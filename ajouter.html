@@ -305,6 +305,20 @@
                 </div>
 
                 <div class="champ">
+    <label for="image">Chemin de la photo</label>
+
+    <input
+        type="text"
+        id="image"
+        placeholder="images/tarte-aux-pommes.jpg"
+    >
+
+    <small>
+        Ajoute d’abord la photo dans le dossier images.
+    </small>
+</div>
+
+                <div class="champ">
                     <label for="auteur">Auteur</label>
 
                     <input
@@ -494,6 +508,10 @@
                     document.getElementById("emoji")
                         .value
                         .trim() || "🍽️",
+                image:
+                    document.getElementById("image")
+                        .value
+                        .trim(),
                 auteur:
                     document.getElementById("auteur")
                         .value
