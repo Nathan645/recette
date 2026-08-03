@@ -2,7 +2,6 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -90,27 +89,70 @@
             }
         }
 
+        function formaterQuantite(valeur) {
+            if (Number.isInteger(valeur)) {
+                return valeur.toString();
+            }
+
+            return valeur
+                .toFixed(2)
+                .replace(/\.00$/, "")
+                .replace(/0$/, "")
+                .replace(".", ",");
+        }
+
         function afficherRecette(recette) {
             document.title =
                 `${recette.nom} | À notre table`;
 
-            const ingredientsHtml = recette.ingredients
-                .map(function (ingredient, index) {
-                    return `
-                        <li class="ingredient-item">
-                            <input
-                                type="checkbox"
-                                id="ingredient-${index}"
-                                class="case-ingredient"
-                            >
+            const personnesInitiales =
+                Number(recette.personnes);
 
-                            <label for="ingredient-${index}">
-                                ${ingredient}
-                            </label>
-                        </li>
-                    `;
-                })
-                .join("");
+            let personnesSelectionnees =
+                personnesInitiales;
+
+            function creerIngredientsHtml() {
+                const coefficient =
+                    personnesSelectionnees / personnesInitiales;
+
+                return recette.ingredients
+                    .map(function (ingredient, index) {
+                        let texteIngredient = ingredient.nom;
+
+                        if (
+                            ingredient.quantite !== null &&
+                            ingredient.quantite !== undefined &&
+                            ingredient.quantite !== ""
+                        ) {
+                            const quantiteCalculee =
+                                Number(ingredient.quantite) *
+                                coefficient;
+
+                            const unite =
+                                ingredient.unite
+                                    ? ` ${ingredient.unite}`
+                                    : "";
+
+                            texteIngredient =
+                                `${formaterQuantite(quantiteCalculee)}${unite} ${ingredient.nom}`;
+                        }
+
+                        return `
+                            <li class="ingredient-item">
+                                <input
+                                    type="checkbox"
+                                    id="ingredient-${index}"
+                                    class="case-ingredient"
+                                >
+
+                                <label for="ingredient-${index}">
+                                    ${texteIngredient}
+                                </label>
+                            </li>
+                        `;
+                    })
+                    .join("");
+            }
 
             const etapesHtml = recette.etapes
                 .map(function (etape, index) {
@@ -191,10 +233,38 @@
                                 </span>
                             </div>
 
-                            <div class="information">
+                            <div class="information information-portions">
                                 <strong>Portions</strong>
-                                <span>
-                                    ${recette.personnes} personnes
+
+                                <div class="controle-portions">
+                                    <button
+                                        type="button"
+                                        class="bouton-portion"
+                                        id="diminuer-portions"
+                                        aria-label="Diminuer le nombre de personnes"
+                                    >
+                                        −
+                                    </button>
+
+                                    <span
+                                        class="nombre-portions"
+                                        id="nombre-portions"
+                                    >
+                                        ${personnesSelectionnees}
+                                    </span>
+
+                                    <button
+                                        type="button"
+                                        class="bouton-portion"
+                                        id="augmenter-portions"
+                                        aria-label="Augmenter le nombre de personnes"
+                                    >
+                                        +
+                                    </button>
+                                </div>
+
+                                <span class="texte-personnes">
+                                    personnes
                                 </span>
                             </div>
 
@@ -212,8 +282,11 @@
                             <section>
                                 <h2>Ingrédients</h2>
 
-                                <ul class="liste-ingredients">
-                                    ${ingredientsHtml}
+                                <ul
+                                    class="liste-ingredients"
+                                    id="liste-ingredients"
+                                >
+                                    ${creerIngredientsHtml()}
                                 </ul>
                             </section>
 
@@ -237,30 +310,68 @@
                 </article>
             `;
 
-            const casesIngredients =
-                document.querySelectorAll(".case-ingredient");
+            const listeIngredients =
+                document.getElementById("liste-ingredients");
 
-            casesIngredients.forEach(function (caseIngredient) {
-                caseIngredient.addEventListener(
-                    "change",
-                    function () {
-                        const ligneIngredient =
-                            caseIngredient.closest(
-                                ".ingredient-item"
-                            );
+            const nombrePortions =
+                document.getElementById("nombre-portions");
 
-                        if (caseIngredient.checked) {
-                            ligneIngredient.classList.add(
-                                "ingredient-coche"
-                            );
-                        } else {
-                            ligneIngredient.classList.remove(
-                                "ingredient-coche"
-                            );
+            const boutonDiminuer =
+                document.getElementById("diminuer-portions");
+
+            const boutonAugmenter =
+                document.getElementById("augmenter-portions");
+
+            function mettreAJourIngredients() {
+                nombrePortions.textContent =
+                    personnesSelectionnees;
+
+                listeIngredients.innerHTML =
+                    creerIngredientsHtml();
+
+                activerCasesIngredients();
+            }
+
+            function activerCasesIngredients() {
+                const casesIngredients =
+                    document.querySelectorAll(".case-ingredient");
+
+                casesIngredients.forEach(function (caseIngredient) {
+                    caseIngredient.addEventListener(
+                        "change",
+                        function () {
+                            const ligneIngredient =
+                                caseIngredient.closest(
+                                    ".ingredient-item"
+                                );
+
+                            if (caseIngredient.checked) {
+                                ligneIngredient.classList.add(
+                                    "ingredient-coche"
+                                );
+                            } else {
+                                ligneIngredient.classList.remove(
+                                    "ingredient-coche"
+                                );
+                            }
                         }
-                    }
-                );
+                    );
+                });
+            }
+
+            boutonDiminuer.addEventListener("click", function () {
+                if (personnesSelectionnees > 1) {
+                    personnesSelectionnees -= 1;
+                    mettreAJourIngredients();
+                }
             });
+
+            boutonAugmenter.addEventListener("click", function () {
+                personnesSelectionnees += 1;
+                mettreAJourIngredients();
+            });
+
+            activerCasesIngredients();
 
             const casesEtapes =
                 document.querySelectorAll(".case-etape");
