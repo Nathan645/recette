@@ -54,5 +54,26 @@
     "sniffer la coke"
   ],
   "astuce": ""
+},
+  {
+  "id": "deuxieme-test",
+  "nom": "deuxième test",
+  "description": "dscqdvz",
+  "categorie": "dessert",
+  "categorieAffichee": "Dessert",
+  "preparation": 43,
+  "cuisson": 0,
+  "personnes": 4,
+  "difficulte": "Moyen",
+  "emoji": "🍽️",
+  "image": "images/tartes-aux-pommes.jpg",
+  "auteur": "zdv",
+  "ingredients": [
+    "zdv"
+  ],
+  "etapes": [
+    "sdegvze"
+  ],
+  "astuce": "aefvzdcs"
 }
 ]
