@@ -53,8 +53,18 @@ function creerCarteRecette(recette) {
     return `
         <article class="carte-recette">
             <div class="illustration-recette">
-                ${recette.emoji || "🍽️"}
-            </div>
+    ${
+        recette.image
+            ? `
+                <img
+                    src="${recette.image}"
+                    alt="${recette.nom}"
+                    class="photo-recette"
+                >
+            `
+            : recette.emoji || "🍽️"
+    }
+</div>
 
             <div class="contenu-carte">
                 <span class="categorie">
