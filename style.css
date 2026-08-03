@@ -420,6 +420,51 @@ footer {
     opacity: .65;
 
 }
+
+.information-portions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.controle-portions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 3px 0 5px;
+}
+
+.bouton-portion {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid var(--vert);
+    border-radius: 50%;
+    background-color: var(--blanc);
+    color: var(--vert);
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.bouton-portion:hover {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+.nombre-portions {
+    min-width: 30px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.texte-personnes {
+    font-size: 13px;
+    color: var(--texte-secondaire);
+}
+
 @media (max-width: 750px) {
     .entete-accueil {
         padding: 50px 20px;
