@@ -113,8 +113,20 @@
                 .join("");
 
             const etapesHtml = recette.etapes
-                .map(function (etape) {
-                    return `<li>${etape}</li>`;
+                .map(function (etape, index) {
+                    return `
+                        <li class="etape-item">
+                            <input
+                                type="checkbox"
+                                id="etape-${index}"
+                                class="case-etape"
+                            >
+
+                            <label for="etape-${index}">
+                                ${etape}
+                            </label>
+                        </li>
+                    `;
                 })
                 .join("");
 
@@ -208,7 +220,7 @@
                             <section>
                                 <h2>Préparation</h2>
 
-                                <ol>
+                                <ol class="liste-etapes">
                                     ${etapesHtml}
                                 </ol>
                             </section>
@@ -244,6 +256,29 @@
                         } else {
                             ligneIngredient.classList.remove(
                                 "ingredient-coche"
+                            );
+                        }
+                    }
+                );
+            });
+
+            const casesEtapes =
+                document.querySelectorAll(".case-etape");
+
+            casesEtapes.forEach(function (caseEtape) {
+                caseEtape.addEventListener(
+                    "change",
+                    function () {
+                        const ligneEtape =
+                            caseEtape.closest(".etape-item");
+
+                        if (caseEtape.checked) {
+                            ligneEtape.classList.add(
+                                "etape-coche"
+                            );
+                        } else {
+                            ligneEtape.classList.remove(
+                                "etape-coche"
                             );
                         }
                     }
