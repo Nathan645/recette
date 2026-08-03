@@ -117,13 +117,26 @@
             contenuRecette.innerHTML = `
                 <article class="fiche-recette">
 
-                    <div
-                        class="illustration"
-                        role="img"
-                        aria-label="Illustration de ${recette.nom}"
-                    >
-                        ${recette.emoji || "🍽️"}
-                    </div>
+                    <div class="illustration">
+    ${
+        recette.image
+            ? `
+                <img
+                    src="${recette.image}"
+                    alt="${recette.nom}"
+                    class="photo-recette photo-recette-detail"
+                >
+            `
+            : `
+                <span
+                    role="img"
+                    aria-label="Illustration de ${recette.nom}"
+                >
+                    ${recette.emoji || "🍽️"}
+                </span>
+            `
+    }
+</div>
 
                     <div class="contenu">
 
