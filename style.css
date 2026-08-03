@@ -388,3 +388,26 @@ footer {
         font-size: 30px;
     }
 }
+
+.actions-accueil {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.bouton-ajouter {
+    display: inline-block;
+    padding: 13px 22px;
+    border: 2px solid var(--vert);
+    border-radius: 10px;
+    color: var(--vert);
+    text-decoration: none;
+    font-weight: bold;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.bouton-ajouter:hover {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
