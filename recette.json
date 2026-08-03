@@ -1,0 +1,35 @@
+[
+  {
+    "id": "carbonara",
+    "nom": "Pâtes carbonara",
+    "description": "Un plat rapide et réconfortant, parfait pour un repas simple en famille.",
+    "categorie": "plat",
+    "categorieAffichee": "Plat",
+    "preparation": 10,
+    "cuisson": 15,
+    "personnes": 4,
+    "difficulte": "Facile",
+    "emoji": "🍝",
+    "auteur": "Recette test de Claire et Nathan",
+    "ingredients": [
+      "400 g de spaghetti",
+      "200 g de lardons fumés",
+      "3 jaunes d’œufs",
+      "1 œuf entier",
+      "80 g de parmesan râpé",
+      "Du poivre",
+      "Une pincée de sel"
+    ],
+    "etapes": [
+      "Faire cuire les spaghetti dans une grande casserole d’eau salée.",
+      "Faire revenir les lardons dans une poêle sans ajouter de matière grasse.",
+      "Mélanger les jaunes d’œufs, l’œuf entier, le parmesan et une bonne quantité de poivre.",
+      "Égoutter les pâtes en conservant un peu d’eau de cuisson.",
+      "Ajouter les pâtes aux lardons, puis retirer la poêle du feu.",
+      "Verser le mélange aux œufs et remuer rapidement.",
+      "Ajouter progressivement un peu d’eau de cuisson pour obtenir une sauce crémeuse.",
+      "Servir immédiatement avec un peu de parmesan."
+    ],
+    "astuce": "Ne remets pas la poêle sur le feu après avoir ajouté les œufs. Ils risqueraient de cuire et de se transformer en œufs brouillés."
+  }
+]
