@@ -7,20 +7,21 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
-    <link rel="stylesheet" href="style.css">
+
     <title>Recette | À notre table</title>
 
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-   <header class="navigation-recette">
-    <nav class="navigation">
-        <a href="index.html" class="retour">
-            ← Retour aux recettes
-        </a>
-    </nav>
-</header>
+    <header class="navigation-recette">
+        <nav class="navigation">
+            <a href="index.html" class="retour">
+                ← Retour aux recettes
+            </a>
+        </nav>
+    </header>
 
     <main id="contenu-recette">
         <div class="message">
@@ -94,8 +95,20 @@
                 `${recette.nom} | À notre table`;
 
             const ingredientsHtml = recette.ingredients
-                .map(function (ingredient) {
-                    return `<li>${ingredient}</li>`;
+                .map(function (ingredient, index) {
+                    return `
+                        <li class="ingredient-item">
+                            <input
+                                type="checkbox"
+                                id="ingredient-${index}"
+                                class="case-ingredient"
+                            >
+
+                            <label for="ingredient-${index}">
+                                ${ingredient}
+                            </label>
+                        </li>
+                    `;
                 })
                 .join("");
 
@@ -114,29 +127,29 @@
                 `
                 : "";
 
+            const illustrationHtml = recette.image
+                ? `
+                    <img
+                        src="${recette.image}"
+                        alt="${recette.nom}"
+                        class="photo-recette photo-recette-detail"
+                    >
+                `
+                : `
+                    <span
+                        role="img"
+                        aria-label="Illustration de ${recette.nom}"
+                    >
+                        ${recette.emoji || "🍽️"}
+                    </span>
+                `;
+
             contenuRecette.innerHTML = `
                 <article class="fiche-recette">
 
                     <div class="illustration">
-    ${
-        recette.image
-            ? `
-                <img
-                    src="${recette.image}"
-                    alt="${recette.nom}"
-                    class="photo-recette photo-recette-detail"
-                >
-            `
-            : `
-                <span
-                    role="img"
-                    aria-label="Illustration de ${recette.nom}"
-                >
-                    ${recette.emoji || "🍽️"}
-                </span>
-            `
-    }
-</div>
+                        ${illustrationHtml}
+                    </div>
 
                     <div class="contenu">
 
@@ -152,28 +165,28 @@
 
                         <div class="informations-recette">
 
-                            <div class="informations-recette">
+                            <div class="information">
                                 <strong>Préparation</strong>
                                 <span>
                                     ${recette.preparation} minutes
                                 </span>
                             </div>
 
-                            <div class="informations-recette">
+                            <div class="information">
                                 <strong>Cuisson</strong>
                                 <span>
                                     ${recette.cuisson} minutes
                                 </span>
                             </div>
 
-                            <div class="informations-recette">
+                            <div class="information">
                                 <strong>Portions</strong>
                                 <span>
                                     ${recette.personnes} personnes
                                 </span>
                             </div>
 
-                            <div class="informations-recette">
+                            <div class="information">
                                 <strong>Difficulté</strong>
                                 <span>
                                     ${recette.difficulte}
@@ -187,7 +200,7 @@
                             <section>
                                 <h2>Ingrédients</h2>
 
-                                <ul>
+                                <ul class="liste-ingredients">
                                     ${ingredientsHtml}
                                 </ul>
                             </section>
@@ -211,6 +224,31 @@
                     </div>
                 </article>
             `;
+
+            const casesIngredients =
+                document.querySelectorAll(".case-ingredient");
+
+            casesIngredients.forEach(function (caseIngredient) {
+                caseIngredient.addEventListener(
+                    "change",
+                    function () {
+                        const ligneIngredient =
+                            caseIngredient.closest(
+                                ".ingredient-item"
+                            );
+
+                        if (caseIngredient.checked) {
+                            ligneIngredient.classList.add(
+                                "ingredient-coche"
+                            );
+                        } else {
+                            ligneIngredient.classList.remove(
+                                "ingredient-coche"
+                            );
+                        }
+                    }
+                );
+            });
         }
 
         chargerRecette();
