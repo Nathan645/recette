@@ -31,5 +31,27 @@
       "Servir immédiatement avec un peu de parmesan."
     ],
     "astuce": "Ne remets pas la poêle sur le feu après avoir ajouté les œufs. Ils risqueraient de cuire et de se transformer en œufs brouillés."
-  }
+  },
+  {
+  "id": "test",
+  "nom": "test",
+  "description": "qsvcqdvùcmSFKV",
+  "categorie": "apéritif",
+  "categorieAffichee": "Apéritif",
+  "preparation": 15,
+  "cuisson": 26,
+  "personnes": 5,
+  "difficulte": "Facile",
+  "emoji": "🍽️",
+  "auteur": "NATHOU",
+  "ingredients": [
+    "500g de coke",
+    "200g de marijuana"
+  ],
+  "etapes": [
+    "rouler le joint",
+    "sniffer la coke"
+  ],
+  "astuce": ""
+}
 ]
