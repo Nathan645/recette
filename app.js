@@ -6,33 +6,54 @@ let recettes = [];
 let categorieSelectionnee = "toutes";
 
 async function chargerRecettes() {
+    grilleRecettes.innerHTML = `
+        <p class="message-chargement">
+            Chargement des recettes…
+        </p>
+    `;
+
     try {
-        const reponse = await fetch("recettes.json");
+        const reponse = await fetch("./recettes.json");
 
         if (!reponse.ok) {
-            throw new Error("Impossible de charger les recettes.");
+            throw new Error(
+                `Le fichier recettes.json est introuvable : erreur ${reponse.status}`
+            );
         }
 
-        recettes = await reponse.json();
+        const donnees = await reponse.json();
+
+        if (!Array.isArray(donnees)) {
+            throw new Error(
+                "Le contenu de recettes.json doit commencer par [ et finir par ]."
+            );
+        }
+
+        recettes = donnees;
+
+        console.log("Recettes chargées :", recettes);
+
         afficherRecettes();
     } catch (erreur) {
-        grilleRecettes.innerHTML = `
-            <p class="message-erreur">
-                Une erreur est survenue pendant le chargement des recettes.
-            </p>
-        `;
+        console.error("Erreur de chargement :", erreur);
 
-        console.error(erreur);
+        grilleRecettes.innerHTML = `
+            <div class="message-erreur">
+                <p><strong>Impossible de charger les recettes.</strong></p>
+                <p>${erreur.message}</p>
+            </div>
+        `;
     }
 }
 
 function creerCarteRecette(recette) {
-    const tempsTotal = recette.preparation + recette.cuisson;
+    const tempsTotal =
+        Number(recette.preparation) + Number(recette.cuisson);
 
     return `
         <article class="carte-recette">
             <div class="illustration-recette">
-                ${recette.emoji}
+                ${recette.emoji || "🍽️"}
             </div>
 
             <div class="contenu-carte">
@@ -53,7 +74,7 @@ function creerCarteRecette(recette) {
                 </div>
 
                 <a
-                    href="recette.html?id=${recette.id}"
+                    href="recette.html?id=${encodeURIComponent(recette.id)}"
                     class="bouton-recette"
                 >
                     Voir la recette
@@ -69,13 +90,17 @@ function afficherRecettes() {
         .trim();
 
     const recettesFiltrees = recettes.filter(function (recette) {
+        const ingredients = Array.isArray(recette.ingredients)
+            ? recette.ingredients.join(" ")
+            : "";
+
         const texteRecherche = [
             recette.nom,
             recette.description,
             recette.categorie,
             recette.categorieAffichee,
             recette.difficulte,
-            recette.ingredients.join(" ")
+            ingredients
         ]
             .join(" ")
             .toLowerCase();
@@ -114,7 +139,9 @@ boutonsFiltres.forEach(function (bouton) {
         });
 
         bouton.classList.add("actif");
-        categorieSelectionnee = bouton.dataset.categorie;
+
+        categorieSelectionnee =
+            bouton.dataset.categorie || "toutes";
 
         afficherRecettes();
     });
