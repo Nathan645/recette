@@ -1,5 +1,5 @@
 [
-  {
+   {
     "id": "carbonara",
     "nom": "Pâtes carbonara",
     "description": "Un plat rapide et réconfortant, parfait pour un repas simple en famille.",
@@ -10,16 +10,44 @@
     "personnes": 4,
     "difficulte": "Facile",
     "emoji": "🍝",
-    "image": "images/carbonara.jpg",
+    "image": "",
     "auteur": "Recette test de Claire et Nathan",
     "ingredients": [
-      "400 g de spaghetti",
-      "200 g de lardons fumés",
-      "3 jaunes d’œufs",
-      "1 œuf entier",
-      "80 g de parmesan râpé",
-      "Du poivre",
-      "Une pincée de sel"
+      {
+        "quantite": 400,
+        "unite": "g",
+        "nom": "de spaghetti"
+      },
+      {
+        "quantite": 200,
+        "unite": "g",
+        "nom": "de lardons fumés"
+      },
+      {
+        "quantite": 3,
+        "unite": "",
+        "nom": "jaunes d’œufs"
+      },
+      {
+        "quantite": 1,
+        "unite": "",
+        "nom": "œuf entier"
+      },
+      {
+        "quantite": 80,
+        "unite": "g",
+        "nom": "de parmesan râpé"
+      },
+      {
+        "quantite": null,
+        "unite": "",
+        "nom": "Poivre"
+      },
+      {
+        "quantite": null,
+        "unite": "",
+        "nom": "Une pincée de sel"
+      }
     ],
     "etapes": [
       "Faire cuire les spaghetti dans une grande casserole d’eau salée.",
