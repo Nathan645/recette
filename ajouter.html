@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Ajouter une recette | À notre table</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        .page-formulaire {
+            max-width: 900px;
+        }
+
+        .entete-formulaire {
+            margin-bottom: 35px;
+            text-align: center;
+        }
+
+        .entete-formulaire h1 {
+            margin-bottom: 10px;
+            font-size: 38px;
+        }
+
+        .entete-formulaire p {
+            color: var(--texte-secondaire);
+            line-height: 1.6;
+        }
+
+        .formulaire-recette {
+            padding: 35px;
+            background-color: var(--blanc);
+            border-radius: 20px;
+            box-shadow: 0 10px 35px var(--ombre);
+        }
+
+        .groupe-champs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .champ {
+            margin-bottom: 22px;
+        }
+
+        .champ label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        .champ input,
+        .champ select,
+        .champ textarea {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #d8d1c5;
+            border-radius: 10px;
+            background-color: white;
+            color: var(--texte);
+            font: inherit;
+        }
+
+        .champ textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .champ small {
+            display: block;
+            margin-top: 7px;
+            color: var(--texte-secondaire);
+            line-height: 1.4;
+        }
+
+        .bouton-generer {
+            width: 100%;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: var(--vert);
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .bouton-generer:hover {
+            background-color: var(--vert-fonce);
+        }
+
+        .resultat-json {
+            display: none;
+            margin-top: 35px;
+            padding: 30px;
+            background-color: var(--blanc);
+            border-radius: 20px;
+            box-shadow: 0 10px 35px var(--ombre);
+        }
+
+        .resultat-json.visible {
+            display: block;
+        }
+
+        .resultat-json h2 {
+            margin-top: 0;
+        }
+
+        .resultat-json pre {
+            overflow-x: auto;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #272b25;
+            color: #f7f5ef;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+
+        .actions-json {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .bouton-secondaire {
+            padding: 12px 18px;
+            border: 1px solid var(--vert);
+            border-radius: 10px;
+            background-color: white;
+            color: var(--vert);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .bouton-secondaire:hover {
+            background-color: var(--beige);
+        }
+
+        .confirmation {
+            min-height: 24px;
+            margin-top: 12px;
+            color: var(--vert);
+            font-weight: bold;
+        }
+
+        @media (max-width: 700px) {
+            .groupe-champs {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .formulaire-recette,
+            .resultat-json {
+                padding: 24px 18px;
+            }
+
+            .entete-formulaire h1 {
+                font-size: 31px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="navigation-recette">
+        <nav class="navigation">
+            <a href="index.html" class="retour">
+                ← Retour aux recettes
+            </a>
+        </nav>
+    </header>
+
+    <main class="page-formulaire">
+
+        <section class="entete-formulaire">
+            <h1>Ajouter une recette</h1>
+
+            <p>
+                Remplis le formulaire. Le site générera ensuite le bloc
+                à ajouter dans le fichier <strong>recettes.json</strong>.
+            </p>
+        </section>
+
+        <form class="formulaire-recette" id="formulaire-recette">
+
+            <div class="groupe-champs">
+
+                <div class="champ">
+                    <label for="nom">Nom de la recette</label>
+                    <input
+                        type="text"
+                        id="nom"
+                        required
+                        placeholder="Ex. Tarte aux pommes"
+                    >
+                </div>
+
+                <div class="champ">
+                    <label for="categorie">Catégorie</label>
+
+                    <select id="categorie" required>
+                        <option value="">Choisir une catégorie</option>
+                        <option value="apéritif">Apéritif</option>
+                        <option value="entrée">Entrée</option>
+                        <option value="plat">Plat</option>
+                        <option value="dessert">Dessert</option>
+                        <option value="boisson">Boisson</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="champ">
+                <label for="description">Description</label>
+
+                <textarea
+                    id="description"
+                    required
+                    placeholder="Une courte description de la recette…"
+                ></textarea>
+            </div>
+
+            <div class="groupe-champs">
+
+                <div class="champ">
+                    <label for="preparation">
+                        Temps de préparation
+                    </label>
+
+                    <input
+                        type="number"
+                        id="preparation"
+                        min="0"
+                        required
+                        placeholder="En minutes"
+                    >
+                </div>
+
+                <div class="champ">
+                    <label for="cuisson">
+                        Temps de cuisson
+                    </label>
+
+                    <input
+                        type="number"
+                        id="cuisson"
+                        min="0"
+                        required
+                        placeholder="En minutes"
+                    >
+                </div>
+
+                <div class="champ">
+                    <label for="personnes">
+                        Nombre de personnes
+                    </label>
+
+                    <input
+                        type="number"
+                        id="personnes"
+                        min="1"
+                        required
+                        placeholder="Ex. 4"
+                    >
+                </div>
+
+                <div class="champ">
+                    <label for="difficulte">Difficulté</label>
+
+                    <select id="difficulte" required>
+                        <option value="">Choisir</option>
+                        <option value="Très facile">Très facile</option>
+                        <option value="Facile">Facile</option>
+                        <option value="Moyen">Moyen</option>
+                        <option value="Difficile">Difficile</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="groupe-champs">
+
+                <div class="champ">
+                    <label for="emoji">Emoji</label>
+
+                    <input
+                        type="text"
+                        id="emoji"
+                        maxlength="4"
+                        placeholder="🍰"
+                    >
+
+                    <small>
+                        Il servira d’illustration provisoire.
+                    </small>
+                </div>
+
+                <div class="champ">
+                    <label for="auteur">Auteur</label>
+
+                    <input
+                        type="text"
+                        id="auteur"
+                        placeholder="Ex. Recette de Mamie"
+                    >
+                </div>
+
+            </div>
+
+            <div class="champ">
+                <label for="ingredients">Ingrédients</label>
+
+                <textarea
+                    id="ingredients"
+                    required
+                    placeholder="Écris un ingrédient par ligne&#10;500 g de farine&#10;3 œufs&#10;100 g de sucre"
+                ></textarea>
+
+                <small>
+                    Un ingrédient par ligne.
+                </small>
+            </div>
+
+            <div class="champ">
+                <label for="etapes">Étapes</label>
+
+                <textarea
+                    id="etapes"
+                    required
+                    placeholder="Écris une étape par ligne&#10;Préchauffer le four.&#10;Mélanger les ingrédients.&#10;Enfourner 30 minutes."
+                ></textarea>
+
+                <small>
+                    Une étape par ligne.
+                </small>
+            </div>
+
+            <div class="champ">
+                <label for="astuce">Astuce</label>
+
+                <textarea
+                    id="astuce"
+                    placeholder="Une astuce ou un conseil facultatif…"
+                ></textarea>
+            </div>
+
+            <button type="submit" class="bouton-generer">
+                Générer la recette
+            </button>
+
+        </form>
+
+        <section class="resultat-json" id="resultat-json">
+
+            <h2>Bloc à ajouter dans recettes.json</h2>
+
+            <p>
+                Copie ce bloc puis ajoute-le dans la liste des recettes.
+            </p>
+
+            <pre id="code-json"></pre>
+
+            <div class="actions-json">
+                <button
+                    type="button"
+                    class="bouton-secondaire"
+                    id="copier-json"
+                >
+                    Copier le JSON
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-secondaire"
+                    id="recommencer"
+                >
+                    Créer une autre recette
+                </button>
+            </div>
+
+            <p
+                class="confirmation"
+                id="confirmation"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+    </main>
+
+    <footer>
+        <p>À notre table ❤️</p>
+    </footer>
+
+    <script>
+        const formulaire =
+            document.getElementById("formulaire-recette");
+
+        const resultatJson =
+            document.getElementById("resultat-json");
+
+        const codeJson =
+            document.getElementById("code-json");
+
+        const boutonCopier =
+            document.getElementById("copier-json");
+
+        const boutonRecommencer =
+            document.getElementById("recommencer");
+
+        const confirmation =
+            document.getElementById("confirmation");
+
+        function creerIdentifiant(nom) {
+            return nom
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .toLowerCase()
+                .trim()
+                .replace(/[^a-z0-9]+/g, "-")
+                .replace(/^-+|-+$/g, "");
+        }
+
+        function transformerEnListe(valeur) {
+            return valeur
+                .split("\n")
+                .map(function (ligne) {
+                    return ligne.trim();
+                })
+                .filter(function (ligne) {
+                    return ligne !== "";
+                });
+        }
+
+        function obtenirCategorieAffichee(categorie) {
+            const categories = {
+                "apéritif": "Apéritif",
+                "entrée": "Entrée",
+                "plat": "Plat",
+                "dessert": "Dessert",
+                "boisson": "Boisson"
+            };
+
+            return categories[categorie] || categorie;
+        }
+
+        formulaire.addEventListener("submit", function (evenement) {
+            evenement.preventDefault();
+
+            const nom =
+                document.getElementById("nom").value.trim();
+
+            const categorie =
+                document.getElementById("categorie").value;
+
+            const recette = {
+                id: creerIdentifiant(nom),
+                nom: nom,
+                description:
+                    document.getElementById("description")
+                        .value
+                        .trim(),
+                categorie: categorie,
+                categorieAffichee:
+                    obtenirCategorieAffichee(categorie),
+                preparation:
+                    Number(
+                        document.getElementById("preparation")
+                            .value
+                    ),
+                cuisson:
+                    Number(
+                        document.getElementById("cuisson")
+                            .value
+                    ),
+                personnes:
+                    Number(
+                        document.getElementById("personnes")
+                            .value
+                    ),
+                difficulte:
+                    document.getElementById("difficulte")
+                        .value,
+                emoji:
+                    document.getElementById("emoji")
+                        .value
+                        .trim() || "🍽️",
+                auteur:
+                    document.getElementById("auteur")
+                        .value
+                        .trim(),
+                ingredients:
+                    transformerEnListe(
+                        document.getElementById("ingredients")
+                            .value
+                    ),
+                etapes:
+                    transformerEnListe(
+                        document.getElementById("etapes")
+                            .value
+                    ),
+                astuce:
+                    document.getElementById("astuce")
+                        .value
+                        .trim()
+            };
+
+            codeJson.textContent =
+                JSON.stringify(recette, null, 2);
+
+            resultatJson.classList.add("visible");
+            confirmation.textContent = "";
+
+            resultatJson.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        });
+
+        boutonCopier.addEventListener("click", async function () {
+            try {
+                await navigator.clipboard.writeText(
+                    codeJson.textContent
+                );
+
+                confirmation.textContent =
+                    "Le bloc JSON a bien été copié.";
+            } catch (erreur) {
+                confirmation.textContent =
+                    "La copie automatique a échoué. Sélectionne le texte manuellement.";
+            }
+        });
+
+        boutonRecommencer.addEventListener("click", function () {
+            formulaire.reset();
+            resultatJson.classList.remove("visible");
+            confirmation.textContent = "";
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        });
+    </script>
+
+</body>
+</html>
