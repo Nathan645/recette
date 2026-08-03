@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Recette | À notre table</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f3e9;
+            color: #343b2f;
+        }
+
+        header {
+            padding: 25px 5%;
+            background-color: #66705a;
+        }
+
+        .navigation {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .retour {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .retour:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            width: 90%;
+            max-width: 1000px;
+            margin: 50px auto;
+        }
+
+        .fiche-recette {
+            overflow: hidden;
+            background-color: white;
+            border-radius: 22px;
+            box-shadow: 0 10px 35px rgba(52, 59, 47, 0.12);
+        }
+
+        .illustration {
+            height: 330px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(
+                135deg,
+                #dfb479,
+                #b76842
+            );
+            font-size: 130px;
+        }
+
+        .contenu {
+            padding: 45px;
+        }
+
+        .categorie {
+            display: inline-block;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background-color: #eee6d7;
+            color: #66705a;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin: 18px 0 10px;
+            font-size: 42px;
+        }
+
+        .introduction {
+            max-width: 700px;
+            margin-bottom: 30px;
+            color: #60655b;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        .informations {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 45px;
+        }
+
+        .information {
+            padding: 18px 12px;
+            text-align: center;
+            border-radius: 12px;
+            background-color: #f8f3e9;
+        }
+
+        .information strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .colonnes {
+            display: grid;
+            grid-template-columns: 0.8fr 1.4fr;
+            gap: 55px;
+        }
+
+        h2 {
+            margin-top: 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #eee6d7;
+            font-size: 27px;
+        }
+
+        ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        ul li {
+            margin-bottom: 13px;
+            line-height: 1.5;
+        }
+
+        ol {
+            margin: 0;
+            padding-left: 25px;
+        }
+
+        ol li {
+            margin-bottom: 20px;
+            padding-left: 8px;
+            line-height: 1.6;
+        }
+
+        .conseil {
+            margin-top: 40px;
+            padding: 25px;
+            border-left: 5px solid #b76842;
+            border-radius: 8px;
+            background-color: #f8f3e9;
+        }
+
+        .conseil h2 {
+            margin-bottom: 10px;
+            padding: 0;
+            border: none;
+            font-size: 22px;
+        }
+
+        .conseil p {
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        .auteur {
+            margin-top: 35px;
+            color: #70756b;
+            font-style: italic;
+        }
+
+        .message {
+            padding: 50px 30px;
+            text-align: center;
+            background-color: white;
+            border-radius: 18px;
+        }
+
+        .message a {
+            color: #66705a;
+            font-weight: bold;
+        }
+
+        footer {
+            padding: 35px 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 750px) {
+            main {
+                width: 92%;
+                margin: 25px auto;
+            }
+
+            .illustration {
+                height: 230px;
+                font-size: 95px;
+            }
+
+            .contenu {
+                padding: 28px 22px;
+            }
+
+            h1 {
+                font-size: 34px;
+            }
+
+            .informations {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .colonnes {
+                grid-template-columns: 1fr;
+                gap: 35px;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .informations {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <nav class="navigation">
+            <a href="index.html" class="retour">
+                ← Retour aux recettes
+            </a>
+        </nav>
+    </header>
+
+    <main id="contenu-recette">
+        <div class="message">
+            Chargement de la recette…
+        </div>
+    </main>
+
+    <footer>
+        <p>À notre table ❤️</p>
+    </footer>
+
+    <script>
+        const contenuRecette =
+            document.getElementById("contenu-recette");
+
+        const parametres =
+            new URLSearchParams(window.location.search);
+
+        const identifiantRecette =
+            parametres.get("id");
+
+        async function chargerRecette() {
+            try {
+                if (!identifiantRecette) {
+                    throw new Error(
+                        "Aucune recette n’a été sélectionnée."
+                    );
+                }
+
+                const reponse = await fetch("./recettes.json");
+
+                if (!reponse.ok) {
+                    throw new Error(
+                        "Impossible de charger les recettes."
+                    );
+                }
+
+                const recettes = await reponse.json();
+
+                const recette = recettes.find(function (element) {
+                    return element.id === identifiantRecette;
+                });
+
+                if (!recette) {
+                    throw new Error(
+                        "Cette recette n’existe pas."
+                    );
+                }
+
+                afficherRecette(recette);
+
+            } catch (erreur) {
+                console.error(erreur);
+
+                contenuRecette.innerHTML = `
+                    <div class="message">
+                        <h1>Recette introuvable</h1>
+
+                        <p>${erreur.message}</p>
+
+                        <a href="index.html">
+                            Retourner à toutes les recettes
+                        </a>
+                    </div>
+                `;
+            }
+        }
+
+        function afficherRecette(recette) {
+            document.title =
+                `${recette.nom} | À notre table`;
+
+            const ingredientsHtml = recette.ingredients
+                .map(function (ingredient) {
+                    return `<li>${ingredient}</li>`;
+                })
+                .join("");
+
+            const etapesHtml = recette.etapes
+                .map(function (etape) {
+                    return `<li>${etape}</li>`;
+                })
+                .join("");
+
+            const astuceHtml = recette.astuce
+                ? `
+                    <aside class="conseil">
+                        <h2>Astuce</h2>
+                        <p>${recette.astuce}</p>
+                    </aside>
+                `
+                : "";
+
+            contenuRecette.innerHTML = `
+                <article class="fiche-recette">
+
+                    <div
+                        class="illustration"
+                        role="img"
+                        aria-label="Illustration de ${recette.nom}"
+                    >
+                        ${recette.emoji || "🍽️"}
+                    </div>
+
+                    <div class="contenu">
+
+                        <span class="categorie">
+                            ${recette.categorieAffichee}
+                        </span>
+
+                        <h1>${recette.nom}</h1>
+
+                        <p class="introduction">
+                            ${recette.description}
+                        </p>
+
+                        <div class="informations">
+
+                            <div class="information">
+                                <strong>Préparation</strong>
+                                <span>
+                                    ${recette.preparation} minutes
+                                </span>
+                            </div>
+
+                            <div class="information">
+                                <strong>Cuisson</strong>
+                                <span>
+                                    ${recette.cuisson} minutes
+                                </span>
+                            </div>
+
+                            <div class="information">
+                                <strong>Portions</strong>
+                                <span>
+                                    ${recette.personnes} personnes
+                                </span>
+                            </div>
+
+                            <div class="information">
+                                <strong>Difficulté</strong>
+                                <span>
+                                    ${recette.difficulte}
+                                </span>
+                            </div>
+
+                        </div>
+
+                        <div class="colonnes">
+
+                            <section>
+                                <h2>Ingrédients</h2>
+
+                                <ul>
+                                    ${ingredientsHtml}
+                                </ul>
+                            </section>
+
+                            <section>
+                                <h2>Préparation</h2>
+
+                                <ol>
+                                    ${etapesHtml}
+                                </ol>
+                            </section>
+
+                        </div>
+
+                        ${astuceHtml}
+
+                        <p class="auteur">
+                            ${recette.auteur || ""}
+                        </p>
+
+                    </div>
+                </article>
+            `;
+        }
+
+        chargerRecette();
+    </script>
+
+</body>
+</html>
