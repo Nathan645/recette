@@ -2,7 +2,11 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Pâtes carbonara | À notre table</title>
 
@@ -56,7 +60,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #dfb479, #b76842);
+            background: linear-gradient(
+                135deg,
+                #dfb479,
+                #b76842
+            );
             font-size: 130px;
         }
 
@@ -124,7 +132,7 @@
             padding-left: 20px;
         }
 
-        li {
+        ul li {
             margin-bottom: 13px;
             line-height: 1.5;
         }
@@ -199,6 +207,16 @@
                 gap: 35px;
             }
         }
+
+        @media (max-width: 420px) {
+            .informations {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 30px;
+            }
+        }
     </style>
 </head>
 
@@ -206,25 +224,38 @@
 
     <header>
         <nav class="navigation">
-            <a href="index.html" class="retour">← Retour aux recettes</a>
+            <a href="index.html" class="retour">
+                ← Retour aux recettes
+            </a>
         </nav>
     </header>
 
     <main>
         <article class="fiche-recette">
 
-            <div class="illustration">🍝</div>
+            <div
+                class="illustration"
+                role="img"
+                aria-label="Assiette de pâtes"
+            >
+                🍝
+            </div>
 
             <div class="contenu">
-                <span class="categorie">Plat</span>
+
+                <span class="categorie">
+                    Plat
+                </span>
 
                 <h1>Pâtes carbonara</h1>
 
                 <p class="introduction">
-                    Un plat rapide et réconfortant, parfait pour un repas simple en famille.
+                    Un plat rapide et réconfortant,
+                    parfait pour un repas simple en famille.
                 </p>
 
                 <div class="informations">
+
                     <div class="information">
                         <strong>Préparation</strong>
                         <span>10 minutes</span>
@@ -244,9 +275,11 @@
                         <strong>Difficulté</strong>
                         <span>Facile</span>
                     </div>
+
                 </div>
 
                 <div class="colonnes">
+
                     <section>
                         <h2>Ingrédients</h2>
 
@@ -256,7 +289,7 @@
                             <li>3 jaunes d’œufs</li>
                             <li>1 œuf entier</li>
                             <li>80 g de parmesan râpé</li>
-                            <li>Poivre</li>
+                            <li>Du poivre</li>
                             <li>Une pincée de sel</li>
                         </ul>
                     </section>
@@ -266,58 +299,64 @@
 
                         <ol>
                             <li>
-                                Faire cuire les spaghetti dans une grande casserole
-                                d’eau salée.
+                                Faire cuire les spaghetti dans une grande
+                                casserole d’eau salée.
                             </li>
 
                             <li>
-                                Faire revenir les lardons dans une poêle sans ajouter
-                                de matière grasse.
+                                Faire revenir les lardons dans une poêle,
+                                sans ajouter de matière grasse.
                             </li>
 
                             <li>
-                                Mélanger les jaunes d’œufs, l’œuf entier, le parmesan
-                                et une bonne quantité de poivre.
+                                Mélanger les jaunes d’œufs, l’œuf entier,
+                                le parmesan et une bonne quantité de poivre.
                             </li>
 
                             <li>
-                                Égoutter les pâtes en conservant un peu d’eau de cuisson.
+                                Égoutter les pâtes en conservant un peu
+                                d’eau de cuisson.
                             </li>
 
                             <li>
-                                Ajouter les pâtes aux lardons, puis retirer la poêle du feu.
+                                Ajouter les pâtes aux lardons, puis retirer
+                                la poêle du feu.
                             </li>
 
                             <li>
-                                Verser le mélange aux œufs et remuer rapidement.
+                                Verser le mélange aux œufs et remuer
+                                rapidement.
                             </li>
 
                             <li>
-                                Ajouter progressivement un peu d’eau de cuisson pour
-                                obtenir une sauce crémeuse.
+                                Ajouter progressivement un peu d’eau de
+                                cuisson pour obtenir une sauce crémeuse.
                             </li>
 
                             <li>
-                                Servir immédiatement avec un peu de parmesan.
+                                Servir immédiatement avec un peu de
+                                parmesan.
                             </li>
                         </ol>
                     </section>
+
                 </div>
 
                 <aside class="conseil">
                     <h2>Astuce</h2>
 
                     <p>
-                        Ne remets pas la poêle sur le feu après avoir ajouté les œufs.
-                        Ils risqueraient de cuire et de se transformer en œufs brouillés.
+                        Ne remets pas la poêle sur le feu après avoir
+                        ajouté les œufs. Ils risqueraient de cuire et
+                        de se transformer en œufs brouillés.
                     </p>
                 </aside>
 
                 <p class="auteur">
                     Recette test de Claire et Nathan
                 </p>
-            </div>
 
+            </div>
         </article>
     </main>
 
