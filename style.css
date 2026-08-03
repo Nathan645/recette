@@ -1,0 +1,390 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --vert: #66705a;
+    --vert-fonce: #515a48;
+    --creme: #f8f3e9;
+    --blanc: #ffffff;
+    --texte: #343b2f;
+    --texte-secondaire: #60655b;
+    --beige: #eee6d7;
+    --terracotta: #b76842;
+    --ombre: rgba(52, 59, 47, 0.12);
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--creme);
+    color: var(--texte);
+}
+
+header {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+.entete-accueil {
+    padding: 70px 20px;
+    text-align: center;
+}
+
+.entete-accueil h1 {
+    margin: 0 0 15px;
+    font-size: 48px;
+}
+
+.entete-accueil p {
+    margin: 0;
+    font-size: 20px;
+}
+
+.navigation-recette {
+    padding: 25px 5%;
+}
+
+.navigation {
+    max-width: 1100px;
+    margin: auto;
+}
+
+.retour {
+    color: var(--blanc);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.retour:hover {
+    text-decoration: underline;
+}
+
+main {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 50px 0;
+}
+
+.titre-section {
+    margin-bottom: 35px;
+    text-align: center;
+    font-size: 32px;
+}
+
+.recherche {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 0 auto 45px;
+    padding: 16px 20px;
+    border: 1px solid #d8d1c5;
+    border-radius: 30px;
+    background-color: var(--blanc);
+    font-size: 16px;
+    outline: none;
+}
+
+.recherche:focus {
+    border-color: var(--vert);
+}
+
+.filtres {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+}
+
+.filtre {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--blanc);
+    color: var(--texte);
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.filtre.actif {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+.grille-recettes {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
+    justify-content: center;
+    gap: 30px;
+}
+
+.carte-recette {
+    overflow: hidden;
+    background-color: var(--blanc);
+    border-radius: 18px;
+    box-shadow: 0 8px 25px var(--ombre);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.carte-recette:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(52, 59, 47, 0.18);
+}
+
+.illustration-recette,
+.illustration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #dfb479, #b76842);
+}
+
+.illustration-recette {
+    height: 210px;
+    font-size: 85px;
+}
+
+.illustration {
+    height: 330px;
+    font-size: 130px;
+}
+
+.contenu-carte {
+    padding: 25px;
+}
+
+.categorie {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background-color: var(--beige);
+    color: var(--vert);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.contenu-carte h3 {
+    margin: 12px 0 10px;
+    font-size: 25px;
+}
+
+.description {
+    min-height: 48px;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    color: var(--texte-secondaire);
+}
+
+.informations {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+    font-size: 14px;
+}
+
+.bouton-recette {
+    display: block;
+    padding: 13px 20px;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 10px;
+    background-color: var(--vert);
+    color: var(--blanc);
+    font-weight: bold;
+}
+
+.bouton-recette:hover {
+    background-color: var(--vert-fonce);
+}
+
+.fiche-recette {
+    overflow: hidden;
+    max-width: 1000px;
+    margin: auto;
+    background-color: var(--blanc);
+    border-radius: 22px;
+    box-shadow: 0 10px 35px var(--ombre);
+}
+
+.contenu {
+    padding: 45px;
+}
+
+.contenu h1 {
+    margin: 18px 0 10px;
+    font-size: 42px;
+}
+
+.introduction {
+    max-width: 700px;
+    margin-bottom: 30px;
+    color: var(--texte-secondaire);
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+.informations-recette {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 45px;
+}
+
+.information {
+    padding: 18px 12px;
+    text-align: center;
+    border-radius: 12px;
+    background-color: var(--creme);
+}
+
+.information strong {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.colonnes {
+    display: grid;
+    grid-template-columns: 0.8fr 1.4fr;
+    gap: 55px;
+}
+
+.colonnes h2 {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--beige);
+    font-size: 27px;
+}
+
+ul,
+ol {
+    margin: 0;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+ol {
+    padding-left: 25px;
+}
+
+li {
+    margin-bottom: 13px;
+    line-height: 1.5;
+}
+
+ol li {
+    margin-bottom: 20px;
+    padding-left: 8px;
+    line-height: 1.6;
+}
+
+.conseil {
+    margin-top: 40px;
+    padding: 25px;
+    border-left: 5px solid var(--terracotta);
+    border-radius: 8px;
+    background-color: var(--creme);
+}
+
+.conseil h2 {
+    margin-bottom: 10px;
+    padding: 0;
+    border: none;
+    font-size: 22px;
+}
+
+.conseil p {
+    margin: 0;
+    line-height: 1.6;
+}
+
+.auteur {
+    margin-top: 35px;
+    color: #70756b;
+    font-style: italic;
+}
+
+.message,
+.message-erreur,
+.aucun-resultat {
+    text-align: center;
+}
+
+.message {
+    padding: 50px 30px;
+    background-color: var(--blanc);
+    border-radius: 18px;
+}
+
+.message a {
+    color: var(--vert);
+    font-weight: bold;
+}
+
+footer {
+    padding: 35px 20px;
+    text-align: center;
+}
+
+@media (max-width: 750px) {
+    .entete-accueil {
+        padding: 50px 20px;
+    }
+
+    .entete-accueil h1 {
+        font-size: 38px;
+    }
+
+    .entete-accueil p {
+        font-size: 17px;
+    }
+
+    main {
+        width: 92%;
+        padding: 40px 0;
+    }
+
+    .titre-section {
+        font-size: 27px;
+    }
+
+    .grille-recettes {
+        grid-template-columns: 1fr;
+    }
+
+    .illustration {
+        height: 230px;
+        font-size: 95px;
+    }
+
+    .contenu {
+        padding: 28px 22px;
+    }
+
+    .contenu h1 {
+        font-size: 34px;
+    }
+
+    .informations-recette {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .colonnes {
+        grid-template-columns: 1fr;
+        gap: 35px;
+    }
+}
+
+@media (max-width: 420px) {
+    .informations-recette {
+        grid-template-columns: 1fr;
+    }
+
+    .contenu h1 {
+        font-size: 30px;
+    }
+}
