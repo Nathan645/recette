@@ -340,7 +340,86 @@ footer {
     padding: 35px 20px;
     text-align: center;
 }
+.liste-ingredients {
+    padding-left: 0;
+    list-style: none;
+}
 
+.ingredient-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 13px;
+}
+
+.case-ingredient {
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    accent-color: var(--vert);
+    cursor: pointer;
+}
+
+.ingredient-item label {
+    line-height: 1.5;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.ingredient-coche label {
+    color: var(--texte-secondaire);
+    text-decoration: line-through;
+    opacity: 0.65;
+}
+.liste-etapes {
+    padding-left: 0;
+    list-style: none;
+}
+
+.etape-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+.case-etape {
+    width: 18px;
+    height: 18px;
+
+    margin-top: 3px;
+
+    flex-shrink: 0;
+
+    accent-color: var(--vert);
+
+    cursor: pointer;
+}
+
+.etape-item label {
+
+    line-height: 1.6;
+
+    cursor: pointer;
+
+    transition:
+        color .2s,
+        opacity .2s;
+}
+
+.etape-coche label {
+
+    text-decoration: line-through;
+
+    color: var(--texte-secondaire);
+
+    opacity: .65;
+
+}
 @media (max-width: 750px) {
     .entete-accueil {
         padding: 50px 20px;
