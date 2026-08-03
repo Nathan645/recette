@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
+"<!DOCTYPE html>
+<html lang=""fr"">
 <head>
-    <meta charset="UTF-8">
+    <meta charset=""UTF-8"">
 
     <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
+        name=""viewport""
+        content=""width=device-width, initial-scale=1.0""
     >
 
     <title>Ajouter une recette | À notre table</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link rel=""stylesheet"" href=""style.css"">
 
     <style>
         .page-formulaire {
-            max-width: 900px;
+            max-width: 950px;
         }
 
         .entete-formulaire {
@@ -49,7 +49,8 @@
             margin-bottom: 22px;
         }
 
-        .champ label {
+        .champ label,
+        .titre-champ {
             display: block;
             margin-bottom: 8px;
             font-weight: bold;
@@ -57,7 +58,8 @@
 
         .champ input,
         .champ select,
-        .champ textarea {
+        .champ textarea,
+        .ligne-ingredient input {
             width: 100%;
             padding: 13px 15px;
             border: 1px solid #d8d1c5;
@@ -72,11 +74,86 @@
             resize: vertical;
         }
 
-        .champ small {
+        .champ small,
+        .aide {
             display: block;
             margin-top: 7px;
             color: var(--texte-secondaire);
             line-height: 1.4;
+        }
+
+        .bloc-ingredients {
+            margin-bottom: 25px;
+        }
+
+        .entete-ingredients {
+            display: grid;
+            grid-template-columns: 120px 100px 1fr 125px 44px;
+            gap: 10px;
+            margin: 12px 0 8px;
+            padding: 0 4px;
+            color: var(--texte-secondaire);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .ligne-ingredient {
+            display: grid;
+            grid-template-columns: 120px 100px 1fr 125px 44px;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .ligne-ingredient input[type=""checkbox""] {
+            width: 19px;
+            height: 19px;
+            margin: 0;
+            accent-color: var(--vert);
+            cursor: pointer;
+        }
+
+        .option-proportionnelle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            padding: 10px 8px;
+            border: 1px solid #d8d1c5;
+            border-radius: 10px;
+            background-color: #fff;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .supprimer-ingredient {
+            width: 42px;
+            height: 42px;
+            border: 1px solid #c9a99a;
+            border-radius: 10px;
+            background-color: white;
+            color: #9b4d35;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .supprimer-ingredient:hover {
+            background-color: #f8ece7;
+        }
+
+        .bouton-ajouter-ligne {
+            padding: 11px 17px;
+            border: 1px solid var(--vert);
+            border-radius: 10px;
+            background-color: white;
+            color: var(--vert);
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .bouton-ajouter-ligne:hover {
+            background-color: var(--beige);
         }
 
         .bouton-generer {
@@ -151,10 +228,35 @@
             font-weight: bold;
         }
 
-        @media (max-width: 700px) {
+        @media (max-width: 760px) {
             .groupe-champs {
                 grid-template-columns: 1fr;
                 gap: 0;
+            }
+
+            .entete-ingredients {
+                display: none;
+            }
+
+            .ligne-ingredient {
+                grid-template-columns: 1fr 1fr 44px;
+                padding: 15px;
+                border: 1px solid #e1dbd0;
+                border-radius: 14px;
+                background-color: #fbf8f2;
+            }
+
+            .ingredient-nom {
+                grid-column: 1 / -1;
+            }
+
+            .option-proportionnelle {
+                grid-column: 1 / 3;
+            }
+
+            .supprimer-ingredient {
+                grid-column: 3;
+                grid-row: 2;
             }
 
             .formulaire-recette,
@@ -171,240 +273,256 @@
 
 <body>
 
-    <header class="navigation-recette">
-        <nav class="navigation">
-            <a href="index.html" class="retour">
+    <header class=""navigation-recette"">
+        <nav class=""navigation"">
+            <a href=""index.html"" class=""retour"">
                 ← Retour aux recettes
             </a>
         </nav>
     </header>
 
-    <main class="page-formulaire">
+    <main class=""page-formulaire"">
 
-        <section class="entete-formulaire">
+        <section class=""entete-formulaire"">
             <h1>Ajouter une recette</h1>
 
             <p>
-                Remplis le formulaire. Le site générera ensuite le bloc
-                à ajouter dans le fichier <strong>recettes.json</strong>.
+                Remplis le formulaire. Le site générera un bloc compatible
+                avec le calcul automatique des portions.
             </p>
         </section>
 
-        <form class="formulaire-recette" id="formulaire-recette">
+        <form class=""formulaire-recette"" id=""formulaire-recette"">
 
-            <div class="groupe-champs">
+            <div class=""groupe-champs"">
 
-                <div class="champ">
-                    <label for="nom">Nom de la recette</label>
+                <div class=""champ"">
+                    <label for=""nom"">Nom de la recette</label>
                     <input
-                        type="text"
-                        id="nom"
+                        type=""text""
+                        id=""nom""
                         required
-                        placeholder="Ex. Tarte aux pommes"
+                        placeholder=""Ex. Tarte aux pommes""
                     >
                 </div>
 
-                <div class="champ">
-                    <label for="categorie">Catégorie</label>
+                <div class=""champ"">
+                    <label for=""categorie"">Catégorie</label>
 
-                    <select id="categorie" required>
-                        <option value="">Choisir une catégorie</option>
-                        <option value="apéritif">Apéritif</option>
-                        <option value="entrée">Entrée</option>
-                        <option value="plat">Plat</option>
-                        <option value="dessert">Dessert</option>
-                        <option value="boisson">Boisson</option>
+                    <select id=""categorie"" required>
+                        <option value="""">Choisir une catégorie</option>
+                        <option value=""apéritif"">Apéritif</option>
+                        <option value=""entrée"">Entrée</option>
+                        <option value=""plat"">Plat</option>
+                        <option value=""dessert"">Dessert</option>
+                        <option value=""boisson"">Boisson</option>
                     </select>
                 </div>
 
             </div>
 
-            <div class="champ">
-                <label for="description">Description</label>
+            <div class=""champ"">
+                <label for=""description"">Description</label>
 
                 <textarea
-                    id="description"
+                    id=""description""
                     required
-                    placeholder="Une courte description de la recette…"
+                    placeholder=""Une courte description de la recette…""
                 ></textarea>
             </div>
 
-            <div class="groupe-champs">
+            <div class=""groupe-champs"">
 
-                <div class="champ">
-                    <label for="preparation">
+                <div class=""champ"">
+                    <label for=""preparation"">
                         Temps de préparation
                     </label>
 
                     <input
-                        type="number"
-                        id="preparation"
-                        min="0"
+                        type=""number""
+                        id=""preparation""
+                        min=""0""
                         required
-                        placeholder="En minutes"
+                        placeholder=""En minutes""
                     >
                 </div>
 
-                <div class="champ">
-                    <label for="cuisson">
+                <div class=""champ"">
+                    <label for=""cuisson"">
                         Temps de cuisson
                     </label>
 
                     <input
-                        type="number"
-                        id="cuisson"
-                        min="0"
+                        type=""number""
+                        id=""cuisson""
+                        min=""0""
                         required
-                        placeholder="En minutes"
+                        placeholder=""En minutes""
                     >
                 </div>
 
-                <div class="champ">
-                    <label for="personnes">
-                        Nombre de personnes
+                <div class=""champ"">
+                    <label for=""personnes"">
+                        Nombre de personnes de base
                     </label>
 
                     <input
-                        type="number"
-                        id="personnes"
-                        min="1"
+                        type=""number""
+                        id=""personnes""
+                        min=""1""
                         required
-                        placeholder="Ex. 4"
+                        placeholder=""Ex. 4""
                     >
+
+                    <small>
+                        Toutes les quantités proportionnelles seront calculées
+                        à partir de ce nombre.
+                    </small>
                 </div>
 
-                <div class="champ">
-                    <label for="difficulte">Difficulté</label>
+                <div class=""champ"">
+                    <label for=""difficulte"">Difficulté</label>
 
-                    <select id="difficulte" required>
-                        <option value="">Choisir</option>
-                        <option value="Très facile">Très facile</option>
-                        <option value="Facile">Facile</option>
-                        <option value="Moyen">Moyen</option>
-                        <option value="Difficile">Difficile</option>
+                    <select id=""difficulte"" required>
+                        <option value="""">Choisir</option>
+                        <option value=""Très facile"">Très facile</option>
+                        <option value=""Facile"">Facile</option>
+                        <option value=""Moyen"">Moyen</option>
+                        <option value=""Difficile"">Difficile</option>
                     </select>
                 </div>
 
             </div>
 
-            <div class="groupe-champs">
+            <div class=""groupe-champs"">
 
-                <div class="champ">
-                    <label for="emoji">Emoji</label>
+                <div class=""champ"">
+                    <label for=""emoji"">Emoji</label>
 
                     <input
-                        type="text"
-                        id="emoji"
-                        maxlength="4"
-                        placeholder="🍰"
+                        type=""text""
+                        id=""emoji""
+                        maxlength=""8""
+                        placeholder=""🍰""
                     >
 
                     <small>
-                        Il servira d’illustration provisoire.
+                        Utilisé lorsqu’aucune photo n’est renseignée.
                     </small>
                 </div>
 
-                <div class="champ">
-    <label for="image">Chemin de la photo</label>
-
-    <input
-        type="text"
-        id="image"
-        placeholder="images/tarte-aux-pommes.jpg"
-    >
-
-    <small>
-        Ajoute d’abord la photo dans le dossier images.
-    </small>
-</div>
-
-                <div class="champ">
-                    <label for="auteur">Auteur</label>
+                <div class=""champ"">
+                    <label for=""image"">Chemin de la photo</label>
 
                     <input
-                        type="text"
-                        id="auteur"
-                        placeholder="Ex. Recette de Mamie"
+                        type=""text""
+                        id=""image""
+                        placeholder=""images/tarte-aux-pommes.jpg""
+                    >
+                </div>
+
+                <div class=""champ"">
+                    <label for=""auteur"">Auteur</label>
+
+                    <input
+                        type=""text""
+                        id=""auteur""
+                        placeholder=""Ex. Recette de Mamie""
                     >
                 </div>
 
             </div>
 
-            <div class="champ">
-                <label for="ingredients">Ingrédients</label>
+            <div class=""bloc-ingredients"">
+                <span class=""titre-champ"">Ingrédients</span>
+
+                <p class=""aide"">
+                    Renseigne séparément la quantité, l’unité et le nom.
+                    Décoche « Proportionnel » pour le sel, le poivre,
+                    la décoration ou une quantité qui ne doit pas évoluer.
+                </p>
+
+                <div class=""entete-ingredients"" aria-hidden=""true"">
+                    <span>Quantité</span>
+                    <span>Unité</span>
+                    <span>Ingrédient</span>
+                    <span>Calcul</span>
+                    <span></span>
+                </div>
+
+                <div id=""liste-champs-ingredients""></div>
+
+                <button
+                    type=""button""
+                    class=""bouton-ajouter-ligne""
+                    id=""ajouter-ingredient""
+                >
+                    + Ajouter un ingrédient
+                </button>
+            </div>
+
+            <div class=""champ"">
+                <label for=""etapes"">Étapes</label>
 
                 <textarea
-                    id="ingredients"
+                    id=""etapes""
                     required
-                    placeholder="Écris un ingrédient par ligne&#10;500 g de farine&#10;3 œufs&#10;100 g de sucre"
+                    placeholder=""Écris une étape par ligne&#10;Préchauffer le four.&#10;Mélanger les ingrédients.&#10;Enfourner 30 minutes.""
                 ></textarea>
 
                 <small>
-                    Un ingrédient par ligne.
+                    Une étape par ligne. Évite les quantités fixes dans les
+                    étapes lorsqu’elles doivent évoluer avec les portions.
                 </small>
             </div>
 
-            <div class="champ">
-                <label for="etapes">Étapes</label>
+            <div class=""champ"">
+                <label for=""astuce"">Astuce</label>
 
                 <textarea
-                    id="etapes"
-                    required
-                    placeholder="Écris une étape par ligne&#10;Préchauffer le four.&#10;Mélanger les ingrédients.&#10;Enfourner 30 minutes."
-                ></textarea>
-
-                <small>
-                    Une étape par ligne.
-                </small>
-            </div>
-
-            <div class="champ">
-                <label for="astuce">Astuce</label>
-
-                <textarea
-                    id="astuce"
-                    placeholder="Une astuce ou un conseil facultatif…"
+                    id=""astuce""
+                    placeholder=""Une astuce ou un conseil facultatif…""
                 ></textarea>
             </div>
 
-            <button type="submit" class="bouton-generer">
+            <button type=""submit"" class=""bouton-generer"">
                 Générer la recette
             </button>
 
         </form>
 
-        <section class="resultat-json" id="resultat-json">
+        <section class=""resultat-json"" id=""resultat-json"">
 
             <h2>Bloc à ajouter dans recettes.json</h2>
 
             <p>
-                Copie ce bloc puis ajoute-le dans la liste des recettes.
+                Ajoute une virgule après la recette précédente, puis colle ce bloc.
             </p>
 
-            <pre id="code-json"></pre>
+            <pre id=""code-json""></pre>
 
-            <div class="actions-json">
+            <div class=""actions-json"">
                 <button
-                    type="button"
-                    class="bouton-secondaire"
-                    id="copier-json"
+                    type=""button""
+                    class=""bouton-secondaire""
+                    id=""copier-json""
                 >
                     Copier le JSON
                 </button>
 
                 <button
-                    type="button"
-                    class="bouton-secondaire"
-                    id="recommencer"
+                    type=""button""
+                    class=""bouton-secondaire""
+                    id=""recommencer""
                 >
                     Créer une autre recette
                 </button>
             </div>
 
             <p
-                class="confirmation"
-                id="confirmation"
-                aria-live="polite"
+                class=""confirmation""
+                id=""confirmation""
+                aria-live=""polite""
             ></p>
 
         </section>
@@ -417,158 +535,361 @@
 
     <script>
         const formulaire =
-            document.getElementById("formulaire-recette");
+            document.getElementById(""formulaire-recette"");
+
+        const conteneurIngredients =
+            document.getElementById(""liste-champs-ingredients"");
+
+        const boutonAjouterIngredient =
+            document.getElementById(""ajouter-ingredient"");
 
         const resultatJson =
-            document.getElementById("resultat-json");
+            document.getElementById(""resultat-json"");
 
         const codeJson =
-            document.getElementById("code-json");
+            document.getElementById(""code-json"");
 
         const boutonCopier =
-            document.getElementById("copier-json");
+            document.getElementById(""copier-json"");
 
         const boutonRecommencer =
-            document.getElementById("recommencer");
+            document.getElementById(""recommencer"");
 
         const confirmation =
-            document.getElementById("confirmation");
+            document.getElementById(""confirmation"");
+
+        let compteurIngredients = 0;
+
+        function creerLigneIngredient(valeurs = {}) {
+            compteurIngredients += 1;
+
+            const ligne = document.createElement(""div"");
+            ligne.className = ""ligne-ingredient"";
+
+            ligne.innerHTML = `
+                <input
+                    type=""text""
+                    inputmode=""decimal""
+                    class=""ingredient-quantite""
+                    aria-label=""Quantité de l’ingrédient""
+                    placeholder=""Ex. 400""
+                    value=""${valeurs.quantite ?? """"}""
+                >
+
+                <input
+                    type=""text""
+                    class=""ingredient-unite""
+                    aria-label=""Unité de l’ingrédient""
+                    placeholder=""g, ml…""
+                    value=""${valeurs.unite ?? """"}""
+                >
+
+                <input
+                    type=""text""
+                    class=""ingredient-nom""
+                    aria-label=""Nom de l’ingrédient""
+                    placeholder=""Ex. de farine""
+                    required
+                    value=""${valeurs.nom ?? """"}""
+                >
+
+                <label class=""option-proportionnelle"">
+                    <input
+                        type=""checkbox""
+                        class=""ingredient-proportionnel""
+                        ${valeurs.proportionnel === false ? """" : ""checked""}
+                    >
+                    Proportionnel
+                </label>
+
+                <button
+                    type=""button""
+                    class=""supprimer-ingredient""
+                    aria-label=""Supprimer cet ingrédient""
+                    title=""Supprimer cet ingrédient""
+                >
+                    ×
+                </button>
+            `;
+
+            ligne
+                .querySelector("".supprimer-ingredient"")
+                .addEventListener(""click"", function () {
+                    const lignes =
+                        conteneurIngredients.querySelectorAll(
+                            "".ligne-ingredient""
+                        );
+
+                    if (lignes.length === 1) {
+                        ligne.querySelectorAll(""input"").forEach(
+                            function (champ) {
+                                if (champ.type === ""checkbox"") {
+                                    champ.checked = true;
+                                } else {
+                                    champ.value = """";
+                                }
+                            }
+                        );
+
+                        return;
+                    }
+
+                    ligne.remove();
+                });
+
+            conteneurIngredients.appendChild(ligne);
+        }
 
         function creerIdentifiant(nom) {
             return nom
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "")
+                .normalize(""NFD"")
+                .replace(/[\u0300-\u036f]/g, """")
                 .toLowerCase()
                 .trim()
-                .replace(/[^a-z0-9]+/g, "-")
-                .replace(/^-+|-+$/g, "");
+                .replace(/[^a-z0-9]+/g, ""-"")
+                .replace(/^-+|-+$/g, """");
         }
 
         function transformerEnListe(valeur) {
             return valeur
-                .split("\n")
+                .split(""\n"")
                 .map(function (ligne) {
                     return ligne.trim();
                 })
                 .filter(function (ligne) {
-                    return ligne !== "";
+                    return ligne !== """";
                 });
         }
 
         function obtenirCategorieAffichee(categorie) {
             const categories = {
-                "apéritif": "Apéritif",
-                "entrée": "Entrée",
-                "plat": "Plat",
-                "dessert": "Dessert",
-                "boisson": "Boisson"
+                ""apéritif"": ""Apéritif"",
+                ""entrée"": ""Entrée"",
+                ""plat"": ""Plat"",
+                ""dessert"": ""Dessert"",
+                ""boisson"": ""Boisson""
             };
 
             return categories[categorie] || categorie;
         }
 
-        formulaire.addEventListener("submit", function (evenement) {
-            evenement.preventDefault();
+        function convertirQuantite(valeur) {
+            const texte = valeur.trim().replace("","", ""."");
 
-            const nom =
-                document.getElementById("nom").value.trim();
+            if (texte === """") {
+                return null;
+            }
 
-            const categorie =
-                document.getElementById("categorie").value;
+            const nombre = Number(texte);
 
-            const recette = {
-                id: creerIdentifiant(nom),
-                nom: nom,
-                description:
-                    document.getElementById("description")
+            if (!Number.isFinite(nombre) || nombre < 0) {
+                throw new Error(
+                    `La quantité « ${valeur} » n’est pas valide.`
+                );
+            }
+
+            return nombre;
+        }
+
+        function recupererIngredients() {
+            const lignes =
+                conteneurIngredients.querySelectorAll(
+                    "".ligne-ingredient""
+                );
+
+            const ingredients = [];
+
+            lignes.forEach(function (ligne) {
+                const quantiteTexte =
+                    ligne.querySelector("".ingredient-quantite"")
+                        .value;
+
+                const unite =
+                    ligne.querySelector("".ingredient-unite"")
                         .value
-                        .trim(),
-                categorie: categorie,
-                categorieAffichee:
-                    obtenirCategorieAffichee(categorie),
-                preparation:
-                    Number(
-                        document.getElementById("preparation")
-                            .value
-                    ),
-                cuisson:
-                    Number(
-                        document.getElementById("cuisson")
-                            .value
-                    ),
-                personnes:
-                    Number(
-                        document.getElementById("personnes")
-                            .value
-                    ),
-                difficulte:
-                    document.getElementById("difficulte")
-                        .value,
-                emoji:
-                    document.getElementById("emoji")
-                        .value
-                        .trim() || "🍽️",
-                image:
-                    document.getElementById("image")
-                        .value
-                        .trim(),
-                auteur:
-                    document.getElementById("auteur")
-                        .value
-                        .trim(),
-                ingredients:
-                    transformerEnListe(
-                        document.getElementById("ingredients")
-                            .value
-                    ),
-                etapes:
-                    transformerEnListe(
-                        document.getElementById("etapes")
-                            .value
-                    ),
-                astuce:
-                    document.getElementById("astuce")
-                        .value
-                        .trim()
-            };
+                        .trim();
 
-            codeJson.textContent =
-                JSON.stringify(recette, null, 2);
+                const nom =
+                    ligne.querySelector("".ingredient-nom"")
+                        .value
+                        .trim();
 
-            resultatJson.classList.add("visible");
-            confirmation.textContent = "";
+                const proportionnel =
+                    ligne.querySelector(
+                        "".ingredient-proportionnel""
+                    ).checked;
 
-            resultatJson.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+                if (
+                    quantiteTexte.trim() === """" &&
+                    unite === """" &&
+                    nom === """"
+                ) {
+                    return;
+                }
+
+                if (nom === """") {
+                    throw new Error(
+                        ""Chaque ligne d’ingrédient doit avoir un nom.""
+                    );
+                }
+
+                ingredients.push({
+                    quantite: convertirQuantite(quantiteTexte),
+                    unite: unite,
+                    nom: nom,
+                    proportionnel: proportionnel
+                });
             });
+
+            if (ingredients.length === 0) {
+                throw new Error(
+                    ""Ajoute au moins un ingrédient.""
+                );
+            }
+
+            return ingredients;
+        }
+
+        boutonAjouterIngredient.addEventListener(
+            ""click"",
+            function () {
+                creerLigneIngredient();
+            }
+        );
+
+        formulaire.addEventListener(""submit"", function (evenement) {
+            evenement.preventDefault();
+            confirmation.textContent = """";
+
+            try {
+                const nom =
+                    document.getElementById(""nom"").value.trim();
+
+                const categorie =
+                    document.getElementById(""categorie"").value;
+
+                const recette = {
+                    id: creerIdentifiant(nom),
+                    nom: nom,
+                    description:
+                        document.getElementById(""description"")
+                            .value
+                            .trim(),
+                    categorie: categorie,
+                    categorieAffichee:
+                        obtenirCategorieAffichee(categorie),
+                    preparation:
+                        Number(
+                            document.getElementById(""preparation"")
+                                .value
+                        ),
+                    cuisson:
+                        Number(
+                            document.getElementById(""cuisson"")
+                                .value
+                        ),
+                    personnes:
+                        Number(
+                            document.getElementById(""personnes"")
+                                .value
+                        ),
+                    difficulte:
+                        document.getElementById(""difficulte"")
+                            .value,
+                    emoji:
+                        document.getElementById(""emoji"")
+                            .value
+                            .trim() || ""🍽️"",
+                    image:
+                        document.getElementById(""image"")
+                            .value
+                            .trim(),
+                    auteur:
+                        document.getElementById(""auteur"")
+                            .value
+                            .trim(),
+                    ingredients:
+                        recupererIngredients(),
+                    etapes:
+                        transformerEnListe(
+                            document.getElementById(""etapes"")
+                                .value
+                        ),
+                    astuce:
+                        document.getElementById(""astuce"")
+                            .value
+                            .trim()
+                };
+
+                if (recette.etapes.length === 0) {
+                    throw new Error(
+                        ""Ajoute au moins une étape.""
+                    );
+                }
+
+                codeJson.textContent =
+                    JSON.stringify(recette, null, 2);
+
+                resultatJson.classList.add(""visible"");
+
+                resultatJson.scrollIntoView({
+                    behavior: ""smooth"",
+                    block: ""start""
+                });
+
+            } catch (erreur) {
+                confirmation.textContent = erreur.message;
+                resultatJson.classList.add(""visible"");
+
+                resultatJson.scrollIntoView({
+                    behavior: ""smooth"",
+                    block: ""start""
+                });
+            }
         });
 
-        boutonCopier.addEventListener("click", async function () {
+        boutonCopier.addEventListener(""click"", async function () {
+            if (!codeJson.textContent.trim()) {
+                confirmation.textContent =
+                    ""Génère d’abord une recette valide."";
+                return;
+            }
+
             try {
                 await navigator.clipboard.writeText(
                     codeJson.textContent
                 );
 
                 confirmation.textContent =
-                    "Le bloc JSON a bien été copié.";
+                    ""Le bloc JSON a bien été copié."";
             } catch (erreur) {
                 confirmation.textContent =
-                    "La copie automatique a échoué. Sélectionne le texte manuellement.";
+                    ""La copie automatique a échoué. Sélectionne le texte manuellement."";
             }
         });
 
-        boutonRecommencer.addEventListener("click", function () {
+        boutonRecommencer.addEventListener(""click"", function () {
             formulaire.reset();
-            resultatJson.classList.remove("visible");
-            confirmation.textContent = "";
+            conteneurIngredients.innerHTML = """";
+            creerLigneIngredient();
+            creerLigneIngredient();
+
+            resultatJson.classList.remove(""visible"");
+            codeJson.textContent = """";
+            confirmation.textContent = """";
 
             window.scrollTo({
                 top: 0,
-                behavior: "smooth"
+                behavior: ""smooth""
             });
         });
+
+        creerLigneIngredient();
+        creerLigneIngredient();
+        creerLigneIngredient();
     </script>
 
 </body>
 </html>
+
+"
