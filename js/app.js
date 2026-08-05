@@ -19,28 +19,29 @@ async function chargerRecettes() {
     `;
 
     try {
-        const reponse = await fetch("./recettes.json");
+        const { data, error } =
+            await window.supabaseClient
+                .from("recettes")
+                .select("*")
+                .order("created_at", {
+                    ascending: false
+                });
 
-        if (!reponse.ok) {
-            throw new Error(
-                `Impossible de charger recettes.json : erreur ${reponse.status}`
-            );
+        if (error) {
+            throw error;
         }
 
-        const donnees = await reponse.json();
-
-        if (!Array.isArray(donnees)) {
-            throw new Error(
-                "Le contenu de recettes.json doit être une liste."
-            );
-        }
-
-        recettes = donnees;
+        recettes = Array.isArray(data)
+            ? data
+            : [];
 
         afficherRecettes();
 
     } catch (erreur) {
-        console.error(erreur);
+        console.error(
+            "Erreur de chargement Supabase :",
+            erreur
+        );
 
         grilleRecettes.innerHTML = `
             <div class="message-erreur">
@@ -50,7 +51,9 @@ async function chargerRecettes() {
                     </strong>
                 </p>
 
-                <p>${erreur.message}</p>
+                <p>
+                    ${erreur.message}
+                </p>
             </div>
         `;
     }
@@ -97,13 +100,13 @@ function creerCarteRecette(recette) {
             <div class="contenu-carte">
 
                 <span class="categorie">
-                    ${recette.categorieAffichee}
+                    ${recette.categorie_affichee || recette.categorie}
                 </span>
 
                 <h3>${recette.nom}</h3>
 
                 <p class="description">
-                    ${recette.description}
+                    ${recette.description || ""}
                 </p>
 
                 <div class="informations">
@@ -163,7 +166,7 @@ function construireTexteRecherche(recette) {
         recette.nom,
         recette.description,
         recette.categorie,
-        recette.categorieAffichee,
+        recette.categorie_affichee,
         recette.difficulte,
         recette.auteur,
         ingredients
@@ -201,7 +204,7 @@ function afficherRecettes() {
     if (recettesFiltrees.length === 0) {
         grilleRecettes.innerHTML = `
             <p class="aucun-resultat">
-                Aucune recette ne correspond à votre recherche.
+                Aucune recette enregistrée pour le moment.
             </p>
         `;
 
