@@ -205,6 +205,23 @@ function afficherRecette(recette) {
                     ${recette.description}
                 </p>
 
+                <div class="actions-gestion-recette">
+    <a
+        href="ajouter.html?id=${encodeURIComponent(recette.id)}"
+        class="bouton-modifier"
+    >
+        ✏️ Modifier la recette
+    </a>
+
+    <button
+        type="button"
+        class="bouton-supprimer"
+        id="supprimer-recette"
+    >
+        🗑️ Supprimer la recette
+    </button>
+</div>
+
                 <div class="informations-recette">
 
                     <div class="information">
