@@ -16,36 +16,38 @@ async function chargerRecette() {
             );
         }
 
-        const reponse = await fetch("./recettes.json");
+        const { data, error } =
+            await window.supabaseClient
+                .from("recettes")
+                .select("*")
+                .eq("id", identifiantRecette)
+                .single();
 
-        if (!reponse.ok) {
-            throw new Error(
-                "Impossible de charger les recettes."
-            );
+        if (error) {
+            throw error;
         }
 
-        const recettes = await reponse.json();
-
-        const recette = recettes.find(function (element) {
-            return element.id === identifiantRecette;
-        });
-
-        if (!recette) {
+        if (!data) {
             throw new Error(
                 "Cette recette n’existe pas."
             );
         }
 
-        afficherRecette(recette);
+        afficherRecette(data);
 
     } catch (erreur) {
-        console.error(erreur);
+        console.error(
+            "Erreur de chargement de la recette :",
+            erreur
+        );
 
         contenuRecette.innerHTML = `
             <div class="message">
                 <h1>Recette introuvable</h1>
 
-                <p>${erreur.message}</p>
+                <p>
+                    Cette recette n’existe pas.
+                </p>
 
                 <a href="index.html">
                     Retourner à toutes les recettes
@@ -54,7 +56,6 @@ async function chargerRecette() {
         `;
     }
 }
-
 
 function formaterQuantite(valeur) {
     if (Number.isInteger(valeur)) {
