@@ -546,3 +546,54 @@ footer {
     background-color: var(--vert);
     color: var(--blanc);
 }
+
+.actions-gestion-recette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin: 25px 0 30px;
+}
+
+.bouton-modifier,
+.bouton-supprimer {
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font: inherit;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.bouton-modifier {
+    border: 2px solid var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+.bouton-modifier:hover {
+    background-color: var(--vert-fonce);
+    border-color: var(--vert-fonce);
+}
+
+.bouton-supprimer {
+    border: 2px solid #a54f3c;
+    background-color: var(--blanc);
+    color: #a54f3c;
+}
+
+.bouton-supprimer:hover {
+    background-color: #f8ece7;
+}
+
+@media (max-width: 550px) {
+    .actions-gestion-recette {
+        flex-direction: column;
+    }
+
+    .bouton-modifier,
+    .bouton-supprimer {
+        width: 100%;
+        text-align: center;
+    }
+}
