@@ -7,20 +7,11 @@ const conteneurIngredients =
 const boutonAjouterIngredient =
     document.getElementById("ajouter-ingredient");
 
-const resultatJson =
-    document.getElementById("resultat-json");
+const boutonEnregistrer =
+    document.getElementById("enregistrer-recette");
 
-const codeJson =
-    document.getElementById("code-json");
-
-const boutonCopier =
-    document.getElementById("copier-json");
-
-const boutonRecommencer =
-    document.getElementById("recommencer");
-
-const confirmation =
-    document.getElementById("confirmation");
+const messageFormulaire =
+    document.getElementById("message-formulaire");
 
 
 function creerLigneIngredient(valeurs = {}) {
@@ -85,24 +76,13 @@ function creerLigneIngredient(valeurs = {}) {
             );
 
         if (lignes.length === 1) {
-            const champQuantite =
-                ligne.querySelector(".ingredient-quantite");
+            ligne.querySelector(".ingredient-quantite").value = "";
+            ligne.querySelector(".ingredient-unite").value = "";
+            ligne.querySelector(".ingredient-nom").value = "";
 
-            const champUnite =
-                ligne.querySelector(".ingredient-unite");
-
-            const champNom =
-                ligne.querySelector(".ingredient-nom");
-
-            const caseProportionnelle =
-                ligne.querySelector(
-                    ".ingredient-proportionnel"
-                );
-
-            champQuantite.value = "";
-            champUnite.value = "";
-            champNom.value = "";
-            caseProportionnelle.checked = true;
+            ligne.querySelector(
+                ".ingredient-proportionnel"
+            ).checked = true;
 
             return;
         }
@@ -111,17 +91,6 @@ function creerLigneIngredient(valeurs = {}) {
     });
 
     conteneurIngredients.appendChild(ligne);
-}
-
-
-function creerIdentifiant(nom) {
-    return nom
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .trim()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
 }
 
 
@@ -211,7 +180,7 @@ function recupererIngredients() {
 
         if (nom === "") {
             throw new Error(
-                "Chaque ligne d’ingrédient doit avoir un nom."
+                "Chaque ingrédient doit avoir un nom."
             );
         }
 
@@ -233,20 +202,10 @@ function recupererIngredients() {
 }
 
 
-function genererRecette() {
-    const nom =
-        document.getElementById("nom")
-            .value
-            .trim();
-
-    const categorie =
-        document.getElementById("categorie")
-            .value;
-
+function construireRecette() {
     const etapes =
         transformerEnListe(
-            document.getElementById("etapes")
-                .value
+            document.getElementById("etapes").value
         );
 
     if (etapes.length === 0) {
@@ -255,10 +214,14 @@ function genererRecette() {
         );
     }
 
-    return {
-        id: creerIdentifiant(nom),
+    const categorie =
+        document.getElementById("categorie").value;
 
-        nom: nom,
+    return {
+        nom:
+            document.getElementById("nom")
+                .value
+                .trim(),
 
         description:
             document.getElementById("description")
@@ -267,30 +230,26 @@ function genererRecette() {
 
         categorie: categorie,
 
-        categorieAffichee:
+        categorie_affichee:
             obtenirCategorieAffichee(categorie),
 
         preparation:
             Number(
-                document.getElementById("preparation")
-                    .value
+                document.getElementById("preparation").value
             ),
 
         cuisson:
             Number(
-                document.getElementById("cuisson")
-                    .value
+                document.getElementById("cuisson").value
             ),
 
         personnes:
             Number(
-                document.getElementById("personnes")
-                    .value
+                document.getElementById("personnes").value
             ),
 
         difficulte:
-            document.getElementById("difficulte")
-                .value,
+            document.getElementById("difficulte").value,
 
         emoji:
             document.getElementById("emoji")
@@ -320,6 +279,22 @@ function genererRecette() {
 }
 
 
+async function enregistrerRecette(recette) {
+    const { data, error } =
+        await window.supabaseClient
+            .from("recettes")
+            .insert(recette)
+            .select("id")
+            .single();
+
+    if (error) {
+        throw error;
+    }
+
+    return data;
+}
+
+
 boutonAjouterIngredient.addEventListener(
     "click",
     function () {
@@ -330,88 +305,47 @@ boutonAjouterIngredient.addEventListener(
 
 formulaire.addEventListener(
     "submit",
-    function (evenement) {
+    async function (evenement) {
         evenement.preventDefault();
 
-        confirmation.textContent = "";
+        messageFormulaire.textContent =
+            "Enregistrement en cours…";
+
+        boutonEnregistrer.disabled = true;
+        boutonEnregistrer.textContent =
+            "Enregistrement…";
 
         try {
-            const recette = genererRecette();
+            const nouvelleRecette =
+                construireRecette();
 
-            codeJson.textContent =
-                JSON.stringify(recette, null, 2);
+            const recetteEnregistree =
+                await enregistrerRecette(
+                    nouvelleRecette
+                );
 
-            resultatJson.classList.add("visible");
+            messageFormulaire.textContent =
+                "La recette a bien été enregistrée.";
 
-            resultatJson.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+            window.location.href =
+                `recette.html?id=${encodeURIComponent(
+                    recetteEnregistree.id
+                )}`;
 
         } catch (erreur) {
-            codeJson.textContent = "";
-
-            confirmation.textContent =
-                erreur.message;
-
-            resultatJson.classList.add("visible");
-
-            resultatJson.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }
-    }
-);
-
-
-boutonCopier.addEventListener(
-    "click",
-    async function () {
-        if (!codeJson.textContent.trim()) {
-            confirmation.textContent =
-                "Génère d’abord une recette valide.";
-
-            return;
-        }
-
-        try {
-            await navigator.clipboard.writeText(
-                codeJson.textContent
+            console.error(
+                "Erreur pendant l’enregistrement :",
+                erreur
             );
 
-            confirmation.textContent =
-                "Le bloc JSON a bien été copié.";
+            messageFormulaire.textContent =
+                erreur.message ||
+                "Impossible d’enregistrer la recette.";
 
-        } catch (erreur) {
-            confirmation.textContent =
-                "La copie automatique a échoué. " +
-                "Sélectionne le texte manuellement.";
+            boutonEnregistrer.disabled = false;
+            boutonEnregistrer.textContent =
+                "Enregistrer la recette";
         }
-    }
-);
-
-
-boutonRecommencer.addEventListener(
-    "click",
-    function () {
-        formulaire.reset();
-
-        conteneurIngredients.innerHTML = "";
-
-        creerLigneIngredient();
-        creerLigneIngredient();
-        creerLigneIngredient();
-
-        resultatJson.classList.remove("visible");
-
-        codeJson.textContent = "";
-        confirmation.textContent = "";
-
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth"
-        });
     }
 );
 
