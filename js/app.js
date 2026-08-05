@@ -1,9 +1,15 @@
-const champRecherche = document.getElementById("recherche");
-const boutonsFiltres = document.querySelectorAll(".filtre");
-const grilleRecettes = document.getElementById("grille-recettes");
+const champRecherche =
+    document.getElementById("recherche");
+
+const boutonsFiltres =
+    document.querySelectorAll(".filtre");
+
+const grilleRecettes =
+    document.getElementById("grille-recettes");
 
 let recettes = [];
 let categorieSelectionnee = "toutes";
+
 
 async function chargerRecettes() {
     grilleRecettes.innerHTML = `
@@ -17,7 +23,7 @@ async function chargerRecettes() {
 
         if (!reponse.ok) {
             throw new Error(
-                `Le fichier recettes.json est introuvable : erreur ${reponse.status}`
+                `Impossible de charger recettes.json : erreur ${reponse.status}`
             );
         }
 
@@ -25,48 +31,71 @@ async function chargerRecettes() {
 
         if (!Array.isArray(donnees)) {
             throw new Error(
-                "Le contenu de recettes.json doit commencer par [ et finir par ]."
+                "Le contenu de recettes.json doit être une liste."
             );
         }
 
         recettes = donnees;
 
-        console.log("Recettes chargées :", recettes);
-
         afficherRecettes();
+
     } catch (erreur) {
-        console.error("Erreur de chargement :", erreur);
+        console.error(erreur);
 
         grilleRecettes.innerHTML = `
             <div class="message-erreur">
-                <p><strong>Impossible de charger les recettes.</strong></p>
+                <p>
+                    <strong>
+                        Impossible de charger les recettes.
+                    </strong>
+                </p>
+
                 <p>${erreur.message}</p>
             </div>
         `;
     }
 }
 
+
+function calculerTempsTotal(recette) {
+    const preparation =
+        Number(recette.preparation) || 0;
+
+    const cuisson =
+        Number(recette.cuisson) || 0;
+
+    return preparation + cuisson;
+}
+
+
+function creerIllustration(recette) {
+    if (recette.image) {
+        return `
+            <img
+                src="${recette.image}"
+                alt="${recette.nom}"
+                class="photo-recette"
+            >
+        `;
+    }
+
+    return recette.emoji || "🍽️";
+}
+
+
 function creerCarteRecette(recette) {
     const tempsTotal =
-        Number(recette.preparation) + Number(recette.cuisson);
+        calculerTempsTotal(recette);
 
     return `
         <article class="carte-recette">
+
             <div class="illustration-recette">
-    ${
-        recette.image
-            ? `
-                <img
-                    src="${recette.image}"
-                    alt="${recette.nom}"
-                    class="photo-recette"
-                >
-            `
-            : recette.emoji || "🍽️"
-    }
-</div>
+                ${creerIllustration(recette)}
+            </div>
 
             <div class="contenu-carte">
+
                 <span class="categorie">
                     ${recette.categorieAffichee}
                 </span>
@@ -78,9 +107,17 @@ function creerCarteRecette(recette) {
                 </p>
 
                 <div class="informations">
-                    <span>⏱️ ${tempsTotal} min</span>
-                    <span>👥 ${recette.personnes} personnes</span>
-                    <span>● ${recette.difficulte}</span>
+                    <span>
+                        ⏱️ ${tempsTotal} min
+                    </span>
+
+                    <span>
+                        👥 ${recette.personnes} personnes
+                    </span>
+
+                    <span>
+                        ● ${recette.difficulte}
+                    </span>
                 </div>
 
                 <a
@@ -89,41 +126,77 @@ function creerCarteRecette(recette) {
                 >
                     Voir la recette
                 </a>
+
             </div>
         </article>
     `;
 }
 
-function afficherRecettes() {
-    const recherche = champRecherche.value
-        .toLowerCase()
-        .trim();
 
-    const recettesFiltrees = recettes.filter(function (recette) {
-        const ingredients = Array.isArray(recette.ingredients)
-            ? recette.ingredients.join(" ")
+function construireTexteRecherche(recette) {
+    const ingredients =
+        Array.isArray(recette.ingredients)
+            ? recette.ingredients
+                .map(function (ingredient) {
+                    if (typeof ingredient === "string") {
+                        return ingredient;
+                    }
+
+                    return [
+                        ingredient.quantite,
+                        ingredient.unite,
+                        ingredient.nom
+                    ]
+                        .filter(function (element) {
+                            return (
+                                element !== null &&
+                                element !== undefined &&
+                                element !== ""
+                            );
+                        })
+                        .join(" ");
+                })
+                .join(" ")
             : "";
 
-        const texteRecherche = [
-            recette.nom,
-            recette.description,
-            recette.categorie,
-            recette.categorieAffichee,
-            recette.difficulte,
-            ingredients
-        ]
-            .join(" ")
-            .toLowerCase();
+    return [
+        recette.nom,
+        recette.description,
+        recette.categorie,
+        recette.categorieAffichee,
+        recette.difficulte,
+        recette.auteur,
+        ingredients
+    ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+}
 
-        const correspondRecherche =
-            texteRecherche.includes(recherche);
 
-        const correspondCategorie =
-            categorieSelectionnee === "toutes" ||
-            recette.categorie === categorieSelectionnee;
+function afficherRecettes() {
+    const recherche =
+        champRecherche.value
+            .toLowerCase()
+            .trim();
 
-        return correspondRecherche && correspondCategorie;
-    });
+    const recettesFiltrees =
+        recettes.filter(function (recette) {
+            const texteRecherche =
+                construireTexteRecherche(recette);
+
+            const correspondRecherche =
+                texteRecherche.includes(recherche);
+
+            const correspondCategorie =
+                categorieSelectionnee === "toutes" ||
+                recette.categorie === categorieSelectionnee;
+
+            return (
+                correspondRecherche &&
+                correspondCategorie
+            );
+        });
 
     if (recettesFiltrees.length === 0) {
         grilleRecettes.innerHTML = `
@@ -135,26 +208,40 @@ function afficherRecettes() {
         return;
     }
 
-    grilleRecettes.innerHTML = recettesFiltrees
-        .map(creerCarteRecette)
-        .join("");
+    grilleRecettes.innerHTML =
+        recettesFiltrees
+            .map(creerCarteRecette)
+            .join("");
 }
 
-champRecherche.addEventListener("input", afficherRecettes);
+
+champRecherche.addEventListener(
+    "input",
+    afficherRecettes
+);
+
 
 boutonsFiltres.forEach(function (bouton) {
-    bouton.addEventListener("click", function () {
-        boutonsFiltres.forEach(function (autreBouton) {
-            autreBouton.classList.remove("actif");
-        });
+    bouton.addEventListener(
+        "click",
+        function () {
+            boutonsFiltres.forEach(
+                function (autreBouton) {
+                    autreBouton.classList.remove(
+                        "actif"
+                    );
+                }
+            );
 
-        bouton.classList.add("actif");
+            bouton.classList.add("actif");
 
-        categorieSelectionnee =
-            bouton.dataset.categorie || "toutes";
+            categorieSelectionnee =
+                bouton.dataset.categorie || "toutes";
 
-        afficherRecettes();
-    });
+            afficherRecettes();
+        }
+    );
 });
+
 
 chargerRecettes();
