@@ -288,58 +288,21 @@
                 ></textarea>
             </div>
 
-            <button
-                type="submit"
-                class="bouton-generer"
-            >
-                Générer la recette
-            </button>
+           <button
+    type="submit"
+    class="bouton-generer"
+    id="enregistrer-recette"
+>
+    Enregistrer la recette
+</button>
+
+<p
+    class="confirmation"
+    id="message-formulaire"
+    aria-live="polite"
+></p>
 
         </form>
-
-        <section
-            class="resultat-json"
-            id="resultat-json"
-        >
-
-            <h2>
-                Bloc à ajouter dans recettes.json
-            </h2>
-
-            <p>
-                Ajoute une virgule après la recette précédente,
-                puis colle ce bloc.
-            </p>
-
-            <pre id="code-json"></pre>
-
-            <div class="actions-json">
-
-                <button
-                    type="button"
-                    class="bouton-secondaire"
-                    id="copier-json"
-                >
-                    Copier le JSON
-                </button>
-
-                <button
-                    type="button"
-                    class="bouton-secondaire"
-                    id="recommencer"
-                >
-                    Créer une autre recette
-                </button>
-
-            </div>
-
-            <p
-                class="confirmation"
-                id="confirmation"
-                aria-live="polite"
-            ></p>
-
-        </section>
 
     </main>
 
