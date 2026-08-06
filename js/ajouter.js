@@ -1,98 +1,67 @@
-const formulaire =
-    document.getElementById("formulaire-recette");
+const formulaire = document.getElementById("formulaire-recette");
+const conteneurIngredients = document.getElementById("liste-champs-ingredients");
+const boutonAjouterIngredient = document.getElementById("ajouter-ingredient");
+const boutonEnregistrer = document.getElementById("enregistrer-recette");
+const messageFormulaire = document.getElementById("message-formulaire");
 
-const conteneurIngredients =
-    document.getElementById("liste-champs-ingredients");
-
-const boutonAjouterIngredient =
-    document.getElementById("ajouter-ingredient");
-
-const boutonEnregistrer =
-    document.getElementById("enregistrer-recette");
-
-const messageFormulaire =
-    document.getElementById("message-formulaire");
-
+const parametres = new URLSearchParams(window.location.search);
+const identifiantRecette = parametres.get("id");
+const modeModification = Boolean(identifiantRecette);
 
 function creerLigneIngredient(valeurs = {}) {
     const ligne = document.createElement("div");
-
     ligne.className = "ligne-ingredient";
 
     ligne.innerHTML = `
-        <input
-            type="text"
-            inputmode="decimal"
+        <input type="text" inputmode="decimal"
             class="ingredient-quantite"
             aria-label="Quantité de l’ingrédient"
             placeholder="Ex. 400"
-            value="${valeurs.quantite ?? ""}"
-        >
+            value="${valeurs.quantite ?? ""}">
 
-        <input
-            type="text"
+        <input type="text"
             class="ingredient-unite"
             aria-label="Unité de l’ingrédient"
             placeholder="g, ml…"
-            value="${valeurs.unite ?? ""}"
-        >
+            value="${valeurs.unite ?? ""}">
 
-        <input
-            type="text"
+        <input type="text"
             class="ingredient-nom"
             aria-label="Nom de l’ingrédient"
             placeholder="Ex. de farine"
             required
-            value="${valeurs.nom ?? ""}"
-        >
+            value="${valeurs.nom ?? ""}">
 
         <label class="option-proportionnelle">
-            <input
-                type="checkbox"
+            <input type="checkbox"
                 class="ingredient-proportionnel"
-                ${valeurs.proportionnel === false ? "" : "checked"}
-            >
-
+                ${valeurs.proportionnel === false ? "" : "checked"}>
             Proportionnel
         </label>
 
-        <button
-            type="button"
+        <button type="button"
             class="supprimer-ingredient"
             aria-label="Supprimer cet ingrédient"
-            title="Supprimer cet ingrédient"
-        >
-            ×
-        </button>
+            title="Supprimer cet ingrédient">×</button>
     `;
 
-    const boutonSupprimer =
-        ligne.querySelector(".supprimer-ingredient");
+    ligne.querySelector(".supprimer-ingredient")
+        .addEventListener("click", function () {
+            const lignes = conteneurIngredients.querySelectorAll(".ligne-ingredient");
 
-    boutonSupprimer.addEventListener("click", function () {
-        const lignes =
-            conteneurIngredients.querySelectorAll(
-                ".ligne-ingredient"
-            );
+            if (lignes.length === 1) {
+                ligne.querySelector(".ingredient-quantite").value = "";
+                ligne.querySelector(".ingredient-unite").value = "";
+                ligne.querySelector(".ingredient-nom").value = "";
+                ligne.querySelector(".ingredient-proportionnel").checked = true;
+                return;
+            }
 
-        if (lignes.length === 1) {
-            ligne.querySelector(".ingredient-quantite").value = "";
-            ligne.querySelector(".ingredient-unite").value = "";
-            ligne.querySelector(".ingredient-nom").value = "";
-
-            ligne.querySelector(
-                ".ingredient-proportionnel"
-            ).checked = true;
-
-            return;
-        }
-
-        ligne.remove();
-    });
+            ligne.remove();
+        });
 
     conteneurIngredients.appendChild(ligne);
 }
-
 
 function transformerEnListe(valeur) {
     return valeur
@@ -104,7 +73,6 @@ function transformerEnListe(valeur) {
             return ligne !== "";
         });
 }
-
 
 function obtenirCategorieAffichee(categorie) {
     const categories = {
@@ -118,12 +86,8 @@ function obtenirCategorieAffichee(categorie) {
     return categories[categorie] || categorie;
 }
 
-
 function convertirQuantite(valeur) {
-    const texte =
-        valeur
-            .trim()
-            .replace(",", ".");
+    const texte = valeur.trim().replace(",", ".");
 
     if (texte === "") {
         return null;
@@ -132,56 +96,39 @@ function convertirQuantite(valeur) {
     const nombre = Number(texte);
 
     if (!Number.isFinite(nombre) || nombre < 0) {
-        throw new Error(
-            `La quantité « ${valeur} » n’est pas valide.`
-        );
+        throw new Error(`La quantité « ${valeur} » n’est pas valide.`);
     }
 
     return nombre;
 }
 
-
 function recupererIngredients() {
-    const lignes =
-        conteneurIngredients.querySelectorAll(
-            ".ligne-ingredient"
-        );
-
+    const lignes = conteneurIngredients.querySelectorAll(".ligne-ingredient");
     const ingredients = [];
 
     lignes.forEach(function (ligne) {
         const quantiteTexte =
-            ligne.querySelector(".ingredient-quantite")
-                .value;
+            ligne.querySelector(".ingredient-quantite").value;
 
         const unite =
-            ligne.querySelector(".ingredient-unite")
-                .value
-                .trim();
+            ligne.querySelector(".ingredient-unite").value.trim();
 
         const nom =
-            ligne.querySelector(".ingredient-nom")
-                .value
-                .trim();
+            ligne.querySelector(".ingredient-nom").value.trim();
 
         const proportionnel =
-            ligne.querySelector(
-                ".ingredient-proportionnel"
-            ).checked;
+            ligne.querySelector(".ingredient-proportionnel").checked;
 
-        const ligneEstVide =
+        if (
             quantiteTexte.trim() === "" &&
             unite === "" &&
-            nom === "";
-
-        if (ligneEstVide) {
+            nom === ""
+        ) {
             return;
         }
 
         if (nom === "") {
-            throw new Error(
-                "Chaque ingrédient doit avoir un nom."
-            );
+            throw new Error("Chaque ingrédient doit avoir un nom.");
         }
 
         ingredients.push({
@@ -193,93 +140,112 @@ function recupererIngredients() {
     });
 
     if (ingredients.length === 0) {
-        throw new Error(
-            "Ajoute au moins un ingrédient."
-        );
+        throw new Error("Ajoute au moins un ingrédient.");
     }
 
     return ingredients;
 }
 
-
 function construireRecette() {
-    const etapes =
-        transformerEnListe(
-            document.getElementById("etapes").value
-        );
+    const etapes = transformerEnListe(
+        document.getElementById("etapes").value
+    );
 
     if (etapes.length === 0) {
-        throw new Error(
-            "Ajoute au moins une étape."
-        );
+        throw new Error("Ajoute au moins une étape.");
     }
 
-    const categorie =
-        document.getElementById("categorie").value;
+    const categorie = document.getElementById("categorie").value;
 
     return {
-        nom:
-            document.getElementById("nom")
-                .value
-                .trim(),
-
-        description:
-            document.getElementById("description")
-                .value
-                .trim(),
-
+        nom: document.getElementById("nom").value.trim(),
+        description: document.getElementById("description").value.trim(),
         categorie: categorie,
-
-        categorie_affichee:
-            obtenirCategorieAffichee(categorie),
-
-        preparation:
-            Number(
-                document.getElementById("preparation").value
-            ),
-
-        cuisson:
-            Number(
-                document.getElementById("cuisson").value
-            ),
-
-        personnes:
-            Number(
-                document.getElementById("personnes").value
-            ),
-
-        difficulte:
-            document.getElementById("difficulte").value,
-
-        emoji:
-            document.getElementById("emoji")
-                .value
-                .trim() || "🍽️",
-
-        image:
-            document.getElementById("image")
-                .value
-                .trim(),
-
-        auteur:
-            document.getElementById("auteur")
-                .value
-                .trim(),
-
-        ingredients:
-            recupererIngredients(),
-
+        categorie_affichee: obtenirCategorieAffichee(categorie),
+        preparation: Number(document.getElementById("preparation").value),
+        cuisson: Number(document.getElementById("cuisson").value),
+        personnes: Number(document.getElementById("personnes").value),
+        difficulte: document.getElementById("difficulte").value,
+        emoji: document.getElementById("emoji").value.trim() || "🍽️",
+        image: document.getElementById("image").value.trim(),
+        auteur: document.getElementById("auteur").value.trim(),
+        ingredients: recupererIngredients(),
         etapes: etapes,
-
-        astuce:
-            document.getElementById("astuce")
-                .value
-                .trim()
+        astuce: document.getElementById("astuce").value.trim()
     };
 }
 
+function remplirFormulaire(recette) {
+    document.getElementById("nom").value = recette.nom || "";
+    document.getElementById("categorie").value = recette.categorie || "";
+    document.getElementById("description").value = recette.description || "";
+    document.getElementById("preparation").value = recette.preparation ?? "";
+    document.getElementById("cuisson").value = recette.cuisson ?? "";
+    document.getElementById("personnes").value = recette.personnes ?? "";
+    document.getElementById("difficulte").value = recette.difficulte || "";
+    document.getElementById("emoji").value = recette.emoji || "";
+    document.getElementById("image").value = recette.image || "";
+    document.getElementById("auteur").value = recette.auteur || "";
+    document.getElementById("etapes").value =
+        Array.isArray(recette.etapes) ? recette.etapes.join("\n") : "";
+    document.getElementById("astuce").value = recette.astuce || "";
 
-async function enregistrerRecette(recette) {
+    conteneurIngredients.innerHTML = "";
+
+    if (
+        Array.isArray(recette.ingredients) &&
+        recette.ingredients.length > 0
+    ) {
+        recette.ingredients.forEach(creerLigneIngredient);
+    } else {
+        creerLigneIngredient();
+    }
+}
+
+async function chargerRecetteAModifier() {
+    if (!modeModification) {
+        creerLigneIngredient();
+        creerLigneIngredient();
+        creerLigneIngredient();
+        return;
+    }
+
+    document.title = "Modifier une recette | À notre table";
+    document.querySelector(".entete-formulaire h1").textContent =
+        "Modifier la recette";
+    document.querySelector(".entete-formulaire p").textContent =
+        "Modifie les informations puis enregistre les changements.";
+    boutonEnregistrer.textContent = "Enregistrer les modifications";
+    messageFormulaire.textContent = "Chargement de la recette…";
+
+    try {
+        const { data, error } =
+            await window.supabaseClient
+                .from("recettes")
+                .select("*")
+                .eq("id", identifiantRecette)
+                .single();
+
+        if (error) {
+            throw error;
+        }
+
+        if (!data) {
+            throw new Error("Cette recette n’existe pas.");
+        }
+
+        remplirFormulaire(data);
+        messageFormulaire.textContent = "";
+
+    } catch (erreur) {
+        console.error("Erreur pendant le chargement :", erreur);
+        messageFormulaire.textContent =
+            erreur.message || "Impossible de charger la recette.";
+        boutonEnregistrer.disabled = true;
+    }
+}
+
+async function ajouterRecette(recette) {
     const { data, error } =
         await window.supabaseClient
             .from("recettes")
@@ -294,62 +260,70 @@ async function enregistrerRecette(recette) {
     return data;
 }
 
+async function modifierRecette(recette) {
+    const { data, error } =
+        await window.supabaseClient
+            .from("recettes")
+            .update(recette)
+            .eq("id", identifiantRecette)
+            .select("id")
+            .single();
 
-boutonAjouterIngredient.addEventListener(
-    "click",
-    function () {
-        creerLigneIngredient();
+    if (error) {
+        throw error;
     }
-);
 
+    return data;
+}
 
-formulaire.addEventListener(
-    "submit",
-    async function (evenement) {
-        evenement.preventDefault();
+boutonAjouterIngredient.addEventListener("click", function () {
+    creerLigneIngredient();
+});
+
+formulaire.addEventListener("submit", async function (evenement) {
+    evenement.preventDefault();
+
+    messageFormulaire.textContent =
+        modeModification
+            ? "Modification en cours…"
+            : "Enregistrement en cours…";
+
+    boutonEnregistrer.disabled = true;
+    boutonEnregistrer.textContent =
+        modeModification
+            ? "Modification…"
+            : "Enregistrement…";
+
+    try {
+        const recette = construireRecette();
+
+        const recetteEnregistree =
+            modeModification
+                ? await modifierRecette(recette)
+                : await ajouterRecette(recette);
 
         messageFormulaire.textContent =
-            "Enregistrement en cours…";
+            modeModification
+                ? "La recette a bien été modifiée."
+                : "La recette a bien été enregistrée.";
 
-        boutonEnregistrer.disabled = true;
+        window.location.href =
+            `recette.html?id=${encodeURIComponent(
+                recetteEnregistree.id
+            )}`;
+
+    } catch (erreur) {
+        console.error("Erreur pendant l’enregistrement :", erreur);
+
+        messageFormulaire.textContent =
+            erreur.message || "Impossible d’enregistrer la recette.";
+
+        boutonEnregistrer.disabled = false;
         boutonEnregistrer.textContent =
-            "Enregistrement…";
-
-        try {
-            const nouvelleRecette =
-                construireRecette();
-
-            const recetteEnregistree =
-                await enregistrerRecette(
-                    nouvelleRecette
-                );
-
-            messageFormulaire.textContent =
-                "La recette a bien été enregistrée.";
-
-            window.location.href =
-                `recette.html?id=${encodeURIComponent(
-                    recetteEnregistree.id
-                )}`;
-
-        } catch (erreur) {
-            console.error(
-                "Erreur pendant l’enregistrement :",
-                erreur
-            );
-
-            messageFormulaire.textContent =
-                erreur.message ||
-                "Impossible d’enregistrer la recette.";
-
-            boutonEnregistrer.disabled = false;
-            boutonEnregistrer.textContent =
-                "Enregistrer la recette";
-        }
+            modeModification
+                ? "Enregistrer les modifications"
+                : "Enregistrer la recette";
     }
-);
+});
 
-
-creerLigneIngredient();
-creerLigneIngredient();
-creerLigneIngredient();
+chargerRecetteAModifier();
