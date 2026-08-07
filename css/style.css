@@ -95,7 +95,7 @@ main {
     justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
-    margin-bottom: 40px;
+    margin-bottom: 18px;
 }
 
 .filtre {
@@ -726,6 +726,191 @@ footer {
     }
 }
 
+
+/* =================================
+   BARRE DES FILTRES AVANCÉS
+================================= */
+
+.barre-filtres-avances {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    margin: 0 auto 10px;
+}
+
+.bouton-filtres-avances,
+.filtre-secondaire {
+    padding: 10px 16px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 22px;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.bouton-filtres-avances:hover,
+.filtre-secondaire:hover {
+    border-color: var(--vert);
+    transform: translateY(-1px);
+}
+
+.filtre-secondaire.actif {
+    border-color: var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+#fleche-filtres {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+
+/* =================================
+   PANNEAU DES FILTRES AVANCÉS
+================================= */
+
+.panneau-filtres-avances {
+    width: 100%;
+    max-width: 950px;
+
+    max-height: 0;
+
+    margin: 0 auto;
+
+    padding: 0 24px;
+
+    overflow: hidden;
+
+    opacity: 0;
+
+    border: 1px solid transparent;
+    border-radius: 18px;
+
+    background-color: rgba(255, 255, 255, 0.45);
+
+    transition:
+        max-height 0.35s ease,
+        opacity 0.2s ease,
+        padding 0.35s ease,
+        margin 0.35s ease,
+        border-color 0.2s ease;
+}
+
+.panneau-filtres-avances.ouvert {
+    max-height: 650px;
+
+    margin-top: 16px;
+    margin-bottom: 18px;
+
+    padding: 22px 24px;
+
+    opacity: 1;
+
+    border-color: rgba(216, 209, 197, 0.75);
+}
+
+.groupe-filtre {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.groupe-filtre:last-child {
+    margin-bottom: 0;
+}
+
+.titre-filtre {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.liste-filtres-secondaires {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.filtre-multiple {
+    padding: 8px 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 20px;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.filtre-multiple:hover {
+    border-color: var(--vert);
+    transform: translateY(-1px);
+}
+
+.filtre-multiple.actif {
+    border-color: var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+@media (max-width: 600px) {
+    .barre-filtres-avances {
+        margin-top: 2px;
+    }
+
+    .bouton-filtres-avances,
+    .filtre-secondaire,
+    .filtre-multiple {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .panneau-filtres-avances.ouvert {
+        padding: 18px 14px;
+    }
+
+    .groupe-filtre {
+        margin-bottom: 16px;
+    }
+}
+
 /* =================================
    RÉSUMÉ DES FILTRES ACTIFS
 ================================= */
@@ -831,19 +1016,8 @@ footer {
 
 @media (max-width: 600px) {
 
-    .filtres-secondaires {
-        margin-bottom: 25px;
-    }
-
-    .groupe-filtre {
-        margin-bottom: 16px;
-    }
-
-    .filtre-secondaire,
-    .filtre-multiple {
-        padding: 8px 12px;
-        font-size: 13px;
-    }
+    /* Les styles mobiles des filtres avancés
+       sont définis plus haut. */
 }
 
 /* =================================
