@@ -41,6 +41,63 @@ async function chargerRecette() {
             erreur
         );
 
+        function creerBadges(valeurs, classeSupplementaire = "") {
+    if (!Array.isArray(valeurs) || valeurs.length === 0) {
+        return "";
+    }
+
+    const noms = {
+        "gros-gros": "Gros gros",
+        "healthy": "Healthy",
+        "végé": "Végé",
+        "rapide": "Rapide",
+        "pour-recevoir": "Pour recevoir",
+        "a-preparer-avance": "À préparer à l'avance",
+
+        "quotidien": "Quotidien",
+        "brunch": "Brunch",
+        "barbecue": "Barbecue",
+        "fetes": "Fêtes",
+        "invites": "Invités",
+        "apero-dinatoire": "Apéro dînatoire",
+
+        "printemps": "Printemps",
+        "été": "Été",
+        "automne": "Automne",
+        "hiver": "Hiver",
+        "toute-annee": "Toute l'année"
+    };
+
+    return valeurs
+        .map(function (valeur) {
+            return `
+                <span class="badge-recette ${classeSupplementaire}">
+                    ${noms[valeur] || valeur}
+                </span>
+            `;
+        })
+        .join("");
+}
+
+
+const badgesEtiquettes =
+    creerBadges(
+        recette.etiquettes,
+        "badge-etiquette"
+    );
+
+const badgesOccasions =
+    creerBadges(
+        recette.occasions,
+        "badge-occasion"
+    );
+
+const badgesSaisons =
+    creerBadges(
+        recette.saisons,
+        "badge-saison"
+    );
+        
         contenuRecette.innerHTML = `
             <div class="message">
                 <h1>Recette introuvable</h1>
