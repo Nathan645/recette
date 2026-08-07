@@ -324,18 +324,13 @@ function creerCarteRecette(recette) {
 
                 <div class="informations">
 
-                    <span>
-                        ⏱️ ${tempsTotal} min
-                    </span>
+                <span>
+                    ⏱️ ${tempsTotal} min
+                </span>
 
-                    <span>
-                        👥 ${recette.personnes}
-                        personnes
-                    </span>
-
-                    <span>
-                        ● ${recette.difficulte}
-                    </span>
+                <span>
+                    ● ${recette.difficulte}
+                </span>
 
                 </div>
 
