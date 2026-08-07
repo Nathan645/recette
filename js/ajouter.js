@@ -80,6 +80,7 @@ function obtenirCategorieAffichee(categorie) {
         "entrée": "Entrée",
         "plat": "Plat",
         "dessert": "Dessert",
+        "goûter": "Goûter",
         "boisson": "Boisson"
     };
 
