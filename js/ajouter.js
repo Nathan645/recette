@@ -74,6 +74,16 @@ function transformerEnListe(valeur) {
         });
 }
 
+function recupererCasesCochees(nom) {
+    return Array.from(
+        document.querySelectorAll(
+            `input[name="${nom}"]:checked`
+        )
+    ).map(function (caseCochee) {
+        return caseCochee.value;
+    });
+}
+
 function obtenirCategorieAffichee(categorie) {
     const categories = {
         "apéritif": "Apéritif",
@@ -172,8 +182,24 @@ function construireRecette() {
         auteur: document.getElementById("auteur").value.trim(),
         ingredients: recupererIngredients(),
         etapes: etapes,
+        etiquettes: recupererCasesCochees("etiquettes"),
+        occasions: recupererCasesCochees("occasions"),
+        saisons: recupererCasesCochees("saisons"),
         astuce: document.getElementById("astuce").value.trim()
     };
+}
+
+function cocherValeurs(nom, valeurs) {
+    const cases =
+        document.querySelectorAll(
+            `input[name="${nom}"]`
+        );
+
+    cases.forEach(function (caseCochee) {
+        caseCochee.checked =
+            Array.isArray(valeurs) &&
+            valeurs.includes(caseCochee.value);
+    });
 }
 
 function remplirFormulaire(recette) {
@@ -188,9 +214,12 @@ function remplirFormulaire(recette) {
     document.getElementById("image").value = recette.image || "";
     document.getElementById("auteur").value = recette.auteur || "";
     document.getElementById("etapes").value =
-        Array.isArray(recette.etapes) ? recette.etapes.join("\n") : "";
+    Array.isArray(recette.etapes) ? recette.etapes.join("\n") : "";
     document.getElementById("astuce").value = recette.astuce || "";
-
+    cocherValeurs("etiquettes",recette.etiquettes);
+    cocherValeurs("occasions",recette.occasions);
+    cocherValeurs("saisons",recette.saisons);
+    
     conteneurIngredients.innerHTML = "";
 
     if (
