@@ -71,11 +71,95 @@ function formaterQuantite(valeur) {
 }
 
 
-async function supprimerRecette() {
-    const confirmationSuppression =
-        window.confirm(
-            "Voulez-vous vraiment supprimer cette recette ? Cette action est définitive."
+function demanderConfirmationSuppression() {
+    return new Promise(function (resolve) {
+
+        const fond = document.createElement("div");
+        fond.className = "fond-popup";
+
+        fond.innerHTML = `
+            <div
+                class="popup-suppression"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="titre-popup-suppression"
+            >
+                <div class="icone-suppression">
+                    🗑️
+                </div>
+
+                <h2 id="titre-popup-suppression">
+                    Supprimer cette recette ?
+                </h2>
+
+                <p>
+                    Cette action est définitive.
+                    La recette sera supprimée du carnet familial.
+                </p>
+
+                <div class="actions-popup">
+                    <button
+                        type="button"
+                        class="bouton-annuler-suppression"
+                        id="annuler-suppression"
+                    >
+                        Annuler
+                    </button>
+
+                    <button
+                        type="button"
+                        class="bouton-confirmer-suppression"
+                        id="confirmer-suppression"
+                    >
+                        Supprimer
+                    </button>
+                </div>
+            </div>
+        `;
+
+        document.body.appendChild(fond);
+
+        const boutonAnnuler =
+            document.getElementById("annuler-suppression");
+
+        const boutonConfirmer =
+            document.getElementById("confirmer-suppression");
+
+        function fermerPopup(resultat) {
+            fond.remove();
+            resolve(resultat);
+        }
+
+        boutonAnnuler.addEventListener(
+            "click",
+            function () {
+                fermerPopup(false);
+            }
         );
+
+        boutonConfirmer.addEventListener(
+            "click",
+            function () {
+                fermerPopup(true);
+            }
+        );
+
+        fond.addEventListener(
+            "click",
+            function (evenement) {
+                if (evenement.target === fond) {
+                    fermerPopup(false);
+                }
+            }
+        );
+    });
+}
+
+
+async function supprimerRecette() {
+
+    const confirmationSuppression =
+        await demanderConfirmationSuppression();
 
     if (!confirmationSuppression) {
         return;
@@ -85,35 +169,42 @@ async function supprimerRecette() {
         document.getElementById("supprimer-recette");
 
     boutonSupprimer.disabled = true;
-    boutonSupprimer.textContent = "Suppression…";
+    boutonSupprimer.textContent =
+        "Suppression…";
 
     try {
+
         const { error } =
             await window.supabaseClient
                 .from("recettes")
                 .delete()
-                .eq("id", identifiantRecette);
+                .eq(
+                    "id",
+                    identifiantRecette
+                );
 
         if (error) {
             throw error;
         }
 
-        window.location.href = "index.html";
+        window.location.href =
+            "index.html";
 
     } catch (erreur) {
+
         console.error(
             "Erreur pendant la suppression :",
             erreur
         );
 
-        window.alert(
-            erreur.message ||
-            "La recette n’a pas pu être supprimée."
-        );
-
         boutonSupprimer.disabled = false;
+
         boutonSupprimer.textContent =
             "🗑️ Supprimer la recette";
+
+        alert(
+            "La recette n’a pas pu être supprimée."
+        );
     }
 }
 
