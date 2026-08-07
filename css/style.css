@@ -727,76 +727,53 @@ footer {
 }
 
 /* =================================
-   FILTRES AVANCÉS
+   RÉSUMÉ DES FILTRES ACTIFS
 ================================= */
 
-.filtres-secondaires {
-    max-width: 950px;
-    margin: 0 auto 35px;
-}
-
-.groupe-filtre {
-    margin-bottom: 18px;
-    text-align: center;
-}
-
-.titre-filtre {
-    display: block;
-    margin-bottom: 9px;
-
-    color: var(--texte-secondaire);
-
-    font-size: 13px;
-    font-weight: bold;
-
-    text-transform: uppercase;
-    letter-spacing: 0.7px;
-}
-
-.liste-filtres-secondaires {
+.resume-filtres-actifs {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
+
+    gap: 7px;
+
+    min-height: 0;
+
+    margin: 10px auto 0;
 }
 
-.filtre-secondaire,
-.filtre-multiple {
-    padding: 9px 15px;
+.badge-filtre-actif {
+    display: flex;
+    align-items: center;
 
-    border: 1px solid #d8d1c5;
-    border-radius: 22px;
+    gap: 7px;
 
-    background-color: var(--blanc);
+    padding: 6px 10px;
 
-    color: var(--texte);
+    border: none;
+    border-radius: 18px;
 
-    font: inherit;
-    font-size: 14px;
+    background-color: #e9ede3;
+
+    color: var(--vert);
+
+    font-size: 12px;
+    font-weight: bold;
 
     cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
 }
 
-.filtre-secondaire:hover,
-.filtre-multiple:hover {
-    border-color: var(--vert);
+.badge-filtre-actif span {
+    font-size: 16px;
+
+    line-height: 1;
+
+    opacity: 0.65;
 }
 
-.filtre-secondaire.actif,
-.filtre-multiple.actif {
-    border-color: var(--vert);
-
-    background-color: var(--vert);
-
-    color: var(--blanc);
+.badge-filtre-actif:hover {
+    background-color: #dde4d4;
 }
-
-
 /* =================================
    FAVORI SUR LES CARTES
 ================================= */
