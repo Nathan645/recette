@@ -725,3 +725,146 @@ footer {
             column-reverse;
     }
 }
+
+/* =================================
+   FILTRES AVANCÉS
+================================= */
+
+.filtres-secondaires {
+    max-width: 950px;
+    margin: 0 auto 35px;
+}
+
+.groupe-filtre {
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.titre-filtre {
+    display: block;
+    margin-bottom: 9px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+.liste-filtres-secondaires {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.filtre-secondaire,
+.filtre-multiple {
+    padding: 9px 15px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 22px;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.filtre-secondaire:hover,
+.filtre-multiple:hover {
+    border-color: var(--vert);
+}
+
+.filtre-secondaire.actif,
+.filtre-multiple.actif {
+    border-color: var(--vert);
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+}
+
+
+/* =================================
+   FAVORI SUR LES CARTES
+================================= */
+
+.illustration-recette {
+    position: relative;
+}
+
+.bouton-favori {
+    position: absolute;
+
+    top: 14px;
+    right: 14px;
+
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color:
+        rgba(255, 255, 255, 0.92);
+
+    color: var(--texte);
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 12px
+        rgba(0, 0, 0, 0.12);
+
+    transition:
+        transform 0.15s ease,
+        color 0.15s ease;
+}
+
+.bouton-favori:hover {
+    transform: scale(1.08);
+}
+
+.bouton-favori.favori-actif {
+    color: #b55045;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .filtres-secondaires {
+        margin-bottom: 25px;
+    }
+
+    .groupe-filtre {
+        margin-bottom: 16px;
+    }
+
+    .filtre-secondaire,
+    .filtre-multiple {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
