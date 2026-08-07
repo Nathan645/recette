@@ -162,8 +162,8 @@ main {
     object-position: center;
 }
 
-.contenu-carte {
-    padding: 25px;
+.contenu-carte{
+    padding:12px 25px 25px;
 }
 
 .categorie {
@@ -182,8 +182,8 @@ main {
 }
 
 .description {
-    min-height: 48px;
-    margin-bottom: 20px;
+    min-height:0;
+    margin-bottom:18px;
     line-height: 1.5;
     color: var(--texte-secondaire);
 }
@@ -192,7 +192,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-bottom: 22px;
+    margin-bottom:18px;
     font-size: 14px;
 }
 
@@ -1077,4 +1077,9 @@ footer {
 
 .badge-saison {
     background-color: #edf1e8;
+}
+.entete-carte{
+    display:flex;
+    justify-content:flex-end;
+    padding:18px 18px 0;
 }
