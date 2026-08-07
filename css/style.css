@@ -597,3 +597,131 @@ footer {
         text-align: center;
     }
 }
+
+/* POP-UP DE SUPPRESSION */
+
+.fond-popup {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background-color: rgba(30, 35, 28, 0.55);
+    backdrop-filter: blur(3px);
+}
+
+.popup-suppression {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 35px;
+
+    text-align: center;
+
+    background-color: var(--blanc);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 20px 60px
+        rgba(30, 35, 28, 0.25);
+}
+
+.icone-suppression {
+    margin-bottom: 15px;
+
+    font-size: 38px;
+}
+
+.popup-suppression h2 {
+    margin:
+        0
+        0
+        12px;
+
+    font-size: 27px;
+}
+
+.popup-suppression p {
+    margin:
+        0
+        auto
+        28px;
+
+    max-width: 330px;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.6;
+}
+
+.actions-popup {
+    display: flex;
+    gap: 12px;
+}
+
+.actions-popup button {
+    flex: 1;
+
+    padding: 13px 18px;
+
+    border-radius: 10px;
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+.bouton-annuler-suppression {
+    border:
+        1px solid
+        #d8d1c5;
+
+    background-color:
+        var(--blanc);
+
+    color:
+        var(--texte);
+}
+
+.bouton-annuler-suppression:hover {
+    background-color:
+        var(--creme);
+}
+
+.bouton-confirmer-suppression {
+    border:
+        1px solid
+        #a94f3d;
+
+    background-color:
+        #a94f3d;
+
+    color:
+        white;
+}
+
+.bouton-confirmer-suppression:hover {
+    background-color:
+        #8f3f31;
+}
+
+@media (max-width: 500px) {
+
+    .popup-suppression {
+        padding:
+            30px
+            22px;
+    }
+
+    .actions-popup {
+        flex-direction:
+            column-reverse;
+    }
+}
