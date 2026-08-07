@@ -283,37 +283,25 @@ function creerCarteRecette(recette) {
     return `
         <article class="carte-recette">
 
-            <div class="illustration-recette">
+           <div class="entete-carte">
 
-                ${creerIllustration(recette)}
+    <button
+        type="button"
+        class="bouton-favori ${
+            estFavorite
+                ? "favori-actif"
+                : ""
+        }"
+        data-favori-id="${recette.id}"
+    >
+        ${
+            estFavorite
+                ? "♥"
+                : "♡"
+        }
+    </button>
 
-                <button
-                    type="button"
-                    class="bouton-favori ${
-                        estFavorite
-                            ? "favori-actif"
-                            : ""
-                    }"
-                    data-favori-id="${recette.id}"
-                    aria-label="${
-                        estFavorite
-                            ? "Retirer des favoris"
-                            : "Ajouter aux favoris"
-                    }"
-                    title="${
-                        estFavorite
-                            ? "Retirer des favoris"
-                            : "Ajouter aux favoris"
-                    }"
-                >
-                    ${
-                        estFavorite
-                            ? "♥"
-                            : "♡"
-                    }
-                </button>
-
-            </div>
+</div>
 
 
             <div class="contenu-carte">
