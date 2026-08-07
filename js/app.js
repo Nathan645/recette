@@ -318,16 +318,6 @@ function creerCarteRecette(recette) {
 
             <div class="contenu-carte">
 
-                <span class="categorie">
-
-                    ${
-                        recette.categorie_affichee ||
-                        recette.categorie ||
-                        ""
-                    }
-
-                </span>
-
 
                 <h3>
                     ${recette.nom}
