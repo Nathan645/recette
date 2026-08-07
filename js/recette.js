@@ -393,15 +393,71 @@ function afficherRecette(recette) {
 
             <div class="contenu">
 
-                <span class="categorie">
-                    ${recette.categorie_affichee || recette.categorie}
-                </span>
+                <div class="badges-principaux">
 
-                <h1>${recette.nom}</h1>
+    <span class="categorie">
+        ${recette.categorie_affichee || recette.categorie}
+    </span>
 
-                <p class="introduction">
-                    ${recette.description || ""}
-                </p>
+</div>
+
+<h1>${recette.nom}</h1>
+
+<p class="introduction">
+    ${recette.description || ""}
+</p>
+
+<div class="details-filtres-recette">
+
+    ${
+        badgesEtiquettes
+            ? `
+                <div class="groupe-badges-recette">
+                    <span class="titre-badges-recette">
+                        Étiquettes
+                    </span>
+
+                    <div class="liste-badges-recette">
+                        ${badgesEtiquettes}
+                    </div>
+                </div>
+            `
+            : ""
+    }
+
+    ${
+        badgesOccasions
+            ? `
+                <div class="groupe-badges-recette">
+                    <span class="titre-badges-recette">
+                        Occasions
+                    </span>
+
+                    <div class="liste-badges-recette">
+                        ${badgesOccasions}
+                    </div>
+                </div>
+            `
+            : ""
+    }
+
+    ${
+        badgesSaisons
+            ? `
+                <div class="groupe-badges-recette">
+                    <span class="titre-badges-recette">
+                        Saisons
+                    </span>
+
+                    <div class="liste-badges-recette">
+                        ${badgesSaisons}
+                    </div>
+                </div>
+            `
+            : ""
+    }
+
+</div>
 
                 <div class="actions-gestion-recette">
                     <a
