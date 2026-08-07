@@ -57,23 +57,43 @@
 
 </div>
 
-        <div class="filtres-secondaires">
+   <div class="barre-filtres-avances">
+
+    <button
+        type="button"
+        class="filtre-secondaire"
+        id="filtre-favoris"
+    >
+        ♡ Mes favoris
+    </button>
+
+    <button
+        type="button"
+        class="bouton-filtres-avances"
+        id="ouvrir-filtres-avances"
+        aria-expanded="false"
+    >
+        ⚙ Plus de filtres
+        <span id="fleche-filtres">⌄</span>
+    </button>
+
+</div>
+
+<div
+    class="resume-filtres-actifs"
+    id="resume-filtres-actifs"
+></div>
+
+
+<div
+    class="panneau-filtres-avances"
+    id="panneau-filtres-avances"
+>
 
     <div class="groupe-filtre">
-        <span class="titre-filtre">Favoris</span>
-
-        <button
-            type="button"
-            class="filtre-secondaire"
-            id="filtre-favoris"
-        >
-            ♡ Mes favoris
-        </button>
-    </div>
-
-
-    <div class="groupe-filtre">
-        <span class="titre-filtre">Étiquettes</span>
+        <span class="titre-filtre">
+            Étiquettes
+        </span>
 
         <div class="liste-filtres-secondaires">
 
@@ -136,7 +156,9 @@
 
 
     <div class="groupe-filtre">
-        <span class="titre-filtre">Occasions</span>
+        <span class="titre-filtre">
+            Occasions
+        </span>
 
         <div class="liste-filtres-secondaires">
 
@@ -199,7 +221,9 @@
 
 
     <div class="groupe-filtre">
-        <span class="titre-filtre">Saisons</span>
+        <span class="titre-filtre">
+            Saisons
+        </span>
 
         <div class="liste-filtres-secondaires">
 
