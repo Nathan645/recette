@@ -41,7 +41,8 @@ async function chargerRecette() {
             erreur
         );
 
-        function creerBadges(valeurs, classeSupplementaire = "") {
+function creerBadges(valeurs, classeSupplementaire = "") {
+
     if (!Array.isArray(valeurs) || valeurs.length === 0) {
         return "";
     }
@@ -68,53 +69,17 @@ async function chargerRecette() {
         "toute-annee": "Toute l'année"
     };
 
-    return valeurs
-        .map(function (valeur) {
-            return `
-                <span class="badge-recette ${classeSupplementaire}">
-                    ${noms[valeur] || valeur}
-                </span>
-            `;
-        })
-        .join("");
-}
+    return valeurs.map(function (valeur) {
 
-
-const badgesEtiquettes =
-    creerBadges(
-        recette.etiquettes,
-        "badge-etiquette"
-    );
-
-const badgesOccasions =
-    creerBadges(
-        recette.occasions,
-        "badge-occasion"
-    );
-
-const badgesSaisons =
-    creerBadges(
-        recette.saisons,
-        "badge-saison"
-    );
-        
-        contenuRecette.innerHTML = `
-            <div class="message">
-                <h1>Recette introuvable</h1>
-
-                <p>
-                    Cette recette n’existe pas.
-                </p>
-
-                <a href="index.html">
-                    Retourner à toutes les recettes
-                </a>
-            </div>
+        return `
+            <span class="badge-recette ${classeSupplementaire}">
+                ${noms[valeur] || valeur}
+            </span>
         `;
-    }
+
+    }).join("");
 }
-
-
+        
 function formaterQuantite(valeur) {
     if (Number.isInteger(valeur)) {
         return valeur.toString();
@@ -269,7 +234,25 @@ async function supprimerRecette() {
 function afficherRecette(recette) {
     document.title =
         `${recette.nom} | À notre table`;
+   
+    const badgesEtiquettes =
+    creerBadges(
+        recette.etiquettes,
+        "badge-etiquette"
+    );
 
+    const badgesOccasions =
+    creerBadges(
+        recette.occasions,
+        "badge-occasion"
+    );
+
+    const badgesSaisons =
+    creerBadges(
+        recette.saisons,
+        "badge-saison"
+    );
+    
     const personnesInitiales =
         Number(recette.personnes);
 
