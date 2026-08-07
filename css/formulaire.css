@@ -257,3 +257,32 @@
         font-size: 31px;
     }
 }
+
+.bloc-filtres-recette {
+    margin: 30px 0;
+}
+
+.choix-multiples {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.choix-multiples label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 10px 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 20px;
+
+    background-color: var(--blanc);
+
+    cursor: pointer;
+}
+
+.choix-multiples input[type="checkbox"] {
+    accent-color: var(--vert);
+}
