@@ -8,6 +8,10 @@ const identifiantRecette =
     parametres.get("id");
 
 
+/* =================================
+   CHARGEMENT DE LA RECETTE
+================================= */
+
 async function chargerRecette() {
     try {
         if (!identifiantRecette) {
@@ -41,9 +45,35 @@ async function chargerRecette() {
             erreur
         );
 
-function creerBadges(valeurs, classeSupplementaire = "") {
+        contenuRecette.innerHTML = `
+            <div class="message">
+                <h1>Recette introuvable</h1>
 
-    if (!Array.isArray(valeurs) || valeurs.length === 0) {
+                <p>
+                    Cette recette n’existe pas.
+                </p>
+
+                <a href="index.html">
+                    Retourner à toutes les recettes
+                </a>
+            </div>
+        `;
+    }
+}
+
+
+/* =================================
+   OUTILS
+================================= */
+
+function creerBadges(
+    valeurs,
+    classeSupplementaire = ""
+) {
+    if (
+        !Array.isArray(valeurs) ||
+        valeurs.length === 0
+    ) {
         return "";
     }
 
@@ -69,17 +99,18 @@ function creerBadges(valeurs, classeSupplementaire = "") {
         "toute-annee": "Toute l'année"
     };
 
-    return valeurs.map(function (valeur) {
-
-        return `
-            <span class="badge-recette ${classeSupplementaire}">
-                ${noms[valeur] || valeur}
-            </span>
-        `;
-
-    }).join("");
+    return valeurs
+        .map(function (valeur) {
+            return `
+                <span class="badge-recette ${classeSupplementaire}">
+                    ${noms[valeur] || valeur}
+                </span>
+            `;
+        })
+        .join("");
 }
-        
+
+
 function formaterQuantite(valeur) {
     if (Number.isInteger(valeur)) {
         return valeur.toString();
@@ -93,10 +124,15 @@ function formaterQuantite(valeur) {
 }
 
 
+/* =================================
+   POP-UP DE SUPPRESSION
+================================= */
+
 function demanderConfirmationSuppression() {
     return new Promise(function (resolve) {
+        const fond =
+            document.createElement("div");
 
-        const fond = document.createElement("div");
         fond.className = "fond-popup";
 
         fond.innerHTML = `
@@ -142,10 +178,14 @@ function demanderConfirmationSuppression() {
         document.body.appendChild(fond);
 
         const boutonAnnuler =
-            document.getElementById("annuler-suppression");
+            document.getElementById(
+                "annuler-suppression"
+            );
 
         const boutonConfirmer =
-            document.getElementById("confirmer-suppression");
+            document.getElementById(
+                "confirmer-suppression"
+            );
 
         function fermerPopup(resultat) {
             fond.remove();
@@ -178,8 +218,11 @@ function demanderConfirmationSuppression() {
 }
 
 
-async function supprimerRecette() {
+/* =================================
+   SUPPRESSION SUPABASE
+================================= */
 
+async function supprimerRecette() {
     const confirmationSuppression =
         await demanderConfirmationSuppression();
 
@@ -188,14 +231,15 @@ async function supprimerRecette() {
     }
 
     const boutonSupprimer =
-        document.getElementById("supprimer-recette");
+        document.getElementById(
+            "supprimer-recette"
+        );
 
     boutonSupprimer.disabled = true;
     boutonSupprimer.textContent =
         "Suppression…";
 
     try {
-
         const { error } =
             await window.supabaseClient
                 .from("recettes")
@@ -213,7 +257,6 @@ async function supprimerRecette() {
             "index.html";
 
     } catch (erreur) {
-
         console.error(
             "Erreur pendant la suppression :",
             erreur
@@ -231,30 +274,34 @@ async function supprimerRecette() {
 }
 
 
+/* =================================
+   AFFICHAGE DE LA RECETTE
+================================= */
+
 function afficherRecette(recette) {
     document.title =
         `${recette.nom} | À notre table`;
-   
+
     const badgesEtiquettes =
-    creerBadges(
-        recette.etiquettes,
-        "badge-etiquette"
-    );
+        creerBadges(
+            recette.etiquettes,
+            "badge-etiquette"
+        );
 
     const badgesOccasions =
-    creerBadges(
-        recette.occasions,
-        "badge-occasion"
-    );
+        creerBadges(
+            recette.occasions,
+            "badge-occasion"
+        );
 
     const badgesSaisons =
-    creerBadges(
-        recette.saisons,
-        "badge-saison"
-    );
-    
+        creerBadges(
+            recette.saisons,
+            "badge-saison"
+        );
+
     const personnesInitiales =
-        Number(recette.personnes);
+        Number(recette.personnes) || 1;
 
     let personnesSelectionnees =
         personnesInitiales;
@@ -262,10 +309,39 @@ function afficherRecette(recette) {
 
     function creerIngredientsHtml() {
         const coefficient =
-            personnesSelectionnees / personnesInitiales;
+            personnesSelectionnees /
+            personnesInitiales;
 
-        return recette.ingredients
+        const ingredients =
+            Array.isArray(recette.ingredients)
+                ? recette.ingredients
+                : [];
+
+        return ingredients
             .map(function (ingredient, index) {
+                /*
+                    Compatibilité avec d'anciennes
+                    recettes éventuellement stockées
+                    sous forme de texte.
+                */
+                if (
+                    typeof ingredient === "string"
+                ) {
+                    return `
+                        <li class="ingredient-item">
+                            <input
+                                type="checkbox"
+                                id="ingredient-${index}"
+                                class="case-ingredient"
+                            >
+
+                            <label for="ingredient-${index}">
+                                ${ingredient}
+                            </label>
+                        </li>
+                    `;
+                }
+
                 const ingredientProportionnel =
                     ingredient.proportionnel !== false;
 
@@ -279,12 +355,13 @@ function afficherRecette(recette) {
                     ingredient.quantite !== ""
                 ) {
                     quantiteAffichee =
-                        Number(ingredient.quantite) *
-                        coefficient;
+                        Number(
+                            ingredient.quantite
+                        ) * coefficient;
                 }
 
                 let texteIngredient =
-                    ingredient.nom;
+                    ingredient.nom || "";
 
                 if (
                     quantiteAffichee !== null &&
@@ -299,7 +376,7 @@ function afficherRecette(recette) {
                     texteIngredient =
                         `${formaterQuantite(
                             Number(quantiteAffichee)
-                        )}${unite} ${ingredient.nom}`;
+                        )}${unite} ${ingredient.nom || ""}`;
                 }
 
                 return `
@@ -320,51 +397,59 @@ function afficherRecette(recette) {
     }
 
 
-    const etapesHtml = recette.etapes
-        .map(function (etape, index) {
-            return `
-                <li class="etape-item">
-                    <input
-                        type="checkbox"
-                        id="etape-${index}"
-                        class="case-etape"
-                    >
+    const etapes =
+        Array.isArray(recette.etapes)
+            ? recette.etapes
+            : [];
 
-                    <label for="etape-${index}">
-                        ${etape}
-                    </label>
-                </li>
+    const etapesHtml =
+        etapes
+            .map(function (etape, index) {
+                return `
+                    <li class="etape-item">
+                        <input
+                            type="checkbox"
+                            id="etape-${index}"
+                            class="case-etape"
+                        >
+
+                        <label for="etape-${index}">
+                            ${etape}
+                        </label>
+                    </li>
+                `;
+            })
+            .join("");
+
+
+    const astuceHtml =
+        recette.astuce
+            ? `
+                <aside class="conseil">
+                    <h2>Astuce</h2>
+                    <p>${recette.astuce}</p>
+                </aside>
+            `
+            : "";
+
+
+    const illustrationHtml =
+        recette.image
+            ? `
+                <img
+                    src="${recette.image}"
+                    alt="${recette.nom}"
+                    class="photo-recette photo-recette-detail"
+                >
+            `
+            : `
+                <span
+                    role="img"
+                    aria-label="Illustration de ${recette.nom}"
+                >
+                    ${recette.emoji || "🍽️"}
+                </span>
             `;
-        })
-        .join("");
-
-
-    const astuceHtml = recette.astuce
-        ? `
-            <aside class="conseil">
-                <h2>Astuce</h2>
-                <p>${recette.astuce}</p>
-            </aside>
-        `
-        : "";
-
-
-    const illustrationHtml = recette.image
-        ? `
-            <img
-                src="${recette.image}"
-                alt="${recette.nom}"
-                class="photo-recette photo-recette-detail"
-            >
-        `
-        : `
-            <span
-                role="img"
-                aria-label="Illustration de ${recette.nom}"
-            >
-                ${recette.emoji || "🍽️"}
-            </span>
-        `;
 
 
     contenuRecette.innerHTML = `
@@ -377,74 +462,80 @@ function afficherRecette(recette) {
             <div class="contenu">
 
                 <div class="badges-principaux">
-
-    <span class="categorie">
-        ${recette.categorie_affichee || recette.categorie}
-    </span>
-
-</div>
-
-<h1>${recette.nom}</h1>
-
-<p class="introduction">
-    ${recette.description || ""}
-</p>
-
-<div class="details-filtres-recette">
-
-    ${
-        badgesEtiquettes
-            ? `
-                <div class="groupe-badges-recette">
-                    <span class="titre-badges-recette">
-                        Étiquettes
+                    <span class="categorie">
+                        ${
+                            recette.categorie_affichee ||
+                            recette.categorie ||
+                            ""
+                        }
                     </span>
-
-                    <div class="liste-badges-recette">
-                        ${badgesEtiquettes}
-                    </div>
                 </div>
-            `
-            : ""
-    }
 
-    ${
-        badgesOccasions
-            ? `
-                <div class="groupe-badges-recette">
-                    <span class="titre-badges-recette">
-                        Occasions
-                    </span>
+                <h1>${recette.nom}</h1>
 
-                    <div class="liste-badges-recette">
-                        ${badgesOccasions}
-                    </div>
+                <p class="introduction">
+                    ${recette.description || ""}
+                </p>
+
+                <div class="details-filtres-recette">
+
+                    ${
+                        badgesEtiquettes
+                            ? `
+                                <div class="groupe-badges-recette">
+                                    <span class="titre-badges-recette">
+                                        Étiquettes
+                                    </span>
+
+                                    <div class="liste-badges-recette">
+                                        ${badgesEtiquettes}
+                                    </div>
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    ${
+                        badgesOccasions
+                            ? `
+                                <div class="groupe-badges-recette">
+                                    <span class="titre-badges-recette">
+                                        Occasions
+                                    </span>
+
+                                    <div class="liste-badges-recette">
+                                        ${badgesOccasions}
+                                    </div>
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    ${
+                        badgesSaisons
+                            ? `
+                                <div class="groupe-badges-recette">
+                                    <span class="titre-badges-recette">
+                                        Saisons
+                                    </span>
+
+                                    <div class="liste-badges-recette">
+                                        ${badgesSaisons}
+                                    </div>
+                                </div>
+                            `
+                            : ""
+                    }
+
                 </div>
-            `
-            : ""
-    }
-
-    ${
-        badgesSaisons
-            ? `
-                <div class="groupe-badges-recette">
-                    <span class="titre-badges-recette">
-                        Saisons
-                    </span>
-
-                    <div class="liste-badges-recette">
-                        ${badgesSaisons}
-                    </div>
-                </div>
-            `
-            : ""
-    }
-
-</div>
 
                 <div class="actions-gestion-recette">
                     <a
-                        href="ajouter.html?id=${encodeURIComponent(recette.id)}"
+                        href="ajouter.html?id=${
+                            encodeURIComponent(
+                                recette.id
+                            )
+                        }"
                         class="bouton-modifier"
                     >
                         ✏️ Modifier la recette
@@ -463,6 +554,7 @@ function afficherRecette(recette) {
 
                     <div class="information">
                         <strong>Préparation</strong>
+
                         <span>
                             ${recette.preparation} minutes
                         </span>
@@ -470,6 +562,7 @@ function afficherRecette(recette) {
 
                     <div class="information">
                         <strong>Cuisson</strong>
+
                         <span>
                             ${recette.cuisson} minutes
                         </span>
@@ -479,6 +572,7 @@ function afficherRecette(recette) {
                         <strong>Portions</strong>
 
                         <div class="controle-portions">
+
                             <button
                                 type="button"
                                 class="bouton-portion"
@@ -503,6 +597,7 @@ function afficherRecette(recette) {
                             >
                                 +
                             </button>
+
                         </div>
 
                         <span class="texte-personnes">
@@ -512,6 +607,7 @@ function afficherRecette(recette) {
 
                     <div class="information">
                         <strong>Difficulté</strong>
+
                         <span>
                             ${recette.difficulte}
                         </span>
@@ -554,19 +650,29 @@ function afficherRecette(recette) {
 
 
     const listeIngredients =
-        document.getElementById("liste-ingredients");
+        document.getElementById(
+            "liste-ingredients"
+        );
 
     const nombrePortions =
-        document.getElementById("nombre-portions");
+        document.getElementById(
+            "nombre-portions"
+        );
 
     const boutonDiminuer =
-        document.getElementById("diminuer-portions");
+        document.getElementById(
+            "diminuer-portions"
+        );
 
     const boutonAugmenter =
-        document.getElementById("augmenter-portions");
+        document.getElementById(
+            "augmenter-portions"
+        );
 
     const boutonSupprimer =
-        document.getElementById("supprimer-recette");
+        document.getElementById(
+            "supprimer-recette"
+        );
 
 
     function activerCasesIngredients() {
@@ -585,15 +691,14 @@ function afficherRecette(recette) {
                                 ".ingredient-item"
                             );
 
-                        if (caseIngredient.checked) {
-                            ligneIngredient.classList.add(
-                                "ingredient-coche"
-                            );
-                        } else {
-                            ligneIngredient.classList.remove(
-                                "ingredient-coche"
-                            );
+                        if (!ligneIngredient) {
+                            return;
                         }
+
+                        ligneIngredient.classList.toggle(
+                            "ingredient-coche",
+                            caseIngredient.checked
+                        );
                     }
                 );
             }
@@ -615,8 +720,11 @@ function afficherRecette(recette) {
     boutonDiminuer.addEventListener(
         "click",
         function () {
-            if (personnesSelectionnees > 1) {
+            if (
+                personnesSelectionnees > 1
+            ) {
                 personnesSelectionnees -= 1;
+
                 mettreAJourIngredients();
             }
         }
@@ -627,6 +735,7 @@ function afficherRecette(recette) {
         "click",
         function () {
             personnesSelectionnees += 1;
+
             mettreAJourIngredients();
         }
     );
@@ -642,28 +751,37 @@ function afficherRecette(recette) {
 
 
     const casesEtapes =
-        document.querySelectorAll(".case-etape");
+        document.querySelectorAll(
+            ".case-etape"
+        );
 
-    casesEtapes.forEach(function (caseEtape) {
-        caseEtape.addEventListener(
-            "change",
-            function () {
-                const ligneEtape =
-                    caseEtape.closest(".etape-item");
+    casesEtapes.forEach(
+        function (caseEtape) {
+            caseEtape.addEventListener(
+                "change",
+                function () {
+                    const ligneEtape =
+                        caseEtape.closest(
+                            ".etape-item"
+                        );
 
-                if (caseEtape.checked) {
-                    ligneEtape.classList.add(
-                        "etape-coche"
-                    );
-                } else {
-                    ligneEtape.classList.remove(
-                        "etape-coche"
+                    if (!ligneEtape) {
+                        return;
+                    }
+
+                    ligneEtape.classList.toggle(
+                        "etape-coche",
+                        caseEtape.checked
                     );
                 }
-            }
-        );
-    });
+            );
+        }
+    );
 }
 
+
+/* =================================
+   DÉMARRAGE
+================================= */
 
 chargerRecette();
