@@ -113,19 +113,21 @@ main {
     color: var(--blanc);
 }
 
-.grille-recettes {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 340px));
-    justify-content: center;
-    gap: 30px;
+.grille-recettes{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:28px;
 }
 
-.carte-recette {
-    overflow: hidden;
-    background-color: var(--blanc);
-    border-radius: 18px;
-    box-shadow: 0 8px 25px var(--ombre);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+.carte-recette{
+    display:flex;
+    flex-direction:column;
+    min-height:320px;
+    padding:24px;
+    background:var(--blanc);
+    border-radius:18px;
+    box-shadow:0 8px 25px var(--ombre);
+    transition:.2s;
 }
 
 .carte-recette:hover {
@@ -163,7 +165,9 @@ main {
 }
 
 .contenu-carte{
-    padding:12px 25px 25px;
+    display:flex;
+    flex-direction:column;
+    flex:1;
 }
 
 .categorie {
@@ -176,24 +180,35 @@ main {
     font-weight: bold;
 }
 
-.contenu-carte h3 {
-    margin: 12px 0 10px;
-    font-size: 25px;
+.contenu-carte h3{
+    margin:0;
+    font-size:34px;
+    line-height:1.2;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    min-height:2.4em;
 }
 
-.description {
-    min-height:0;
-    margin-bottom:18px;
-    line-height: 1.5;
-    color: var(--texte-secondaire);
+.description{
+    margin:18px 0;
+    color:var(--texte-secondaire);
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    min-height:3em;
 }
 
-.informations {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom:18px;
-    font-size: 14px;
+.informations{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:auto;
+    margin-bottom:22px;
+    font-size:15px;
 }
 
 .bouton-recette {
@@ -967,40 +982,16 @@ footer {
     position: relative;
 }
 
-.bouton-favori {
-    position: absolute;
-
-    top: 14px;
-    right: 14px;
-
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background-color:
-        rgba(255, 255, 255, 0.92);
-
-    color: var(--texte);
-
-    font-size: 25px;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 3px 12px
-        rgba(0, 0, 0, 0.12);
-
-    transition:
-        transform 0.15s ease,
-        color 0.15s ease;
+.bouton-favori{
+    width:42px;
+    height:42px;
+    margin-left:auto;
+    border:none;
+    border-radius:50%;
+    background:#f6f6f6;
+    font-size:24px;
+    cursor:pointer;
+    transition:.2s;
 }
 
 .bouton-favori:hover {
@@ -1078,8 +1069,9 @@ footer {
 .badge-saison {
     background-color: #edf1e8;
 }
+
 .entete-carte{
     display:flex;
     justify-content:flex-end;
-    padding:18px 18px 0;
+    margin-bottom:10px;
 }
