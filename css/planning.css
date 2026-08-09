@@ -1,0 +1,606 @@
+/* =================================
+   PAGE
+================================= */
+
+.navigation-planning {
+    padding: 22px 5%;
+}
+
+
+.navigation-planning .navigation {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.titre-navigation {
+    color: var(--blanc);
+    font-weight: bold;
+}
+
+
+.page-planning {
+    width: 94%;
+    max-width: 1500px;
+
+    padding: 45px 0 70px;
+}
+
+
+/* =================================
+   EN-TÊTE
+================================= */
+
+.entete-planning {
+    margin-bottom: 35px;
+}
+
+
+.sur-titre-planning {
+    color: var(--vert);
+
+    font-size: 13px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+
+.entete-planning h1 {
+    margin: 7px 0 10px;
+
+    font-size: 38px;
+}
+
+
+.entete-planning p {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.6;
+}
+
+
+/* =================================
+   NAVIGATION SEMAINE
+================================= */
+
+.navigation-semaine {
+    display: grid;
+
+    grid-template-columns:
+        50px
+        minmax(0, 1fr)
+        50px;
+
+    align-items: center;
+
+    max-width: 650px;
+
+    margin: 0 auto 12px;
+}
+
+
+.semaine-actuelle {
+    text-align: center;
+}
+
+
+.numero-semaine {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+
+.semaine-actuelle h2 {
+    margin: 0;
+
+    font-size: 23px;
+}
+
+
+.bouton-navigation-semaine {
+    width: 42px;
+    height: 42px;
+
+    padding: 0;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 50%;
+
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+
+.bouton-navigation-semaine:hover {
+    border-color: var(--vert);
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+}
+
+
+.actions-semaine {
+    margin-bottom: 28px;
+
+    text-align: center;
+}
+
+
+.bouton-aujourdhui {
+    padding: 8px 15px;
+
+    border: 1px solid var(--vert);
+    border-radius: 20px;
+
+    background-color: transparent;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* =================================
+   SEMAINE
+================================= */
+
+.grille-semaine {
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(150px, 1fr));
+
+    gap: 12px;
+
+    align-items: stretch;
+}
+
+
+.jour-planning {
+    min-width: 0;
+
+    padding: 18px;
+
+    border-radius: 17px;
+
+    background-color: var(--blanc);
+
+    box-shadow:
+        0 6px 20px
+        rgba(52, 59, 47, 0.08);
+}
+
+
+.jour-planning.aujourdhui {
+    outline:
+        2px solid
+        var(--vert);
+}
+
+
+.entete-jour {
+    padding-bottom: 14px;
+
+    border-bottom:
+        1px solid
+        var(--beige);
+}
+
+
+.nom-jour {
+    display: block;
+
+    font-weight: bold;
+
+    text-transform: capitalize;
+}
+
+
+.date-jour {
+    margin-top: 3px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+}
+
+
+/* =================================
+   REPAS
+================================= */
+
+.creneau-repas {
+    padding-top: 17px;
+}
+
+
+.creneau-repas + .creneau-repas {
+    margin-top: 17px;
+
+    border-top:
+        1px solid
+        var(--beige);
+}
+
+
+.titre-creneau {
+    display: block;
+
+    margin-bottom: 9px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 11px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+}
+
+
+.bouton-ajouter-repas {
+    width: 100%;
+
+    padding: 11px 8px;
+
+    border:
+        1px dashed
+        #cfc8bc;
+
+    border-radius: 10px;
+
+    background-color: var(--creme);
+
+    color: var(--texte-secondaire);
+
+    font: inherit;
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+
+.bouton-ajouter-repas:hover {
+    border-color: var(--vert);
+
+    color: var(--vert);
+}
+
+
+.repas-planifie {
+    display: block;
+
+    padding: 11px;
+
+    border-radius: 10px;
+
+    background-color: #eef0e8;
+
+    color: var(--texte);
+
+    font-size: 14px;
+    font-weight: bold;
+
+    text-decoration: none;
+}
+
+
+a.repas-planifie:hover {
+    background-color: #dde4d4;
+}
+
+
+/* =================================
+   POP-UP
+================================= */
+
+.fond-popup-planning {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1200;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background-color:
+        rgba(30, 35, 28, 0.55);
+
+    backdrop-filter: blur(3px);
+}
+
+
+.fond-popup-planning[hidden] {
+    display: none;
+}
+
+
+.popup-repas {
+    position: relative;
+
+    width: 100%;
+    max-width: 520px;
+
+    max-height: 85vh;
+
+    overflow-y: auto;
+
+    padding: 32px;
+
+    border-radius: 20px;
+
+    background-color: var(--blanc);
+
+    box-shadow:
+        0 20px 60px
+        rgba(30, 35, 28, 0.25);
+}
+
+
+.popup-repas h2 {
+    margin: 0 0 5px;
+
+    font-size: 28px;
+}
+
+
+.date-popup-repas {
+    margin:
+        0
+        0
+        24px;
+
+    color: var(--texte-secondaire);
+}
+
+
+.fermer-popup-repas {
+    position: absolute;
+
+    top: 17px;
+    right: 17px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    border-radius: 50%;
+
+    background-color: var(--creme);
+
+    color: var(--texte);
+
+    font-size: 22px;
+
+    cursor: pointer;
+}
+
+
+/* =================================
+   TYPE DE REPAS
+================================= */
+
+.choix-type-repas {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 4px;
+
+    margin-bottom: 22px;
+
+    padding: 4px;
+
+    border-radius: 12px;
+
+    background-color: var(--creme);
+}
+
+
+.type-repas {
+    padding: 10px;
+
+    border: none;
+    border-radius: 9px;
+
+    background-color: transparent;
+
+    color: var(--texte-secondaire);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.type-repas.actif {
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    box-shadow:
+        0 2px 8px
+        rgba(52, 59, 47, 0.08);
+}
+
+
+/* =================================
+   CHAMPS POP-UP
+================================= */
+
+.bloc-recette-planning label,
+.bloc-repas-libre label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+.bloc-recette-planning input,
+.bloc-repas-libre input {
+    width: 100%;
+
+    padding: 12px 13px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 10px;
+
+    font: inherit;
+
+    outline: none;
+}
+
+
+.bloc-recette-planning input:focus,
+.bloc-repas-libre input:focus {
+    border-color: var(--vert);
+}
+
+
+.resultats-recettes-planning {
+    margin-top: 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.resultat-recette-planning {
+    width: 100%;
+
+    padding: 11px 13px;
+
+    border: none;
+    border-radius: 9px;
+
+    background-color: var(--creme);
+
+    color: var(--texte);
+
+    text-align: left;
+
+    font: inherit;
+
+    cursor: pointer;
+}
+
+
+.resultat-recette-planning:hover {
+    background-color: #e9ede3;
+}
+
+
+.bouton-valider-repas {
+    width: 100%;
+
+    margin-top: 15px;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.message-planning {
+    min-height: 20px;
+
+    margin: 15px 0 0;
+
+    color: #a54f3c;
+
+    text-align: center;
+
+    font-size: 13px;
+}
+
+
+/* =================================
+   RESPONSIVE
+================================= */
+
+@media (max-width: 1150px) {
+
+    .grille-semaine {
+        grid-template-columns:
+            repeat(4, minmax(180px, 1fr));
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .page-planning {
+        width: 92%;
+    }
+
+
+    .entete-planning h1 {
+        font-size: 32px;
+    }
+
+
+    .grille-semaine {
+        grid-template-columns: 1fr;
+    }
+
+
+    .jour-planning {
+        padding: 17px;
+    }
+
+
+    .choix-type-repas {
+        grid-template-columns: 1fr;
+    }
+
+}
