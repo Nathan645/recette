@@ -703,6 +703,19 @@ a.repas-planifie:hover {
     font-weight: 700;
 }
 
+.infos-repas-planifie {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.personnes-repas-planifie {
+    font-size: 13px;
+    color: #77766f;
+    font-weight: 600;
+}
+
 /* =================================
    RESPONSIVE
 ================================= */
