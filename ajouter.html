@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
     <meta charset="UTF-8">
 
     <meta
@@ -8,47 +10,97 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Ajouter une recette | À notre table</title>
+    <title>
+        Ajouter une recette | À notre table
+    </title>
 
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/formulaire.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/formulaire.css"
+    >
+
 </head>
+
 
 <body>
 
     <header class="navigation-recette">
+
         <nav class="navigation">
-            <a href="index.html" class="retour">
+
+            <a
+                href="index.html"
+                class="retour"
+            >
                 ← Retour aux recettes
             </a>
+
         </nav>
+
     </header>
+
 
     <main class="page-formulaire">
 
         <section class="entete-formulaire">
-            <h1>Ajouter une recette</h1>
+
+            <h1>
+                Ajouter une recette
+            </h1>
 
             <p>
-                Remplis le formulaire. Le site générera un bloc compatible
-                avec le calcul automatique des portions.
+                Remplis le formulaire.
+                Les quantités pourront ensuite être adaptées
+                automatiquement selon le nombre de personnes.
             </p>
+
         </section>
+
 
         <form
             class="formulaire-recette"
             id="formulaire-recette"
         >
 
+
+            <!-- =========================
+                 INFORMATIONS PRINCIPALES
+            ========================== -->
+
             <div class="groupe-champs">
+
+                <div class="champ">
+
+                    <label for="nom">
+                        Nom de la recette
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nom"
+                        required
+                        placeholder="Ex. Tarte aux pommes"
+                    >
+
+                </div>
 
 
                 <div class="champ">
+
                     <label for="categorie">
                         Catégorie
                     </label>
 
-                    <select id="categorie" required>
+                    <select
+                        id="categorie"
+                        required
+                    >
+
                         <option value="">
                             Choisir une catégorie
                         </option>
@@ -76,12 +128,16 @@
                         <option value="boisson">
                             Boisson
                         </option>
+
                     </select>
+
                 </div>
 
             </div>
 
+
             <div class="champ">
+
                 <label for="description">
                     Description
                 </label>
@@ -91,11 +147,18 @@
                     required
                     placeholder="Une courte description de la recette…"
                 ></textarea>
+
             </div>
+
+
+            <!-- =========================
+                 TEMPS / PORTIONS
+            ========================== -->
 
             <div class="groupe-champs">
 
                 <div class="champ">
+
                     <label for="preparation">
                         Temps de préparation
                     </label>
@@ -107,9 +170,12 @@
                         required
                         placeholder="En minutes"
                     >
+
                 </div>
 
+
                 <div class="champ">
+
                     <label for="cuisson">
                         Temps de cuisson
                     </label>
@@ -121,9 +187,12 @@
                         required
                         placeholder="En minutes"
                     >
+
                 </div>
 
+
                 <div class="champ">
+
                     <label for="personnes">
                         Nombre de personnes de base
                     </label>
@@ -137,17 +206,24 @@
                     >
 
                     <small>
-                        Toutes les quantités proportionnelles seront calculées
-                        à partir de ce nombre.
+                        Toutes les quantités proportionnelles
+                        seront calculées à partir de ce nombre.
                     </small>
+
                 </div>
 
+
                 <div class="champ">
+
                     <label for="difficulte">
                         Difficulté
                     </label>
 
-                    <select id="difficulte" required>
+                    <select
+                        id="difficulte"
+                        required
+                    >
+
                         <option value="">
                             Choisir
                         </option>
@@ -167,40 +243,17 @@
                         <option value="Difficile">
                             Difficile
                         </option>
+
                     </select>
+
                 </div>
 
             </div>
 
-            <div class="groupe-champs">
 
-            
-
-                <div class="champ">
-                    <label for="image">
-                        Chemin de la photo
-                    </label>
-
-                    <input
-                        type="text"
-                        id="image"
-                        placeholder="images/tarte-aux-pommes.jpg"
-                    >
-                </div>
-
-                <div class="champ">
-                    <label for="auteur">
-                        Auteur
-                    </label>
-
-                    <input
-                        type="text"
-                        id="auteur"
-                        placeholder="Ex. Recette de Mamie"
-                    >
-                </div>
-
-            </div>
+            <!-- =========================
+                 INGRÉDIENTS
+            ========================== -->
 
             <div class="bloc-ingredients">
 
@@ -209,23 +262,47 @@
                 </span>
 
                 <p class="aide">
-                    Renseigne séparément la quantité, l’unité et le nom.
-                    Décoche « Proportionnel » pour le sel, le poivre,
-                    la décoration ou une quantité qui ne doit pas évoluer.
+
+                    Renseigne séparément la quantité,
+                    l’unité et le nom.
+
+                    Décoche « Proportionnel » pour le sel,
+                    le poivre, la décoration ou toute quantité
+                    qui ne doit pas évoluer.
+
                 </p>
+
 
                 <div
                     class="entete-ingredients"
                     aria-hidden="true"
                 >
-                    <span>Quantité</span>
-                    <span>Unité</span>
-                    <span>Ingrédient</span>
-                    <span>Calcul</span>
+
+                    <span>
+                        Quantité
+                    </span>
+
+                    <span>
+                        Unité
+                    </span>
+
+                    <span>
+                        Ingrédient
+                    </span>
+
+                    <span>
+                        Calcul
+                    </span>
+
                     <span></span>
+
                 </div>
 
-                <div id="liste-champs-ingredients"></div>
+
+                <div
+                    id="liste-champs-ingredients"
+                ></div>
+
 
                 <button
                     type="button"
@@ -236,196 +313,289 @@
                 </button>
 
             </div>
+
+
+            <!-- =========================
+                 FILTRES
+            ========================== -->
+
             <div class="bloc-filtres-recette">
 
-    <div class="champ">
-        <span class="titre-champ">
-            Étiquettes
-        </span>
 
-        <div class="choix-multiples">
+                <!-- ÉTIQUETTES -->
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="gros-gros"
-                >
-                Grogros
-            </label>
+                <div class="champ">
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="healthy"
-                >
-                Healthy
-            </label>
+                    <span class="titre-champ">
+                        Étiquettes
+                    </span>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="végé"
-                >
-                Végé
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="rapide"
-                >
-                Rapide
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="pour-recevoir"
-                >
-                Pour recevoir
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="etiquettes"
-                    value="a-preparer-avance"
-                >
-                À préparer à l'avance
-            </label>
-
-        </div>
-    </div>
+                    <div class="choix-multiples">
 
 
-    <div class="champ">
-        <span class="titre-champ">
-            Occasions
-        </span>
+                        <label>
 
-        <div class="choix-multiples">
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="gros-gros"
+                            >
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="quotidien"
-                >
-                Quotidien
-            </label>
+                            Grogros
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="brunch"
-                >
-                Brunch
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="barbecue"
-                >
-                Barbecue
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="fetes"
-                >
-                Fêtes
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="invites"
-                >
-                Invités
-            </label>
-
-            <label>
-                <input
-                    type="checkbox"
-                    name="occasions"
-                    value="apero-dinatoire"
-                >
-                Apéro dînatoire
-            </label>
-
-        </div>
-    </div>
+                        </label>
 
 
-    <div class="champ">
-        <span class="titre-champ">
-            Saisons
-        </span>
+                        <label>
 
-        <div class="choix-multiples">
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="healthy"
+                            >
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="saisons"
-                    value="printemps"
-                >
-                Printemps
-            </label>
+                            Healthy
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="saisons"
-                    value="été"
-                >
-                Été
-            </label>
+                        </label>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="saisons"
-                    value="automne"
-                >
-                Automne
-            </label>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="saisons"
-                    value="hiver"
-                >
-                Hiver
-            </label>
+                        <label>
 
-            <label>
-                <input
-                    type="checkbox"
-                    name="saisons"
-                    value="toute-annee"
-                >
-                Toute l'année
-            </label>
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="végé"
+                            >
 
-        </div>
-    </div>
+                            Végé
 
-</div>
-            
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="rapide"
+                            >
+
+                            Rapide
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="pour-recevoir"
+                            >
+
+                            Pour recevoir
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="etiquettes"
+                                value="a-preparer-avance"
+                            >
+
+                            À préparer à l'avance
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OCCASIONS -->
+
+                <div class="champ">
+
+                    <span class="titre-champ">
+                        Occasions
+                    </span>
+
+                    <div class="choix-multiples">
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="quotidien"
+                            >
+
+                            Quotidien
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="brunch"
+                            >
+
+                            Brunch
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="barbecue"
+                            >
+
+                            Barbecue
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="fetes"
+                            >
+
+                            Fêtes
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="invites"
+                            >
+
+                            Invités
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="occasions"
+                                value="apero-dinatoire"
+                            >
+
+                            Apéro dînatoire
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SAISONS -->
+
+                <div class="champ">
+
+                    <span class="titre-champ">
+                        Saisons
+                    </span>
+
+                    <div class="choix-multiples">
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="saisons"
+                                value="printemps"
+                            >
+
+                            Printemps
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="saisons"
+                                value="été"
+                            >
+
+                            Été
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="saisons"
+                                value="automne"
+                            >
+
+                            Automne
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="saisons"
+                                value="hiver"
+                            >
+
+                            Hiver
+
+                        </label>
+
+
+                        <label>
+
+                            <input
+                                type="checkbox"
+                                name="saisons"
+                                value="toute-annee"
+                            >
+
+                            Toute l'année
+
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ÉTAPES
+            ========================== -->
+
             <div class="champ">
+
                 <label for="etapes">
                     Étapes
                 </label>
@@ -437,12 +607,20 @@
                 ></textarea>
 
                 <small>
-                    Une étape par ligne. Évite les quantités fixes dans les
-                    étapes lorsqu’elles doivent évoluer avec les portions.
+                    Une étape par ligne.
+                    Évite les quantités fixes dans les étapes
+                    lorsqu’elles doivent évoluer avec les portions.
                 </small>
+
             </div>
 
+
+            <!-- =========================
+                 ASTUCE
+            ========================== -->
+
             <div class="champ">
+
                 <label for="astuce">
                     Astuce
                 </label>
@@ -451,34 +629,49 @@
                     id="astuce"
                     placeholder="Une astuce ou un conseil facultatif…"
                 ></textarea>
+
             </div>
 
-           <button
-    type="submit"
-    class="bouton-generer"
-    id="enregistrer-recette"
->
-    Enregistrer la recette
-</button>
 
-<p
-    class="confirmation"
-    id="message-formulaire"
-    aria-live="polite"
-></p>
+            <!-- =========================
+                 ENREGISTREMENT
+            ========================== -->
+
+            <button
+                type="submit"
+                class="bouton-generer"
+                id="enregistrer-recette"
+            >
+                Enregistrer la recette
+            </button>
+
+
+            <p
+                class="confirmation"
+                id="message-formulaire"
+                aria-live="polite"
+            ></p>
+
 
         </form>
 
     </main>
 
+
     <footer>
-        <p>À notre table ❤️</p>
+
+        <p>
+            À notre table ❤️
+        </p>
+
     </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
     <script src="js/ajouter.js"></script>
-    
+
 </body>
+
 </html>
