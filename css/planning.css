@@ -545,6 +545,18 @@ a.repas-planifie:hover {
     font-size: 13px;
 }
 
+.bouton-modifier-repas {
+    width: 100%;
+
+    border: none;
+
+    text-align: left;
+
+    font: inherit;
+
+    cursor: pointer;
+}
+
 
 /* =================================
    RESPONSIVE
