@@ -157,3 +157,30 @@ async function supprimerRepas() {
 
     if (error) throw error;
 }
+
+async function chargerNombrePersonnesParDefaut() {
+
+    if (!foyerActuel?.id) {
+        nombrePersonnesParDefaut = 2;
+        return;
+    }
+
+    const { data, error } = await supabaseClient
+        .from("foyers")
+        .select("personnes_par_defaut")
+        .eq("id", foyerActuel.id)
+        .single();
+
+    if (error) {
+        console.error(
+            "Erreur chargement nombre de personnes :",
+            error
+        );
+
+        nombrePersonnesParDefaut = 2;
+        return;
+    }
+
+    nombrePersonnesParDefaut =
+        data?.personnes_par_defaut || 2;
+}
