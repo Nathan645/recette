@@ -1,0 +1,389 @@
+.page-foyer {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px 20px;
+
+    background-color: var(--creme);
+}
+
+
+.conteneur-foyer {
+    width: 100%;
+    max-width: 560px;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+.carte-foyer {
+    width: 100%;
+
+    padding: 38px;
+
+    border-radius: 22px;
+
+    background-color: var(--blanc);
+
+    box-shadow:
+        0 14px 40px
+        rgba(52, 59, 47, 0.13);
+}
+
+
+/* =================================
+   EN-TÊTE
+================================= */
+
+.entete-foyer {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+
+.icone-foyer {
+    margin-bottom: 10px;
+
+    font-size: 38px;
+}
+
+
+.entete-foyer h1 {
+    margin: 0 0 10px;
+
+    font-size: 34px;
+}
+
+
+.entete-foyer p {
+    margin: 0 auto;
+
+    max-width: 390px;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.6;
+}
+
+
+/* =================================
+   ONGLETS
+================================= */
+
+.onglets-foyer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 4px;
+
+    margin-bottom: 28px;
+
+    padding: 4px;
+
+    border-radius: 14px;
+
+    background-color: var(--creme);
+}
+
+
+.onglet-foyer {
+    padding: 11px 14px;
+
+    border: none;
+    border-radius: 11px;
+
+    background-color: transparent;
+
+    color: var(--texte-secondaire);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.onglet-foyer.actif {
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    box-shadow:
+        0 3px 10px
+        rgba(52, 59, 47, 0.08);
+}
+
+
+/* =================================
+   FORMULAIRES
+================================= */
+
+.formulaire-foyer {
+    display: none;
+}
+
+
+.formulaire-foyer.actif {
+    display: block;
+}
+
+
+.champ-foyer {
+    margin-bottom: 20px;
+}
+
+
+.champ-foyer label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+.champ-foyer input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 11px;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.champ-foyer input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(102, 112, 90, 0.12);
+}
+
+
+.champ-foyer small {
+    display: block;
+
+    margin-top: 7px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* =================================
+   BOUTONS
+================================= */
+
+.bouton-foyer {
+    width: 100%;
+
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 11px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-foyer:hover {
+    background-color: var(--vert-fonce);
+
+    transform: translateY(-1px);
+}
+
+
+.bouton-foyer:disabled {
+    opacity: 0.65;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   CODE DU FOYER
+================================= */
+
+.bloc-code-foyer {
+    margin-top: 25px;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    background-color: var(--creme);
+
+    text-align: center;
+}
+
+
+.titre-code-foyer {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 12px;
+    font-weight: bold;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.7px;
+}
+
+
+.code-foyer-affiche {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+}
+
+
+.code-foyer-affiche strong {
+    font-size: 26px;
+
+    letter-spacing: 4px;
+}
+
+
+.bouton-copier-code {
+    padding: 8px 12px;
+
+    border: 1px solid var(--vert);
+    border-radius: 9px;
+
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+.bouton-copier-code:hover {
+    background-color: var(--vert);
+
+    color: var(--blanc);
+}
+
+
+.bloc-code-foyer p {
+    margin: 14px 0 0;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+
+    line-height: 1.5;
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message-foyer {
+    min-height: 22px;
+
+    margin: 18px 0 0;
+
+    text-align: center;
+
+    color: var(--texte-secondaire);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.message-foyer.erreur {
+    color: #a54f3c;
+}
+
+
+.message-foyer.succes {
+    color: var(--vert);
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .page-foyer {
+        align-items: flex-start;
+
+        padding-top: 25px;
+    }
+
+
+    .carte-foyer {
+        padding: 28px 22px;
+    }
+
+
+    .entete-foyer h1 {
+        font-size: 30px;
+    }
+
+
+    .onglets-foyer {
+        grid-template-columns: 1fr;
+    }
+
+
+    .code-foyer-affiche {
+        flex-direction: column;
+    }
+
+}
