@@ -406,61 +406,19 @@ formulaireCreerFoyer.addEventListener(
                 3. Affichage du code
             */
 
-            codeFoyerGenere.textContent =
-                foyer.code;
-
-            blocCodeFoyer.hidden =
-                false;
-
-
-            formulaireCreerFoyer
-                .reset();
-
 
             afficherMessage(
-                `Le foyer « ${foyer.nom} » a bien été créé.`,
-                "succes"
-            );
-
-
-            /*
-                On ne redirige PAS tout de suite :
-                cela laisse le temps de copier
-                le code du foyer.
-
-                Le bouton d'accès pourra être
-                ajouté ensuite si tu préfères.
-            */
-
-
-        } catch (erreur) {
-
-            console.error(
-                "Erreur pendant la création du foyer :",
-                erreur
-            );
-
-
-            afficherMessage(
-                erreur.message ||
-                "Impossible de créer le foyer.",
-                "erreur"
-            );
-
-
-        } finally {
-
-            boutonCreerFoyer.disabled =
-                false;
-
-            boutonCreerFoyer.textContent =
-                "Créer mon foyer";
-
-        }
-
-    }
+    `Le foyer « ${foyer.nom} » a bien été créé.`,
+    "succes"
 );
 
+setTimeout(
+    function () {
+        window.location.href =
+            "index.html";
+    },
+    600
+);
 
 /* =================================
    FORMULAIRE :
