@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Mon foyer | À notre table</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/foyer.css">
+</head>
+
+<body class="page-foyer">
+
+    <main class="conteneur-foyer">
+
+        <section class="carte-foyer">
+
+            <div class="entete-foyer">
+
+                <div class="icone-foyer">
+                    🏠
+                </div>
+
+                <h1>
+                    Votre foyer
+                </h1>
+
+                <p>
+                    Le foyer permet de partager
+                    votre planning de repas
+                    avec les personnes de votre choix.
+                </p>
+
+            </div>
+
+
+            <div
+                class="onglets-foyer"
+                role="tablist"
+                aria-label="Créer ou rejoindre un foyer"
+            >
+
+                <button
+                    type="button"
+                    class="onglet-foyer actif"
+                    id="onglet-creer-foyer"
+                    data-onglet="creer"
+                    role="tab"
+                    aria-selected="true"
+                >
+                    Créer un foyer
+                </button>
+
+                <button
+                    type="button"
+                    class="onglet-foyer"
+                    id="onglet-rejoindre-foyer"
+                    data-onglet="rejoindre"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Rejoindre un foyer
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 CRÉER UN FOYER
+            ========================== -->
+
+            <form
+                class="formulaire-foyer actif"
+                id="formulaire-creer-foyer"
+            >
+
+                <div class="champ-foyer">
+
+                    <label for="nom-foyer">
+                        Nom du foyer
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nom-foyer"
+                        required
+                        placeholder="Ex. Claire & Nathan"
+                    >
+
+                    <small>
+                        Ce nom sera visible uniquement
+                        par les membres de votre foyer.
+                    </small>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="bouton-foyer"
+                    id="bouton-creer-foyer"
+                >
+                    Créer mon foyer
+                </button>
+
+            </form>
+
+
+            <!-- =========================
+                 REJOINDRE UN FOYER
+            ========================== -->
+
+            <form
+                class="formulaire-foyer"
+                id="formulaire-rejoindre-foyer"
+            >
+
+                <div class="champ-foyer">
+
+                    <label for="code-foyer">
+                        Code du foyer
+                    </label>
+
+                    <input
+                        type="text"
+                        id="code-foyer"
+                        required
+                        maxlength="6"
+                        autocomplete="off"
+                        placeholder="Ex. A7F3C9"
+                    >
+
+                    <small>
+                        Demandez le code à une personne
+                        déjà membre du foyer.
+                    </small>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="bouton-foyer"
+                    id="bouton-rejoindre-foyer"
+                >
+                    Rejoindre le foyer
+                </button>
+
+            </form>
+
+
+            <!-- =========================
+                 CODE APRÈS CRÉATION
+            ========================== -->
+
+            <div
+                class="bloc-code-foyer"
+                id="bloc-code-foyer"
+                hidden
+            >
+
+                <span class="titre-code-foyer">
+                    Code de votre foyer
+                </span>
+
+                <div class="code-foyer-affiche">
+
+                    <strong id="code-foyer-genere">
+                        ------
+                    </strong>
+
+                    <button
+                        type="button"
+                        class="bouton-copier-code"
+                        id="copier-code-foyer"
+                    >
+                        Copier
+                    </button>
+
+                </div>
+
+                <p>
+                    Partagez ce code avec les personnes
+                    qui doivent rejoindre votre foyer.
+                </p>
+
+            </div>
+
+
+            <p
+                class="message-foyer"
+                id="message-foyer"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/foyer.js"></script>
+
+</body>
+</html>
