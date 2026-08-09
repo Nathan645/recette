@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Planning | À notre table</title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/planning.css"
+    >
+
+</head>
+
+
+<body>
+
+    <header class="navigation-planning">
+
+        <nav class="navigation">
+
+            <a
+                href="index.html"
+                class="retour"
+            >
+                ← Recettes
+            </a>
+
+            <span class="titre-navigation">
+                Planning
+            </span>
+
+        </nav>
+
+    </header>
+
+
+    <main class="page-planning">
+
+
+        <section class="entete-planning">
+
+            <div>
+
+                <span class="sur-titre-planning">
+                    Notre semaine
+                </span>
+
+                <h1>
+                    Planning des repas
+                </h1>
+
+                <p>
+                    Préparez vos repas de la semaine
+                    et retrouvez directement les recettes
+                    du carnet.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="navigation-semaine">
+
+            <button
+                type="button"
+                class="bouton-navigation-semaine"
+                id="semaine-precedente"
+                aria-label="Semaine précédente"
+            >
+                ←
+            </button>
+
+
+            <div class="semaine-actuelle">
+
+                <span
+                    class="numero-semaine"
+                    id="numero-semaine"
+                >
+                    Semaine
+                </span>
+
+                <h2 id="titre-semaine">
+                    Chargement…
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="bouton-navigation-semaine"
+                id="semaine-suivante"
+                aria-label="Semaine suivante"
+            >
+                →
+            </button>
+
+        </section>
+
+
+        <div class="actions-semaine">
+
+            <button
+                type="button"
+                class="bouton-aujourdhui"
+                id="aller-aujourdhui"
+            >
+                Aujourd'hui
+            </button>
+
+        </div>
+
+
+        <section
+            class="grille-semaine"
+            id="grille-semaine"
+        >
+
+            <p>
+                Chargement du planning…
+            </p>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         POP-UP AJOUT DE REPAS
+    ========================== -->
+
+    <div
+        class="fond-popup-planning"
+        id="popup-repas"
+        hidden
+    >
+
+        <div
+            class="popup-repas"
+            role="dialog"
+            aria-modal="true"
+        >
+
+            <button
+                type="button"
+                class="fermer-popup-repas"
+                id="fermer-popup-repas"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+
+            <h2>
+                Ajouter un repas
+            </h2>
+
+
+            <p
+                class="date-popup-repas"
+                id="date-popup-repas"
+            ></p>
+
+
+            <div class="choix-type-repas">
+
+                <button
+                    type="button"
+                    class="type-repas actif"
+                    id="choisir-recette"
+                >
+                    Depuis mes recettes
+                </button>
+
+                <button
+                    type="button"
+                    class="type-repas"
+                    id="choisir-libre"
+                >
+                    Repas libre
+                </button>
+
+            </div>
+
+
+            <div
+                class="bloc-recette-planning"
+                id="bloc-recette-planning"
+            >
+
+                <label for="recherche-recette-planning">
+                    Rechercher une recette
+                </label>
+
+                <input
+                    type="search"
+                    id="recherche-recette-planning"
+                    placeholder="Carbonara, curry, salade…"
+                >
+
+                <div
+                    class="resultats-recettes-planning"
+                    id="resultats-recettes-planning"
+                ></div>
+
+            </div>
+
+
+            <div
+                class="bloc-repas-libre"
+                id="bloc-repas-libre"
+                hidden
+            >
+
+                <label for="nom-repas-libre">
+                    Nom du repas
+                </label>
+
+                <input
+                    type="text"
+                    id="nom-repas-libre"
+                    placeholder="Restaurant, pizza, chez les parents…"
+                >
+
+                <button
+                    type="button"
+                    class="bouton-valider-repas"
+                    id="valider-repas-libre"
+                >
+                    Ajouter au planning
+                </button>
+
+            </div>
+
+
+            <p
+                class="message-planning"
+                id="message-planning"
+            ></p>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/planning.js"></script>
+
+</body>
+
+</html>
