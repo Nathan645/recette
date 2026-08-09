@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Compte | À notre table</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/compte.css">
+</head>
+
+<body class="page-compte">
+
+    <main class="conteneur-compte">
+
+        <section class="carte-compte">
+
+            <div class="entete-compte">
+
+                <div class="icone-compte">
+                    🍽️
+                </div>
+
+                <h1>
+                    À notre table
+                </h1>
+
+                <p>
+                    Retrouvez vos recettes,
+                    vos favoris
+                    et votre planning repas.
+                </p>
+
+            </div>
+
+
+            <div
+                class="onglets-compte"
+                role="tablist"
+                aria-label="Connexion ou inscription"
+            >
+
+                <button
+                    type="button"
+                    class="onglet-compte actif"
+                    id="onglet-connexion"
+                    data-onglet="connexion"
+                    role="tab"
+                    aria-selected="true"
+                >
+                    Connexion
+                </button>
+
+                <button
+                    type="button"
+                    class="onglet-compte"
+                    id="onglet-inscription"
+                    data-onglet="inscription"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Inscription
+                </button>
+
+            </div>
+
+
+            <!-- =========================
+                 FORMULAIRE CONNEXION
+            ========================== -->
+
+            <form
+                class="formulaire-compte actif"
+                id="formulaire-connexion"
+            >
+
+                <div class="champ-compte">
+
+                    <label for="email-connexion">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email-connexion"
+                        autocomplete="email"
+                        required
+                        placeholder="exemple@email.com"
+                    >
+
+                </div>
+
+
+                <div class="champ-compte">
+
+                    <label for="mot-de-passe-connexion">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="mot-de-passe-connexion"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Votre mot de passe"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="bouton-compte"
+                    id="bouton-connexion"
+                >
+                    Se connecter
+                </button>
+
+            </form>
+
+
+            <!-- =========================
+                 FORMULAIRE INSCRIPTION
+            ========================== -->
+
+            <form
+                class="formulaire-compte"
+                id="formulaire-inscription"
+            >
+
+                <div class="groupe-champs-compte">
+
+                    <div class="champ-compte">
+
+                        <label for="prenom">
+                            Prénom
+                        </label>
+
+                        <input
+                            type="text"
+                            id="prenom"
+                            autocomplete="given-name"
+                            required
+                            placeholder="Claire"
+                        >
+
+                    </div>
+
+
+                    <div class="champ-compte">
+
+                        <label for="nom">
+                            Nom
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nom"
+                            autocomplete="family-name"
+                            required
+                            placeholder="Petitroux"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <div class="champ-compte">
+
+                    <label for="email-inscription">
+                        Adresse e-mail
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email-inscription"
+                        autocomplete="email"
+                        required
+                        placeholder="exemple@email.com"
+                    >
+
+                </div>
+
+
+                <div class="champ-compte">
+
+                    <label for="mot-de-passe-inscription">
+                        Mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="mot-de-passe-inscription"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="6 caractères minimum"
+                    >
+
+                </div>
+
+
+                <div class="champ-compte">
+
+                    <label for="confirmation-mot-de-passe">
+                        Confirmer le mot de passe
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmation-mot-de-passe"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="Retapez votre mot de passe"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="bouton-compte"
+                    id="bouton-inscription"
+                >
+                    Créer mon compte
+                </button>
+
+            </form>
+
+
+            <p
+                class="message-compte"
+                id="message-compte"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/compte.js"></script>
+
+</body>
+</html>
