@@ -71,13 +71,7 @@ async function recupererUtilisateurEtFoyer() {
 /* =================================
    NOMBRE DE PERSONNES PAR DÉFAUT
 ================================= */
-
 async function chargerNombrePersonnesParDefaut() {
-
-    /*
-        Si aucun foyer n'est encore chargé,
-        on garde 2 comme valeur de secours.
-    */
 
     if (!foyerId) {
 
@@ -115,7 +109,6 @@ async function chargerNombrePersonnesParDefaut() {
         nombrePersonnesParDefaut =
             2;
 
-
         return;
     }
 
@@ -132,7 +125,6 @@ async function chargerNombrePersonnesParDefaut() {
             ? nombre
             : 2;
 }
-
 
 /* =================================
    RECETTES
