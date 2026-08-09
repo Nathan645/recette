@@ -49,6 +49,10 @@ async function chargerInformationsUtilisateur() {
                 )
                 .maybeSingle();
 
+        console.log("Utilisateur :", utilisateur.id);
+        console.log("Profil :", profil);
+        console.log("Erreur profil :", erreurProfil);
+
 
         if (erreurProfil) {
             throw erreurProfil;
