@@ -128,11 +128,12 @@ main {
     border-radius:18px;
     box-shadow:0 8px 25px var(--ombre);
     transition:.2s;
+    cursor:pointer;
 }
 
 .carte-recette:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(52, 59, 47, 0.18);
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
 }
 
 .illustration-recette,
@@ -992,6 +993,8 @@ footer {
     font-size:24px;
     cursor:pointer;
     transition:.2s;
+    cursor:pointer;
+    z-index:2;
 }
 
 .bouton-favori:hover {
