@@ -281,7 +281,10 @@ function creerCarteRecette(recette) {
 
 
     return `
-        <article class="carte-recette">
+        <article
+        class="carte-recette"
+        data-recette-id="${recette.id}"
+        >
 
            <div class="entete-carte">
 
@@ -333,18 +336,6 @@ function creerCarteRecette(recette) {
                 </span>
 
                 </div>
-
-
-                <a
-                    href="recette.html?id=${
-                        encodeURIComponent(
-                            recette.id
-                        )
-                    }"
-                    class="bouton-recette"
-                >
-                    Voir la recette
-                </a>
 
             </div>
 
@@ -1237,16 +1228,43 @@ resumeFiltresActifs
    CLIC SUR LE CŒUR D'UNE RECETTE
 ================================= */
 
-grilleRecettes
-    .addEventListener(
-        "click",
-        function (evenement) {
+grilleRecettes.addEventListener(
+    "click",
+    function (event) {
 
-            const boutonFavori =
-                evenement.target
-                    .closest(
-                        "[data-favori-id]"
-                    );
+        const boutonFavori =
+            event.target.closest(
+                "[data-favori-id]"
+            );
+
+        if (boutonFavori) {
+
+            event.stopPropagation();
+
+            basculerFavori(
+                boutonFavori.dataset.favoriId
+            );
+
+            return;
+        }
+
+
+        const carte =
+            event.target.closest(
+                ".carte-recette"
+            );
+
+        if (!carte) {
+            return;
+        }
+
+        window.location.href =
+            `recette.html?id=${encodeURIComponent(
+                carte.dataset.recetteId
+            )}`;
+
+    }
+);
 
 
             if (!boutonFavori) {
