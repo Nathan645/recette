@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Mon compte | À notre table
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/mon-compte.css"
+    >
+
+</head>
+
+
+<body>
+
+    <header class="entete-principale">
+
+        <div class="bloc-marque">
+
+            <h1>
+                À notre table
+            </h1>
+
+            <p>
+                Nos recettes, nos souvenirs
+                et nos petits secrets de cuisine.
+            </p>
+
+            <div
+                class="infos-utilisateur"
+                id="infos-utilisateur"
+                hidden
+            >
+
+                <span>
+                    Bonjour
+                    <strong id="prenom-utilisateur"></strong>
+                </span>
+
+                <span class="separateur-utilisateur">
+                    •
+                </span>
+
+                <span>
+                    Foyer :
+                    <strong id="nom-foyer-utilisateur"></strong>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation-principale">
+
+            <a
+                href="index.html"
+                class="lien-navigation"
+            >
+                Recettes
+            </a>
+
+            <a
+                href="planning.html"
+                class="lien-navigation"
+            >
+                Planning
+            </a>
+
+            <a
+                href="courses.html"
+                class="lien-navigation"
+            >
+                Courses
+            </a>
+
+            <a
+                href="mon-compte.html"
+                class="lien-navigation actif"
+            >
+                Compte
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <main class="page-mon-compte">
+
+        <section class="entete-page-compte">
+
+            <span class="sur-titre-compte">
+                Espace personnel
+            </span>
+
+            <h2>
+                Mon compte
+            </h2>
+
+            <p>
+                Retrouvez vos informations personnelles
+                et les membres de votre foyer.
+            </p>
+
+        </section>
+
+
+        <div
+            class="message-chargement-compte"
+            id="chargement-compte"
+        >
+            Chargement de votre compte…
+        </div>
+
+
+        <div
+            class="contenu-mon-compte"
+            id="contenu-mon-compte"
+            hidden
+        >
+
+
+            <!-- =========================
+                 MON PROFIL
+            ========================== -->
+
+            <section class="carte-espace-compte">
+
+                <div class="entete-carte-compte">
+
+                    <div class="icone-carte-compte">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <span class="petit-titre-compte">
+                            Profil
+                        </span>
+
+                        <h3>
+                            Mes informations
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grille-informations-compte">
+
+                    <div class="information-compte">
+
+                        <span class="label-information">
+                            Prénom
+                        </span>
+
+                        <strong id="compte-prenom">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-compte">
+
+                        <span class="label-information">
+                            Nom
+                        </span>
+
+                        <strong id="compte-nom">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-compte information-large">
+
+                        <span class="label-information">
+                            Adresse e-mail
+                        </span>
+
+                        <strong id="compte-email">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-compte">
+
+                        <span class="label-information">
+                            Rôle
+                        </span>
+
+                        <strong id="compte-role">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 MON FOYER
+            ========================== -->
+
+            <section class="carte-espace-compte">
+
+                <div class="entete-carte-compte">
+
+                    <div class="icone-carte-compte">
+                        🏠
+                    </div>
+
+                    <div>
+
+                        <span class="petit-titre-compte">
+                            Foyer
+                        </span>
+
+                        <h3>
+                            Mon foyer
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="grille-informations-compte">
+
+                    <div class="information-compte information-large">
+
+                        <span class="label-information">
+                            Nom du foyer
+                        </span>
+
+                        <strong id="foyer-nom">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-compte">
+
+                        <span class="label-information">
+                            Mon rôle
+                        </span>
+
+                        <strong id="foyer-role">
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <div class="information-compte">
+
+                        <span class="label-information">
+                            Membres
+                        </span>
+
+                        <strong id="foyer-nombre-membres">
+                            —
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                <div class="bloc-code-foyer">
+
+                    <div>
+
+                        <span class="label-information">
+                            Code du foyer
+                        </span>
+
+                        <strong
+                            class="code-foyer"
+                            id="foyer-code"
+                        >
+                            —
+                        </strong>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="bouton-copier-code"
+                        id="copier-code-foyer"
+                    >
+                        Copier le code
+                    </button>
+
+                </div>
+
+
+                <p
+                    class="message-copie-code"
+                    id="message-copie-code"
+                    aria-live="polite"
+                ></p>
+
+            </section>
+
+
+            <!-- =========================
+                 MEMBRES
+            ========================== -->
+
+            <section class="carte-espace-compte">
+
+                <div class="entete-carte-compte">
+
+                    <div class="icone-carte-compte">
+                        👥
+                    </div>
+
+                    <div>
+
+                        <span class="petit-titre-compte">
+                            Famille
+                        </span>
+
+                        <h3>
+                            Membres du foyer
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="liste-membres-foyer"
+                    id="liste-membres-foyer"
+                >
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 ACTIONS
+            ========================== -->
+
+            <section class="carte-espace-compte carte-actions-compte">
+
+                <div>
+
+                    <h3>
+                        Session
+                    </h3>
+
+                    <p>
+                        Vous pouvez vous déconnecter
+                        de cet appareil à tout moment.
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="bouton-deconnexion"
+                    id="bouton-deconnexion"
+                >
+                    Se déconnecter
+                </button>
+
+            </section>
+
+        </div>
+
+
+        <div
+            class="message-erreur-compte"
+            id="message-erreur-compte"
+            hidden
+        >
+
+            <h3>
+                Impossible de charger votre compte
+            </h3>
+
+            <p id="texte-erreur-compte">
+                Une erreur est survenue.
+            </p>
+
+            <a
+                href="index.html"
+                class="bouton-retour-recettes"
+            >
+                Retour aux recettes
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+
+        <p>
+            À notre table ❤️
+        </p>
+
+    </footer>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/mon-compte.js"></script>
+
+</body>
+
+</html>
