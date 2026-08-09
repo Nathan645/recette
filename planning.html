@@ -267,6 +267,7 @@
                 id="bloc-repas-libre"
                 hidden
             >
+                
 
                 <label for="nom-repas-libre">
                     Nom du repas
@@ -297,7 +298,15 @@
 
             </div>
 
-
+                <button
+                    type="button"
+                    class="bouton-supprimer-repas"
+                    id="supprimer-repas-planning"
+                    hidden
+                >
+                Vider ce créneau
+                </button>
+            
             <p
                 class="message-planning"
                 id="message-planning"
@@ -308,11 +317,15 @@
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/supabase.js"></script>
-    <script src="js/session.js"></script>
-    <script src="js/planning.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+<script src="js/session.js"></script>
+<script src="js/planning-core.js"></script>
+<script src="js/planning-data.js"></script>
+<script src="js/planning-ui.js"></script>
+<script src="js/planning-popup.js"></script>
+<script src="js/planning.js"></script>
 
 </body>
 
