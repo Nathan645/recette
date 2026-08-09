@@ -1098,3 +1098,184 @@ footer {
     }
 
 }
+
+/* =================================
+   HEADER PRINCIPAL
+================================= */
+
+.entete-principale {
+    padding:
+        45px
+        5%
+        0;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    text-align: center;
+}
+
+
+.bloc-marque {
+    padding-bottom: 30px;
+}
+
+
+.entete-principale h1 {
+    margin: 0;
+
+    color: var(--blanc);
+
+    font-size: 56px;
+}
+
+
+.entete-principale p {
+    margin: 12px 0 0;
+
+    color: rgba(255, 255, 255, 0.92);
+
+    font-size: 19px;
+}
+
+
+.infos-utilisateur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 14px;
+}
+
+
+.infos-utilisateur strong {
+    color: var(--blanc);
+}
+
+
+.separateur-utilisateur {
+    opacity: 0.55;
+}
+
+
+/* =================================
+   NAVIGATION
+================================= */
+
+.navigation-principale {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 6px;
+
+    max-width: 850px;
+
+    margin: 0 auto;
+
+    padding: 7px;
+
+    border-radius:
+        16px
+        16px
+        0
+        0;
+
+    background-color:
+        rgba(255, 255, 255, 0.12);
+}
+
+
+.lien-navigation {
+    flex: 1;
+
+    padding: 13px 18px;
+
+    border-radius: 11px;
+
+    color: rgba(255, 255, 255, 0.86);
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.lien-navigation:hover {
+    background-color:
+        rgba(255, 255, 255, 0.12);
+
+    color: var(--blanc);
+}
+
+
+.lien-navigation.actif {
+    background-color: var(--creme);
+
+    color: var(--vert);
+}
+
+@media (max-width: 700px) {
+
+    .entete-principale {
+        padding:
+            32px
+            16px
+            0;
+    }
+
+
+    .entete-principale h1 {
+        font-size: 40px;
+    }
+
+
+    .entete-principale p {
+        font-size: 15px;
+    }
+
+
+    .infos-utilisateur {
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .separateur-utilisateur {
+        display: none;
+    }
+
+
+    .navigation-principale {
+        overflow-x: auto;
+
+        justify-content: flex-start;
+
+        border-radius:
+            13px
+            13px
+            0
+            0;
+    }
+
+
+    .lien-navigation {
+        flex: 0 0 auto;
+
+        padding: 11px 15px;
+    }
+
+}
