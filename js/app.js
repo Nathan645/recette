@@ -241,28 +241,6 @@ function calculerTempsTotal(recette) {
 }
 
 
-function creerIllustration(recette) {
-
-    if (recette.image) {
-
-        return `
-            <img
-                src="${recette.image}"
-                alt="${recette.nom}"
-                class="photo-recette"
-            >
-        `;
-
-    }
-
-
-    return (
-        recette.emoji ||
-        "🍽️"
-    );
-}
-
-
 /* =================================
    CARTE RECETTE
 ================================= */
