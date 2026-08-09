@@ -1,0 +1,298 @@
+.page-compte {
+    min-height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px 20px;
+
+    background-color: var(--creme);
+}
+
+
+.conteneur-compte {
+    width: 100%;
+    max-width: 520px;
+
+    margin: 0;
+    padding: 0;
+}
+
+
+.carte-compte {
+    width: 100%;
+
+    padding: 38px;
+
+    border-radius: 22px;
+
+    background-color: var(--blanc);
+
+    box-shadow:
+        0 14px 40px
+        rgba(52, 59, 47, 0.13);
+}
+
+
+/* =================================
+   EN-TÊTE
+================================= */
+
+.entete-compte {
+    margin-bottom: 30px;
+
+    text-align: center;
+}
+
+
+.icone-compte {
+    margin-bottom: 10px;
+
+    font-size: 38px;
+}
+
+
+.entete-compte h1 {
+    margin: 0 0 10px;
+
+    font-size: 36px;
+}
+
+
+.entete-compte p {
+    margin: 0 auto;
+
+    max-width: 350px;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.6;
+}
+
+
+/* =================================
+   ONGLETS
+================================= */
+
+.onglets-compte {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 4px;
+
+    margin-bottom: 28px;
+
+    padding: 4px;
+
+    border-radius: 14px;
+
+    background-color: var(--creme);
+}
+
+
+.onglet-compte {
+    padding: 11px 16px;
+
+    border: none;
+    border-radius: 11px;
+
+    background-color: transparent;
+
+    color: var(--texte-secondaire);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.onglet-compte.actif {
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    box-shadow:
+        0 3px 10px
+        rgba(52, 59, 47, 0.08);
+}
+
+
+/* =================================
+   FORMULAIRES
+================================= */
+
+.formulaire-compte {
+    display: none;
+}
+
+
+.formulaire-compte.actif {
+    display: block;
+}
+
+
+.groupe-champs-compte {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 14px;
+}
+
+
+.champ-compte {
+    margin-bottom: 18px;
+}
+
+
+.champ-compte label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+.champ-compte input {
+    width: 100%;
+
+    padding: 13px 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 11px;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.champ-compte input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(102, 112, 90, 0.12);
+}
+
+
+/* =================================
+   BOUTON
+================================= */
+
+.bouton-compte {
+    width: 100%;
+
+    margin-top: 6px;
+
+    padding: 14px 18px;
+
+    border: none;
+    border-radius: 11px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-compte:hover {
+    background-color: var(--vert-fonce);
+
+    transform: translateY(-1px);
+}
+
+
+.bouton-compte:disabled {
+    opacity: 0.65;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message-compte {
+    min-height: 22px;
+
+    margin: 18px 0 0;
+
+    text-align: center;
+
+    color: var(--texte-secondaire);
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+.message-compte.erreur {
+    color: #a54f3c;
+}
+
+
+.message-compte.succes {
+    color: var(--vert);
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .page-compte {
+        align-items: flex-start;
+
+        padding-top: 25px;
+    }
+
+
+    .carte-compte {
+        padding: 28px 22px;
+    }
+
+
+    .entete-compte h1 {
+        font-size: 31px;
+    }
+
+
+    .groupe-champs-compte {
+        grid-template-columns: 1fr;
+
+        gap: 0;
+    }
+
+}
