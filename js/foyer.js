@@ -322,13 +322,11 @@ ongletRejoindreFoyer.addEventListener(
    FORMULAIRE :
    CRÉATION DU FOYER
 ================================= */
-
 formulaireCreerFoyer.addEventListener(
     "submit",
     async function (evenement) {
 
         evenement.preventDefault();
-
 
         const nomFoyer =
             document.getElementById(
@@ -362,11 +360,6 @@ formulaireCreerFoyer.addEventListener(
 
         try {
 
-            /*
-                On revérifie qu'il n'a
-                pas déjà rejoint un foyer.
-            */
-
             const foyerExistant =
                 await recupererFoyerUtilisateur();
 
@@ -393,8 +386,8 @@ formulaireCreerFoyer.addEventListener(
 
 
             /*
-                2. Le créateur devient
-                   automatiquement membre.
+                2. Ajout du créateur
+                dans le foyer
             */
 
             await ajouterMembreAuFoyer(
@@ -403,23 +396,58 @@ formulaireCreerFoyer.addEventListener(
 
 
             /*
-                3. Affichage du code
+                3. Confirmation
             */
+
+            afficherMessage(
+                `Le foyer « ${foyer.nom} » a bien été créé.`,
+                "succes"
+            );
+
+
+            /*
+                4. Redirection vers
+                le carnet de recettes
+            */
+
+            setTimeout(
+                function () {
+
+                    window.location.href =
+                        "index.html";
+
+                },
+                600
+            );
+
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur pendant la création du foyer :",
+                erreur
+            );
 
 
             afficherMessage(
-    `Le foyer « ${foyer.nom} » a bien été créé.`,
-    "succes"
-);
+                erreur.message ||
+                "Impossible de créer le foyer.",
+                "erreur"
+            );
 
-setTimeout(
-    function () {
-        window.location.href =
-            "index.html";
-    },
-    600
-);
 
+        } finally {
+
+            boutonCreerFoyer.disabled =
+                false;
+
+            boutonCreerFoyer.textContent =
+                "Créer mon foyer";
+
+        }
+
+    }
+);
 /* =================================
    FORMULAIRE :
    REJOINDRE UN FOYER
