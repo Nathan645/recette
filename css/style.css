@@ -1050,3 +1050,10 @@ footer {
     justify-content:flex-end;
     margin-bottom:10px;
 }
+
+.badges-recette{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin:32px 0;
+}
