@@ -436,10 +436,6 @@ function afficherRecette(recette) {
     contenuRecette.innerHTML = `
         <article class="fiche-recette">
 
-            <div class="illustration">
-                ${illustrationHtml}
-            </div>
-
             <div class="contenu">
 
                 <div class="badges-principaux">
