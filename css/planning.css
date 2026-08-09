@@ -1,28 +1,8 @@
-/* =================================
-   PAGE
-================================= */
-
-.navigation-planning {
-    padding: 22px 5%;
-}
-
-
-.navigation-planning .navigation {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-
-.titre-navigation {
-    color: var(--blanc);
-    font-weight: bold;
-}
-
-
 .page-planning {
     width: 94%;
     max-width: 1500px;
+
+    margin: 0 auto;
 
     padding: 45px 0 70px;
 }
@@ -44,11 +24,12 @@
     font-weight: bold;
 
     text-transform: uppercase;
+
     letter-spacing: 0.8px;
 }
 
 
-.entete-planning h1 {
+.entete-planning h2 {
     margin: 7px 0 10px;
 
     font-size: 38px;
@@ -102,11 +83,12 @@
     font-weight: bold;
 
     text-transform: uppercase;
+
     letter-spacing: 0.7px;
 }
 
 
-.semaine-actuelle h2 {
+.semaine-actuelle h3 {
     margin: 0;
 
     font-size: 23px;
@@ -260,6 +242,7 @@
     font-weight: bold;
 
     text-transform: uppercase;
+
     letter-spacing: 0.7px;
 }
 
@@ -456,7 +439,7 @@ a.repas-planifie:hover {
 
 
 /* =================================
-   CHAMPS POP-UP
+   CHAMPS
 ================================= */
 
 .bloc-recette-planning label,
@@ -495,12 +478,12 @@ a.repas-planifie:hover {
 
 
 .resultats-recettes-planning {
-    margin-top: 12px;
-
     display: flex;
     flex-direction: column;
 
     gap: 7px;
+
+    margin-top: 12px;
 }
 
 
@@ -584,7 +567,7 @@ a.repas-planifie:hover {
     }
 
 
-    .entete-planning h1 {
+    .entete-planning h2 {
         font-size: 32px;
     }
 
