@@ -29,6 +29,11 @@ function ouvrirPopup(dateISO, moment, repas = null) {
     momentSelectionne = moment;
     repasEnModification = repas;
 
+   const champPersonnes =
+    document.getElementById("personnes-repas");
+
+champPersonnes.value =
+    nombrePersonnesParDefaut;
     const date = new Date(`${dateISO}T12:00:00`);
     const momentTexte = moment === "midi" ? "Midi" : "Soir";
 
