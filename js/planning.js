@@ -3,137 +3,88 @@
 ================================= */
 
 const grilleSemaine =
-    document.getElementById(
-        "grille-semaine"
-    );
+    document.getElementById("grille-semaine");
 
 const boutonSemainePrecedente =
-    document.getElementById(
-        "semaine-precedente"
-    );
+    document.getElementById("semaine-precedente");
 
 const boutonSemaineSuivante =
-    document.getElementById(
-        "semaine-suivante"
-    );
+    document.getElementById("semaine-suivante");
 
 const boutonAujourdhui =
-    document.getElementById(
-        "aller-aujourdhui"
-    );
+    document.getElementById("aller-aujourdhui");
 
 const numeroSemaine =
-    document.getElementById(
-        "numero-semaine"
-    );
+    document.getElementById("numero-semaine");
 
 const titreSemaine =
-    document.getElementById(
-        "titre-semaine"
-    );
+    document.getElementById("titre-semaine");
 
-
-/* POP-UP */
 
 const popupRepas =
-    document.getElementById(
-        "popup-repas"
-    );
+    document.getElementById("popup-repas");
 
 const boutonFermerPopup =
-    document.getElementById(
-        "fermer-popup-repas"
-    );
+    document.getElementById("fermer-popup-repas");
 
 const datePopupRepas =
-    document.getElementById(
-        "date-popup-repas"
-    );
+    document.getElementById("date-popup-repas");
 
 const boutonChoisirRecette =
-    document.getElementById(
-        "choisir-recette"
-    );
+    document.getElementById("choisir-recette");
 
 const boutonChoisirLibre =
-    document.getElementById(
-        "choisir-libre"
-    );
+    document.getElementById("choisir-libre");
 
 const blocRecettePlanning =
-    document.getElementById(
-        "bloc-recette-planning"
-    );
+    document.getElementById("bloc-recette-planning");
 
 const blocRepasLibre =
-    document.getElementById(
-        "bloc-repas-libre"
-    );
+    document.getElementById("bloc-repas-libre");
 
 const champRechercheRecette =
-    document.getElementById(
-        "recherche-recette-planning"
-    );
+    document.getElementById("recherche-recette-planning");
 
 const resultatsRecettes =
-    document.getElementById(
-        "resultats-recettes-planning"
-    );
+    document.getElementById("resultats-recettes-planning");
 
 const champRepasLibre =
-    document.getElementById(
-        "nom-repas-libre"
-    );
+    document.getElementById("nom-repas-libre");
 
 const boutonValiderRepasLibre =
-    document.getElementById(
-        "valider-repas-libre"
-    );
+    document.getElementById("valider-repas-libre");
 
 const messagePlanning =
-    document.getElementById(
-        "message-planning"
-    );
+    document.getElementById("message-planning");
 
 
 /* =================================
    VARIABLES
 ================================= */
 
-let utilisateurConnecte =
-    null;
+let utilisateurConnecte = null;
 
-let foyerId =
-    null;
+let foyerId = null;
 
 let debutSemaine =
-    obtenirDebutSemaine(
-        new Date()
-    );
+    obtenirDebutSemaine(new Date());
 
-let repasSemaine =
-    [];
+let repasSemaine = [];
 
-let recettes =
-    [];
+let recettes = [];
 
-let dateSelectionnee =
-    null;
+let dateSelectionnee = null;
 
-let momentSelectionne =
-    null;
+let momentSelectionne = null;
 
-let repasEnModification =
-    null;
+let repasEnModification = null;
 
 
 /* =================================
    OUTILS DATES
 ================================= */
 
-function obtenirDebutSemaine(
-    date
-) {
+function obtenirDebutSemaine(date) {
 
     const resultat =
         new Date(
@@ -151,8 +102,7 @@ function obtenirDebutSemaine(
             : 1 - jour;
 
     resultat.setDate(
-        resultat.getDate() +
-        decalage
+        resultat.getDate() + decalage
     );
 
     resultat.setHours(
@@ -166,26 +116,20 @@ function obtenirDebutSemaine(
 }
 
 
-function ajouterJours(
-    date,
-    nombre
-) {
+function ajouterJours(date, nombre) {
 
     const resultat =
         new Date(date);
 
     resultat.setDate(
-        resultat.getDate() +
-        nombre
+        resultat.getDate() + nombre
     );
 
     return resultat;
 }
 
 
-function formaterDateISO(
-    date
-) {
+function formaterDateISO(date) {
 
     const annee =
         date.getFullYear();
@@ -210,9 +154,7 @@ function formaterDateISO(
 }
 
 
-function formaterDateCourte(
-    date
-) {
+function formaterDateCourte(date) {
 
     return date.toLocaleDateString(
         "fr-FR",
@@ -224,9 +166,7 @@ function formaterDateCourte(
 }
 
 
-function formaterDateLongue(
-    date
-) {
+function formaterDateLongue(date) {
 
     return date.toLocaleDateString(
         "fr-FR",
@@ -239,9 +179,7 @@ function formaterDateLongue(
 }
 
 
-function capitaliser(
-    texte
-) {
+function capitaliser(texte) {
 
     if (!texte) {
         return "";
@@ -255,12 +193,10 @@ function capitaliser(
 
 
 /* =================================
-   NUMÉRO DE SEMAINE ISO
+   NUMÉRO DE SEMAINE
 ================================= */
 
-function obtenirNumeroSemaine(
-    date
-) {
+function obtenirNumeroSemaine(date) {
 
     const copie =
         new Date(
@@ -307,9 +243,7 @@ function obtenirNumeroSemaine(
    AUJOURD'HUI
 ================================= */
 
-function estAujourdhui(
-    date
-) {
+function estAujourdhui(date) {
 
     const maintenant =
         new Date();
@@ -356,17 +290,14 @@ async function recupererUtilisateurEtFoyer() {
         return false;
     }
 
+
     const {
         data: membre,
         error: erreurMembre
     } =
         await window.supabaseClient
-            .from(
-                "membres_foyer"
-            )
-            .select(
-                "foyer_id"
-            )
+            .from("membres_foyer")
+            .select("foyer_id")
             .eq(
                 "user_id",
                 utilisateurConnecte.id
@@ -374,9 +305,11 @@ async function recupererUtilisateurEtFoyer() {
             .limit(1)
             .maybeSingle();
 
+
     if (erreurMembre) {
         throw erreurMembre;
     }
+
 
     if (!membre) {
 
@@ -385,6 +318,7 @@ async function recupererUtilisateurEtFoyer() {
 
         return false;
     }
+
 
     foyerId =
         membre.foyer_id;
@@ -404,12 +338,8 @@ async function chargerRecettes() {
         error
     } =
         await window.supabaseClient
-            .from(
-                "recettes"
-            )
-            .select(
-                "id, nom"
-            )
+            .from("recettes")
+            .select("id, nom")
             .order(
                 "nom",
                 {
@@ -450,16 +380,14 @@ async function chargerRepasSemaine() {
             finSemaine
         );
 
+
     const {
         data,
         error
     } =
         await window.supabaseClient
-            .from(
-                "repas_planning"
-            )
-            .select(
-                `
+            .from("repas_planning")
+            .select(`
                 id,
                 foyer_id,
                 date,
@@ -467,8 +395,7 @@ async function chargerRepasSemaine() {
                 nom,
                 recette_id,
                 created_by
-                `
-            )
+            `)
             .eq(
                 "foyer_id",
                 foyerId
@@ -482,9 +409,11 @@ async function chargerRepasSemaine() {
                 dateFin
             );
 
+
     if (error) {
         throw error;
     }
+
 
     repasSemaine =
         Array.isArray(data)
@@ -503,19 +432,14 @@ function trouverRepas(
 ) {
 
     const dateISO =
-        formaterDateISO(
-            date
-        );
+        formaterDateISO(date);
 
     return repasSemaine.find(
         function (repas) {
 
             return (
-                repas.date ===
-                    dateISO &&
-
-                repas.moment ===
-                    moment
+                repas.date === dateISO &&
+                repas.moment === moment
             );
 
         }
@@ -562,19 +486,63 @@ function creerCreneauRepas(
 
     let contenu = "";
 
+
     if (repas) {
 
-        contenu = `
+        if (repas.recette_id) {
 
-            <button
-                type="button"
-                class="repas-planifie bouton-modifier-repas"
-                data-repas-id="${repas.id}"
-            >
-                ${repas.nom}
-            </button>
+            contenu = `
 
-        `;
+                <div class="repas-planifie">
+
+                    <a
+                        href="recette.html?id=${encodeURIComponent(
+                            repas.recette_id
+                        )}"
+                        class="lien-repas-recette"
+                    >
+                        ${repas.nom}
+                    </a>
+
+                    <button
+                        type="button"
+                        class="bouton-editer-repas"
+                        data-repas-id="${repas.id}"
+                        aria-label="Modifier ce repas"
+                        title="Modifier ce repas"
+                    >
+                        ✏️
+                    </button>
+
+                </div>
+
+            `;
+
+        } else {
+
+            contenu = `
+
+                <div class="repas-planifie">
+
+                    <span class="nom-repas-libre">
+                        ${repas.nom}
+                    </span>
+
+                    <button
+                        type="button"
+                        class="bouton-editer-repas"
+                        data-repas-id="${repas.id}"
+                        aria-label="Modifier ce repas"
+                        title="Modifier ce repas"
+                    >
+                        ✏️
+                    </button>
+
+                </div>
+
+            `;
+
+        }
 
     } else {
 
@@ -583,9 +551,7 @@ function creerCreneauRepas(
             <button
                 type="button"
                 class="bouton-ajouter-repas"
-                data-date="${formaterDateISO(
-                    date
-                )}"
+                data-date="${formaterDateISO(date)}"
                 data-moment="${moment}"
             >
                 + Ajouter
@@ -594,6 +560,7 @@ function creerCreneauRepas(
         `;
 
     }
+
 
     return `
 
@@ -612,7 +579,7 @@ function creerCreneauRepas(
 
 
 /* =================================
-   AFFICHAGE SEMAINE
+   AFFICHER LA SEMAINE
 ================================= */
 
 function afficherSemaine() {
@@ -623,12 +590,14 @@ function afficherSemaine() {
             6
         );
 
+
     numeroSemaine.textContent =
         `Semaine ${
             obtenirNumeroSemaine(
                 debutSemaine
             )
         }`;
+
 
     titreSemaine.textContent =
         `${formaterDateCourte(
@@ -644,7 +613,9 @@ function afficherSemaine() {
             )
         }`;
 
+
     const jours = [];
+
 
     for (
         let index = 0;
@@ -666,6 +637,7 @@ function afficherSemaine() {
                 }
             );
 
+
         jours.push(`
 
             <article
@@ -679,15 +651,11 @@ function afficherSemaine() {
                 <div class="entete-jour">
 
                     <span class="nom-jour">
-                        ${capitaliser(
-                            nomJour
-                        )}
+                        ${capitaliser(nomJour)}
                     </span>
 
                     <div class="date-jour">
-                        ${formaterDateCourte(
-                            date
-                        )}
+                        ${formaterDateCourte(date)}
                     </div>
 
                 </div>
@@ -708,6 +676,7 @@ function afficherSemaine() {
 
     }
 
+
     grilleSemaine.innerHTML =
         jours.join("");
 }
@@ -719,12 +688,11 @@ function afficherSemaine() {
 
 async function rafraichirPlanning() {
 
-    grilleSemaine.innerHTML =
-        `
-            <p>
-                Chargement du planning…
-            </p>
-        `;
+    grilleSemaine.innerHTML = `
+        <p>
+            Chargement du planning…
+        </p>
+    `;
 
     try {
 
@@ -739,69 +707,61 @@ async function rafraichirPlanning() {
             erreur
         );
 
-        grilleSemaine.innerHTML =
-            `
-                <p>
-                    Impossible de charger le planning.
-                </p>
-            `;
+        grilleSemaine.innerHTML = `
+            <p>
+                Impossible de charger le planning.
+            </p>
+        `;
 
     }
 }
-
 
 /* =================================
    NAVIGATION SEMAINE
 ================================= */
 
-boutonSemainePrecedente
-    .addEventListener(
-        "click",
-        async function () {
+boutonSemainePrecedente.addEventListener(
+    "click",
+    async function () {
 
-            debutSemaine =
-                ajouterJours(
-                    debutSemaine,
-                    -7
-                );
+        debutSemaine =
+            ajouterJours(
+                debutSemaine,
+                -7
+            );
 
-            await rafraichirPlanning();
-
-        }
-    );
+        await rafraichirPlanning();
+    }
+);
 
 
-boutonSemaineSuivante
-    .addEventListener(
-        "click",
-        async function () {
+boutonSemaineSuivante.addEventListener(
+    "click",
+    async function () {
 
-            debutSemaine =
-                ajouterJours(
-                    debutSemaine,
-                    7
-                );
+        debutSemaine =
+            ajouterJours(
+                debutSemaine,
+                7
+            );
 
-            await rafraichirPlanning();
-
-        }
-    );
+        await rafraichirPlanning();
+    }
+);
 
 
-boutonAujourdhui
-    .addEventListener(
-        "click",
-        async function () {
+boutonAujourdhui.addEventListener(
+    "click",
+    async function () {
 
-            debutSemaine =
-                obtenirDebutSemaine(
-                    new Date()
-                );
+        debutSemaine =
+            obtenirDebutSemaine(
+                new Date()
+            );
 
-            await rafraichirPlanning();
-
-        }
-    );
+        await rafraichirPlanning();
+    }
+);
 
 
 /* =================================
@@ -812,15 +772,11 @@ function afficherModeRecette() {
 
     boutonChoisirRecette
         .classList
-        .add(
-            "actif"
-        );
+        .add("actif");
 
     boutonChoisirLibre
         .classList
-        .remove(
-            "actif"
-        );
+        .remove("actif");
 
     blocRecettePlanning.hidden =
         false;
@@ -834,15 +790,11 @@ function afficherModeLibre() {
 
     boutonChoisirLibre
         .classList
-        .add(
-            "actif"
-        );
+        .add("actif");
 
     boutonChoisirRecette
         .classList
-        .remove(
-            "actif"
-        );
+        .remove("actif");
 
     blocRecettePlanning.hidden =
         true;
@@ -880,22 +832,24 @@ function ouvrirPopup(
     repasEnModification =
         repas;
 
+
     const date =
         new Date(
             `${dateISO}T12:00:00`
         );
+
 
     const momentTexte =
         moment === "midi"
             ? "Midi"
             : "Soir";
 
+
     datePopupRepas.textContent =
         `${capitaliser(
-            formaterDateLongue(
-                date
-            )
+            formaterDateLongue(date)
         )} • ${momentTexte}`;
+
 
     champRechercheRecette.value =
         "";
@@ -905,6 +859,7 @@ function ouvrirPopup(
 
     messagePlanning.textContent =
         "";
+
 
     if (repasEnModification) {
 
@@ -935,11 +890,10 @@ function ouvrirPopup(
 
         afficherModeRecette();
 
-        afficherResultatsRecettes(
-            ""
-        );
+        afficherResultatsRecettes("");
 
     }
+
 
     popupRepas.hidden =
         false;
@@ -972,12 +926,17 @@ function fermerPopup() {
 
 
 /* =================================
-   CLICS DANS LE PLANNING
+   CLICS PLANNING
 ================================= */
 
 grilleSemaine.addEventListener(
     "click",
     function (evenement) {
+
+        /*
+            CASE VIDE :
+            AJOUTER UN REPAS
+        */
 
         const boutonAjouter =
             evenement.target.closest(
@@ -995,20 +954,32 @@ grilleSemaine.addEventListener(
         }
 
 
+        /*
+            PETIT CRAYON :
+            MODIFIER UN REPAS
+        */
+
         const boutonModifier =
             evenement.target.closest(
-                ".bouton-modifier-repas"
+                ".bouton-editer-repas"
             );
+
 
         if (!boutonModifier) {
             return;
         }
 
 
+        evenement.preventDefault();
+
+        evenement.stopPropagation();
+
+
         const repas =
             trouverRepasParId(
                 boutonModifier.dataset.repasId
             );
+
 
         if (!repas) {
             return;
@@ -1029,11 +1000,10 @@ grilleSemaine.addEventListener(
    FERMER POP-UP
 ================================= */
 
-boutonFermerPopup
-    .addEventListener(
-        "click",
-        fermerPopup
-    );
+boutonFermerPopup.addEventListener(
+    "click",
+    fermerPopup
+);
 
 
 popupRepas.addEventListener(
@@ -1046,7 +1016,6 @@ popupRepas.addEventListener(
         ) {
 
             fermerPopup();
-
         }
 
     }
@@ -1058,13 +1027,11 @@ document.addEventListener(
     function (evenement) {
 
         if (
-            evenement.key ===
-                "Escape" &&
+            evenement.key === "Escape" &&
             !popupRepas.hidden
         ) {
 
             fermerPopup();
-
         }
 
     }
@@ -1072,21 +1039,19 @@ document.addEventListener(
 
 
 /* =================================
-   CHANGER LE TYPE
+   CHANGER LE TYPE DE REPAS
 ================================= */
 
-boutonChoisirRecette
-    .addEventListener(
-        "click",
-        afficherModeRecette
-    );
+boutonChoisirRecette.addEventListener(
+    "click",
+    afficherModeRecette
+);
 
 
-boutonChoisirLibre
-    .addEventListener(
-        "click",
-        afficherModeLibre
-    );
+boutonChoisirLibre.addEventListener(
+    "click",
+    afficherModeLibre
+);
 
 
 /* =================================
@@ -1102,6 +1067,7 @@ function afficherResultatsRecettes(
             .trim()
             .toLowerCase();
 
+
     const recettesFiltrees =
         recettes
             .filter(
@@ -1109,9 +1075,7 @@ function afficherResultatsRecettes(
 
                     return recette.nom
                         .toLowerCase()
-                        .includes(
-                            texte
-                        );
+                        .includes(texte);
 
                 }
             )
@@ -1120,19 +1084,20 @@ function afficherResultatsRecettes(
                 12
             );
 
+
     if (
         recettesFiltrees.length === 0
     ) {
 
-        resultatsRecettes.innerHTML =
-            `
-                <p>
-                    Aucune recette trouvée.
-                </p>
-            `;
+        resultatsRecettes.innerHTML = `
+            <p>
+                Aucune recette trouvée.
+            </p>
+        `;
 
         return;
     }
+
 
     resultatsRecettes.innerHTML =
         recettesFiltrees
@@ -1157,17 +1122,16 @@ function afficherResultatsRecettes(
 }
 
 
-champRechercheRecette
-    .addEventListener(
-        "input",
-        function () {
+champRechercheRecette.addEventListener(
+    "input",
+    function () {
 
-            afficherResultatsRecettes(
-                champRechercheRecette.value
-            );
+        afficherResultatsRecettes(
+            champRechercheRecette.value
+        );
 
-        }
-    );
+    }
+);
 
 
 /* =================================
@@ -1187,17 +1151,15 @@ async function enregistrerRepas(
         throw new Error(
             "Le créneau du repas n'est pas défini."
         );
-
     }
+
 
     const {
         data,
         error
     } =
         await window.supabaseClient
-            .from(
-                "repas_planning"
-            )
+            .from("repas_planning")
             .insert({
 
                 foyer_id:
@@ -1219,14 +1181,14 @@ async function enregistrerRepas(
                     utilisateurConnecte.id
 
             })
-            .select(
-                "id"
-            )
+            .select("id")
             .single();
+
 
     if (error) {
         throw error;
     }
+
 
     return data;
 }
@@ -1246,17 +1208,15 @@ async function modifierRepas(
         throw new Error(
             "Aucun repas à modifier."
         );
-
     }
+
 
     const {
         data,
         error
     } =
         await window.supabaseClient
-            .from(
-                "repas_planning"
-            )
+            .from("repas_planning")
             .update({
 
                 nom:
@@ -1270,46 +1230,43 @@ async function modifierRepas(
                 "id",
                 repasEnModification.id
             )
-            .select(
-                "id"
-            )
+            .select("id")
             .single();
+
 
     if (error) {
         throw error;
     }
 
+
     return data;
 }
 
-
 /* =================================
-   RECETTE EXISTANTE
+   SÉLECTION D'UNE RECETTE
 ================================= */
 
 resultatsRecettes.addEventListener(
     "click",
-    async function (
-        evenement
-    ) {
+    async function (evenement) {
 
         const bouton =
             evenement.target.closest(
                 "[data-recette-id]"
             );
 
+
         if (!bouton) {
             return;
         }
+
 
         const recette =
             recettes.find(
                 function (element) {
 
                     return (
-                        String(
-                            element.id
-                        ) ===
+                        String(element.id) ===
                         String(
                             bouton.dataset.recetteId
                         )
@@ -1318,19 +1275,23 @@ resultatsRecettes.addEventListener(
                 }
             );
 
+
         if (!recette) {
             return;
         }
+
 
         messagePlanning.textContent =
             repasEnModification
                 ? "Modification en cours…"
                 : "Ajout en cours…";
 
+
         try {
 
             bouton.disabled =
                 true;
+
 
             if (repasEnModification) {
 
@@ -1348,9 +1309,11 @@ resultatsRecettes.addEventListener(
 
             }
 
+
             fermerPopup();
 
             await rafraichirPlanning();
+
 
         } catch (erreur) {
 
@@ -1359,9 +1322,11 @@ resultatsRecettes.addEventListener(
                 erreur
             );
 
+
             messagePlanning.textContent =
                 erreur.message ||
                 "Impossible d'enregistrer le repas.";
+
 
             bouton.disabled =
                 false;
@@ -1376,81 +1341,94 @@ resultatsRecettes.addEventListener(
    REPAS LIBRE
 ================================= */
 
-boutonValiderRepasLibre
-    .addEventListener(
-        "click",
-        async function () {
+boutonValiderRepasLibre.addEventListener(
+    "click",
+    async function () {
 
-            const nom =
-                champRepasLibre
-                    .value
-                    .trim();
+        const nom =
+            champRepasLibre
+                .value
+                .trim();
 
-            if (!nom) {
 
-                messagePlanning.textContent =
-                    "Renseigne le nom du repas.";
-
-                return;
-            }
-
-            boutonValiderRepasLibre.disabled =
-                true;
-
-            boutonValiderRepasLibre.textContent =
-                repasEnModification
-                    ? "Modification…"
-                    : "Ajout…";
+        if (!nom) {
 
             messagePlanning.textContent =
-                "";
+                "Renseigne le nom du repas.";
 
-            try {
+            return;
+        }
 
-                if (repasEnModification) {
 
-                    await modifierRepas(
-                        nom,
-                        null
-                    );
+        boutonValiderRepasLibre.disabled =
+            true;
 
-                } else {
 
-                    await enregistrerRepas(
-                        nom,
-                        null
-                    );
+        boutonValiderRepasLibre.textContent =
+            repasEnModification
+                ? "Modification…"
+                : "Ajout…";
 
-                }
 
-                fermerPopup();
+        messagePlanning.textContent =
+            "";
 
-                await rafraichirPlanning();
 
-            } catch (erreur) {
+        try {
 
-                console.error(
-                    "Erreur ajout/modification repas libre :",
-                    erreur
+            if (repasEnModification) {
+
+                await modifierRepas(
+                    nom,
+                    null
                 );
 
-                messagePlanning.textContent =
-                    erreur.message ||
-                    "Impossible d'enregistrer le repas.";
+            } else {
 
-            } finally {
-
-                boutonValiderRepasLibre.disabled =
-                    false;
-
-                boutonValiderRepasLibre.textContent =
-                    "Ajouter au planning";
+                await enregistrerRepas(
+                    nom,
+                    null
+                );
 
             }
 
-        }
-    );
 
+            fermerPopup();
+
+            await rafraichirPlanning();
+
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur ajout/modification repas libre :",
+                erreur
+            );
+
+
+            messagePlanning.textContent =
+                erreur.message ||
+                "Impossible d'enregistrer le repas.";
+
+
+        } finally {
+
+            boutonValiderRepasLibre.disabled =
+                false;
+
+
+            boutonValiderRepasLibre.textContent =
+                "Ajouter au planning";
+
+        }
+
+    }
+);
+
+
+/* =================================
+   ENTRÉE POUR REPAS LIBRE
+================================= */
 
 champRepasLibre.addEventListener(
     "keydown",
@@ -1464,7 +1442,6 @@ champRepasLibre.addEventListener(
             evenement.preventDefault();
 
             boutonValiderRepasLibre.click();
-
         }
 
     }
@@ -1479,25 +1456,28 @@ async function initialiserPlanning() {
 
     try {
 
-        grilleSemaine.innerHTML =
-            `
-                <p>
-                    Chargement du planning…
-                </p>
-            `;
+        grilleSemaine.innerHTML = `
+            <p>
+                Chargement du planning…
+            </p>
+        `;
+
 
         const utilisateurPret =
             await recupererUtilisateurEtFoyer();
 
+
         if (!utilisateurPret) {
             return;
         }
+
 
         await chargerRecettes();
 
         await chargerRepasSemaine();
 
         afficherSemaine();
+
 
     } catch (erreur) {
 
@@ -1506,13 +1486,13 @@ async function initialiserPlanning() {
             erreur
         );
 
-        grilleSemaine.innerHTML =
-            `
-                <p>
-                    Impossible de charger le planning.
-                    ${erreur.message || ""}
-                </p>
-            `;
+
+        grilleSemaine.innerHTML = `
+            <p>
+                Impossible de charger le planning.
+                ${erreur.message || ""}
+            </p>
+        `;
 
     }
 
