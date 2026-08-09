@@ -44,6 +44,12 @@ const grilleRecettes =
 
 let recettes = [];
 
+let utilisateurConnecte =
+    null;
+
+let favoris =
+    [];
+
 let categorieSelectionnee =
     "toutes";
 
@@ -61,89 +67,202 @@ let saisonsSelectionnees =
 
 
 /* =================================
-   FAVORIS
+   UTILISATEUR CONNECTÉ
 ================================= */
 
-function recupererFavoris() {
+async function recupererUtilisateurConnecte() {
 
-    try {
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .auth
+            .getUser();
 
-        const favoris =
-            JSON.parse(
-                localStorage.getItem(
-                    "recettes-favorites"
-                )
+
+    if (error) {
+        throw error;
+    }
+
+
+    utilisateurConnecte =
+        data.user;
+
+
+    if (!utilisateurConnecte) {
+
+        window.location.href =
+            "compte.html";
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =================================
+   FAVORIS SUPABASE
+================================= */
+
+async function chargerFavoris() {
+
+    if (!utilisateurConnecte) {
+
+        favoris = [];
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from("favoris")
+            .select("recette_id")
+            .eq(
+                "user_id",
+                utilisateurConnecte.id
             );
 
-        return Array.isArray(favoris)
-            ? favoris
-            : [];
 
-    } catch (erreur) {
-
-        return [];
-
+    if (error) {
+        throw error;
     }
+
+
+    favoris =
+        Array.isArray(data)
+            ? data.map(
+                function (favori) {
+
+                    return favori.recette_id;
+
+                }
+            )
+            : [];
 }
 
 
-function enregistrerFavoris(favoris) {
+function recetteEstFavorite(
+    id
+) {
 
-    localStorage.setItem(
-        "recettes-favorites",
-        JSON.stringify(favoris)
-    );
-}
-
-
-function recetteEstFavorite(id) {
-
-    return recupererFavoris()
+    return favoris
         .map(String)
-        .includes(String(id));
+        .includes(
+            String(id)
+        );
 }
 
 
-function basculerFavori(id) {
+async function basculerFavori(
+    id
+) {
 
-    let favoris =
-        recupererFavoris();
+    if (!utilisateurConnecte) {
+        return;
+    }
+
 
     const idTexte =
         String(id);
 
+
     const existeDeja =
         favoris
             .map(String)
-            .includes(idTexte);
-
-
-    if (existeDeja) {
-
-        favoris =
-            favoris.filter(
-                function (favoriId) {
-
-                    return (
-                        String(favoriId) !==
-                        idTexte
-                    );
-
-                }
+            .includes(
+                idTexte
             );
 
-    } else {
 
-        favoris.push(id);
+    try {
+
+        if (existeDeja) {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from("favoris")
+                    .delete()
+                    .eq(
+                        "user_id",
+                        utilisateurConnecte.id
+                    )
+                    .eq(
+                        "recette_id",
+                        id
+                    );
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            favoris =
+                favoris.filter(
+                    function (
+                        favoriId
+                    ) {
+
+                        return (
+                            String(
+                                favoriId
+                            ) !==
+                            idTexte
+                        );
+
+                    }
+                );
+
+
+        } else {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from("favoris")
+                    .insert({
+
+                        user_id:
+                            utilisateurConnecte.id,
+
+                        recette_id:
+                            id
+
+                    });
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            favoris.push(
+                id
+            );
+        }
+
+
+        afficherRecettes();
+
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur pendant la modification du favori :",
+            erreur
+        );
 
     }
-
-
-    enregistrerFavoris(
-        favoris
-    );
-
-    afficherRecettes();
 }
 
 
@@ -162,14 +281,30 @@ async function chargerRecettes() {
 
     try {
 
-        const { data, error } =
+        const utilisateurPret =
+            await recupererUtilisateurConnecte();
+
+
+        if (!utilisateurPret) {
+            return;
+        }
+
+
+        await chargerFavoris();
+
+
+        const {
+            data,
+            error
+        } =
             await window.supabaseClient
                 .from("recettes")
                 .select("*")
                 .order(
                     "created_at",
                     {
-                        ascending: false
+                        ascending:
+                            false
                     }
                 );
 
@@ -221,12 +356,15 @@ async function chargerRecettes() {
    INFORMATIONS DES CARTES
 ================================= */
 
-function calculerTempsTotal(recette) {
+function calculerTempsTotal(
+    recette
+) {
 
     const preparation =
         Number(
             recette.preparation
         ) || 0;
+
 
     const cuisson =
         Number(
@@ -245,12 +383,15 @@ function calculerTempsTotal(recette) {
    CARTE RECETTE
 ================================= */
 
-function creerCarteRecette(recette) {
+function creerCarteRecette(
+    recette
+) {
 
     const tempsTotal =
         calculerTempsTotal(
             recette
         );
+
 
     const estFavorite =
         recetteEstFavorite(
@@ -259,34 +400,44 @@ function creerCarteRecette(recette) {
 
 
     return `
+
         <article
-        class="carte-recette"
-        data-recette-id="${recette.id}"
+            class="carte-recette"
+            data-recette-id="${recette.id}"
         >
 
-           <div class="entete-carte">
+            <div class="entete-carte">
 
-    <button
-        type="button"
-        class="bouton-favori ${
-            estFavorite
-                ? "favori-actif"
-                : ""
-        }"
-        data-favori-id="${recette.id}"
-    >
-        ${
-            estFavorite
-                ? "♥"
-                : "♡"
-        }
-    </button>
+                <button
+                    type="button"
+                    class="bouton-favori ${
+                        estFavorite
+                            ? "favori-actif"
+                            : ""
+                    }"
+                    data-favori-id="${recette.id}"
+                    aria-label="${
+                        estFavorite
+                            ? "Retirer des favoris"
+                            : "Ajouter aux favoris"
+                    }"
+                    title="${
+                        estFavorite
+                            ? "Retirer des favoris"
+                            : "Ajouter aux favoris"
+                    }"
+                >
+                    ${
+                        estFavorite
+                            ? "♥"
+                            : "♡"
+                    }
+                </button>
 
-</div>
+            </div>
 
 
             <div class="contenu-carte">
-
 
                 <h3>
                     ${recette.nom}
@@ -305,22 +456,22 @@ function creerCarteRecette(recette) {
 
                 <div class="informations">
 
-                <span>
-                    ⏱️ ${tempsTotal} min
-                </span>
+                    <span>
+                        ⏱️ ${tempsTotal} min
+                    </span>
 
-                <span>
-                    ● ${recette.difficulte}
-                </span>
+                    <span>
+                        ● ${recette.difficulte}
+                    </span>
 
                 </div>
 
             </div>
 
         </article>
+
     `;
 }
-
 
 /* =================================
    RECHERCHE TEXTUELLE
@@ -346,14 +497,17 @@ function construireTexteRecherche(
                         ) {
 
                             return ingredient;
-
                         }
 
 
                         return [
+
                             ingredient.quantite,
+
                             ingredient.unite,
+
                             ingredient.nom
+
                         ]
                             .filter(
                                 function (
@@ -361,18 +515,13 @@ function construireTexteRecherche(
                                 ) {
 
                                     return (
-                                        element !==
-                                            null &&
-                                        element !==
-                                            undefined &&
-                                        element !==
-                                            ""
+                                        element !== null &&
+                                        element !== undefined &&
+                                        element !== ""
                                     );
-
                                 }
                             )
                             .join(" ");
-
                     }
                 )
                 .join(" ")
@@ -390,8 +539,6 @@ function construireTexteRecherche(
         recette.categorie_affichee,
 
         recette.difficulte,
-
-        recette.auteur,
 
         ingredients,
 
@@ -438,7 +585,6 @@ function recetteContientTous(
     ) {
 
         return true;
-
     }
 
 
@@ -449,13 +595,14 @@ function recetteContientTous(
     ) {
 
         return false;
-
     }
 
 
     return valeursRecherchees
         .every(
-            function (valeur) {
+            function (
+                valeur
+            ) {
 
                 return (
                     valeursRecette
@@ -463,7 +610,6 @@ function recetteContientTous(
                             valeur
                         )
                 );
-
             }
         );
 }
@@ -480,7 +626,6 @@ function recetteCorrespondSaisons(
     ) {
 
         return true;
-
     }
 
 
@@ -491,14 +636,13 @@ function recetteCorrespondSaisons(
     ) {
 
         return false;
-
     }
 
 
     /*
-        Une recette enregistrée comme
-        "Toute l'année" doit apparaître
-        quelle que soit la saison choisie.
+        Une recette "Toute l'année"
+        apparaît quelle que soit
+        la saison choisie.
     */
 
     if (
@@ -508,13 +652,14 @@ function recetteCorrespondSaisons(
     ) {
 
         return true;
-
     }
 
 
     return saisonsRecherchees
         .every(
-            function (saison) {
+            function (
+                saison
+            ) {
 
                 return (
                     recette.saisons
@@ -522,7 +667,6 @@ function recetteCorrespondSaisons(
                             saison
                         )
                 );
-
             }
         );
 }
@@ -556,7 +700,6 @@ function obtenirNomFiltre(
         "a-preparer-avance":
             "À préparer à l'avance",
 
-
         "quotidien":
             "Quotidien",
 
@@ -574,7 +717,6 @@ function obtenirNomFiltre(
 
         "apero-dinatoire":
             "Apéro dînatoire",
-
 
         "printemps":
             "Printemps",
@@ -611,7 +753,9 @@ function afficherResumeFiltres() {
         [];
 
 
-    if (favorisSeulement) {
+    if (
+        favorisSeulement
+    ) {
 
         filtresActifs.push({
 
@@ -625,13 +769,14 @@ function afficherResumeFiltres() {
                 "♥ Favoris"
 
         });
-
     }
 
 
     etiquettesSelectionnees
         .forEach(
-            function (valeur) {
+            function (
+                valeur
+            ) {
 
                 filtresActifs.push({
 
@@ -647,14 +792,15 @@ function afficherResumeFiltres() {
                         )
 
                 });
-
             }
         );
 
 
     occasionsSelectionnees
         .forEach(
-            function (valeur) {
+            function (
+                valeur
+            ) {
 
                 filtresActifs.push({
 
@@ -670,14 +816,15 @@ function afficherResumeFiltres() {
                         )
 
                 });
-
             }
         );
 
 
     saisonsSelectionnees
         .forEach(
-            function (valeur) {
+            function (
+                valeur
+            ) {
 
                 filtresActifs.push({
 
@@ -693,7 +840,6 @@ function afficherResumeFiltres() {
                         )
 
                 });
-
             }
         );
 
@@ -707,16 +853,18 @@ function afficherResumeFiltres() {
             .innerHTML = "";
 
         return;
-
     }
 
 
     resumeFiltresActifs.innerHTML =
         filtresActifs
             .map(
-                function (filtre) {
+                function (
+                    filtre
+                ) {
 
                     return `
+
                         <button
                             type="button"
                             class="badge-filtre-actif"
@@ -728,9 +876,10 @@ function afficherResumeFiltres() {
                             <span>
                                 ×
                             </span>
-                        </button>
-                    `;
 
+                        </button>
+
+                    `;
                 }
             )
             .join("");
@@ -752,7 +901,9 @@ function afficherRecettes() {
 
     const recettesFiltrees =
         recettes.filter(
-            function (recette) {
+            function (
+                recette
+            ) {
 
                 const texteRecherche =
                     construireTexteRecherche(
@@ -817,7 +968,6 @@ function afficherRecettes() {
                     correspondSaisons
 
                 );
-
             }
         );
 
@@ -835,7 +985,6 @@ function afficherRecettes() {
         `;
 
         return;
-
     }
 
 
@@ -854,7 +1003,9 @@ function afficherRecettes() {
 
 boutonsCategories
     .forEach(
-        function (bouton) {
+        function (
+            bouton
+        ) {
 
             bouton.addEventListener(
                 "click",
@@ -871,7 +1022,6 @@ boutonsCategories
                                     .remove(
                                         "actif"
                                     );
-
                             }
                         );
 
@@ -890,16 +1040,14 @@ boutonsCategories
 
 
                     afficherRecettes();
-
                 }
             );
-
         }
     );
 
 
 /* =================================
-   FAVORIS
+   FILTRE FAVORIS
 ================================= */
 
 boutonFavoris
@@ -929,13 +1077,12 @@ boutonFavoris
             afficherResumeFiltres();
 
             afficherRecettes();
-
         }
     );
 
 
 /* =================================
-   OUVERTURE DES FILTRES AVANCÉS
+   OUVERTURE FILTRES AVANCÉS
 ================================= */
 
 boutonFiltresAvances
@@ -963,7 +1110,6 @@ boutonFiltresAvances
                     panneauOuvert
                         ? "⌃"
                         : "⌄";
-
         }
     );
 
@@ -974,7 +1120,9 @@ boutonFiltresAvances
 
 boutonsMultiples
     .forEach(
-        function (bouton) {
+        function (
+            bouton
+        ) {
 
             bouton.addEventListener(
                 "click",
@@ -983,6 +1131,7 @@ boutonsMultiples
                     const type =
                         bouton.dataset
                             .type;
+
 
                     const valeur =
                         bouton.dataset
@@ -1019,7 +1168,6 @@ boutonsMultiples
                     } else {
 
                         return;
-
                     }
 
 
@@ -1030,12 +1178,14 @@ boutonsMultiples
 
 
                     if (
-                        index === -1
+                        index ===
+                        -1
                     ) {
 
                         tableau.push(
                             valeur
                         );
+
 
                         bouton
                             .classList
@@ -1050,25 +1200,22 @@ boutonsMultiples
                             1
                         );
 
+
                         bouton
                             .classList
                             .remove(
                                 "actif"
                             );
-
                     }
 
 
                     afficherResumeFiltres();
 
                     afficherRecettes();
-
                 }
             );
-
         }
     );
-
 
 /* =================================
    SUPPRESSION D'UN FILTRE ACTIF
@@ -1077,7 +1224,9 @@ boutonsMultiples
 resumeFiltresActifs
     .addEventListener(
         "click",
-        function (evenement) {
+        function (
+            evenement
+        ) {
 
             const badge =
                 evenement.target
@@ -1094,6 +1243,7 @@ resumeFiltresActifs
             const type =
                 badge.dataset
                     .retirerType;
+
 
             const valeur =
                 badge.dataset
@@ -1149,11 +1299,12 @@ resumeFiltresActifs
 
                     tableau =
                         saisonsSelectionnees;
-
                 }
 
 
-                if (tableau) {
+                if (
+                    tableau
+                ) {
 
                     const index =
                         tableau.indexOf(
@@ -1162,16 +1313,15 @@ resumeFiltresActifs
 
 
                     if (
-                        index !== -1
+                        index !==
+                        -1
                     ) {
 
                         tableau.splice(
                             index,
                             1
                         );
-
                     }
-
                 }
 
 
@@ -1181,71 +1331,120 @@ resumeFiltresActifs
                     );
 
 
-                if (bouton) {
+                if (
+                    bouton
+                ) {
 
                     bouton
                         .classList
                         .remove(
                             "actif"
                         );
-
                 }
-
             }
 
 
             afficherResumeFiltres();
 
             afficherRecettes();
-
         }
     );
 
 
 /* =================================
-   CLIC SUR LE CŒUR D'UNE RECETTE
+   CLIC SUR LE CŒUR / CARTE
 ================================= */
 
-grilleRecettes.addEventListener(
-    "click",
-    function (event) {
+grilleRecettes
+    .addEventListener(
+        "click",
+        async function (
+            evenement
+        ) {
 
-        const boutonFavori =
-            event.target.closest(
-                "[data-favori-id]"
-            );
+            const boutonFavori =
+                evenement.target
+                    .closest(
+                        "[data-favori-id]"
+                    );
 
-        if (boutonFavori) {
 
-            event.stopPropagation();
+            if (
+                boutonFavori
+            ) {
 
-            basculerFavori(
-                boutonFavori.dataset.favoriId
-            );
+                evenement.preventDefault();
 
-            return;
+                evenement.stopPropagation();
+
+
+                boutonFavori.disabled =
+                    true;
+
+
+                try {
+
+                    await basculerFavori(
+                        boutonFavori.dataset
+                            .favoriId
+                    );
+
+                } catch (erreur) {
+
+                    console.error(
+                        "Erreur clic favori :",
+                        erreur
+                    );
+
+                } finally {
+
+                    /*
+                        afficherRecettes()
+                        recrée normalement
+                        toute la carte.
+                    */
+
+                    if (
+                        document.body
+                            .contains(
+                                boutonFavori
+                            )
+                    ) {
+
+                        boutonFavori.disabled =
+                            false;
+                    }
+                }
+
+
+                return;
+            }
+
+
+            const carte =
+                evenement.target
+                    .closest(
+                        ".carte-recette"
+                    );
+
+
+            if (
+                !carte
+            ) {
+
+                return;
+            }
+
+
+            window.location.href =
+                `recette.html?id=${
+                    encodeURIComponent(
+                        carte.dataset
+                            .recetteId
+                    )
+                }`;
         }
-
-
-        const carte =
-            event.target.closest(
-                ".carte-recette"
-            );
-
-        if (!carte) {
-            return;
-        }
-
-        window.location.href =
-            `recette.html?id=${encodeURIComponent(
-                carte.dataset.recetteId
-            )}`;
-
-    }
-);
-
-
-           
+    );
 
 
 /* =================================
@@ -1263,6 +1462,23 @@ champRecherche
    DÉMARRAGE
 ================================= */
 
-afficherResumeFiltres();
+async function initialiserApplication() {
 
-chargerRecettes();
+    afficherResumeFiltres();
+
+
+    try {
+
+        await chargerRecettes();
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur initialisation application :",
+            erreur
+        );
+    }
+}
+
+
+initialiserApplication();
