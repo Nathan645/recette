@@ -58,10 +58,6 @@ const compteEmail =
         "compte-email"
     );
 
-const compteRole =
-    document.getElementById(
-        "compte-role"
-    );
 
 
 /* FOYER */
@@ -71,10 +67,6 @@ const foyerNom =
         "foyer-nom"
     );
 
-const foyerRole =
-    document.getElementById(
-        "foyer-role"
-    );
 
 const foyerNombreMembres =
     document.getElementById(
@@ -573,10 +565,6 @@ function afficherProfil() {
         );
 
 
-    compteRole.textContent =
-        obtenirRoleProfil();
-
-
     /* HEADER */
 
     prenomUtilisateur.textContent =
@@ -610,12 +598,6 @@ function afficherFoyer() {
     foyerCode.textContent =
         valeurOuTiret(
             foyerUtilisateur.code
-        );
-
-
-    foyerRole.textContent =
-        obtenirRoleFoyer(
-            utilisateurConnecte.id
         );
 
 
