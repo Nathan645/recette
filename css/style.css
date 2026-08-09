@@ -136,34 +136,6 @@ main {
     box-shadow:0 12px 30px rgba(0,0,0,.12);
 }
 
-.illustration-recette,
-.illustration {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #dfb479, #b76842);
-}
-
-.illustration-recette {
-    height: 210px;
-    font-size: 85px;
-}
-
-.illustration {
-    height: 330px;
-    font-size: 130px;
-}
-
-.photo-recette {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: cover;
-}
-
-.photo-recette-detail {
-    object-position: center;
-}
 
 .contenu-carte{
     display:flex;
