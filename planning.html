@@ -27,20 +27,72 @@
 
 <body>
 
-    <header class="navigation-planning">
+    <header class="entete-principale">
 
-        <nav class="navigation">
+        <div class="bloc-marque">
+
+            <h1>
+                À notre table
+            </h1>
+
+            <p>
+                Nos recettes, nos souvenirs et nos petits secrets de cuisine.
+            </p>
+
+            <div
+                class="infos-utilisateur"
+                id="infos-utilisateur"
+                hidden
+            >
+
+                <span>
+                    Bonjour
+                    <strong id="prenom-utilisateur"></strong>
+                </span>
+
+                <span class="separateur-utilisateur">
+                    •
+                </span>
+
+                <span>
+                    Foyer :
+                    <strong id="nom-foyer-utilisateur"></strong>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation-principale">
 
             <a
                 href="index.html"
-                class="retour"
+                class="lien-navigation"
             >
-                ← Recettes
+                Recettes
             </a>
 
-            <span class="titre-navigation">
+            <a
+                href="planning.html"
+                class="lien-navigation actif"
+            >
                 Planning
-            </span>
+            </a>
+
+            <a
+                href="courses.html"
+                class="lien-navigation"
+            >
+                Courses
+            </a>
+
+            <a
+                href="compte.html"
+                class="lien-navigation"
+            >
+                Compte
+            </a>
 
         </nav>
 
@@ -49,26 +101,19 @@
 
     <main class="page-planning">
 
-
         <section class="entete-planning">
 
-            <div>
+            <span class="sur-titre-planning">
+                Organisation
+            </span>
 
-                <span class="sur-titre-planning">
-                    Notre semaine
-                </span>
+            <h2>
+                Planning des repas
+            </h2>
 
-                <h1>
-                    Planning des repas
-                </h1>
-
-                <p>
-                    Préparez vos repas de la semaine
-                    et retrouvez directement les recettes
-                    du carnet.
-                </p>
-
-            </div>
+            <p>
+                Préparez les repas de votre foyer semaine par semaine.
+            </p>
 
         </section>
 
@@ -94,9 +139,9 @@
                     Semaine
                 </span>
 
-                <h2 id="titre-semaine">
+                <h3 id="titre-semaine">
                     Chargement…
-                </h2>
+                </h3>
 
             </div>
 
@@ -137,13 +182,8 @@
 
         </section>
 
-
     </main>
 
-
-    <!-- =========================
-         POP-UP AJOUT DE REPAS
-    ========================== -->
 
     <div
         class="fond-popup-planning"
@@ -185,7 +225,7 @@
                     class="type-repas actif"
                     id="choisir-recette"
                 >
-                    Depuis mes recettes
+                    Depuis les recettes
                 </button>
 
                 <button
@@ -262,6 +302,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="js/config.js"></script>
     <script src="js/supabase.js"></script>
+    <script src="js/session.js"></script>
     <script src="js/planning.js"></script>
 
 </body>
