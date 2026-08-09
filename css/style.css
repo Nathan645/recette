@@ -1057,3 +1057,44 @@ footer {
     gap:12px;
     margin:32px 0;
 }
+
+.infos-utilisateur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 22px;
+
+    font-size: 15px;
+
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+.infos-utilisateur strong {
+    color: var(--blanc);
+}
+
+
+.separateur-utilisateur {
+    opacity: 0.6;
+}
+
+
+@media (max-width: 600px) {
+
+    .infos-utilisateur {
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .separateur-utilisateur {
+        display: none;
+    }
+
+}
