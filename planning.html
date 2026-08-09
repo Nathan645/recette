@@ -278,6 +278,41 @@
                     placeholder="Restaurant, pizza, chez les parents…"
                 >
 
+                <div class="bloc-personnes-repas">
+
+    <label for="personnes-repas">
+        Nombre de personnes
+    </label>
+
+    <div class="controle-personnes-repas">
+
+        <button
+            type="button"
+            id="diminuer-personnes-repas"
+            aria-label="Diminuer le nombre de personnes"
+        >
+            −
+        </button>
+
+        <input
+            type="number"
+            id="personnes-repas"
+            min="1"
+            value="2"
+        >
+
+        <button
+            type="button"
+            id="augmenter-personnes-repas"
+            aria-label="Augmenter le nombre de personnes"
+        >
+            +
+        </button>
+
+    </div>
+
+</div>
+                
                 <button
                     type="button"
                     class="bouton-valider-repas"
