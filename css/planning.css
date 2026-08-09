@@ -637,6 +637,41 @@ a.repas-planifie:hover {
     background-color: #fff2ef;
 }
 
+.bouton-supprimer-repas {
+    width: 100%;
+
+    margin-top: 16px;
+
+    padding: 12px;
+
+    border: 1px solid #c96b58;
+    border-radius: 10px;
+
+    background-color: transparent;
+
+    color: #a54f3c;
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.bouton-supprimer-repas:hover {
+    background-color: #fff2ef;
+}
+
+
+.bouton-supprimer-repas:disabled {
+    opacity: 0.6;
+
+    cursor: default;
+}
 
 /* =================================
    RESPONSIVE
