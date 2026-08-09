@@ -1,0 +1,625 @@
+/* =================================
+   PAGE MON COMPTE
+================================= */
+
+.page-mon-compte {
+    width: min(
+        1100px,
+        calc(100% - 32px)
+    );
+
+    margin: 0 auto;
+
+    padding:
+        48px 0
+        70px;
+}
+
+
+/* =================================
+   ENTÊTE PAGE
+================================= */
+
+.entete-page-compte {
+    margin-bottom: 32px;
+}
+
+
+.sur-titre-compte {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--vert);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+}
+
+
+.entete-page-compte h2 {
+    margin:
+        0 0
+        8px;
+
+    font-size:
+        clamp(
+            32px,
+            5vw,
+            46px
+        );
+
+    line-height: 1.05;
+}
+
+
+.entete-page-compte p {
+    max-width: 650px;
+
+    margin: 0;
+
+    color: #6d6d68;
+
+    font-size: 16px;
+
+    line-height: 1.6;
+}
+
+
+/* =================================
+   CHARGEMENT / ERREUR
+================================= */
+
+.message-chargement-compte {
+    padding: 30px;
+
+    border-radius: 18px;
+
+    background-color: #f7f5ef;
+
+    text-align: center;
+
+    color: #67675f;
+}
+
+
+.message-erreur-compte {
+    padding: 32px;
+
+    border: 1px solid #ead4cf;
+    border-radius: 18px;
+
+    background-color: #fff6f3;
+
+    text-align: center;
+}
+
+
+.message-erreur-compte h3 {
+    margin-top: 0;
+}
+
+
+.message-erreur-compte p {
+    color: #7d5e57;
+}
+
+
+.bouton-retour-recettes {
+    display: inline-flex;
+
+    margin-top: 12px;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: white;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+/* =================================
+   CONTENU
+================================= */
+
+.contenu-mon-compte {
+    display: grid;
+
+    gap: 22px;
+}
+
+
+/* =================================
+   CARTES
+================================= */
+
+.carte-espace-compte {
+    padding: 28px;
+
+    border: 1px solid #e7e3d9;
+    border-radius: 20px;
+
+    background-color: white;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.035);
+}
+
+
+.entete-carte-compte {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 24px;
+}
+
+
+.icone-carte-compte {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 auto;
+
+    border-radius: 14px;
+
+    background-color: #f3f1e9;
+
+    font-size: 23px;
+}
+
+
+.petit-titre-compte {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #8b8a82;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.08em;
+}
+
+
+.entete-carte-compte h3 {
+    margin: 0;
+
+    font-size: 22px;
+}
+
+
+/* =================================
+   INFORMATIONS
+================================= */
+
+.grille-informations-compte {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 14px;
+}
+
+
+.information-compte {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 16px 18px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+}
+
+
+.information-large {
+    grid-column:
+        span 2;
+}
+
+
+.label-information {
+    color: #8a8982;
+
+    font-size: 13px;
+}
+
+
+.information-compte strong {
+    color: var(--texte);
+
+    font-size: 16px;
+
+    word-break: break-word;
+}
+
+
+/* =================================
+   CODE FOYER
+================================= */
+
+.bloc-code-foyer {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-top: 18px;
+
+    padding: 18px;
+
+    border: 1px dashed #cfc9bc;
+    border-radius: 15px;
+
+    background-color: #fcfaf5;
+}
+
+
+.code-foyer {
+    display: block;
+
+    margin-top: 4px;
+
+    font-size: 23px;
+
+    letter-spacing: 0.12em;
+}
+
+
+.bouton-copier-code {
+    flex: 0 0 auto;
+
+    padding: 11px 16px;
+
+    border: 1px solid var(--vert);
+    border-radius: 10px;
+
+    background-color: white;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-copier-code:hover {
+    background-color: var(--vert);
+
+    color: white;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.message-copie-code {
+    min-height: 20px;
+
+    margin:
+        8px 0
+        0;
+
+    color: var(--vert);
+
+    font-size: 13px;
+}
+
+
+/* =================================
+   MEMBRES DU FOYER
+================================= */
+
+.liste-membres-foyer {
+    display: grid;
+
+    gap: 10px;
+}
+
+
+.membre-foyer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 14px 16px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+}
+
+
+.avatar-membre {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 auto;
+
+    border-radius: 50%;
+
+    background-color: var(--vert);
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+
+.infos-membre {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 3px;
+
+    min-width: 0;
+}
+
+
+.infos-membre strong {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+.infos-membre span {
+    color: #85847e;
+
+    font-size: 13px;
+}
+
+
+.badge-moi {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding:
+        3px 7px;
+
+    border-radius: 999px;
+
+    background-color: #e8efe4;
+
+    color: var(--vert) !important;
+
+    font-size: 11px !important;
+    font-weight: 700;
+}
+
+
+/* =================================
+   SESSION / DÉCONNEXION
+================================= */
+
+.carte-actions-compte {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 24px;
+}
+
+
+.carte-actions-compte h3 {
+    margin:
+        0 0
+        5px;
+}
+
+
+.carte-actions-compte p {
+    margin: 0;
+
+    color: #77766f;
+
+    line-height: 1.5;
+}
+
+
+.bouton-deconnexion {
+    flex: 0 0 auto;
+
+    padding: 12px 18px;
+
+    border: 1px solid #c86a58;
+    border-radius: 10px;
+
+    background-color: white;
+
+    color: #a54f3c;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-deconnexion:hover {
+    background-color: #fff2ef;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.bouton-deconnexion:disabled,
+.bouton-copier-code:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   INFO UTILISATEUR DU HEADER
+================================= */
+
+.infos-utilisateur {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 9px;
+
+    font-size: 13px;
+
+    color: #77766f;
+}
+
+
+.infos-utilisateur strong {
+    color: var(--texte);
+}
+
+
+.separateur-utilisateur {
+    opacity: 0.45;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (
+    max-width: 700px
+) {
+
+    .page-mon-compte {
+        width:
+            min(
+                100% - 24px,
+                1100px
+            );
+
+        padding:
+            30px 0
+            50px;
+    }
+
+
+    .carte-espace-compte {
+        padding:
+            22px 18px;
+    }
+
+
+    .grille-informations-compte {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .information-large {
+        grid-column:
+            auto;
+    }
+
+
+    .bloc-code-foyer {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .bouton-copier-code {
+        width: 100%;
+    }
+
+
+    .carte-actions-compte {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
+    }
+
+
+    .bouton-deconnexion {
+        width: 100%;
+    }
+
+
+    .infos-utilisateur {
+        justify-content:
+            center;
+    }
+
+
+    .separateur-utilisateur {
+        display: none;
+    }
+}
