@@ -177,8 +177,6 @@ function construireRecette() {
         cuisson: Number(document.getElementById("cuisson").value),
         personnes: Number(document.getElementById("personnes").value),
         difficulte: document.getElementById("difficulte").value,
-        emoji: document.getElementById("emoji").value.trim() || "🍽️",
-        image: document.getElementById("image").value.trim(),
         auteur: document.getElementById("auteur").value.trim(),
         ingredients: recupererIngredients(),
         etapes: etapes,
@@ -210,8 +208,6 @@ function remplirFormulaire(recette) {
     document.getElementById("cuisson").value = recette.cuisson ?? "";
     document.getElementById("personnes").value = recette.personnes ?? "";
     document.getElementById("difficulte").value = recette.difficulte || "";
-    document.getElementById("emoji").value = recette.emoji || "";
-    document.getElementById("image").value = recette.image || "";
     document.getElementById("auteur").value = recette.auteur || "";
     document.getElementById("etapes").value =
     Array.isArray(recette.etapes) ? recette.etapes.join("\n") : "";
