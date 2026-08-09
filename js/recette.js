@@ -282,23 +282,25 @@ function afficherRecette(recette) {
     document.title =
         `${recette.nom} | À notre table`;
 
-    const badgesEtiquettes =
-        creerBadges(
-            recette.etiquettes,
-            "badge-etiquette"
-        );
+    const tousLesBadges = [
+    ...(Array.isArray(recette.etiquettes)
+        ? recette.etiquettes
+        : []),
 
-    const badgesOccasions =
-        creerBadges(
-            recette.occasions,
-            "badge-occasion"
-        );
+    ...(Array.isArray(recette.occasions)
+        ? recette.occasions
+        : []),
 
-    const badgesSaisons =
-        creerBadges(
-            recette.saisons,
-            "badge-saison"
-        );
+    ...(Array.isArray(recette.saisons)
+        ? recette.saisons
+        : [])
+];
+
+const badgesRecette =
+    creerBadges(
+        tousLesBadges,
+        "badge-filtre-recette"
+    );
 
     const personnesInitiales =
         Number(recette.personnes) || 1;
@@ -454,57 +456,15 @@ function afficherRecette(recette) {
                     ${recette.description || ""}
                 </p>
 
-                <div class="details-filtres-recette">
-
-                    ${
-                        badgesEtiquettes
-                            ? `
-                                <div class="groupe-badges-recette">
-                                    <span class="titre-badges-recette">
-                                        Étiquettes
-                                    </span>
-
-                                    <div class="liste-badges-recette">
-                                        ${badgesEtiquettes}
-                                    </div>
-                                </div>
-                            `
-                            : ""
-                    }
-
-                    ${
-                        badgesOccasions
-                            ? `
-                                <div class="groupe-badges-recette">
-                                    <span class="titre-badges-recette">
-                                        Occasions
-                                    </span>
-
-                                    <div class="liste-badges-recette">
-                                        ${badgesOccasions}
-                                    </div>
-                                </div>
-                            `
-                            : ""
-                    }
-
-                    ${
-                        badgesSaisons
-                            ? `
-                                <div class="groupe-badges-recette">
-                                    <span class="titre-badges-recette">
-                                        Saisons
-                                    </span>
-
-                                    <div class="liste-badges-recette">
-                                        ${badgesSaisons}
-                                    </div>
-                                </div>
-                            `
-                            : ""
-                    }
-
-                </div>
+                ${
+    badgesRecette
+        ? `
+            <div class="badges-recette">
+                ${badgesRecette}
+            </div>
+        `
+        : ""
+}
 
                 <div class="actions-gestion-recette">
                     <a
