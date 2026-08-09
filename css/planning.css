@@ -277,13 +277,24 @@
 
 
 .repas-planifie {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    padding: 11px;
+    gap: 8px;
+
+    padding: 10px 8px 10px 11px;
 
     border-radius: 10px;
 
     background-color: #eef0e8;
+}
+
+
+.lien-repas-recette {
+    flex: 1;
+
+    min-width: 0;
 
     color: var(--texte);
 
@@ -291,6 +302,62 @@
     font-weight: bold;
 
     text-decoration: none;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.lien-repas-recette:hover {
+    color: var(--vert);
+    text-decoration: underline;
+}
+
+
+.nom-repas-libre {
+    flex: 1;
+
+    min-width: 0;
+
+    font-size: 14px;
+    font-weight: bold;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+.bouton-editer-repas {
+    flex: 0 0 auto;
+
+    width: 30px;
+    height: 30px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: transparent;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    opacity: 0.55;
+
+    transition:
+        opacity 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.bouton-editer-repas:hover {
+    opacity: 1;
+
+    background-color: var(--blanc);
 }
 
 
@@ -543,18 +610,6 @@ a.repas-planifie:hover {
     text-align: center;
 
     font-size: 13px;
-}
-
-.bouton-modifier-repas {
-    width: 100%;
-
-    border: none;
-
-    text-align: left;
-
-    font: inherit;
-
-    cursor: pointer;
 }
 
 
