@@ -256,22 +256,19 @@ async function ajouterMembreAuFoyer(
 /* =================================
    RECHERCHER UN FOYER PAR CODE
 ================================= */
-
 async function rechercherFoyerParCode(
     code
 ) {
 
     const { data, error } =
         await window.supabaseClient
-            .from("foyers")
-            .select(
-                "id, nom, code"
-            )
-            .eq(
-                "code",
-                code
-            )
-            .maybeSingle();
+            .rpc(
+                "trouver_foyer_par_code",
+                {
+                    code_recherche:
+                        code
+                }
+            );
 
 
     if (error) {
@@ -279,7 +276,17 @@ async function rechercherFoyerParCode(
     }
 
 
-    return data;
+    if (
+        !Array.isArray(data) ||
+        data.length === 0
+    ) {
+
+        return null;
+
+    }
+
+
+    return data[0];
 }
 
 
