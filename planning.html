@@ -27,6 +27,11 @@
 
 <body>
 
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
     <header class="entete-principale">
 
         <div class="bloc-marque">
@@ -87,16 +92,21 @@
                 Courses
             </a>
 
-           <a href="mon-compte.html"
-               class="lien-navigation"
-               >
-    Compte
-</a>
+            <a
+                href="mon-compte.html"
+                class="lien-navigation"
+            >
+                Compte
+            </a>
 
         </nav>
 
     </header>
 
+
+    <!-- =========================
+         PAGE PLANNING
+    ========================== -->
 
     <main class="page-planning">
 
@@ -116,6 +126,10 @@
 
         </section>
 
+
+        <!-- =========================
+             NAVIGATION SEMAINE
+        ========================== -->
 
         <section class="navigation-semaine">
 
@@ -170,6 +184,10 @@
         </div>
 
 
+        <!-- =========================
+             GRILLE DE LA SEMAINE
+        ========================== -->
+
         <section
             class="grille-semaine"
             id="grille-semaine"
@@ -183,6 +201,10 @@
 
     </main>
 
+
+    <!-- =========================
+         POPUP REPAS
+    ========================== -->
 
     <div
         class="fond-popup-planning"
@@ -217,6 +239,10 @@
             ></p>
 
 
+            <!-- =========================
+                 TYPE DE REPAS
+            ========================== -->
+
             <div class="choix-type-repas">
 
                 <button
@@ -237,6 +263,10 @@
 
             </div>
 
+
+            <!-- =========================
+                 RECETTE
+            ========================== -->
 
             <div
                 class="bloc-recette-planning"
@@ -261,12 +291,15 @@
             </div>
 
 
+            <!-- =========================
+                 REPAS LIBRE
+            ========================== -->
+
             <div
                 class="bloc-repas-libre"
                 id="bloc-repas-libre"
                 hidden
             >
-                
 
                 <label for="nom-repas-libre">
                     Nom du repas
@@ -278,56 +311,70 @@
                     placeholder="Restaurant, pizza, chez les parents…"
                 >
 
-                <div class="bloc-personnes-repas">
+            </div>
 
-    <label for="personnes-repas">
-        Nombre de personnes
-    </label>
 
-    <div class="controle-personnes-repas">
+            <!-- =========================
+                 NOMBRE DE PERSONNES
+                 COMMUN AUX DEUX MODES
+            ========================== -->
 
-    <input
-        type="number"
-        id="personnes-repas"
-        min="1"
-        value="2"
-    >
+            <div class="bloc-personnes-repas">
 
-</div>
+                <label for="personnes-repas">
+                    Nombre de personnes
+                </label>
 
-</div>
-                
-                <button
-                    type="button"
-                    class="bouton-valider-repas"
-                    id="valider-repas-libre"
-                >
-                    Ajouter au planning
-                </button>
+                <div class="controle-personnes-repas">
 
-                <button
-                    type="button"
-                    class="bouton-supprimer-repas"
-                    id="supprimer-repas-planning"
-                    hidden
+                    <input
+                        type="number"
+                        id="personnes-repas"
+                        min="1"
+                        step="1"
+                        value="2"
                     >
-                    Vider ce créneau
-                </button>
+
+                </div>
 
             </div>
 
-                <button
-                    type="button"
-                    class="bouton-supprimer-repas"
-                    id="supprimer-repas-planning"
-                    hidden
-                >
+
+            <!-- =========================
+                 VALIDATION REPAS LIBRE
+            ========================== -->
+
+            <button
+                type="button"
+                class="bouton-valider-repas"
+                id="valider-repas-libre"
+            >
+                Ajouter au planning
+            </button>
+
+
+            <!-- =========================
+                 SUPPRESSION
+            ========================== -->
+
+            <button
+                type="button"
+                class="bouton-supprimer-repas"
+                id="supprimer-repas-planning"
+                hidden
+            >
                 Vider ce créneau
-                </button>
-            
+            </button>
+
+
+            <!-- =========================
+                 MESSAGE
+            ========================== -->
+
             <p
                 class="message-planning"
                 id="message-planning"
+                aria-live="polite"
             ></p>
 
         </div>
@@ -335,15 +382,21 @@
     </div>
 
 
- <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/session.js"></script>
-<script src="js/planning-core.js"></script>
-<script src="js/planning-data.js"></script>
-<script src="js/planning-ui.js"></script>
-<script src="js/planning-popup.js"></script>
-<script src="js/planning.js"></script>
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/session.js"></script>
+
+    <script src="js/planning-core.js"></script>
+    <script src="js/planning-data.js"></script>
+    <script src="js/planning-popup.js"></script>
+    <script src="js/planning-render.js"></script>
+    <script src="js/planning.js"></script>
 
 </body>
 
