@@ -717,6 +717,63 @@ a.repas-planifie:hover {
 }
 
 /* =================================
+   REPAS + NOMBRE DE PERSONNES
+================================= */
+
+.repas-planifie {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    height: auto;
+    min-height: 76px;
+
+    padding: 14px 16px;
+
+    overflow: visible;
+}
+
+
+.infos-repas-planifie {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 6px;
+
+    min-width: 0;
+    flex: 1;
+}
+
+
+.lien-repas-recette,
+.nom-repas-libre {
+    display: block;
+
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+
+.personnes-repas-planifie {
+    display: block;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #77766f;
+
+    line-height: 1.2;
+}
+
+
+.bouton-editer-repas {
+    flex: 0 0 auto;
+}
+
+/* =================================
    RESPONSIVE
 ================================= */
 
