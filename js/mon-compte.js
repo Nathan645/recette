@@ -483,55 +483,6 @@ function obtenirRoleFoyer(
 }
 
 
-function obtenirRoleProfil() {
-
-    /*
-        Si ta table profiles possède
-        déjà une colonne role,
-        on l'utilise.
-
-        Sinon on affiche simplement
-        "Utilisateur".
-    */
-
-    if (
-        profilUtilisateur &&
-        profilUtilisateur.role
-    ) {
-
-        const role =
-            String(
-                profilUtilisateur.role
-            )
-                .trim()
-                .toLowerCase();
-
-
-        if (
-            role === "admin"
-        ) {
-
-            return "Administrateur";
-        }
-
-
-        if (
-            role === "utilisateur" ||
-            role === "user"
-        ) {
-
-            return "Utilisateur";
-        }
-
-
-        return profilUtilisateur.role;
-    }
-
-
-    return "Utilisateur";
-}
-
-
 /* =================================
    AFFICHER LE PROFIL
 ================================= */
