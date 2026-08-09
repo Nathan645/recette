@@ -35,6 +35,7 @@ let recettes = [];
 let dateSelectionnee = null;
 let momentSelectionne = null;
 let repasEnModification = null;
+let nombrePersonnesParDefaut = 2;
 
 /* =================================
    OUTILS DATES
