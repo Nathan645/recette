@@ -433,25 +433,6 @@ function afficherRecette(recette) {
             : "";
 
 
-    const illustrationHtml =
-        recette.image
-            ? `
-                <img
-                    src="${recette.image}"
-                    alt="${recette.nom}"
-                    class="photo-recette photo-recette-detail"
-                >
-            `
-            : `
-                <span
-                    role="img"
-                    aria-label="Illustration de ${recette.nom}"
-                >
-                    ${recette.emoji || "🍽️"}
-                </span>
-            `;
-
-
     contenuRecette.innerHTML = `
         <article class="fiche-recette">
 
