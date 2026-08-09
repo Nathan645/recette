@@ -673,6 +673,50 @@ a.repas-planifie:hover {
     cursor: default;
 }
 
+.bloc-personnes-repas {
+    margin-top: 20px;
+}
+
+.bloc-personnes-repas label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+
+.controle-personnes-repas {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.controle-personnes-repas button {
+    width: 44px;
+    height: 44px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: white;
+
+    font-size: 22px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.controle-personnes-repas input {
+    width: 90px;
+    height: 44px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    text-align: center;
+
+    font: inherit;
+    font-weight: 700;
+}
+
 /* =================================
    RESPONSIVE
 ================================= */
