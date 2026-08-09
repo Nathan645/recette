@@ -1245,24 +1245,7 @@ grilleRecettes.addEventListener(
 );
 
 
-            if (!boutonFavori) {
-                return;
-            }
-
-
-            evenement.preventDefault();
-
-            evenement.stopPropagation();
-
-
-            basculerFavori(
-                boutonFavori
-                    .dataset
-                    .favoriId
-            );
-
-        }
-    );
+           
 
 
 /* =================================
