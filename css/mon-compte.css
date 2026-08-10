@@ -443,7 +443,6 @@
     font-weight: 700;
 }
 
-
 /* =================================
    SESSION / DÉCONNEXION
 ================================= */
@@ -517,6 +516,7 @@
 
 /* =================================
    INFO UTILISATEUR DU HEADER
+   CORRECTION COULEUR
 ================================= */
 
 .infos-utilisateur {
@@ -532,28 +532,42 @@
 
     font-size: 13px;
 
-    color: #77766f;
+    color: rgba(
+        255,
+        255,
+        255,
+        0.78
+    );
 }
 
 
 .infos-utilisateur strong {
-    color: var(--texte);
+    color: #ffffff;
 }
 
 
 .separateur-utilisateur {
-    opacity: 0.45;
+    color: rgba(
+        255,
+        255,
+        255,
+        0.55
+    );
+
+    opacity: 1;
 }
+
 
 /* =================================
    NOMBRE DE PERSONNES DU FOYER
 ================================= */
 
 .bloc-personnes-foyer {
-    margin-top: 24px;
-    padding-top: 22px;
+    margin-top: 0;
 
-    border-top: 1px solid #e7e3d9;
+    padding-top: 0;
+
+    border-top: none;
 }
 
 
@@ -579,6 +593,7 @@
 
 .controle-personnes-foyer {
     display: flex;
+
     align-items: center;
 
     gap: 10px;
@@ -617,7 +632,12 @@
 
     box-shadow:
         0 0 0 3px
-        rgba(70, 95, 70, 0.10);
+        rgba(
+            70,
+            95,
+            70,
+            0.10
+        );
 }
 
 
@@ -654,6 +674,7 @@
 
 .bouton-enregistrer-personnes:disabled {
     opacity: 0.55;
+
     cursor: default;
 
     transform: none;
@@ -674,6 +695,145 @@
     color: #77766f;
 
     font-size: 13px;
+}
+
+
+/* =================================
+   CORRECTION LIGNE FOYER
+================================= */
+
+/*
+    Le bloc contenant :
+    - Membres
+    - Nombre habituel de personnes
+
+    devient une vraie ligne compacte.
+*/
+
+.grille-foyer-compte {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(300px, 0.9fr);
+
+    gap: 18px;
+
+    align-items: stretch;
+}
+
+
+/*
+    Si ton HTML utilise directement
+    .information-compte pour le nombre
+    de membres, on réduit sa hauteur.
+*/
+
+.grille-foyer-compte
+.information-compte {
+    min-height: auto;
+
+    justify-content: center;
+
+    padding:
+        16px 18px;
+}
+
+
+/*
+    Zone nombre habituel de personnes
+*/
+
+.grille-foyer-compte
+.bloc-personnes-foyer {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    padding:
+        16px 18px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+}
+
+
+/* =================================
+   CORRECTION SPÉCIFIQUE
+   BLOC "1 MEMBRE"
+================================= */
+
+.information-membres-foyer {
+    min-height: 0;
+
+    padding:
+        16px 18px;
+}
+
+
+/*
+    Empêche un éventuel stretch
+    vertical venant du grid parent.
+*/
+
+.information-membres-foyer strong {
+    line-height: 1.2;
+}
+
+
+/* =================================
+   OPTION DE SECOURS
+   SI L'HTML N'A PAS LES CLASSES
+   .grille-foyer-compte /
+   .information-membres-foyer
+================================= */
+
+/*
+    Cette règle compacte les deux blocs
+    qui suivent le nom du foyer,
+    même avec ton HTML actuel.
+*/
+
+.carte-espace-compte
+.grille-informations-compte
+.information-compte {
+    align-self: start;
+}
+
+
+/*
+    Évite qu'un élément de la grille
+    prenne toute la hauteur disponible.
+*/
+
+.carte-espace-compte
+.grille-informations-compte {
+    align-items: start;
+}
+
+/* =================================
+   RESPONSIVE TABLETTE
+================================= */
+
+@media (
+    max-width: 900px
+) {
+
+    .grille-foyer-compte {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .grille-foyer-compte
+    .bloc-personnes-foyer {
+        width: 100%;
+
+        box-sizing: border-box;
+    }
 }
 
 
@@ -707,6 +867,9 @@
     .grille-informations-compte {
         grid-template-columns:
             1fr;
+
+        align-items:
+            start;
     }
 
 
@@ -744,30 +907,239 @@
     }
 
 
+    /* =================================
+       HEADER UTILISATEUR
+    ================================= */
+
     .infos-utilisateur {
         justify-content:
             center;
+
+        color:
+            rgba(
+                255,
+                255,
+                255,
+                0.82
+            );
+    }
+
+
+    .infos-utilisateur strong {
+        color:
+            #ffffff;
     }
 
 
     .separateur-utilisateur {
-        display: none;
+        display:
+            none;
     }
 
-       .controle-personnes-foyer {
-        align-items: stretch;
-        flex-direction: column;
+
+    /* =================================
+       FOYER MOBILE
+    ================================= */
+
+    .grille-foyer-compte {
+        grid-template-columns:
+            1fr;
+
+        gap:
+            12px;
+    }
+
+
+    .information-membres-foyer {
+        min-height:
+            0;
+    }
+
+
+    .grille-foyer-compte
+    .information-compte {
+        min-height:
+            0;
+    }
+
+
+    .grille-foyer-compte
+    .bloc-personnes-foyer {
+        padding:
+            16px;
+    }
+
+
+    /* =================================
+       NOMBRE DE PERSONNES
+    ================================= */
+
+    .controle-personnes-foyer {
+        align-items:
+            stretch;
+
+        flex-direction:
+            column;
     }
 
 
     .controle-personnes-foyer input {
-        width: 100%;
-        box-sizing: border-box;
+        width:
+            100%;
+
+        box-sizing:
+            border-box;
     }
 
 
     .bouton-enregistrer-personnes {
-        width: 100%;
+        width:
+            100%;
+    }
+}
+
+
+/* =================================
+   PETIT MOBILE
+================================= */
+
+@media (
+    max-width: 500px
+) {
+
+    .entete-page-compte h2 {
+        font-size:
+            34px;
     }
 
+
+    .entete-page-compte p {
+        font-size:
+            15px;
+    }
+
+
+    .entete-carte-compte {
+        gap:
+            10px;
+    }
+
+
+    .icone-carte-compte {
+        width:
+            44px;
+
+        height:
+            44px;
+
+        font-size:
+            21px;
+    }
+
+
+    .entete-carte-compte h3 {
+        font-size:
+            20px;
+    }
+
+
+    .information-compte {
+        padding:
+            14px 15px;
+    }
+
+
+    .bloc-code-foyer {
+        padding:
+            16px;
+    }
+
+
+    .code-foyer {
+        font-size:
+            20px;
+    }
 }
+
+
+/* =================================
+   SÉCURITÉ AFFICHAGE
+   HEADER COMPTE
+================================= */
+
+/*
+    On force ici la même apparence
+    que sur Planning / Courses.
+
+    Ces règles sont volontairement
+    placées tout en bas du fichier
+    pour avoir priorité sur les
+    éventuelles règles précédentes.
+*/
+
+.entete-principale
+.infos-utilisateur {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.82
+        );
+}
+
+
+.entete-principale
+.infos-utilisateur strong {
+    color:
+        #ffffff;
+}
+
+
+.entete-principale
+.separateur-utilisateur {
+    color:
+        rgba(
+            255,
+            255,
+            255,
+            0.55
+        );
+}
+
+
+/* =================================
+   SÉCURITÉ HAUTEUR
+   INFORMATIONS FOYER
+================================= */
+
+.carte-espace-compte
+.information-compte {
+    height:
+        auto;
+}
+
+
+.carte-espace-compte
+.grille-informations-compte {
+    grid-auto-rows:
+        auto;
+}
+
+
+/*
+    Évite qu'une ligne de grille
+    s'étire inutilement.
+*/
+
+.carte-espace-compte
+.grille-informations-compte
+> * {
+    align-self:
+        start;
+}
+
+
+/* =================================
+   FIN
+================================= */
