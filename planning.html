@@ -181,6 +181,14 @@
                 Aujourd'hui
             </button>
 
+            <button
+    type="button"
+    class="bouton-copier-semaine"
+    id="copier-semaine"
+>
+    Copier cette semaine
+</button>
+
         </div>
 
 
@@ -380,7 +388,93 @@
         </div>
 
     </div>
+<div
+    class="fond-popup-planning"
+    id="popup-copie-semaine"
+    hidden
+>
 
+    <div
+        class="popup-repas popup-copie-semaine"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titre-copie-semaine"
+    >
+
+        <button
+            type="button"
+            class="fermer-popup-repas"
+            id="fermer-copie-semaine"
+            aria-label="Fermer"
+        >
+            ×
+        </button>
+
+
+        <h2 id="titre-copie-semaine">
+            Copier cette semaine
+        </h2>
+
+
+        <p class="texte-copie-semaine">
+            Choisis vers quelle semaine copier
+            les repas actuellement planifiés.
+        </p>
+
+
+        <div class="choix-destination-copie">
+
+            <label class="option-copie-semaine">
+
+                <input
+                    type="radio"
+                    name="destination-copie-semaine"
+                    value="suivante"
+                    checked
+                >
+
+                <span>
+                    Semaine suivante
+                </span>
+
+            </label>
+
+
+            <label class="option-copie-semaine">
+
+                <input
+                    type="radio"
+                    name="destination-copie-semaine"
+                    value="precedente"
+                >
+
+                <span>
+                    Semaine précédente
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="bouton-valider-copie-semaine"
+            id="valider-copie-semaine"
+        >
+            Copier les repas
+        </button>
+
+
+        <p
+            class="message-planning"
+            id="message-copie-semaine"
+            aria-live="polite"
+        ></p>
+
+    </div>
+
+</div>
 
     <!-- =========================
          SCRIPTS
