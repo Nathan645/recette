@@ -7,66 +7,55 @@ const boutonSemainePrecedenteCourses =
         "semaine-precedente-courses"
     );
 
-
 const boutonSemaineSuivanteCourses =
     document.getElementById(
         "semaine-suivante-courses"
     );
-
 
 const boutonAujourdhuiCourses =
     document.getElementById(
         "aller-aujourdhui-courses"
     );
 
-
 const numeroSemaineCourses =
     document.getElementById(
         "numero-semaine-courses"
     );
-
 
 const titreSemaineCourses =
     document.getElementById(
         "titre-semaine-courses"
     );
 
-
 const nombreRepasCourses =
     document.getElementById(
         "nombre-repas-courses"
     );
-
 
 const nombreRecettesCourses =
     document.getElementById(
         "nombre-recettes-courses"
     );
 
-
 const nombreArticlesCourses =
     document.getElementById(
         "nombre-articles-courses"
     );
-
 
 const listeCourses =
     document.getElementById(
         "liste-courses"
     );
 
-
 const messageVideCourses =
     document.getElementById(
         "message-vide-courses"
     );
 
-
 const messageErreurCourses =
     document.getElementById(
         "message-erreur-courses"
     );
-
 
 const texteErreurCourses =
     document.getElementById(
@@ -83,36 +72,30 @@ const formulaireArticleManuel =
         "formulaire-article-manuel"
     );
 
-
 const champNomArticleManuel =
     document.getElementById(
         "nom-article-manuel"
     );
-
 
 const champQuantiteArticleManuel =
     document.getElementById(
         "quantite-article-manuel"
     );
 
-
 const champCategorieArticleManuel =
     document.getElementById(
         "categorie-article-manuel"
     );
-
 
 const boutonAjouterArticleManuel =
     document.getElementById(
         "ajouter-article-manuel"
     );
 
-
 const messageArticleManuel =
     document.getElementById(
         "message-article-manuel"
     );
-
 
 const boutonToutDecocher =
     document.getElementById(
@@ -127,30 +110,38 @@ const boutonToutDecocher =
 let utilisateurConnecte =
     null;
 
-
 let foyerId =
     null;
-
 
 let debutSemaine =
     obtenirDebutSemaine(
         new Date()
     );
 
-
 let repasSemaine =
     [];
-
 
 let recettesSemaine =
     [];
 
-
 let articlesCourses =
     [];
 
-
 let articlesManuels =
+    [];
+
+
+/*
+    IMPORTANT :
+
+    Cette variable remplace maintenant
+    le localStorage.
+
+    Son contenu est chargé depuis
+    public.courses_cochees.
+*/
+
+let articlesCoches =
     [];
 
 
@@ -171,7 +162,6 @@ const categoriesCourses = {
             1
     },
 
-
     "frais": {
         nom:
             "Frais",
@@ -182,7 +172,6 @@ const categoriesCourses = {
         ordre:
             2
     },
-
 
     "viandes-poissons": {
         nom:
@@ -195,7 +184,6 @@ const categoriesCourses = {
             3
     },
 
-
     "epicerie": {
         nom:
             "Épicerie",
@@ -206,7 +194,6 @@ const categoriesCourses = {
         ordre:
             4
     },
-
 
     "boulangerie": {
         nom:
@@ -219,7 +206,6 @@ const categoriesCourses = {
             5
     },
 
-
     "surgeles": {
         nom:
             "Surgelés",
@@ -230,7 +216,6 @@ const categoriesCourses = {
         ordre:
             6
     },
-
 
     "boissons": {
         nom:
@@ -243,7 +228,6 @@ const categoriesCourses = {
             7
     },
 
-
     "maison": {
         nom:
             "Maison & entretien",
@@ -254,7 +238,6 @@ const categoriesCourses = {
         ordre:
             8
     },
-
 
     "divers": {
         nom:
@@ -283,7 +266,6 @@ function obtenirDebutSemaine(
             date
         );
 
-
     copie.setHours(
         0,
         0,
@@ -291,22 +273,18 @@ function obtenirDebutSemaine(
         0
     );
 
-
     const jour =
         copie.getDay();
-
 
     const difference =
         jour === 0
             ? -6
             : 1 - jour;
 
-
     copie.setDate(
         copie.getDate() +
         difference
     );
-
 
     return copie;
 }
@@ -322,12 +300,10 @@ function ajouterJours(
             date
         );
 
-
     copie.setDate(
         copie.getDate() +
         nombre
     );
-
 
     return copie;
 }
@@ -340,7 +316,6 @@ function formaterDateISO(
     const annee =
         date.getFullYear();
 
-
     const mois =
         String(
             date.getMonth() + 1
@@ -350,7 +325,6 @@ function formaterDateISO(
                 "0"
             );
 
-
     const jour =
         String(
             date.getDate()
@@ -359,7 +333,6 @@ function formaterDateISO(
                 2,
                 "0"
             );
-
 
     return `${annee}-${mois}-${jour}`;
 }
@@ -395,17 +368,14 @@ function obtenirNumeroSemaine(
             )
         );
 
-
     const jour =
         copie.getUTCDay() || 7;
-
 
     copie.setUTCDate(
         copie.getUTCDate() +
         4 -
         jour
     );
-
 
     const premierJanvier =
         new Date(
@@ -415,7 +385,6 @@ function obtenirNumeroSemaine(
                 1
             )
         );
-
 
     return Math.ceil(
         (
@@ -446,7 +415,6 @@ function echapperHtml(
 
         return "";
     }
-
 
     return String(
         valeur
@@ -506,7 +474,6 @@ function formaterQuantite(
             valeur
         );
 
-
     if (
         !Number.isFinite(
             nombre
@@ -515,7 +482,6 @@ function formaterQuantite(
 
         return "";
     }
-
 
     if (
         Number.isInteger(
@@ -527,7 +493,6 @@ function formaterQuantite(
             nombre
         );
     }
-
 
     return nombre
         .toFixed(
@@ -569,58 +534,33 @@ function determinerCategorieIngredient(
     const fruitsLegumes = [
 
         "tomate",
-        "tomates",
         "courgette",
-        "courgettes",
         "aubergine",
-        "aubergines",
         "carotte",
-        "carottes",
         "oignon",
-        "oignons",
         "echalote",
-        "echalotes",
         "ail",
         "poireau",
-        "poireaux",
         "poivron",
-        "poivrons",
         "champignon",
-        "champignons",
         "salade",
         "laitue",
         "epinard",
-        "epinards",
         "brocoli",
-        "brocolis",
         "chou",
-        "choux",
         "haricot vert",
-        "haricots verts",
         "concombre",
-        "concombres",
         "avocat",
-        "avocats",
         "pomme de terre",
-        "pommes de terre",
         "patate douce",
-        "patates douces",
         "citron",
-        "citrons",
         "orange",
-        "oranges",
         "pomme",
-        "pommes",
         "poire",
-        "poires",
         "banane",
-        "bananes",
         "fraise",
-        "fraises",
         "framboise",
-        "framboises",
         "myrtille",
-        "myrtilles",
         "persil",
         "coriandre",
         "basilic",
@@ -664,7 +604,6 @@ function determinerCategorieIngredient(
         "yaourt",
         "yogourt",
         "oeuf",
-        "oeufs",
         "mascarpone",
         "ricotta",
         "burrata"
@@ -703,19 +642,14 @@ function determinerCategorieIngredient(
         "dinde",
         "jambon",
         "lardon",
-        "lardons",
         "saucisse",
-        "saucisses",
         "merguez",
         "saumon",
         "thon",
         "cabillaud",
         "crevette",
-        "crevettes",
         "poisson",
-        "poissons",
         "viande",
-        "viande hachee",
         "bacon"
     ];
 
@@ -747,11 +681,7 @@ function determinerCategorieIngredient(
         "baguette",
         "brioche",
         "tortilla",
-        "tortillas",
-        "wrap",
-        "wraps",
-        "pain burger",
-        "pain hamburger"
+        "wrap"
     ];
 
 
@@ -779,9 +709,7 @@ function determinerCategorieIngredient(
     const surgeles = [
 
         "surgele",
-        "surgeles",
-        "glace",
-        "glaces"
+        "glace"
     ];
 
 
@@ -841,7 +769,6 @@ function determinerCategorieIngredient(
     const epicerie = [
 
         "pate",
-        "pates",
         "spaghetti",
         "tagliatelle",
         "riz",
@@ -860,15 +787,11 @@ function determinerCategorieIngredient(
         "semoule",
         "quinoa",
         "lentille",
-        "lentilles",
         "pois chiche",
-        "pois chiches",
         "haricot rouge",
-        "haricots rouges",
         "conserve",
         "bouillon",
         "epice",
-        "epices",
         "paprika",
         "curry",
         "cumin",
@@ -878,9 +801,7 @@ function determinerCategorieIngredient(
         "chapelure",
         "noix",
         "amande",
-        "amandes",
-        "noisette",
-        "noisettes"
+        "noisette"
     ];
 
 
@@ -1172,7 +1093,8 @@ async function chargerArticlesManuels() {
                 quantite,
                 categorie,
                 semaine,
-                created_by
+                created_by,
+                created_at
             `)
             .eq(
                 "foyer_id",
@@ -1209,6 +1131,66 @@ async function chargerArticlesManuels() {
 
 
 /* =================================
+   CHARGER LES CASES COCHÉES
+   DEPUIS SUPABASE
+================================= */
+
+async function chargerArticlesCoches() {
+
+    const dateSemaine =
+        formaterDateISO(
+            debutSemaine
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "courses_cochees"
+            )
+            .select(
+                "article_cle"
+            )
+            .eq(
+                "foyer_id",
+                foyerId
+            )
+            .eq(
+                "semaine",
+                dateSemaine
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    articlesCoches =
+        Array.isArray(
+            data
+        )
+            ? data
+                .map(
+                    function (
+                        ligne
+                    ) {
+
+                        return ligne.article_cle;
+                    }
+                )
+                .filter(Boolean)
+            : [];
+}
+
+
+/* =================================
    TROUVER UNE RECETTE
 ================================= */
 
@@ -1232,7 +1214,6 @@ function trouverRecette(
         }
     );
 }
-
 /* =================================
    AJOUTER / REGROUPER UN ARTICLE
 ================================= */
@@ -1277,16 +1258,6 @@ function ajouterArticle(
             nom
         );
 
-
-    /*
-        On regroupe les ingrédients
-        avec le même nom + même unité.
-
-        Exemple :
-        500 g pâtes
-        + 300 g pâtes
-        = 800 g pâtes.
-    */
 
     const cle =
         `${normaliserTexte(
@@ -1340,11 +1311,6 @@ function ajouterArticle(
     }
 
 
-    /*
-        Pas de quantité exploitable :
-        sel, poivre, huile selon goût...
-    */
-
     if (
         quantiteCalculee === null ||
         quantiteCalculee === undefined ||
@@ -1394,11 +1360,6 @@ function calculerArticlesRecettes() {
         function (
             repas
         ) {
-
-            /*
-                Les repas libres
-                sont ignorés.
-            */
 
             if (
                 !repas.recette_id
@@ -1450,13 +1411,6 @@ function calculerArticlesRecettes() {
                     ingredient
                 ) {
 
-                    /*
-                        Compatibilité avec
-                        les anciennes recettes
-                        éventuellement stockées
-                        sous forme de texte.
-                    */
-
                     if (
                         typeof ingredient ===
                         "string"
@@ -1486,16 +1440,6 @@ function calculerArticlesRecettes() {
                     let quantiteCalculee =
                         quantite;
 
-
-                    /*
-                        Si proportionnel = false,
-                        la quantité reste identique.
-
-                        Sinon :
-                        quantité recette
-                        × personnes repas
-                        ÷ personnes recette.
-                    */
 
                     if (
                         ingredient.proportionnel !==
@@ -1556,13 +1500,6 @@ function convertirArticlesManuels() {
 
             return {
 
-                /*
-                    Préfixe différent pour
-                    éviter une collision
-                    avec un ingrédient
-                    automatique.
-                */
-
                 cle:
                     `manuel__${article.id}`,
 
@@ -1577,13 +1514,6 @@ function convertirArticlesManuels() {
 
                 quantiteNumerique:
                     false,
-
-                /*
-                    Pour un article manuel,
-                    la quantité est déjà un
-                    texte libre :
-                    "2 paquets", "1 bouteille"...
-                */
 
                 quantiteTexte:
                     article.quantite ||
@@ -1628,12 +1558,6 @@ function calculerListeCourses() {
 
     ];
 
-
-    /*
-        Tri :
-        catégorie d'abord,
-        puis ordre alphabétique.
-    */
 
     articlesCourses.sort(
         function (
@@ -1685,12 +1609,6 @@ function construireQuantiteArticle(
     article
 ) {
 
-    /*
-        Article manuel :
-        quantité déjà saisie
-        sous forme libre.
-    */
-
     if (
         article.manuel
     ) {
@@ -1699,11 +1617,6 @@ function construireQuantiteArticle(
             "";
     }
 
-
-    /*
-        Article automatique sans
-        quantité numérique.
-    */
 
     if (
         article.quantite === null ||
@@ -1735,61 +1648,169 @@ function construireQuantiteArticle(
 
 
 /* =================================
-   CASES COCHÉES
+   COCHER UN ARTICLE DANS SUPABASE
 ================================= */
 
-function obtenirCleStockageCourses() {
+async function cocherArticleSupabase(
+    cleArticle
+) {
 
-    return (
-        "courses-" +
-        foyerId +
-        "-" +
+    const dateSemaine =
         formaterDateISO(
             debutSemaine
-        )
-    );
-}
+        );
 
 
-function recupererArticlesCoches() {
+    const {
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "courses_cochees"
+            )
+            .upsert(
+                {
 
-    try {
+                    foyer_id:
+                        foyerId,
 
-        const donnees =
-            JSON.parse(
-                localStorage.getItem(
-                    obtenirCleStockageCourses()
-                ) ||
-                "[]"
+                    semaine:
+                        dateSemaine,
+
+                    article_cle:
+                        cleArticle,
+
+                    coche_par:
+                        utilisateurConnecte.id
+
+                },
+                {
+                    onConflict:
+                        "foyer_id,semaine,article_cle"
+                }
             );
 
 
-        return Array.isArray(
-            donnees
-        )
-            ? donnees
-            : [];
-
-
-    } catch (
-        erreur
+    if (
+        error
     ) {
 
-        return [];
+        throw error;
+    }
+
+
+    if (
+        !articlesCoches.includes(
+            cleArticle
+        )
+    ) {
+
+        articlesCoches.push(
+            cleArticle
+        );
     }
 }
 
 
-function enregistrerArticlesCoches(
-    valeurs
+/* =================================
+   DÉCOCHER UN ARTICLE DANS SUPABASE
+================================= */
+
+async function decocherArticleSupabase(
+    cleArticle
 ) {
 
-    localStorage.setItem(
-        obtenirCleStockageCourses(),
-        JSON.stringify(
-            valeurs
-        )
-    );
+    const dateSemaine =
+        formaterDateISO(
+            debutSemaine
+        );
+
+
+    const {
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "courses_cochees"
+            )
+            .delete()
+            .eq(
+                "foyer_id",
+                foyerId
+            )
+            .eq(
+                "semaine",
+                dateSemaine
+            )
+            .eq(
+                "article_cle",
+                cleArticle
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    articlesCoches =
+        articlesCoches.filter(
+            function (
+                cle
+            ) {
+
+                return (
+                    cle !==
+                    cleArticle
+                );
+            }
+        );
+}
+
+
+/* =================================
+   TOUT DÉCOCHER DANS SUPABASE
+================================= */
+
+async function toutDecocherSupabase() {
+
+    const dateSemaine =
+        formaterDateISO(
+            debutSemaine
+        );
+
+
+    const {
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "courses_cochees"
+            )
+            .delete()
+            .eq(
+                "foyer_id",
+                foyerId
+            )
+            .eq(
+                "semaine",
+                dateSemaine
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    articlesCoches =
+        [];
 }
 
 
@@ -1959,8 +1980,7 @@ function grouperArticlesParCategorie() {
 
 function creerHtmlArticle(
     article,
-    index,
-    articlesCoches
+    index
 ) {
 
     const estCoche =
@@ -2063,16 +2083,11 @@ function creerHtmlArticle(
     `;
 }
 
-
 /* =================================
    AFFICHER LA LISTE
 ================================= */
 
 function afficherListeCourses() {
-
-    const articlesCoches =
-        recupererArticlesCoches();
-
 
     if (
         articlesCourses.length ===
@@ -2151,8 +2166,7 @@ function afficherListeCourses() {
                                     const html =
                                         creerHtmlArticle(
                                             article,
-                                            indexGlobal,
-                                            articlesCoches
+                                            indexGlobal
                                         );
 
 
@@ -2197,13 +2211,15 @@ function afficherListeCourses() {
             .join("");
 }
 
+
 /* =================================
    COCHER / DÉCOCHER
+   SYNCHRONISÉ SUPABASE
 ================================= */
 
 listeCourses.addEventListener(
     "change",
-    function (
+    async function (
         evenement
     ) {
 
@@ -2235,55 +2251,82 @@ listeCourses.addEventListener(
         }
 
 
-        ligne.classList.toggle(
-            "coche",
-            caseArticle.checked
-        );
-
-
         const cle =
             ligne.dataset.articleCle;
 
 
-        let articlesCoches =
-            recupererArticlesCoches();
-
-
         if (
-            caseArticle.checked
+            !cle
         ) {
 
+            return;
+        }
+
+
+        /*
+            On bloque temporairement
+            la case pendant l'écriture.
+        */
+
+        caseArticle.disabled =
+            true;
+
+
+        try {
+
             if (
-                !articlesCoches.includes(
-                    cle
-                )
+                caseArticle.checked
             ) {
 
-                articlesCoches.push(
+                await cocherArticleSupabase(
+                    cle
+                );
+
+            } else {
+
+                await decocherArticleSupabase(
                     cle
                 );
             }
 
-        } else {
 
-            articlesCoches =
-                articlesCoches.filter(
-                    function (
-                        valeur
-                    ) {
+            ligne.classList.toggle(
+                "coche",
+                caseArticle.checked
+            );
 
-                        return (
-                            valeur !==
-                            cle
-                        );
-                    }
-                );
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur synchronisation article :",
+                erreur
+            );
+
+
+            /*
+                On remet la case dans
+                son état précédent si
+                Supabase refuse.
+            */
+
+            caseArticle.checked =
+                !caseArticle.checked;
+
+
+            ligne.classList.toggle(
+                "coche",
+                caseArticle.checked
+            );
+
+
+        } finally {
+
+            caseArticle.disabled =
+                false;
         }
-
-
-        enregistrerArticlesCoches(
-            articlesCoches
-        );
     }
 );
 
@@ -2294,14 +2337,47 @@ listeCourses.addEventListener(
 
 boutonToutDecocher.addEventListener(
     "click",
-    function () {
+    async function () {
 
-        enregistrerArticlesCoches(
-            []
-        );
+        boutonToutDecocher.disabled =
+            true;
 
 
-        afficherListeCourses();
+        const texteInitial =
+            boutonToutDecocher.textContent;
+
+
+        boutonToutDecocher.textContent =
+            "Décochage…";
+
+
+        try {
+
+            await toutDecocherSupabase();
+
+
+            afficherListeCourses();
+
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur Tout décocher :",
+                erreur
+            );
+
+
+        } finally {
+
+            boutonToutDecocher.disabled =
+                false;
+
+
+            boutonToutDecocher.textContent =
+                texteInitial;
+        }
     }
 );
 
@@ -2431,17 +2507,8 @@ formulaireArticleManuel.addEventListener(
                 "divers";
 
 
-            messageArticleManuel.textContent =
-                "Article ajouté ✓";
-
-
             await rafraichirCourses();
 
-
-            /*
-                On remet le message
-                après le rafraîchissement.
-            */
 
             messageArticleManuel.textContent =
                 "Article ajouté ✓";
@@ -2556,33 +2623,39 @@ listeCourses.addEventListener(
 
 
             /*
-                Si l'article supprimé
-                était coché, on enlève
-                aussi sa clé du localStorage.
+                L'article manuel peut
+                aussi être coché dans
+                courses_cochees.
+
+                On supprime cette entrée
+                pour garder la base propre.
             */
 
             const cleArticle =
                 `manuel__${articleId}`;
 
 
-            const articlesCoches =
-                recupererArticlesCoches()
-                    .filter(
-                        function (
-                            cle
-                        ) {
+            try {
 
-                            return (
-                                cle !==
-                                cleArticle
-                            );
-                        }
-                    );
+                await decocherArticleSupabase(
+                    cleArticle
+                );
 
+            } catch (
+                erreurDecochage
+            ) {
 
-            enregistrerArticlesCoches(
-                articlesCoches
-            );
+                /*
+                    Ce n'est pas bloquant :
+                    l'article peut ne pas
+                    avoir été coché.
+                */
+
+                console.warn(
+                    "Nettoyage de la case cochée non effectué :",
+                    erreurDecochage
+                );
+            }
 
 
             await rafraichirCourses();
@@ -2603,7 +2676,6 @@ listeCourses.addEventListener(
         }
     }
 );
-
 
 /* =================================
    CHARGEMENT COMPLET
@@ -2654,21 +2726,29 @@ async function rafraichirCourses() {
 
 
         /*
-            4. Calcul complet
+            4. Cases cochées synchronisées
+            depuis Supabase
+        */
+
+        await chargerArticlesCoches();
+
+
+        /*
+            5. Calcul complet
         */
 
         calculerListeCourses();
 
 
         /*
-            5. Résumé
+            6. Résumé
         */
 
         afficherResume();
 
 
         /*
-            6. Affichage
+            7. Affichage
         */
 
         afficherListeCourses();
@@ -2722,11 +2802,6 @@ boutonSemainePrecedenteCourses
                     -7
                 );
 
-
-            /*
-                On efface le message
-                d'ajout éventuel.
-            */
 
             messageArticleManuel.textContent =
                 "";
