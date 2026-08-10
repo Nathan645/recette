@@ -1945,3 +1945,49 @@ input[type="radio"]:focus-visible {
     }
 
 }
+
+/* =================================
+   PROPORTIONNEL PLUS COMPACT
+================================= */
+
+.option-proportionnelle {
+    gap: 6px;
+
+    padding:
+        6px
+        9px;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* Petite checkbox */
+
+.option-proportionnelle
+.ingredient-proportionnel {
+    width: 16px;
+    height: 16px;
+
+    flex:
+        0 0
+        16px;
+
+    border-width: 1.5px;
+
+    border-radius: 5px;
+}
+
+
+/* Petit ✓ */
+
+.option-proportionnelle
+.ingredient-proportionnel:checked::after {
+    font-size: 10px;
+
+    transform:
+        translate(
+            -50%,
+            -53%
+        );
+}
