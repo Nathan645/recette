@@ -235,6 +235,140 @@
 
 
         <!-- =========================
+             AJOUT MANUEL
+        ========================== -->
+
+        <section class="carte-ajout-course">
+
+            <div class="entete-carte-courses">
+
+                <div>
+
+                    <span class="petit-titre-courses">
+                        Ajouter
+                    </span>
+
+                    <h3>
+                        Article manuel
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <form
+                id="formulaire-article-manuel"
+                class="formulaire-article-manuel"
+            >
+
+                <div class="champ-course">
+
+                    <label for="nom-article-manuel">
+                        Article
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nom-article-manuel"
+                        placeholder="Ex. Papier toilette"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="champ-course">
+
+                    <label for="quantite-article-manuel">
+                        Quantité
+                    </label>
+
+                    <input
+                        type="text"
+                        id="quantite-article-manuel"
+                        placeholder="Ex. 2 paquets"
+                    >
+
+                </div>
+
+
+                <div class="champ-course">
+
+                    <label for="categorie-article-manuel">
+                        Catégorie
+                    </label>
+
+                    <select
+                        id="categorie-article-manuel"
+                    >
+
+                        <option value="divers">
+                            Divers
+                        </option>
+
+                        <option value="fruits-legumes">
+                            Fruits & légumes
+                        </option>
+
+                        <option value="frais">
+                            Frais
+                        </option>
+
+                        <option value="viandes-poissons">
+                            Viandes & poissons
+                        </option>
+
+                        <option value="epicerie">
+                            Épicerie
+                        </option>
+
+                        <option value="boulangerie">
+                            Boulangerie
+                        </option>
+
+                        <option value="surgeles">
+                            Surgelés
+                        </option>
+
+                        <option value="boissons">
+                            Boissons
+                        </option>
+
+                        <option value="maison">
+                            Maison & entretien
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="actions-article-manuel">
+
+                    <button
+                        type="submit"
+                        class="bouton-ajouter-article"
+                        id="ajouter-article-manuel"
+                    >
+                        + Ajouter
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <p
+                class="message-article-manuel"
+                id="message-article-manuel"
+                aria-live="polite"
+            ></p>
+
+        </section>
+
+
+        <!-- =========================
              LISTE DE COURSES
         ========================== -->
 
@@ -254,6 +388,15 @@
 
                 </div>
 
+
+                <button
+                    type="button"
+                    class="bouton-tout-decocher"
+                    id="tout-decocher-courses"
+                >
+                    Tout décocher
+                </button>
+
             </div>
 
 
@@ -272,7 +415,7 @@
 
 
         <!-- =========================
-             AUCUN REPAS
+             AUCUN ARTICLE
         ========================== -->
 
         <section
@@ -291,7 +434,7 @@
 
             <p>
                 Ajoutez des recettes à votre planning
-                pour générer automatiquement votre liste.
+                ou ajoutez un article manuellement.
             </p>
 
             <a
