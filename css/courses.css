@@ -499,6 +499,364 @@
     color: #7d5e57;
 }
 
+/* =================================
+   AJOUT MANUEL D'ARTICLE
+================================= */
+
+.carte-ajout-course {
+    margin-bottom: 22px;
+
+    padding: 28px;
+
+    border: 1px solid #e7e3d9;
+    border-radius: 20px;
+
+    background-color: white;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.035);
+}
+
+
+/* =================================
+   FORMULAIRE ARTICLE MANUEL
+================================= */
+
+.formulaire-article-manuel {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 2fr)
+        minmax(0, 1fr)
+        minmax(0, 1.4fr)
+        auto;
+
+    gap: 14px;
+
+    align-items: end;
+}
+
+
+.champ-course {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+.champ-course label {
+    font-size: 13px;
+    font-weight: 700;
+
+    color: var(--texte);
+}
+
+
+.champ-course input,
+.champ-course select {
+    width: 100%;
+
+    box-sizing: border-box;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: var(--texte);
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.champ-course input:focus,
+.champ-course select:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(70, 95, 70, 0.10);
+}
+
+
+/* =================================
+   BOUTON AJOUTER
+================================= */
+
+.actions-article-manuel {
+    display: flex;
+}
+
+
+.bouton-ajouter-article {
+    padding: 11px 18px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: white;
+
+    font: inherit;
+    font-weight: 700;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bouton-ajouter-article:hover {
+    transform: translateY(-1px);
+}
+
+
+.bouton-ajouter-article:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   MESSAGE AJOUT MANUEL
+================================= */
+
+.message-article-manuel {
+    min-height: 20px;
+
+    margin:
+        10px 0
+        0;
+
+    color: #77766f;
+
+    font-size: 13px;
+}
+
+
+/* =================================
+   BOUTON TOUT DÉCOCHER
+================================= */
+
+.bouton-tout-decocher {
+    flex: 0 0 auto;
+
+    padding: 10px 14px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: white;
+
+    color: #66655f;
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-tout-decocher:hover {
+    background-color: #f5f3ed;
+
+    transform: translateY(-1px);
+}
+
+
+/* =================================
+   TITRE DE CATÉGORIE
+================================= */
+
+.entete-groupe-courses {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+}
+
+
+/* =================================
+   ARTICLE MANUEL
+================================= */
+
+.article-course {
+    position: relative;
+}
+
+
+.article-course-manuel {
+    padding-right: 52px;
+}
+
+
+.badge-article-manuel {
+    display: inline-flex;
+
+    align-items: center;
+
+    margin-left: 8px;
+
+    padding:
+        2px 6px;
+
+    border-radius: 999px;
+
+    background-color: #ebe8df;
+
+    color: #77766f;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.04em;
+}
+
+
+/* =================================
+   SUPPRIMER ARTICLE MANUEL
+================================= */
+
+.bouton-supprimer-article-manuel {
+    position: absolute;
+
+    top: 50%;
+    right: 12px;
+
+    transform: translateY(-50%);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    border: none;
+    border-radius: 8px;
+
+    background-color: transparent;
+
+    color: #a65b4c;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-supprimer-article-manuel:hover {
+    background-color: #fff1ed;
+
+    transform:
+        translateY(-50%)
+        scale(1.05);
+}
+
+
+/* =================================
+   GROUPES DE CATÉGORIES
+================================= */
+
+.groupe-courses + .groupe-courses {
+    margin-top: 4px;
+}
+
+
+/* =================================
+   CATÉGORIE VIDE
+================================= */
+
+.groupe-courses[hidden] {
+    display: none;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 900px) {
+
+    .formulaire-article-manuel {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+
+    .actions-article-manuel {
+        align-items: stretch;
+    }
+
+
+    .bouton-ajouter-article {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 600px) {
+
+    .carte-ajout-course {
+        padding:
+            22px 16px;
+    }
+
+
+    .formulaire-article-manuel {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .entete-carte-courses {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .bouton-tout-decocher {
+        width: 100%;
+    }
+
+
+    .article-course-manuel {
+        padding-right: 46px;
+    }
+}
 
 /* =================================
    MOBILE
