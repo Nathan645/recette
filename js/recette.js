@@ -3,16 +3,20 @@ const contenuRecette =
         "contenu-recette"
     );
 
+
 const parametres =
     new URLSearchParams(
         window.location.search
     );
 
+
 const identifiantRecette =
     parametres.get("id");
 
+
 let utilisateurConnecte =
     null;
+
 
 let recetteChargee =
     null;
@@ -114,6 +118,7 @@ async function chargerRecette() {
 
 
         contenuRecette.innerHTML = `
+
             <div class="message">
 
                 <h1>
@@ -129,6 +134,7 @@ async function chargerRecette() {
                 </a>
 
             </div>
+
         `;
     }
 }
@@ -220,12 +226,15 @@ function creerBadges(
                     </span>
 
                 `;
-
             }
         )
         .join("");
 }
 
+
+/* =================================
+   QUANTITÉS
+================================= */
 
 function formaterQuantite(
     valeur
@@ -390,10 +399,8 @@ function demanderConfirmationSuppression() {
                             false
                         );
                     }
-
                 }
             );
-
         }
     );
 }
@@ -510,11 +517,14 @@ async function supprimerRecette() {
     }
 }
 
+
 /* =================================
    AFFICHAGE DE LA RECETTE
 ================================= */
 
-function afficherRecette(recette) {
+function afficherRecette(
+    recette
+) {
 
     document.title =
         `${recette.nom} | À notre table`;
@@ -536,6 +546,7 @@ function afficherRecette(recette) {
     const actionsGestionHtml =
         estCreateur
             ? `
+
                 <div class="actions-gestion-recette">
 
                     <a
@@ -556,8 +567,35 @@ function afficherRecette(recette) {
                     </button>
 
                 </div>
+
             `
             : "";
+
+
+    /* =========================
+       VISIBILITÉ
+    ========================= */
+
+    const visibiliteHtml =
+        recette.visibilite === "foyer"
+            ? `
+
+                <div
+                    class="visibilite-recette visibilite-foyer"
+                >
+                    🏠 Mon foyer uniquement
+                </div>
+
+            `
+            : `
+
+                <div
+                    class="visibilite-recette visibilite-publique"
+                >
+                    🌍 Tout le monde
+                </div>
+
+            `;
 
 
     /* =========================
@@ -745,12 +783,10 @@ function afficherRecette(recette) {
                         </li>
 
                     `;
-
                 }
             )
             .join("");
     }
-
 
     /* =========================
        ÉTAPES
@@ -791,7 +827,6 @@ function afficherRecette(recette) {
                         </li>
 
                     `;
-
                 }
             )
             .join("");
@@ -996,6 +1031,13 @@ function afficherRecette(recette) {
                 ${astuceHtml}
 
 
+                <!-- =========================
+                     VISIBILITÉ
+                ========================== -->
+
+                ${visibiliteHtml}
+
+
             </div>
 
         </article>
@@ -1143,7 +1185,6 @@ function afficherRecette(recette) {
 
                 mettreAJourIngredients();
             }
-
         }
     );
 
@@ -1161,7 +1202,6 @@ function afficherRecette(recette) {
 
 
             mettreAJourIngredients();
-
         }
     );
 
@@ -1213,13 +1253,10 @@ function afficherRecette(recette) {
                             "etape-coche",
                             caseEtape.checked
                         );
-
                 }
             );
-
         }
     );
-
 }
 
 
