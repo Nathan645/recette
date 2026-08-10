@@ -774,6 +774,196 @@ a.repas-planifie:hover {
 }
 
 /* =================================
+   ACTIONS DE LA SEMAINE
+================================= */
+
+.actions-semaine {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    margin-bottom: 28px;
+}
+
+
+/* =================================
+   BOUTON COPIER LA SEMAINE
+================================= */
+
+.bouton-copier-semaine {
+    padding: 8px 15px;
+
+    border: 1px solid var(--vert);
+    border-radius: 20px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-copier-semaine:hover {
+    transform: translateY(-1px);
+}
+
+
+.bouton-copier-semaine:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   POPUP COPIE DE SEMAINE
+================================= */
+
+.popup-copie-semaine {
+    max-width: 470px;
+}
+
+
+.texte-copie-semaine {
+    margin:
+        8px 0
+        24px;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.55;
+}
+
+
+/* =================================
+   CHOIX DE LA DESTINATION
+================================= */
+
+.choix-destination-copie {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+
+.option-copie-semaine {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 14px 16px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 12px;
+
+    background-color: var(--creme);
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.option-copie-semaine:hover {
+    border-color: var(--vert);
+
+    background-color: #eef0e8;
+}
+
+
+.option-copie-semaine input {
+    width: 18px;
+    height: 18px;
+
+    margin: 0;
+
+    accent-color: var(--vert);
+
+    cursor: pointer;
+}
+
+
+.option-copie-semaine span {
+    font-size: 14px;
+    font-weight: bold;
+
+    color: var(--texte);
+}
+
+
+/* =================================
+   BOUTON VALIDER LA COPIE
+================================= */
+
+.bouton-valider-copie-semaine {
+    width: 100%;
+
+    padding: 13px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font: inherit;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-valider-copie-semaine:hover {
+    transform: translateY(-1px);
+}
+
+
+.bouton-valider-copie-semaine:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   MESSAGE COPIE
+================================= */
+
+#message-copie-semaine {
+    margin-top: 14px;
+}
+
+/* =================================
    RESPONSIVE
 ================================= */
 
@@ -812,5 +1002,24 @@ a.repas-planifie:hover {
     .choix-type-repas {
         grid-template-columns: 1fr;
     }
+
+    .actions-semaine {
+        flex-wrap: wrap;
+    }
+
+
+    .bouton-aujourdhui,
+    .bouton-copier-semaine {
+        flex:
+            1 1
+            150px;
+    }
+
+
+    .popup-copie-semaine {
+        padding:
+            28px 20px;
+    }
+
 
 }
