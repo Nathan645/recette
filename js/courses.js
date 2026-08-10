@@ -130,17 +130,6 @@ let articlesCourses =
 let articlesManuels =
     [];
 
-
-/*
-    IMPORTANT :
-
-    Cette variable remplace maintenant
-    le localStorage.
-
-    Son contenu est chargé depuis
-    public.courses_cochees.
-*/
-
 let articlesCoches =
     [];
 
@@ -474,6 +463,7 @@ function formaterQuantite(
             valeur
         );
 
+
     if (
         !Number.isFinite(
             nombre
@@ -482,6 +472,7 @@ function formaterQuantite(
 
         return "";
     }
+
 
     if (
         Number.isInteger(
@@ -493,6 +484,7 @@ function formaterQuantite(
             nombre
         );
     }
+
 
     return nombre
         .toFixed(
@@ -512,6 +504,460 @@ function formaterQuantite(
         );
 }
 
+
+/* =================================
+   NORMALISATION DES UNITÉS
+================================= */
+
+function normaliserUnite(
+    unite
+) {
+
+    const valeur =
+        normaliserTexte(
+            unite
+        );
+
+
+    /*
+        =========================
+        GRAMMES
+        =========================
+    */
+
+    if (
+        [
+            "g",
+            "gr",
+            "gramme",
+            "grammes"
+        ].includes(
+            valeur
+        )
+    ) {
+
+        return "g";
+    }
+
+
+    /*
+        =========================
+        KILOGRAMMES
+        =========================
+    */
+
+    if (
+        [
+            "kg",
+            "kgs",
+            "kilo",
+            "kilos",
+            "kilogramme",
+            "kilogrammes"
+        ].includes(
+            valeur
+        )
+    ) {
+
+        return "kg";
+    }
+
+
+    /*
+        =========================
+        MILLILITRES
+        =========================
+    */
+
+    if (
+        [
+            "ml",
+            "millilitre",
+            "millilitres"
+        ].includes(
+            valeur
+        )
+    ) {
+
+        return "ml";
+    }
+
+
+    /*
+        =========================
+        CENTILITRES
+        =========================
+    */
+
+    if (
+        [
+            "cl",
+            "centilitre",
+            "centilitres"
+        ].includes(
+            valeur
+        )
+    ) {
+
+        return "cl";
+    }
+
+
+    /*
+        =========================
+        LITRES
+        =========================
+    */
+
+    if (
+        [
+            "l",
+            "litre",
+            "litres"
+        ].includes(
+            valeur
+        )
+    ) {
+
+        return "l";
+    }
+
+
+    /*
+        Pour toutes les autres unités,
+        on conserve la valeur normalisée.
+
+        Exemples :
+        pièce
+        tranche
+        boîte
+        cuillère à soupe
+    */
+
+    return valeur;
+}
+
+
+/* =================================
+   FAMILLE D'UNITÉ
+================================= */
+
+function obtenirFamilleUnite(
+    unite
+) {
+
+    const uniteNormalisee =
+        normaliserUnite(
+            unite
+        );
+
+
+    if (
+        uniteNormalisee === "g" ||
+        uniteNormalisee === "kg"
+    ) {
+
+        return "masse";
+    }
+
+
+    if (
+        uniteNormalisee === "ml" ||
+        uniteNormalisee === "cl" ||
+        uniteNormalisee === "l"
+    ) {
+
+        return "volume";
+    }
+
+
+    /*
+        Les autres unités ne doivent
+        être regroupées qu'avec elles-mêmes.
+
+        Exemple :
+        2 pièces + 3 pièces = 5 pièces
+
+        Mais :
+        2 pièces + 100 g
+        ne doivent jamais être additionnés.
+    */
+
+    return (
+        "autre__" +
+        uniteNormalisee
+    );
+}
+
+
+/* =================================
+   CONVERSION VERS UNITÉ DE BASE
+================================= */
+
+function convertirVersUniteBase(
+    quantite,
+    unite
+) {
+
+    const nombre =
+        Number(
+            quantite
+        );
+
+
+    if (
+        !Number.isFinite(
+            nombre
+        )
+    ) {
+
+        return null;
+    }
+
+
+    const uniteNormalisee =
+        normaliserUnite(
+            unite
+        );
+
+
+    /*
+        MASSE
+
+        unité de base = gramme
+    */
+
+    if (
+        uniteNormalisee === "kg"
+    ) {
+
+        return nombre * 1000;
+    }
+
+
+    if (
+        uniteNormalisee === "g"
+    ) {
+
+        return nombre;
+    }
+
+
+    /*
+        VOLUME
+
+        unité de base = millilitre
+    */
+
+    if (
+        uniteNormalisee === "l"
+    ) {
+
+        return nombre * 1000;
+    }
+
+
+    if (
+        uniteNormalisee === "cl"
+    ) {
+
+        return nombre * 10;
+    }
+
+
+    if (
+        uniteNormalisee === "ml"
+    ) {
+
+        return nombre;
+    }
+
+
+    /*
+        Pour les unités sans conversion,
+        on conserve simplement la quantité.
+    */
+
+    return nombre;
+}
+
+
+/* =================================
+   UNITÉ D'AFFICHAGE
+================================= */
+
+function convertirPourAffichage(
+    quantiteBase,
+    famille,
+    unitesOrigine = []
+) {
+
+    const quantite =
+        Number(
+            quantiteBase
+        );
+
+
+    if (
+        !Number.isFinite(
+            quantite
+        )
+    ) {
+
+        return {
+            quantite:
+                null,
+
+            unite:
+                ""
+        };
+    }
+
+
+    /* =========================
+       MASSE
+    ========================= */
+
+    if (
+        famille ===
+        "masse"
+    ) {
+
+        /*
+            1000 g ou plus :
+            affichage en kg.
+        */
+
+        if (
+            quantite >=
+            1000
+        ) {
+
+            return {
+
+                quantite:
+                    quantite /
+                    1000,
+
+                unite:
+                    "kg"
+
+            };
+        }
+
+
+        return {
+
+            quantite:
+                quantite,
+
+            unite:
+                "g"
+
+        };
+    }
+
+
+    /* =========================
+       VOLUME
+    ========================= */
+
+    if (
+        famille ===
+        "volume"
+    ) {
+
+        /*
+            1000 ml ou plus :
+            affichage en litres.
+        */
+
+        if (
+            quantite >=
+            1000
+        ) {
+
+            return {
+
+                quantite:
+                    quantite /
+                    1000,
+
+                unite:
+                    "L"
+
+            };
+        }
+
+
+        /*
+            Si au moins une recette
+            utilisait des cl et que
+            le résultat tombe proprement
+            en centilitres, on conserve
+            cette unité.
+
+            Exemple :
+            20 cl + 100 ml
+            = 300 ml
+            = 30 cl.
+        */
+
+        const contientCentilitres =
+            unitesOrigine.includes(
+                "cl"
+            );
+
+
+        if (
+            contientCentilitres &&
+            quantite >= 100 &&
+            quantite % 10 === 0
+        ) {
+
+            return {
+
+                quantite:
+                    quantite /
+                    10,
+
+                unite:
+                    "cl"
+
+            };
+        }
+
+
+        return {
+
+            quantite:
+                quantite,
+
+            unite:
+                "ml"
+
+        };
+    }
+
+
+    /*
+        Unité non convertible :
+        on garde la quantité telle quelle.
+
+        Le nom exact de l'unité sera
+        défini dans l'article.
+    */
+
+    return {
+
+        quantite:
+            quantite,
+
+        unite:
+            ""
+
+    };
+}
 
 /* =================================
    CATÉGORIE AUTOMATIQUE
@@ -1214,8 +1660,11 @@ function trouverRecette(
         }
     );
 }
+
+
 /* =================================
    AJOUTER / REGROUPER UN ARTICLE
+   AVEC CONVERSION D'UNITÉS
 ================================= */
 
 function ajouterArticle(
@@ -1241,16 +1690,31 @@ function ajouterArticle(
             .trim();
 
 
-    if (!nom) {
+    if (
+        !nom
+    ) {
+
         return;
     }
 
 
-    const unite =
+    const uniteOriginale =
         String(
             ingredient.unite || ""
         )
             .trim();
+
+
+    const uniteNormalisee =
+        normaliserUnite(
+            uniteOriginale
+        );
+
+
+    const famille =
+        obtenirFamilleUnite(
+            uniteNormalisee
+        );
 
 
     const categorie =
@@ -1259,12 +1723,29 @@ function ajouterArticle(
         );
 
 
+    /*
+        IMPORTANT :
+
+        La clé n'utilise plus directement
+        l'unité.
+
+        On utilise désormais :
+        nom + famille d'unité.
+
+        Ainsi :
+
+        poulet + kg
+        et
+        poulet + g
+
+        utilisent la même clé :
+        poulet__masse
+    */
+
     const cle =
         `${normaliserTexte(
             nom
-        )}__${normaliserTexte(
-            unite
-        )}`;
+        )}__${famille}`;
 
 
     let article =
@@ -1273,7 +1754,9 @@ function ajouterArticle(
         );
 
 
-    if (!article) {
+    if (
+        !article
+    ) {
 
         article = {
 
@@ -1283,14 +1766,37 @@ function ajouterArticle(
             nom:
                 nom,
 
+            /*
+                L'unité définitive sera
+                déterminée plus tard
+                au moment de l'affichage.
+            */
+
             unite:
-                unite,
+                uniteNormalisee,
+
+            familleUnite:
+                famille,
 
             quantite:
                 null,
 
             quantiteNumerique:
                 true,
+
+            /*
+                Quantité stockée dans
+                l'unité de base :
+
+                masse  -> g
+                volume -> ml
+            */
+
+            quantiteBase:
+                0,
+
+            unitesOrigine:
+                [],
 
             categorie:
                 categorie,
@@ -1311,6 +1817,37 @@ function ajouterArticle(
     }
 
 
+    /*
+        On mémorise les unités utilisées
+        dans les recettes.
+
+        Ça servira notamment à choisir
+        entre ml et cl à l'affichage.
+    */
+
+    if (
+        uniteNormalisee &&
+        !article.unitesOrigine.includes(
+            uniteNormalisee
+        )
+    ) {
+
+        article.unitesOrigine.push(
+            uniteNormalisee
+        );
+    }
+
+
+    /*
+        Pas de quantité exploitable :
+
+        exemple :
+        sel "selon goût"
+
+        On conserve quand même l'article,
+        mais il n'est pas additionnable.
+    */
+
     if (
         quantiteCalculee === null ||
         quantiteCalculee === undefined ||
@@ -1329,21 +1866,35 @@ function ajouterArticle(
     }
 
 
+    const quantiteBase =
+        convertirVersUniteBase(
+            quantiteCalculee,
+            uniteNormalisee
+        );
+
+
     if (
-        article.quantite === null
+        quantiteBase === null
     ) {
 
-        article.quantite =
-            0;
+        article.quantiteNumerique =
+            false;
+
+        return;
     }
 
 
-    article.quantite +=
-        Number(
-            quantiteCalculee
-        );
-}
+    /*
+        Addition dans une unité commune.
+    */
 
+    article.quantiteBase +=
+        quantiteBase;
+
+
+    article.quantite =
+        article.quantiteBase;
+}
 
 /* =================================
    CALCUL DES INGRÉDIENTS
@@ -1361,6 +1912,12 @@ function calculerArticlesRecettes() {
             repas
         ) {
 
+            /*
+                Les repas libres
+                ne génèrent pas
+                d'ingrédients.
+            */
+
             if (
                 !repas.recette_id
             ) {
@@ -1375,10 +1932,18 @@ function calculerArticlesRecettes() {
                 );
 
 
-            if (!recette) {
+            if (
+                !recette
+            ) {
+
                 return;
             }
 
+
+            /*
+                Nombre de personnes prévu
+                par la recette.
+            */
 
             const personnesRecette =
                 Number(
@@ -1386,12 +1951,26 @@ function calculerArticlesRecettes() {
                 ) || 1;
 
 
+            /*
+                Nombre de personnes prévu
+                dans le planning.
+            */
+
             const personnesRepas =
                 Number(
                     repas.personnes
                 ) ||
                 personnesRecette;
 
+
+            /*
+                Exemple :
+
+                recette prévue pour 4
+                planning prévu pour 6
+
+                coefficient = 1,5
+            */
 
             const coefficient =
                 personnesRepas /
@@ -1410,6 +1989,13 @@ function calculerArticlesRecettes() {
                 function (
                     ingredient
                 ) {
+
+                    /*
+                        Compatibilité avec
+                        les anciennes recettes
+                        qui auraient un ingrédient
+                        sous forme de simple texte.
+                    */
 
                     if (
                         typeof ingredient ===
@@ -1440,6 +2026,13 @@ function calculerArticlesRecettes() {
                     let quantiteCalculee =
                         quantite;
 
+
+                    /*
+                        Si l'ingrédient est
+                        proportionnel au nombre
+                        de personnes, on applique
+                        le coefficient.
+                    */
 
                     if (
                         ingredient.proportionnel !==
@@ -1500,6 +2093,18 @@ function convertirArticlesManuels() {
 
             return {
 
+                /*
+                    Les articles manuels
+                    restent indépendants
+                    des ingrédients calculés.
+
+                    Leur quantité est un texte
+                    libre :
+                    "2 paquets"
+                    "1 bouteille"
+                    etc.
+                */
+
                 cle:
                     `manuel__${article.id}`,
 
@@ -1509,7 +2114,13 @@ function convertirArticlesManuels() {
                 unite:
                     "",
 
+                familleUnite:
+                    "manuel",
+
                 quantite:
+                    null,
+
+                quantiteBase:
                     null,
 
                 quantiteNumerique:
@@ -1518,6 +2129,9 @@ function convertirArticlesManuels() {
                 quantiteTexte:
                     article.quantite ||
                     "",
+
+                unitesOrigine:
+                    [],
 
                 categorie:
                     categorieExiste
@@ -1558,6 +2172,12 @@ function calculerListeCourses() {
 
     ];
 
+
+    /*
+        Tri :
+        1. catégorie
+        2. ordre alphabétique
+    */
 
     articlesCourses.sort(
         function (
@@ -1609,6 +2229,12 @@ function construireQuantiteArticle(
     article
 ) {
 
+    /*
+        =========================
+        ARTICLE MANUEL
+        =========================
+    */
+
     if (
         article.manuel
     ) {
@@ -1618,8 +2244,20 @@ function construireQuantiteArticle(
     }
 
 
+    /*
+        =========================
+        PAS DE QUANTITÉ NUMÉRIQUE
+        =========================
+
+        Exemple :
+        "sel selon goût"
+
+        On affiche éventuellement
+        seulement l'unité si elle existe.
+    */
+
     if (
-        article.quantite === null ||
+        article.quantiteBase === null ||
         !article.quantiteNumerique
     ) {
 
@@ -1629,9 +2267,71 @@ function construireQuantiteArticle(
     }
 
 
+    /*
+        =========================
+        MASSE / VOLUME
+        =========================
+
+        Ici on transforme par exemple :
+
+        1400 g -> 1,4 kg
+        300 ml -> 30 cl
+        1250 ml -> 1,25 L
+    */
+
+    if (
+        article.familleUnite ===
+            "masse" ||
+        article.familleUnite ===
+            "volume"
+    ) {
+
+        const affichage =
+            convertirPourAffichage(
+                article.quantiteBase,
+                article.familleUnite,
+                article.unitesOrigine
+            );
+
+
+        const quantite =
+            formaterQuantite(
+                affichage.quantite
+            );
+
+
+        if (
+            !affichage.unite
+        ) {
+
+            return quantite;
+        }
+
+
+        return (
+            quantite +
+            " " +
+            affichage.unite
+        );
+    }
+
+
+    /*
+        =========================
+        AUTRES UNITÉS
+        =========================
+
+        Exemple :
+        2 pièces + 3 pièces
+        = 5 pièces
+
+        2 tranches + 4 tranches
+        = 6 tranches
+    */
+
     const quantite =
         formaterQuantite(
-            article.quantite
+            article.quantiteBase
         );
 
 
@@ -1643,7 +2343,11 @@ function construireQuantiteArticle(
     }
 
 
-    return `${quantite} ${article.unite}`;
+    return (
+        quantite +
+        " " +
+        article.unite
+    );
 }
 
 
@@ -2265,7 +2969,8 @@ listeCourses.addEventListener(
 
         /*
             On bloque temporairement
-            la case pendant l'écriture.
+            la case pendant l'écriture
+            dans Supabase.
         */
 
         caseArticle.disabled =
@@ -2307,9 +3012,8 @@ listeCourses.addEventListener(
 
 
             /*
-                On remet la case dans
-                son état précédent si
-                Supabase refuse.
+                On restaure l'état précédent
+                si Supabase refuse.
             */
 
             caseArticle.checked =
@@ -2623,12 +3327,11 @@ listeCourses.addEventListener(
 
 
             /*
-                L'article manuel peut
-                aussi être coché dans
+                Un article manuel supprimé
+                peut aussi être présent dans
                 courses_cochees.
 
-                On supprime cette entrée
-                pour garder la base propre.
+                On nettoie donc sa case cochée.
             */
 
             const cleArticle =
@@ -2647,8 +3350,8 @@ listeCourses.addEventListener(
 
                 /*
                     Ce n'est pas bloquant :
-                    l'article peut ne pas
-                    avoir été coché.
+                    l'article n'était peut-être
+                    simplement pas coché.
                 */
 
                 console.warn(
@@ -2677,6 +3380,7 @@ listeCourses.addEventListener(
     }
 );
 
+
 /* =================================
    CHARGEMENT COMPLET
 ================================= */
@@ -2684,9 +3388,11 @@ listeCourses.addEventListener(
 async function rafraichirCourses() {
 
     listeCourses.innerHTML = `
+
         <p class="message-chargement-courses">
             Calcul de la liste de courses…
         </p>
+
     `;
 
 
@@ -2719,22 +3425,25 @@ async function rafraichirCourses() {
 
         /*
             3. Articles manuels
-            de la semaine
         */
 
         await chargerArticlesManuels();
 
 
         /*
-            4. Cases cochées synchronisées
-            depuis Supabase
+            4. Cases cochées
+            synchronisées Supabase
         */
 
         await chargerArticlesCoches();
 
 
         /*
-            5. Calcul complet
+            5. Calcul de la liste
+
+            C'est ici que les conversions
+            d'unités sont désormais prises
+            en compte.
         */
 
         calculerListeCourses();
