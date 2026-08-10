@@ -998,3 +998,226 @@ champPersonnesParDefaut
         }
     );
 
+/* =================================
+   COPIER LE CODE DU FOYER
+================================= */
+
+boutonCopierCode.addEventListener(
+    "click",
+    async function () {
+
+        const code =
+            foyerUtilisateur?.code;
+
+
+        if (!code) {
+            return;
+        }
+
+
+        try {
+
+            await navigator.clipboard
+                .writeText(
+                    code
+                );
+
+
+            boutonCopierCode.textContent =
+                "Copié ✓";
+
+
+            messageCopieCode.textContent =
+                "Le code du foyer a été copié.";
+
+
+            setTimeout(
+                function () {
+
+                    boutonCopierCode.textContent =
+                        "Copier le code";
+
+
+                    messageCopieCode.textContent =
+                        "";
+
+                },
+                1800
+            );
+
+
+        } catch (erreur) {
+
+            console.error(
+                "Impossible de copier le code :",
+                erreur
+            );
+
+
+            messageCopieCode.textContent =
+                `Code du foyer : ${code}`;
+        }
+    }
+);
+
+
+/* =================================
+   DÉCONNEXION
+================================= */
+
+boutonDeconnexion.addEventListener(
+    "click",
+    async function () {
+
+        boutonDeconnexion.disabled =
+            true;
+
+
+        boutonDeconnexion.textContent =
+            "Déconnexion…";
+
+
+        try {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .auth
+                    .signOut();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            window.location.href =
+                "compte.html";
+
+
+        } catch (erreur) {
+
+            console.error(
+                "Erreur de déconnexion :",
+                erreur
+            );
+
+
+            boutonDeconnexion.disabled =
+                false;
+
+
+            boutonDeconnexion.textContent =
+                "Se déconnecter";
+
+
+            window.alert(
+                "Impossible de vous déconnecter."
+            );
+        }
+    }
+);
+
+
+/* =================================
+   INITIALISATION
+================================= */
+
+async function initialiserMonCompte() {
+
+    try {
+
+        /*
+            1. Utilisateur connecté
+        */
+
+        const utilisateur =
+            await recupererUtilisateur();
+
+
+        if (!utilisateur) {
+            return;
+        }
+
+
+        /*
+            2. Profil utilisateur
+        */
+
+        await recupererProfil();
+
+
+        /*
+            3. Appartenance au foyer
+        */
+
+        const appartenance =
+            await recupererAppartenanceFoyer();
+
+
+        if (!appartenance) {
+            return;
+        }
+
+
+        /*
+            4. Informations du foyer
+        */
+
+        await recupererFoyer(
+            appartenance.foyer_id
+        );
+
+
+        /*
+            5. Membres du foyer
+        */
+
+        await recupererMembresFoyer(
+            appartenance.foyer_id
+        );
+
+
+        /*
+            6. Affichage
+        */
+
+        afficherProfil();
+
+        afficherFoyer();
+
+        afficherMembres();
+
+
+        /*
+            7. Fin du chargement
+        */
+
+        chargementCompte.hidden =
+            true;
+
+
+        messageErreurCompte.hidden =
+            true;
+
+
+        contenuMonCompte.hidden =
+            false;
+
+
+    } catch (erreur) {
+
+        afficherErreur(
+            erreur
+        );
+    }
+}
+
+
+/* =================================
+   DÉMARRAGE
+================================= */
+
+initialiserMonCompte();
+
