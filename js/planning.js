@@ -261,12 +261,6 @@ function fermerPopupCopieSemaine() {
 
 async function copierSemainePlanning() {
 
-    /*
-        S'il n'y a aucun repas dans
-        la semaine affichée, inutile
-        d'interroger Supabase.
-    */
-
     if (
         repasSemaine.length === 0
     ) {
@@ -336,20 +330,16 @@ async function copierSemainePlanning() {
 
     try {
 
-        /*
-            1. On récupère les créneaux
-            déjà occupés dans la semaine
-            de destination.
-        */
+        /* =================================
+           1. CRÉNEAUX DÉJÀ OCCUPÉS
+        ================================= */
 
         const {
             data: repasExistants,
             error: erreurRepasExistants
         } =
             await window.supabaseClient
-                .from(
-                    "repas_planning"
-                )
+                .from("repas_planning")
                 .select(`
                     id,
                     date,
@@ -387,7 +377,9 @@ async function copierSemainePlanning() {
                         : []
                 )
                     .map(
-                        function (repas) {
+                        function (
+                            repas
+                        ) {
 
                             return (
                                 repas.date +
@@ -399,11 +391,9 @@ async function copierSemainePlanning() {
             );
 
 
-        /*
-            2. On prépare uniquement
-            les repas dont le créneau
-            cible est encore vide.
-        */
+        /* =================================
+           2. PRÉPARER LES REPAS
+        ================================= */
 
         const repasACopier =
             [];
@@ -414,7 +404,9 @@ async function copierSemainePlanning() {
 
 
         repasSemaine.forEach(
-            function (repas) {
+            function (
+                repas
+            ) {
 
                 const dateCible =
                     decalerDateISO(
@@ -478,13 +470,6 @@ async function copierSemainePlanning() {
                 });
 
 
-                /*
-                    On marque immédiatement
-                    le créneau comme occupé
-                    pour éviter un doublon
-                    éventuel dans le tableau.
-                */
-
                 creneauxOccupes.add(
                     cleCreneau
                 );
@@ -492,19 +477,26 @@ async function copierSemainePlanning() {
         );
 
 
-        /*
-            3. Tous les créneaux sont
-            déjà occupés.
-        */
+        /* =================================
+           3. RIEN À COPIER
+        ================================= */
 
         if (
             repasACopier.length === 0
         ) {
 
-            messageCopieSemaine.textContent =
+            if (
                 nombreIgnores === 1
-                    ? "Aucun repas copié : le créneau cible est déjà occupé."
-                    : `Aucun repas copié : ${nombreIgnores} créneaux sont déjà occupés.`;
+            ) {
+
+                messageCopieSemaine.textContent =
+                    "Aucun repas copié : le créneau cible est déjà occupé.";
+
+            } else {
+
+                messageCopieSemaine.textContent =
+                    `Aucun repas copié : ${nombreIgnores} créneaux sont déjà occupés.`;
+            }
 
 
             boutonValiderCopieSemaine.disabled =
@@ -519,21 +511,28 @@ async function copierSemainePlanning() {
         }
 
 
-        /*
-            4. Insertion en une seule
-            requête Supabase.
-        */
+        /* =================================
+           4. INSERTION SUPABASE
+        ================================= */
 
         const {
+            data: repasCopies,
             error: erreurInsertion
         } =
             await window.supabaseClient
-                .from(
-                    "repas_planning"
-                )
+                .from("repas_planning")
                 .insert(
                     repasACopier
-                );
+                )
+                .select(`
+                    id,
+                    foyer_id,
+                    date,
+                    moment,
+                    nom,
+                    recette_id,
+                    personnes
+                `);
 
 
         if (
@@ -545,11 +544,36 @@ async function copierSemainePlanning() {
 
 
         /*
-            5. Message de résultat.
+            Sécurité supplémentaire :
+            Supabase doit réellement
+            nous renvoyer les lignes créées.
         */
 
+        if (
+            !Array.isArray(
+                repasCopies
+            ) ||
+            repasCopies.length === 0
+        ) {
+
+            throw new Error(
+                "Aucun repas n'a été créé dans la semaine cible."
+            );
+        }
+
+
+        console.log(
+            "Repas copiés :",
+            repasCopies
+        );
+
+
+        /* =================================
+           5. MESSAGE
+        ================================= */
+
         const nombreCopies =
-            repasACopier.length;
+            repasCopies.length;
 
 
         let message =
@@ -573,23 +597,35 @@ async function copierSemainePlanning() {
             `${message} ✓`;
 
 
-        /*
-            On laisse le résultat visible
-            un court instant avant de
-            fermer la popup.
-        */
+        /* =================================
+           6. ALLER SUR LA SEMAINE COPIÉE
+        ================================= */
 
         setTimeout(
-            function () {
+            async function () {
 
                 fermerPopupCopieSemaine();
 
+
+                /*
+                    On affiche directement
+                    la semaine de destination.
+                */
+
+                debutSemaine =
+                    debutSemaineCible;
+
+
+                await rafraichirPlanning();
+
             },
-            1400
+            900
         );
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur copie de semaine :",
