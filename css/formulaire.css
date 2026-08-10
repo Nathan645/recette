@@ -286,3 +286,43 @@
 .choix-multiples input[type="checkbox"] {
     accent-color: var(--vert);
 }
+
+/* =================================
+   VISIBILITÉ RECETTE
+================================= */
+
+.choix-visibilite {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 8px;
+}
+
+
+.option-visibilite {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    padding: 11px 14px;
+
+    border: 1px solid #ddd7cc;
+    border-radius: 10px;
+
+    background-color: #fbfaf6;
+
+    cursor: pointer;
+}
+
+
+.option-visibilite input {
+    accent-color: var(--vert);
+}
+
+
+.option-visibilite:has(input:checked) {
+    border-color: var(--vert);
+    background-color: #eef2e9;
+}
