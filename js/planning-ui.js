@@ -7,19 +7,73 @@ function creerCreneauRepas(
     moment
 ) {
 
-    const repas =
-        trouverRepas(
-            date,
-            moment
+    const dateISO =
+        formaterDateISO(
+            date
         );
+
+
+    /*
+        Recherche robuste du repas.
+
+        On normalise la date et le moment
+        pour éviter qu'un repas présent
+        en base ne soit pas affiché à cause
+        d'une différence de format.
+    */
+
+    const repas =
+        repasSemaine.find(
+            function (
+                element
+            ) {
+
+                const dateRepas =
+                    String(
+                        element.date || ""
+                    )
+                        .trim();
+
+
+                const momentRepas =
+                    String(
+                        element.moment || ""
+                    )
+                        .trim()
+                        .toLowerCase();
+
+
+                const momentRecherche =
+                    String(
+                        moment || ""
+                    )
+                        .trim()
+                        .toLowerCase();
+
+
+                return (
+                    dateRepas ===
+                        dateISO &&
+                    momentRepas ===
+                        momentRecherche
+                );
+            }
+        );
+
 
     const titreMoment =
         moment === "midi"
             ? "Midi"
             : "Soir";
 
-    let contenu = "";
 
+    let contenu =
+        "";
+
+
+    /* =================================
+       REPAS EXISTANT
+    ================================= */
 
     if (repas) {
 
@@ -43,6 +97,10 @@ function creerCreneauRepas(
                     : ""
             }`;
 
+
+        /* =================================
+           REPAS AVEC RECETTE
+        ================================= */
 
         if (
             repas.recette_id
@@ -84,6 +142,11 @@ function creerCreneauRepas(
 
             `;
 
+
+        /* =================================
+           REPAS LIBRE
+        ================================= */
+
         } else {
 
             contenu = `
@@ -119,6 +182,10 @@ function creerCreneauRepas(
         }
 
 
+    /* =================================
+       CRÉNEAU VIDE
+    ================================= */
+
     } else {
 
         contenu = `
@@ -126,9 +193,7 @@ function creerCreneauRepas(
             <button
                 type="button"
                 class="bouton-ajouter-repas"
-                data-date="${formaterDateISO(
-                    date
-                )}"
+                data-date="${dateISO}"
                 data-moment="${moment}"
             >
                 + Ajouter
@@ -137,6 +202,10 @@ function creerCreneauRepas(
         `;
     }
 
+
+    /* =================================
+       RETOUR DU CRÉNEAU
+    ================================= */
 
     return `
 
@@ -167,11 +236,19 @@ function afficherSemaine() {
         );
 
 
+    /* =================================
+       NUMÉRO DE SEMAINE
+    ================================= */
+
     numeroSemaine.textContent =
         `Semaine ${obtenirNumeroSemaine(
             debutSemaine
         )}`;
 
+
+    /* =================================
+       DATES DE LA SEMAINE
+    ================================= */
 
     titreSemaine.textContent =
         `${formaterDateCourte(
@@ -190,6 +267,64 @@ function afficherSemaine() {
             }
         )}`;
 
+
+    /* =================================
+       DEBUG TEMPORAIRE
+    ================================= */
+
+    console.log(
+        "AFFICHAGE SEMAINE :",
+        formaterDateISO(
+            debutSemaine
+        ),
+        "→",
+        formaterDateISO(
+            finSemaine
+        )
+    );
+
+
+    console.log(
+        "REPAS DISPONIBLES POUR AFFICHAGE :",
+        repasSemaine
+    );
+
+
+    console.table(
+        repasSemaine.map(
+            function (
+                repas
+            ) {
+
+                return {
+
+                    id:
+                        repas.id,
+
+                    date:
+                        repas.date,
+
+                    moment:
+                        repas.moment,
+
+                    nom:
+                        repas.nom,
+
+                    recette_id:
+                        repas.recette_id,
+
+                    personnes:
+                        repas.personnes
+
+                };
+            }
+        )
+    );
+
+
+    /* =================================
+       CONSTRUCTION DES 7 JOURS
+    ================================= */
 
     const jours =
         [];
@@ -231,15 +366,20 @@ function afficherSemaine() {
                 <div class="entete-jour">
 
                     <span class="nom-jour">
+
                         ${capitaliser(
                             nomJour
                         )}
+
                     </span>
 
+
                     <div class="date-jour">
+
                         ${formaterDateCourte(
                             date
                         )}
+
                     </div>
 
                 </div>
@@ -262,6 +402,10 @@ function afficherSemaine() {
     }
 
 
+    /* =================================
+       INJECTION HTML
+    ================================= */
+
     grilleSemaine.innerHTML =
         jours.join("");
 }
@@ -274,16 +418,45 @@ function afficherSemaine() {
 async function rafraichirPlanning() {
 
     grilleSemaine.innerHTML = `
+
         <p>
             Chargement du planning…
         </p>
+
     `;
 
 
     try {
 
+        /*
+            On vide explicitement
+            l'ancienne semaine avant
+            d'interroger Supabase.
+        */
+
+        repasSemaine =
+            [];
+
+
+        /*
+            Chargement de la semaine
+            correspondant au nouveau
+            debutSemaine.
+        */
+
         await chargerRepasSemaine();
 
+
+        console.log(
+            "NOMBRE DE REPAS APRÈS RECHARGEMENT :",
+            repasSemaine.length
+        );
+
+
+        /*
+            Affichage uniquement après
+            réception des données.
+        */
 
         afficherSemaine();
 
@@ -297,9 +470,12 @@ async function rafraichirPlanning() {
 
 
         grilleSemaine.innerHTML = `
+
             <p>
                 Impossible de charger le planning.
+                ${erreur.message || ""}
             </p>
+
         `;
     }
 }
@@ -339,20 +515,31 @@ function afficherResultatsRecettes(
             );
 
 
+    /* =================================
+       AUCUN RÉSULTAT
+    ================================= */
+
     if (
         recettesFiltrees.length ===
         0
     ) {
 
         resultatsRecettes.innerHTML = `
+
             <p>
                 Aucune recette trouvée.
             </p>
+
         `;
+
 
         return;
     }
 
+
+    /* =================================
+       AFFICHAGE DES RECETTES
+    ================================= */
 
     resultatsRecettes.innerHTML =
         recettesFiltrees
@@ -368,7 +555,9 @@ function afficherResultatsRecettes(
                             class="resultat-recette-planning"
                             data-recette-id="${recette.id}"
                         >
+
                             ${recette.nom}
+
                         </button>
 
                     `;
