@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Courses | À notre table
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/courses.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
+    <header class="entete-principale">
+
+        <div class="bloc-marque">
+
+            <h1>
+                À notre table
+            </h1>
+
+            <p>
+                Nos recettes, nos souvenirs et nos petits secrets de cuisine.
+            </p>
+
+            <div
+                class="infos-utilisateur"
+                id="infos-utilisateur"
+                hidden
+            >
+
+                <span>
+                    Bonjour
+                    <strong id="prenom-utilisateur"></strong>
+                </span>
+
+                <span class="separateur-utilisateur">
+                    •
+                </span>
+
+                <span>
+                    Foyer :
+                    <strong id="nom-foyer-utilisateur"></strong>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <nav class="navigation-principale">
+
+            <a
+                href="index.html"
+                class="lien-navigation"
+            >
+                Recettes
+            </a>
+
+            <a
+                href="planning.html"
+                class="lien-navigation"
+            >
+                Planning
+            </a>
+
+            <a
+                href="courses.html"
+                class="lien-navigation actif"
+            >
+                Courses
+            </a>
+
+            <a
+                href="mon-compte.html"
+                class="lien-navigation"
+            >
+                Compte
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         PAGE COURSES
+    ========================== -->
+
+    <main class="page-courses">
+
+        <section class="entete-courses">
+
+            <span class="sur-titre-courses">
+                Organisation
+            </span>
+
+            <h2>
+                Liste de courses
+            </h2>
+
+            <p>
+                Les ingrédients sont calculés automatiquement
+                à partir des repas prévus dans votre planning.
+            </p>
+
+        </section>
+
+
+        <!-- =========================
+             NAVIGATION SEMAINE
+        ========================== -->
+
+        <section class="navigation-semaine-courses">
+
+            <button
+                type="button"
+                class="bouton-navigation-semaine"
+                id="semaine-precedente-courses"
+                aria-label="Semaine précédente"
+            >
+                ←
+            </button>
+
+
+            <div class="semaine-courses-actuelle">
+
+                <span
+                    class="numero-semaine-courses"
+                    id="numero-semaine-courses"
+                >
+                    Semaine
+                </span>
+
+                <h3 id="titre-semaine-courses">
+                    Chargement…
+                </h3>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="bouton-navigation-semaine"
+                id="semaine-suivante-courses"
+                aria-label="Semaine suivante"
+            >
+                →
+            </button>
+
+        </section>
+
+
+        <div class="actions-semaine-courses">
+
+            <button
+                type="button"
+                class="bouton-aujourdhui"
+                id="aller-aujourdhui-courses"
+            >
+                Aujourd'hui
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             RÉSUMÉ
+        ========================== -->
+
+        <section class="resume-courses">
+
+            <div class="resume-course-item">
+
+                <span class="resume-course-label">
+                    Repas planifiés
+                </span>
+
+                <strong id="nombre-repas-courses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="resume-course-item">
+
+                <span class="resume-course-label">
+                    Recettes utilisées
+                </span>
+
+                <strong id="nombre-recettes-courses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="resume-course-item">
+
+                <span class="resume-course-label">
+                    Articles
+                </span>
+
+                <strong id="nombre-articles-courses">
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             LISTE DE COURSES
+        ========================== -->
+
+        <section class="carte-courses">
+
+            <div class="entete-carte-courses">
+
+                <div>
+
+                    <span class="petit-titre-courses">
+                        Cette semaine
+                    </span>
+
+                    <h3>
+                        À acheter
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="liste-courses"
+                id="liste-courses"
+            >
+
+                <p class="message-chargement-courses">
+                    Chargement de la liste de courses…
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             AUCUN REPAS
+        ========================== -->
+
+        <section
+            class="message-vide-courses"
+            id="message-vide-courses"
+            hidden
+        >
+
+            <div class="icone-vide-courses">
+                🛒
+            </div>
+
+            <h3>
+                Aucun ingrédient à acheter
+            </h3>
+
+            <p>
+                Ajoutez des recettes à votre planning
+                pour générer automatiquement votre liste.
+            </p>
+
+            <a
+                href="planning.html"
+                class="bouton-retour-planning"
+            >
+                Aller au planning
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             ERREUR
+        ========================== -->
+
+        <section
+            class="message-erreur-courses"
+            id="message-erreur-courses"
+            hidden
+        >
+
+            <h3>
+                Impossible de charger la liste
+            </h3>
+
+            <p id="texte-erreur-courses">
+                Une erreur est survenue.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <p>
+            À notre table ❤️
+        </p>
+
+    </footer>
+
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/session.js"></script>
+
+    <script src="js/courses.js"></script>
+
+</body>
+
+</html>
