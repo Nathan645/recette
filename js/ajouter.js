@@ -1,22 +1,30 @@
+/* =================================
+   ÉLÉMENTS PRINCIPAUX
+================================= */
+
 const formulaire =
     document.getElementById(
         "formulaire-recette"
     );
+
 
 const conteneurIngredients =
     document.getElementById(
         "liste-champs-ingredients"
     );
 
+
 const boutonAjouterIngredient =
     document.getElementById(
         "ajouter-ingredient"
     );
 
+
 const boutonEnregistrer =
     document.getElementById(
         "enregistrer-recette"
     );
+
 
 const messageFormulaire =
     document.getElementById(
@@ -24,13 +32,19 @@ const messageFormulaire =
     );
 
 
+/* =================================
+   PARAMÈTRES URL
+================================= */
+
 const parametres =
     new URLSearchParams(
         window.location.search
     );
 
+
 const identifiantRecette =
     parametres.get("id");
+
 
 const modeModification =
     Boolean(
@@ -38,12 +52,20 @@ const modeModification =
     );
 
 
+/* =================================
+   UTILISATEUR / FOYER
+================================= */
+
 let utilisateurConnecte =
     null;
 
 
+let foyerId =
+    null;
+
+
 /* =================================
-   UTILISATEUR
+   UTILISATEUR CONNECTÉ
 ================================= */
 
 async function recupererUtilisateurConnecte() {
@@ -72,6 +94,55 @@ async function recupererUtilisateurConnecte() {
 
 
     return data.user;
+}
+
+
+/* =================================
+   FOYER DE L'UTILISATEUR
+================================= */
+
+async function recupererFoyerUtilisateur() {
+
+    if (!utilisateurConnecte) {
+
+        return null;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from("membres_foyer")
+            .select("foyer_id")
+            .eq(
+                "user_id",
+                utilisateurConnecte.id
+            )
+            .limit(1)
+            .maybeSingle();
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    if (!data) {
+
+        window.location.href =
+            "foyer.html";
+
+        return null;
+    }
+
+
+    foyerId =
+        data.foyer_id;
+
+
+    return foyerId;
 }
 
 
@@ -166,6 +237,11 @@ function creerLigneIngredient(
                     );
 
 
+            /*
+                On conserve toujours
+                au moins une ligne.
+            */
+
             if (
                 lignes.length === 1
             ) {
@@ -176,11 +252,13 @@ function creerLigneIngredient(
                     )
                     .value = "";
 
+
                 ligne
                     .querySelector(
                         ".ingredient-unite"
                     )
                     .value = "";
+
 
                 ligne
                     .querySelector(
@@ -188,18 +266,20 @@ function creerLigneIngredient(
                     )
                     .value = "";
 
+
                 ligne
                     .querySelector(
                         ".ingredient-proportionnel"
                     )
-                    .checked = true;
+                    .checked =
+                        true;
+
 
                 return;
             }
 
 
             ligne.remove();
-
         }
     );
 
@@ -222,21 +302,29 @@ function transformerEnListe(
     return valeur
         .split("\n")
         .map(
-            function (ligne) {
+            function (
+                ligne
+            ) {
 
                 return ligne.trim();
-
             }
         )
         .filter(
-            function (ligne) {
+            function (
+                ligne
+            ) {
 
-                return ligne !== "";
-
+                return (
+                    ligne !== ""
+                );
             }
         );
 }
 
+
+/* =================================
+   CASES COCHÉES
+================================= */
 
 function recupererCasesCochees(
     nom
@@ -246,15 +334,21 @@ function recupererCasesCochees(
         document.querySelectorAll(
             `input[name="${nom}"]:checked`
         )
-    ).map(
-        function (caseCochee) {
+    )
+        .map(
+            function (
+                caseCochee
+            ) {
 
-            return caseCochee.value;
-
-        }
-    );
+                return caseCochee.value;
+            }
+        );
 }
 
+
+/* =================================
+   CATÉGORIE AFFICHÉE
+================================= */
 
 function obtenirCategorieAffichee(
     categorie
@@ -290,6 +384,10 @@ function obtenirCategorieAffichee(
 }
 
 
+/* =================================
+   CONVERSION QUANTITÉ
+================================= */
+
 function convertirQuantite(
     valeur
 ) {
@@ -308,7 +406,6 @@ function convertirQuantite(
     ) {
 
         return null;
-
     }
 
 
@@ -328,7 +425,6 @@ function convertirQuantite(
         throw new Error(
             `La quantité « ${valeur} » n’est pas valide.`
         );
-
     }
 
 
@@ -354,7 +450,9 @@ function recupererIngredients() {
 
 
     lignes.forEach(
-        function (ligne) {
+        function (
+            ligne
+        ) {
 
             const quantiteTexte =
                 ligne
@@ -401,7 +499,6 @@ function recupererIngredients() {
             ) {
 
                 return;
-
             }
 
 
@@ -412,7 +509,6 @@ function recupererIngredients() {
                 throw new Error(
                     "Chaque ingrédient doit avoir un nom."
                 );
-
             }
 
 
@@ -433,23 +529,53 @@ function recupererIngredients() {
                     proportionnel
 
             });
-
         }
     );
 
 
     if (
-        ingredients.length === 0
+        ingredients.length ===
+        0
     ) {
 
         throw new Error(
             "Ajoute au moins un ingrédient."
         );
-
     }
 
 
     return ingredients;
+}
+
+
+/* =================================
+   VISIBILITÉ
+================================= */
+
+function recupererVisibilite() {
+
+    const champ =
+        document.querySelector(
+            'input[name="visibilite"]:checked'
+        );
+
+
+    if (!champ) {
+
+        return "publique";
+    }
+
+
+    if (
+        champ.value !== "publique" &&
+        champ.value !== "foyer"
+    ) {
+
+        return "publique";
+    }
+
+
+    return champ.value;
 }
 
 
@@ -461,9 +587,11 @@ function construireRecette() {
 
     const etapes =
         transformerEnListe(
-            document.getElementById(
-                "etapes"
-            ).value
+            document
+                .getElementById(
+                    "etapes"
+                )
+                .value
         );
 
 
@@ -474,20 +602,22 @@ function construireRecette() {
         throw new Error(
             "Ajoute au moins une étape."
         );
-
     }
 
 
     const categorie =
-        document.getElementById(
-            "categorie"
-        ).value;
+        document
+            .getElementById(
+                "categorie"
+            )
+            .value;
 
 
     const nom =
-        document.getElementById(
-            "nom"
-        )
+        document
+            .getElementById(
+                "nom"
+            )
             .value
             .trim();
 
@@ -497,7 +627,27 @@ function construireRecette() {
         throw new Error(
             "Renseigne le nom de la recette."
         );
+    }
 
+
+    const visibilite =
+        recupererVisibilite();
+
+
+    /*
+        Une recette foyer doit
+        obligatoirement être rattachée
+        au foyer de l'utilisateur.
+    */
+
+    if (
+        visibilite === "foyer" &&
+        !foyerId
+    ) {
+
+        throw new Error(
+            "Impossible de déterminer votre foyer."
+        );
     }
 
 
@@ -583,7 +733,18 @@ function construireRecette() {
                     "astuce"
                 )
                 .value
-                .trim()
+                .trim(),
+
+        /*
+            Nouvelle logique
+            de visibilité.
+        */
+
+        visibilite:
+            visibilite,
+
+        foyer_id:
+            foyerId
 
     };
 }
@@ -605,7 +766,9 @@ function cocherValeurs(
 
 
     cases.forEach(
-        function (caseCochee) {
+        function (
+            caseCochee
+        ) {
 
             caseCochee.checked =
                 Array.isArray(
@@ -614,9 +777,38 @@ function cocherValeurs(
                 valeurs.includes(
                     caseCochee.value
                 );
-
         }
     );
+}
+
+
+/* =================================
+   COCHER LA VISIBILITÉ
+================================= */
+
+function cocherVisibilite(
+    visibilite
+) {
+
+    const valeur =
+        visibilite === "foyer"
+            ? "foyer"
+            : "publique";
+
+
+    const champ =
+        document.querySelector(
+            `input[name="visibilite"][value="${valeur}"]`
+        );
+
+
+    if (
+        champ
+    ) {
+
+        champ.checked =
+            true;
+    }
 }
 
 
@@ -633,7 +825,8 @@ function remplirFormulaire(
             "nom"
         )
         .value =
-            recette.nom || "";
+            recette.nom ||
+            "";
 
 
     document
@@ -641,7 +834,8 @@ function remplirFormulaire(
             "categorie"
         )
         .value =
-            recette.categorie || "";
+            recette.categorie ||
+            "";
 
 
     document
@@ -649,7 +843,8 @@ function remplirFormulaire(
             "description"
         )
         .value =
-            recette.description || "";
+            recette.description ||
+            "";
 
 
     document
@@ -657,7 +852,8 @@ function remplirFormulaire(
             "preparation"
         )
         .value =
-            recette.preparation ?? "";
+            recette.preparation ??
+            "";
 
 
     document
@@ -665,7 +861,8 @@ function remplirFormulaire(
             "cuisson"
         )
         .value =
-            recette.cuisson ?? "";
+            recette.cuisson ??
+            "";
 
 
     document
@@ -673,7 +870,8 @@ function remplirFormulaire(
             "personnes"
         )
         .value =
-            recette.personnes ?? "";
+            recette.personnes ??
+            "";
 
 
     document
@@ -681,7 +879,8 @@ function remplirFormulaire(
             "difficulte"
         )
         .value =
-            recette.difficulte || "";
+            recette.difficulte ||
+            "";
 
 
     document
@@ -692,9 +891,10 @@ function remplirFormulaire(
             Array.isArray(
                 recette.etapes
             )
-                ? recette.etapes.join(
-                    "\n"
-                )
+                ? recette.etapes
+                    .join(
+                        "\n"
+                    )
                 : "";
 
 
@@ -703,7 +903,22 @@ function remplirFormulaire(
             "astuce"
         )
         .value =
-            recette.astuce || "";
+            recette.astuce ||
+            "";
+
+
+    /*
+        Visibilité.
+
+        Les anciennes recettes,
+        qui n'ont pas encore ce champ,
+        restent publiques.
+    */
+
+    cocherVisibilite(
+        recette.visibilite ||
+        "publique"
+    );
 
 
     cocherValeurs(
@@ -725,14 +940,16 @@ function remplirFormulaire(
 
 
     conteneurIngredients
-        .innerHTML = "";
+        .innerHTML =
+            "";
 
 
     if (
         Array.isArray(
             recette.ingredients
         ) &&
-        recette.ingredients.length > 0
+        recette.ingredients.length >
+            0
     ) {
 
         recette.ingredients
@@ -743,7 +960,6 @@ function remplirFormulaire(
     } else {
 
         creerLigneIngredient();
-
     }
 }
 
@@ -825,19 +1041,15 @@ async function chargerRecetteAModifier() {
             throw new Error(
                 "Cette recette n’existe pas."
             );
-
         }
 
 
         /*
-            Si la recette possède déjà
-            un créateur, seul celui-ci
-            peut accéder au formulaire
-            de modification.
+            Seul le créateur peut
+            modifier la recette.
 
-            Les anciennes recettes
-            sans created_by restent
-            modifiables pour l'instant.
+            La RLS Supabase reste
+            également la vraie sécurité.
         */
 
         if (
@@ -849,7 +1061,6 @@ async function chargerRecetteAModifier() {
             throw new Error(
                 "Vous ne pouvez pas modifier cette recette."
             );
-
         }
 
 
@@ -863,7 +1074,9 @@ async function chargerRecetteAModifier() {
                 "";
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur pendant le chargement :",
@@ -880,7 +1093,6 @@ async function chargerRecetteAModifier() {
         boutonEnregistrer
             .disabled =
                 true;
-
     }
 }
 
@@ -892,6 +1104,11 @@ async function chargerRecetteAModifier() {
 async function ajouterRecette(
     recette
 ) {
+
+    /*
+        Le créateur est ajouté
+        uniquement lors de la création.
+    */
 
     const recetteAvecCreateur = {
 
@@ -939,10 +1156,14 @@ async function modifierRecette(
 
     /*
         created_by n'est volontairement
-        PAS modifié ici.
+        PAS modifié.
 
-        Le créateur original reste donc
+        Le créateur original reste
         propriétaire de la recette.
+
+        foyer_id et visibilite peuvent
+        en revanche être modifiés :
+        publique <-> foyer.
     */
 
     const {
@@ -959,6 +1180,10 @@ async function modifierRecette(
             .eq(
                 "id",
                 identifiantRecette
+            )
+            .eq(
+                "created_by",
+                utilisateurConnecte.id
             )
             .select(
                 "id"
@@ -985,7 +1210,6 @@ boutonAjouterIngredient
         function () {
 
             creerLigneIngredient();
-
         }
     );
 
@@ -1031,7 +1255,16 @@ formulaire.addEventListener(
                 throw new Error(
                     "Vous devez être connecté pour enregistrer une recette."
                 );
+            }
 
+
+            if (
+                !foyerId
+            ) {
+
+                throw new Error(
+                    "Impossible de déterminer votre foyer."
+                );
             }
 
 
@@ -1064,7 +1297,9 @@ formulaire.addEventListener(
                 }`;
 
 
-        } catch (erreur) {
+        } catch (
+            erreur
+        ) {
 
             console.error(
                 "Erreur pendant l’enregistrement :",
@@ -1088,9 +1323,7 @@ formulaire.addEventListener(
                     modeModification
                         ? "Enregistrer les modifications"
                         : "Enregistrer la recette";
-
         }
-
     }
 );
 
@@ -1103,6 +1336,10 @@ async function initialiserPage() {
 
     try {
 
+        /*
+            1. Utilisateur
+        */
+
         utilisateurConnecte =
             await recupererUtilisateurConnecte();
 
@@ -1112,14 +1349,34 @@ async function initialiserPage() {
         ) {
 
             return;
-
         }
 
+
+        /*
+            2. Foyer
+        */
+
+        const foyer =
+            await recupererFoyerUtilisateur();
+
+
+        if (!foyer) {
+
+            return;
+        }
+
+
+        /*
+            3. Nouvelle recette
+               ou modification.
+        */
 
         await chargerRecetteAModifier();
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur d'initialisation :",
@@ -1136,9 +1393,12 @@ async function initialiserPage() {
         boutonEnregistrer
             .disabled =
                 true;
-
     }
 }
 
+
+/* =================================
+   DÉMARRAGE
+================================= */
 
 initialiserPage();
