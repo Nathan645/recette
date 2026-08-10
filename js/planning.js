@@ -5,6 +5,7 @@
 let recetteSelectionneePlanning =
     null;
 
+
 let modeRepasPlanning =
     "recette";
 
@@ -12,6 +13,40 @@ let modeRepasPlanning =
 const champPersonnesRepas =
     document.getElementById(
         "personnes-repas"
+    );
+
+
+/* =================================
+   COPIE DE SEMAINE
+================================= */
+
+const boutonCopierSemaine =
+    document.getElementById(
+        "copier-semaine"
+    );
+
+
+const popupCopieSemaine =
+    document.getElementById(
+        "popup-copie-semaine"
+    );
+
+
+const boutonFermerCopieSemaine =
+    document.getElementById(
+        "fermer-copie-semaine"
+    );
+
+
+const boutonValiderCopieSemaine =
+    document.getElementById(
+        "valider-copie-semaine"
+    );
+
+
+const messageCopieSemaine =
+    document.getElementById(
+        "message-copie-semaine"
     );
 
 
@@ -115,6 +150,506 @@ function marquerRecetteSelectionnee() {
 
 
 /* =================================
+   OUTIL DATE ISO POUR LA COPIE
+================================= */
+
+function decalerDateISO(
+    dateISO,
+    nombreJours
+) {
+
+    /*
+        On parse manuellement la date
+        pour éviter les décalages liés
+        aux fuseaux horaires.
+    */
+
+    const morceaux =
+        String(dateISO)
+            .split("-")
+            .map(Number);
+
+
+    if (
+        morceaux.length !== 3 ||
+        morceaux.some(
+            function (valeur) {
+                return !Number.isFinite(valeur);
+            }
+        )
+    ) {
+
+        throw new Error(
+            "Une date du planning est invalide."
+        );
+    }
+
+
+    const date =
+        new Date(
+            morceaux[0],
+            morceaux[1] - 1,
+            morceaux[2]
+        );
+
+
+    date.setDate(
+        date.getDate() +
+        nombreJours
+    );
+
+
+    return formaterDateISO(
+        date
+    );
+}
+
+
+/* =================================
+   OUVRIR / FERMER
+   POPUP COPIE SEMAINE
+================================= */
+
+function ouvrirPopupCopieSemaine() {
+
+    messageCopieSemaine.textContent =
+        "";
+
+
+    const choixSemaineSuivante =
+        document.querySelector(
+            'input[name="destination-copie-semaine"][value="suivante"]'
+        );
+
+
+    if (
+        choixSemaineSuivante
+    ) {
+
+        choixSemaineSuivante.checked =
+            true;
+    }
+
+
+    popupCopieSemaine.hidden =
+        false;
+}
+
+
+function fermerPopupCopieSemaine() {
+
+    popupCopieSemaine.hidden =
+        true;
+
+
+    messageCopieSemaine.textContent =
+        "";
+
+
+    boutonValiderCopieSemaine.disabled =
+        false;
+
+
+    boutonValiderCopieSemaine.textContent =
+        "Copier les repas";
+}
+
+
+/* =================================
+   COPIER UNE SEMAINE
+================================= */
+
+async function copierSemainePlanning() {
+
+    /*
+        S'il n'y a aucun repas dans
+        la semaine affichée, inutile
+        d'interroger Supabase.
+    */
+
+    if (
+        repasSemaine.length === 0
+    ) {
+
+        messageCopieSemaine.textContent =
+            "Il n'y a aucun repas à copier cette semaine.";
+
+        return;
+    }
+
+
+    const choixDestination =
+        document.querySelector(
+            'input[name="destination-copie-semaine"]:checked'
+        );
+
+
+    const destination =
+        choixDestination
+            ? choixDestination.value
+            : "suivante";
+
+
+    const decalage =
+        destination === "precedente"
+            ? -7
+            : 7;
+
+
+    const debutSemaineCible =
+        ajouterJours(
+            debutSemaine,
+            decalage
+        );
+
+
+    const finSemaineCible =
+        ajouterJours(
+            debutSemaineCible,
+            6
+        );
+
+
+    const dateDebutCible =
+        formaterDateISO(
+            debutSemaineCible
+        );
+
+
+    const dateFinCible =
+        formaterDateISO(
+            finSemaineCible
+        );
+
+
+    boutonValiderCopieSemaine.disabled =
+        true;
+
+
+    boutonValiderCopieSemaine.textContent =
+        "Copie en cours…";
+
+
+    messageCopieSemaine.textContent =
+        "";
+
+
+    try {
+
+        /*
+            1. On récupère les créneaux
+            déjà occupés dans la semaine
+            de destination.
+        */
+
+        const {
+            data: repasExistants,
+            error: erreurRepasExistants
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .select(`
+                    id,
+                    date,
+                    moment
+                `)
+                .eq(
+                    "foyer_id",
+                    foyerId
+                )
+                .gte(
+                    "date",
+                    dateDebutCible
+                )
+                .lte(
+                    "date",
+                    dateFinCible
+                );
+
+
+        if (
+            erreurRepasExistants
+        ) {
+
+            throw erreurRepasExistants;
+        }
+
+
+        const creneauxOccupes =
+            new Set(
+                (
+                    Array.isArray(
+                        repasExistants
+                    )
+                        ? repasExistants
+                        : []
+                )
+                    .map(
+                        function (repas) {
+
+                            return (
+                                repas.date +
+                                "__" +
+                                repas.moment
+                            );
+                        }
+                    )
+            );
+
+
+        /*
+            2. On prépare uniquement
+            les repas dont le créneau
+            cible est encore vide.
+        */
+
+        const repasACopier =
+            [];
+
+
+        let nombreIgnores =
+            0;
+
+
+        repasSemaine.forEach(
+            function (repas) {
+
+                const dateCible =
+                    decalerDateISO(
+                        repas.date,
+                        decalage
+                    );
+
+
+                const cleCreneau =
+                    dateCible +
+                    "__" +
+                    repas.moment;
+
+
+                if (
+                    creneauxOccupes.has(
+                        cleCreneau
+                    )
+                ) {
+
+                    nombreIgnores +=
+                        1;
+
+                    return;
+                }
+
+
+                repasACopier.push({
+
+                    foyer_id:
+                        foyerId,
+
+                    date:
+                        dateCible,
+
+                    moment:
+                        repas.moment,
+
+                    nom:
+                        repas.nom,
+
+                    recette_id:
+                        repas.recette_id ||
+                        null,
+
+                    personnes:
+                        Number(
+                            repas.personnes
+                        ) > 0
+                            ? Number(
+                                repas.personnes
+                            )
+                            : (
+                                nombrePersonnesParDefaut ||
+                                2
+                            ),
+
+                    created_by:
+                        utilisateurConnecte.id
+
+                });
+
+
+                /*
+                    On marque immédiatement
+                    le créneau comme occupé
+                    pour éviter un doublon
+                    éventuel dans le tableau.
+                */
+
+                creneauxOccupes.add(
+                    cleCreneau
+                );
+            }
+        );
+
+
+        /*
+            3. Tous les créneaux sont
+            déjà occupés.
+        */
+
+        if (
+            repasACopier.length === 0
+        ) {
+
+            messageCopieSemaine.textContent =
+                nombreIgnores === 1
+                    ? "Aucun repas copié : le créneau cible est déjà occupé."
+                    : `Aucun repas copié : ${nombreIgnores} créneaux sont déjà occupés.`;
+
+
+            boutonValiderCopieSemaine.disabled =
+                false;
+
+
+            boutonValiderCopieSemaine.textContent =
+                "Copier les repas";
+
+
+            return;
+        }
+
+
+        /*
+            4. Insertion en une seule
+            requête Supabase.
+        */
+
+        const {
+            error: erreurInsertion
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .insert(
+                    repasACopier
+                );
+
+
+        if (
+            erreurInsertion
+        ) {
+
+            throw erreurInsertion;
+        }
+
+
+        /*
+            5. Message de résultat.
+        */
+
+        const nombreCopies =
+            repasACopier.length;
+
+
+        let message =
+            nombreCopies === 1
+                ? "1 repas copié"
+                : `${nombreCopies} repas copiés`;
+
+
+        if (
+            nombreIgnores > 0
+        ) {
+
+            message +=
+                nombreIgnores === 1
+                    ? ", 1 créneau déjà occupé"
+                    : `, ${nombreIgnores} créneaux déjà occupés`;
+        }
+
+
+        messageCopieSemaine.textContent =
+            `${message} ✓`;
+
+
+        /*
+            On laisse le résultat visible
+            un court instant avant de
+            fermer la popup.
+        */
+
+        setTimeout(
+            function () {
+
+                fermerPopupCopieSemaine();
+
+            },
+            1400
+        );
+
+
+    } catch (erreur) {
+
+        console.error(
+            "Erreur copie de semaine :",
+            erreur
+        );
+
+
+        messageCopieSemaine.textContent =
+            erreur.message ||
+            "Impossible de copier cette semaine.";
+
+
+        boutonValiderCopieSemaine.disabled =
+            false;
+
+
+        boutonValiderCopieSemaine.textContent =
+            "Copier les repas";
+    }
+}
+
+
+/* =================================
+   ÉVÉNEMENTS COPIE SEMAINE
+================================= */
+
+boutonCopierSemaine.addEventListener(
+    "click",
+    ouvrirPopupCopieSemaine
+);
+
+
+boutonFermerCopieSemaine.addEventListener(
+    "click",
+    fermerPopupCopieSemaine
+);
+
+
+boutonValiderCopieSemaine.addEventListener(
+    "click",
+    copierSemainePlanning
+);
+
+
+popupCopieSemaine.addEventListener(
+    "click",
+    function (evenement) {
+
+        if (
+            evenement.target ===
+            popupCopieSemaine
+        ) {
+
+            fermerPopupCopieSemaine();
+        }
+    }
+);
+
+
+/* =================================
    NAVIGATION SEMAINE
 ================================= */
 
@@ -127,6 +662,7 @@ boutonSemainePrecedente.addEventListener(
                 debutSemaine,
                 -7
             );
+
 
         await rafraichirPlanning();
     }
@@ -143,6 +679,7 @@ boutonSemaineSuivante.addEventListener(
                 7
             );
 
+
         await rafraichirPlanning();
     }
 );
@@ -156,6 +693,7 @@ boutonAujourdhui.addEventListener(
             obtenirDebutSemaine(
                 new Date()
             );
+
 
         await rafraichirPlanning();
     }
@@ -180,6 +718,7 @@ grilleSemaine.addEventListener(
 
             recetteSelectionneePlanning =
                 null;
+
 
             modeRepasPlanning =
                 "recette";
@@ -258,6 +797,7 @@ grilleSemaine.addEventListener(
             modeRepasPlanning =
                 "libre";
 
+
             recetteSelectionneePlanning =
                 null;
         }
@@ -285,7 +825,6 @@ grilleSemaine.addEventListener(
         );
     }
 );
-
 
 /* =================================
    FERMER POP-UP
@@ -316,12 +855,33 @@ document.addEventListener(
     "keydown",
     function (evenement) {
 
+        /*
+            Popup repas
+        */
+
         if (
-            evenement.key === "Escape" &&
+            evenement.key ===
+                "Escape" &&
             !popupRepas.hidden
         ) {
 
             fermerPopup();
+
+            return;
+        }
+
+
+        /*
+            Popup copie semaine
+        */
+
+        if (
+            evenement.key ===
+                "Escape" &&
+            !popupCopieSemaine.hidden
+        ) {
+
+            fermerPopupCopieSemaine();
         }
     }
 );
@@ -785,7 +1345,6 @@ champPersonnesRepas.addEventListener(
             valeur;
     }
 );
-
 
 /* =================================
    INITIALISATION
