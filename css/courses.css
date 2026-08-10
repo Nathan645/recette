@@ -810,6 +810,61 @@
     }
 }
 
+/* =================================
+   BOUTON AUJOURD'HUI
+   IDENTIQUE AU PLANNING
+================================= */
+
+.actions-semaine-courses {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 14px;
+}
+
+
+.actions-semaine-courses
+.bouton-aujourdhui {
+    padding: 8px 15px;
+
+    border: 1px solid var(--vert);
+    border-radius: 20px;
+
+    background-color: transparent;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.actions-semaine-courses
+.bouton-aujourdhui:hover {
+    background-color: var(--vert);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.actions-semaine-courses
+.bouton-aujourdhui:active {
+    transform: translateY(0);
+}
+
+
 
 /* =================================
    MOBILE
@@ -879,6 +934,12 @@
 
     .quantite-article-course {
         white-space: normal;
+    }
+
+   
+    .actions-semaine-courses
+    .bouton-aujourdhui {
+        padding: 8px 14px;
     }
 }
 
