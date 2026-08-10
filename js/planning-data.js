@@ -71,6 +71,7 @@ async function recupererUtilisateurEtFoyer() {
 /* =================================
    NOMBRE DE PERSONNES PAR DÉFAUT
 ================================= */
+
 async function chargerNombrePersonnesParDefaut() {
 
     if (!foyerId) {
@@ -125,6 +126,7 @@ async function chargerNombrePersonnesParDefaut() {
             ? nombre
             : 2;
 }
+
 
 /* =================================
    RECETTES
@@ -187,6 +189,21 @@ async function chargerRepasSemaine() {
         );
 
 
+    /*
+        LOG TEMPORAIRE
+
+        Permet de vérifier quelles dates
+        sont réellement demandées à Supabase.
+    */
+
+    console.log(
+        "CHARGEMENT PLANNING :",
+        dateDebut,
+        "→",
+        dateFin
+    );
+
+
     const {
         data,
         error
@@ -214,10 +231,23 @@ async function chargerRepasSemaine() {
             .lte(
                 "date",
                 dateFin
+            )
+            .order(
+                "date",
+                {
+                    ascending:
+                        true
+                }
             );
 
 
     if (error) {
+
+        console.error(
+            "ERREUR CHARGEMENT PLANNING :",
+            error
+        );
+
         throw error;
     }
 
@@ -226,6 +256,54 @@ async function chargerRepasSemaine() {
         Array.isArray(data)
             ? data
             : [];
+
+
+    /*
+        LOG TEMPORAIRE
+
+        Très important pour notre test :
+        on va voir exactement ce que
+        Supabase renvoie au front.
+    */
+
+    console.log(
+        "REPAS SEMAINE CHARGÉS :",
+        repasSemaine
+    );
+
+
+    /*
+        Petit résumé pratique pour
+        lire plus facilement la console.
+    */
+
+    console.table(
+        repasSemaine.map(
+            function (repas) {
+
+                return {
+
+                    id:
+                        repas.id,
+
+                    date:
+                        repas.date,
+
+                    moment:
+                        repas.moment,
+
+                    nom:
+                        repas.nom,
+
+                    recette_id:
+                        repas.recette_id,
+
+                    personnes:
+                        repas.personnes
+                };
+            }
+        )
+    );
 }
 
 
