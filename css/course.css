@@ -1,0 +1,573 @@
+/* =================================
+   PAGE COURSES
+================================= */
+
+.page-courses {
+    width: min(
+        1100px,
+        calc(100% - 32px)
+    );
+
+    margin: 0 auto;
+
+    padding:
+        48px 0
+        70px;
+}
+
+
+/* =================================
+   ENTÊTE PAGE
+================================= */
+
+.entete-courses {
+    margin-bottom: 36px;
+}
+
+
+.sur-titre-courses {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: var(--vert);
+
+    font-size: 14px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+
+.entete-courses h2 {
+    margin:
+        0 0
+        10px;
+
+    font-size:
+        clamp(
+            34px,
+            5vw,
+            50px
+        );
+
+    line-height: 1.05;
+}
+
+
+.entete-courses p {
+    max-width: 700px;
+
+    margin: 0;
+
+    color: #6d6d68;
+
+    font-size: 17px;
+    line-height: 1.6;
+}
+
+
+/* =================================
+   NAVIGATION SEMAINE
+================================= */
+
+.navigation-semaine-courses {
+    display: grid;
+
+    grid-template-columns:
+        70px
+        1fr
+        70px;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-top: 36px;
+}
+
+
+.semaine-courses-actuelle {
+    text-align: center;
+}
+
+
+.numero-semaine-courses {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #77766f;
+
+    font-size: 13px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+
+.semaine-courses-actuelle h3 {
+    margin: 0;
+
+    font-size:
+        clamp(
+            24px,
+            4vw,
+            34px
+        );
+}
+
+
+.navigation-semaine-courses
+.bouton-navigation-semaine {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    margin: 0 auto;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 50%;
+
+    background-color: white;
+
+    color: var(--vert);
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.navigation-semaine-courses
+.bouton-navigation-semaine:hover {
+    background-color: #f3f1e9;
+
+    transform:
+        translateY(-1px);
+}
+
+
+.actions-semaine-courses {
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 14px;
+}
+
+
+/* =================================
+   RÉSUMÉ
+================================= */
+
+.resume-courses {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(
+                0,
+                1fr
+            )
+        );
+
+    gap: 14px;
+
+    margin-top: 34px;
+    margin-bottom: 22px;
+}
+
+
+.resume-course-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 20px;
+
+    border: 1px solid #e7e3d9;
+    border-radius: 16px;
+
+    background-color: white;
+}
+
+
+.resume-course-label {
+    color: #85847e;
+
+    font-size: 13px;
+}
+
+
+.resume-course-item strong {
+    font-size: 28px;
+
+    color: var(--texte);
+}
+
+
+/* =================================
+   CARTE COURSES
+================================= */
+
+.carte-courses {
+    padding: 28px;
+
+    border: 1px solid #e7e3d9;
+    border-radius: 20px;
+
+    background-color: white;
+
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.035);
+}
+
+
+.entete-carte-courses {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+}
+
+
+.petit-titre-courses {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #8b8a82;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+
+.entete-carte-courses h3 {
+    margin: 0;
+
+    font-size: 24px;
+}
+
+
+/* =================================
+   LISTE DE COURSES
+================================= */
+
+.liste-courses {
+    display: grid;
+
+    gap: 12px;
+}
+
+
+.message-chargement-courses {
+    margin: 0;
+
+    padding: 24px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+
+    text-align: center;
+
+    color: #77766f;
+}
+
+
+/* =================================
+   GROUPES
+================================= */
+
+.groupe-courses {
+    border-radius: 16px;
+
+    background-color: #f8f7f2;
+
+    overflow: hidden;
+}
+
+
+.entete-groupe-courses {
+    padding:
+        14px 18px;
+
+    border-bottom: 1px solid #e7e3d9;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+
+.liste-groupe-courses {
+    display: grid;
+}
+
+
+/* =================================
+   ARTICLE
+================================= */
+
+.article-course {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    padding:
+        14px 18px;
+
+    border-bottom: 1px solid #ece8df;
+}
+
+
+.article-course:last-child {
+    border-bottom: none;
+}
+
+
+.article-course input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+
+    flex: 0 0 auto;
+
+    accent-color: var(--vert);
+
+    cursor: pointer;
+}
+
+
+.article-course label {
+    display: flex;
+
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    width: 100%;
+
+    cursor: pointer;
+}
+
+
+.nom-article-course {
+    font-weight: 700;
+
+    color: var(--texte);
+}
+
+
+.quantite-article-course {
+    color: #6f6e68;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+}
+
+
+.article-course.coche {
+    opacity: 0.55;
+}
+
+
+.article-course.coche
+.nom-article-course {
+    text-decoration: line-through;
+}
+
+
+/* =================================
+   MESSAGE VIDE
+================================= */
+
+.message-vide-courses {
+    margin-top: 22px;
+
+    padding: 36px 28px;
+
+    border: 1px dashed #cec7bb;
+    border-radius: 20px;
+
+    background-color: #fbfaf6;
+
+    text-align: center;
+}
+
+
+.icone-vide-courses {
+    margin-bottom: 10px;
+
+    font-size: 38px;
+}
+
+
+.message-vide-courses h3 {
+    margin:
+        0 0
+        8px;
+}
+
+
+.message-vide-courses p {
+    max-width: 520px;
+
+    margin:
+        0 auto;
+
+    color: #74736d;
+
+    line-height: 1.5;
+}
+
+
+.bouton-retour-planning {
+    display: inline-flex;
+
+    margin-top: 18px;
+
+    padding:
+        11px 18px;
+
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: white;
+
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+/* =================================
+   ERREUR
+================================= */
+
+.message-erreur-courses {
+    margin-top: 22px;
+
+    padding: 28px;
+
+    border: 1px solid #ead4cf;
+    border-radius: 18px;
+
+    background-color: #fff6f3;
+
+    text-align: center;
+}
+
+
+.message-erreur-courses h3 {
+    margin-top: 0;
+}
+
+
+.message-erreur-courses p {
+    margin-bottom: 0;
+
+    color: #7d5e57;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (
+    max-width: 760px
+) {
+
+    .page-courses {
+        width:
+            min(
+                100% - 24px,
+                1100px
+            );
+
+        padding:
+            30px 0
+            50px;
+    }
+
+
+    .navigation-semaine-courses {
+        grid-template-columns:
+            50px
+            1fr
+            50px;
+
+        gap: 10px;
+    }
+
+
+    .navigation-semaine-courses
+    .bouton-navigation-semaine {
+        width: 46px;
+        height: 46px;
+
+        font-size: 24px;
+    }
+
+
+    .resume-courses {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .carte-courses {
+        padding:
+            22px 16px;
+    }
+
+
+    .article-course {
+        padding:
+            13px 14px;
+    }
+
+
+    .article-course label {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 3px;
+    }
+
+
+    .quantite-article-course {
+        white-space: normal;
+    }
+}
