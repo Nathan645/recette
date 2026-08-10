@@ -1,112 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
     
-    <script>
-    document.addEventListener("DOMContentLoaded", async function () {
-
-        try {
-
-            const {
-                data: donneesUtilisateur,
-                error: erreurUtilisateur
-            } =
-                await window.supabaseClient
-                    .auth
-                    .getUser();
-
-
-            if (erreurUtilisateur) {
-                throw erreurUtilisateur;
-            }
-
-
-            const utilisateur =
-                donneesUtilisateur.user;
-
-
-            /* =========================
-               PAS CONNECTÉ
-            ========================= */
-
-            if (!utilisateur) {
-
-                window.location.replace(
-                    "compte.html"
-                );
-
-                return;
-            }
-
-
-            /* =========================
-               VÉRIFIER LE FOYER
-            ========================= */
-
-            const {
-                data: membre,
-                error: erreurMembre
-            } =
-                await window.supabaseClient
-                    .from("membres_foyer")
-                    .select("foyer_id")
-                    .eq(
-                        "user_id",
-                        utilisateur.id
-                    )
-                    .limit(1)
-                    .maybeSingle();
-
-
-            if (erreurMembre) {
-                throw erreurMembre;
-            }
-
-
-            /* =========================
-               AUCUN FOYER
-            ========================= */
-
-            if (!membre) {
-
-                window.location.replace(
-                    "foyer.html"
-                );
-
-                return;
-            }
-
-
-            /*
-                Sinon :
-                utilisateur connecté
-                + foyer existant.
-
-                On ne fait rien :
-                index.html continue
-                normalement.
-            */
-
-        } catch (erreur) {
-
-            console.error(
-                "Erreur vérification accueil :",
-                erreur
-            );
-
-
-            /*
-                En cas de doute,
-                on renvoie vers compte.
-            */
-
-            window.location.replace(
-                "compte.html"
-            );
-        }
-
-    });
-</script>
-    
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -116,7 +10,60 @@
 </head>
 
 <body>
+    
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
 
+    <script>
+    document.addEventListener("DOMContentLoaded", async function () {
+
+        const {
+            data: donneesUtilisateur
+        } =
+            await window.supabaseClient
+                .auth
+                .getUser();
+
+
+        const utilisateur =
+            donneesUtilisateur.user;
+
+
+        if (!utilisateur) {
+
+            window.location.replace(
+                "compte.html"
+            );
+
+            return;
+        }
+
+
+        const {
+            data: membre
+        } =
+            await window.supabaseClient
+                .from("membres_foyer")
+                .select("foyer_id")
+                .eq(
+                    "user_id",
+                    utilisateur.id
+                )
+                .limit(1)
+                .maybeSingle();
+
+
+        if (!membre) {
+
+            window.location.replace(
+                "foyer.html"
+            );
+        }
+
+    });
+</script>
+    
     <header class="entete-principale">
 
     <div class="bloc-marque">
@@ -467,9 +414,6 @@
         <p>Le carnet de recettes de notre famille ❤️</p>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/config.js"></script>
-    <script src="js/supabase.js"></script>
     <script src="js/session.js"></script>
     <script src="js/app.js"></script>
 
