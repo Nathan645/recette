@@ -545,6 +545,137 @@
     opacity: 0.45;
 }
 
+/* =================================
+   NOMBRE DE PERSONNES DU FOYER
+================================= */
+
+.bloc-personnes-foyer {
+    margin-top: 24px;
+    padding-top: 22px;
+
+    border-top: 1px solid #e7e3d9;
+}
+
+
+/* =================================
+   LABEL
+================================= */
+
+.bloc-personnes-foyer label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 14px;
+    font-weight: 700;
+
+    color: var(--texte);
+}
+
+
+/* =================================
+   CONTRÔLE
+================================= */
+
+.controle-personnes-foyer {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+/* =================================
+   CHAMP NOMBRE
+================================= */
+
+.controle-personnes-foyer input {
+    width: 90px;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-weight: 700;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.controle-personnes-foyer input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(70, 95, 70, 0.10);
+}
+
+
+/* =================================
+   BOUTON ENREGISTRER
+================================= */
+
+.bouton-enregistrer-personnes {
+    padding: 11px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bouton-enregistrer-personnes:hover {
+    transform: translateY(-1px);
+}
+
+
+.bouton-enregistrer-personnes:disabled {
+    opacity: 0.55;
+    cursor: default;
+
+    transform: none;
+}
+
+
+/* =================================
+   MESSAGE
+================================= */
+
+.message-personnes-foyer {
+    min-height: 18px;
+
+    margin:
+        8px 0
+        0;
+
+    color: #77766f;
+
+    font-size: 13px;
+}
+
 
 /* =================================
    MOBILE
@@ -622,4 +753,21 @@
     .separateur-utilisateur {
         display: none;
     }
+
+       .controle-personnes-foyer {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+
+    .controle-personnes-foyer input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+
+    .bouton-enregistrer-personnes {
+        width: 100%;
+    }
+
 }
