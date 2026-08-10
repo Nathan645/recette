@@ -1326,219 +1326,6 @@ footer {
 
 }
 
-/* =================================
-   FORMULAIRE AJOUT RECETTE
-   SELECTS + CHOIX MULTIPLES
-================================= */
-
-
-/* =================================
-   1. MENUS DÉROULANTS
-   CATÉGORIE / DIFFICULTÉ
-================================= */
-
-form select {
-    width: 100%;
-
-    height: 52px !important;
-    min-height: 52px !important;
-
-    box-sizing: border-box;
-
-    padding:
-        0
-        42px
-        0
-        14px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius:
-        10px;
-
-    background-color:
-        #ffffff;
-
-    color:
-        var(--texte);
-
-    font:
-        inherit;
-
-    font-size:
-        16px;
-
-    outline:
-        none;
-
-    -webkit-appearance:
-        none !important;
-
-    appearance:
-        none !important;
-
-    background-image:
-        linear-gradient(
-            45deg,
-            transparent 50%,
-            var(--vert) 50%
-        ),
-        linear-gradient(
-            135deg,
-            var(--vert) 50%,
-            transparent 50%
-        );
-
-    background-position:
-        calc(100% - 18px)
-        22px,
-
-        calc(100% - 12px)
-        22px;
-
-    background-size:
-        6px 6px,
-        6px 6px;
-
-    background-repeat:
-        no-repeat;
-
-    cursor:
-        pointer;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-form select:focus {
-    border-color:
-        var(--vert);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(
-            102,
-            112,
-            90,
-            0.10
-        );
-}
-
-
-/* =================================
-   2. CHECKBOX PERSONNALISÉE
-================================= */
-
-/*
-    On garde les vraies checkbox
-    accessibles mais on supprime leur
-    apparence native.
-*/
-
-form input[type="checkbox"] {
-    width:
-        22px;
-
-    height:
-        22px;
-
-    flex:
-        0 0
-        22px;
-
-    margin:
-        0;
-
-    border:
-        2px solid
-        #cfc8bc;
-
-    border-radius:
-        7px;
-
-    background-color:
-        #ffffff;
-
-    -webkit-appearance:
-        none;
-
-    appearance:
-        none;
-
-    cursor:
-        pointer;
-
-    position:
-        relative;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
-}
-
-
-form input[type="checkbox"]:hover {
-    border-color:
-        var(--vert);
-}
-
-
-form input[type="checkbox"]:checked {
-    border-color:
-        var(--vert);
-
-    background-color:
-        var(--vert);
-}
-
-
-form input[type="checkbox"]:checked::after {
-    content:
-        "✓";
-
-    position:
-        absolute;
-
-    top:
-        50%;
-
-    left:
-        50%;
-
-    transform:
-        translate(
-            -50%,
-            -52%
-        );
-
-    color:
-        #ffffff;
-
-    font-size:
-        14px;
-
-    font-weight:
-        900;
-
-    line-height:
-        1;
-}
-
-
-/* =================================
-   CARTES ÉTIQUETTES /
-   OCCASIONS / SAISONS
-================================= */
-
-/*
-    Ces sélecteurs couvrent les labels
-    qui contiennent une checkbox dans
-    ton formulaire.
 */
 
 form label:has(
@@ -1600,11 +1387,238 @@ form label:has(
 }
 
 
-/*
-    Carte entière sélectionnée.
-*/
+/* =================================
+   FORMULAIRE AJOUT RECETTE
+================================= */
 
-form label:has(
+
+/* =================================
+   MENUS DÉROULANTS
+   CATÉGORIE / DIFFICULTÉ
+================================= */
+
+.formulaire-recette select {
+    width: 100%;
+
+    height: 48px !important;
+    min-height: 48px !important;
+
+    box-sizing: border-box;
+
+    padding:
+        0
+        42px
+        0
+        14px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 10px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font: inherit;
+    font-size: 16px;
+
+    outline: none;
+
+    -webkit-appearance: none !important;
+    appearance: none !important;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--vert) 50%
+        ),
+        linear-gradient(
+            135deg,
+            var(--vert) 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 18px) 20px,
+        calc(100% - 12px) 20px;
+
+    background-size:
+        6px 6px,
+        6px 6px;
+
+    background-repeat:
+        no-repeat;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.formulaire-recette select:focus {
+    border-color:
+        var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            102,
+            112,
+            90,
+            0.10
+        );
+}
+
+
+/* =================================
+   CHECKBOX PERSONNALISÉE
+   BASE COMMUNE
+================================= */
+
+.choix-multiples
+input[type="checkbox"],
+.option-proportionnelle
+input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+
+    flex:
+        0 0
+        22px;
+
+    margin: 0;
+
+    position: relative;
+
+    border:
+        2px solid
+        #cfc8bc;
+
+    border-radius: 7px;
+
+    background-color:
+        #ffffff;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+.choix-multiples
+input[type="checkbox"]:hover,
+.option-proportionnelle
+input[type="checkbox"]:hover {
+    border-color:
+        var(--vert);
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked,
+.option-proportionnelle
+input[type="checkbox"]:checked {
+    border-color:
+        var(--vert);
+
+    background-color:
+        var(--vert);
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked::after,
+.option-proportionnelle
+input[type="checkbox"]:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -52%
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 14px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* =================================
+   ÉTIQUETTES / OCCASIONS /
+   SAISONS
+================================= */
+
+.choix-multiples label {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 10px;
+
+    min-height: 58px;
+
+    padding:
+        12px
+        16px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 15px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.choix-multiples label:hover {
+    border-color:
+        var(--vert);
+
+    transform:
+        translateY(-1px);
+}
+
+
+.choix-multiples label:has(
     input[type="checkbox"]:checked
 ) {
     border-color:
@@ -1625,45 +1639,60 @@ form label:has(
 
 
 /* =================================
-   3. VISIBILITÉ
-   RADIO PERSONNALISÉE
+   PROPORTIONNEL
+   INGRÉDIENTS
 ================================= */
 
-form input[type="radio"] {
-    width:
-        22px;
+/*
+   Ce bloc est volontairement séparé
+   des Étiquettes / Occasions / Saisons.
 
-    height:
-        22px;
+   Il reste compact afin de tenir dans
+   la colonne "Calcul".
+*/
 
-    flex:
-        0 0
-        22px;
+.option-proportionnelle {
+    width: 100%;
+    min-width: 0;
 
-    margin:
-        0;
+    height: 48px;
+    min-height: 48px;
+
+    box-sizing: border-box;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    padding:
+        7px
+        10px;
 
     border:
-        2px solid
-        #cfc8bc;
+        1px solid
+        #d8d1c5;
 
-    border-radius:
-        7px;
+    border-radius: 12px;
 
     background-color:
         #ffffff;
 
-    -webkit-appearance:
-        none;
+    color:
+        var(--texte);
 
-    appearance:
-        none;
+    font-size: 13px;
+    font-weight: 700;
 
-    position:
-        relative;
+    line-height: 1;
 
-    cursor:
-        pointer;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    overflow: hidden;
 
     transition:
         background-color 0.2s ease,
@@ -1671,13 +1700,90 @@ form input[type="radio"] {
 }
 
 
-form input[type="radio"]:hover {
+.option-proportionnelle:hover {
     border-color:
         var(--vert);
 }
 
 
-form input[type="radio"]:checked {
+.option-proportionnelle:has(
+    .ingredient-proportionnel:checked
+) {
+    border-color:
+        var(--vert);
+
+    background-color:
+        #eef0e8;
+}
+
+
+/* Checkbox un peu plus compacte ici */
+
+.option-proportionnelle
+.ingredient-proportionnel {
+    width: 20px;
+    height: 20px;
+
+    flex:
+        0 0
+        20px;
+
+    border-radius: 6px;
+}
+
+
+.option-proportionnelle
+.ingredient-proportionnel:checked::after {
+    font-size: 13px;
+}
+
+
+/* =================================
+   VISIBILITÉ
+================================= */
+
+.option-visibilite
+input[type="radio"] {
+    width: 22px;
+    height: 22px;
+
+    flex:
+        0 0
+        22px;
+
+    margin: 0;
+
+    position: relative;
+
+    border:
+        2px solid
+        #cfc8bc;
+
+    border-radius: 7px;
+
+    background-color:
+        #ffffff;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.option-visibilite
+input[type="radio"]:hover {
+    border-color:
+        var(--vert);
+}
+
+
+.option-visibilite
+input[type="radio"]:checked {
     border-color:
         var(--vert);
 
@@ -1686,18 +1792,14 @@ form input[type="radio"]:checked {
 }
 
 
-form input[type="radio"]:checked::after {
-    content:
-        "✓";
+.option-visibilite
+input[type="radio"]:checked::after {
+    content: "✓";
 
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        50%;
-
-    left:
-        50%;
+    top: 50%;
+    left: 50%;
 
     transform:
         translate(
@@ -1708,14 +1810,10 @@ form input[type="radio"]:checked::after {
     color:
         #ffffff;
 
-    font-size:
-        14px;
+    font-size: 14px;
+    font-weight: 900;
 
-    font-weight:
-        900;
-
-    line-height:
-        1;
+    line-height: 1;
 }
 
 
@@ -1723,30 +1821,25 @@ form input[type="radio"]:checked::after {
    CARTES VISIBILITÉ
 ================================= */
 
-form label:has(
-    input[type="radio"]
-) {
-    display:
-        inline-flex;
+.option-visibilite {
+    display: inline-flex;
 
-    align-items:
-        center;
+    align-items: center;
+    justify-content: flex-start;
 
-    gap:
-        14px;
+    gap: 12px;
 
-    min-height:
-        64px;
+    min-height: 58px;
 
     padding:
-        16px 20px;
+        12px
+        16px;
 
     border:
         1px solid
         #d8d1c5;
 
-    border-radius:
-        16px;
+    border-radius: 15px;
 
     background-color:
         #ffffff;
@@ -1754,22 +1847,19 @@ form label:has(
     color:
         var(--texte);
 
-    font-weight:
-        700;
+    font-weight: 700;
 
-    cursor:
-        pointer;
+    cursor: pointer;
 
     transition:
         background-color 0.2s ease,
         border-color 0.2s ease,
+        box-shadow 0.2s ease,
         transform 0.2s ease;
 }
 
 
-form label:has(
-    input[type="radio"]
-):hover {
+.option-visibilite:hover {
     border-color:
         var(--vert);
 
@@ -1778,7 +1868,7 @@ form label:has(
 }
 
 
-form label:has(
+.option-visibilite:has(
     input[type="radio"]:checked
 ) {
     border-color:
@@ -1786,6 +1876,15 @@ form label:has(
 
     background-color:
         #eef0e8;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(
+            102,
+            112,
+            90,
+            0.10
+        );
 }
 
 
@@ -1793,8 +1892,14 @@ form label:has(
    FOCUS CLAVIER
 ================================= */
 
-form input[type="checkbox"]:focus-visible,
-form input[type="radio"]:focus-visible {
+.choix-multiples
+input[type="checkbox"]:focus-visible,
+
+.option-proportionnelle
+input[type="checkbox"]:focus-visible,
+
+.option-visibilite
+input[type="radio"]:focus-visible {
     outline:
         3px solid
         rgba(
@@ -1804,8 +1909,7 @@ form input[type="radio"]:focus-visible {
             0.20
         );
 
-    outline-offset:
-        2px;
+    outline-offset: 2px;
 }
 
 
@@ -1813,28 +1917,31 @@ form input[type="radio"]:focus-visible {
    MOBILE
 ================================= */
 
-@media (
-    max-width:
-        700px
-) {
+@media (max-width: 700px) {
 
-    form label:has(
-        input[type="checkbox"]
-    ),
-    form label:has(
-        input[type="radio"]
-    ) {
-        width:
-            100%;
-
-        min-height:
-            58px;
+    .formulaire-recette select {
+        height: 48px !important;
+        min-height: 48px !important;
     }
 
 
-    form select {
-        height:
-            52px !important;
+    .choix-multiples label {
+        min-height: 54px;
+    }
+
+
+    .option-visibilite {
+        width: 100%;
+
+        min-height: 54px;
+    }
+
+
+    .option-proportionnelle {
+        height: 46px;
+        min-height: 46px;
+
+        font-size: 12px;
     }
 
 }
