@@ -7,15 +7,18 @@ const chargementCompte =
         "chargement-compte"
     );
 
+
 const contenuMonCompte =
     document.getElementById(
         "contenu-mon-compte"
     );
 
+
 const messageErreurCompte =
     document.getElementById(
         "message-erreur-compte"
     );
+
 
 const texteErreurCompte =
     document.getElementById(
@@ -23,17 +26,21 @@ const texteErreurCompte =
     );
 
 
-/* HEADER */
+/* =================================
+   HEADER
+================================= */
 
 const infosUtilisateur =
     document.getElementById(
         "infos-utilisateur"
     );
 
+
 const prenomUtilisateur =
     document.getElementById(
         "prenom-utilisateur"
     );
+
 
 const nomFoyerUtilisateur =
     document.getElementById(
@@ -41,17 +48,21 @@ const nomFoyerUtilisateur =
     );
 
 
-/* PROFIL */
+/* =================================
+   PROFIL
+================================= */
 
 const comptePrenom =
     document.getElementById(
         "compte-prenom"
     );
 
+
 const compteNom =
     document.getElementById(
         "compte-nom"
     );
+
 
 const compteEmail =
     document.getElementById(
@@ -59,8 +70,9 @@ const compteEmail =
     );
 
 
-
-/* FOYER */
+/* =================================
+   FOYER
+================================= */
 
 const foyerNom =
     document.getElementById(
@@ -73,15 +85,18 @@ const foyerNombreMembres =
         "foyer-nombre-membres"
     );
 
+
 const foyerCode =
     document.getElementById(
         "foyer-code"
     );
 
+
 const boutonCopierCode =
     document.getElementById(
         "copier-code-foyer"
     );
+
 
 const messageCopieCode =
     document.getElementById(
@@ -89,7 +104,31 @@ const messageCopieCode =
     );
 
 
-/* MEMBRES */
+/* =================================
+   PERSONNES DU FOYER
+================================= */
+
+const champPersonnesParDefaut =
+    document.getElementById(
+        "personnes-par-defaut"
+    );
+
+
+const boutonEnregistrerPersonnes =
+    document.getElementById(
+        "enregistrer-personnes-foyer"
+    );
+
+
+const messagePersonnesFoyer =
+    document.getElementById(
+        "message-personnes-foyer"
+    );
+
+
+/* =================================
+   MEMBRES
+================================= */
 
 const listeMembresFoyer =
     document.getElementById(
@@ -97,7 +136,9 @@ const listeMembresFoyer =
     );
 
 
-/* DÉCONNEXION */
+/* =================================
+   DÉCONNEXION
+================================= */
 
 const boutonDeconnexion =
     document.getElementById(
@@ -112,11 +153,14 @@ const boutonDeconnexion =
 let utilisateurConnecte =
     null;
 
+
 let profilUtilisateur =
     null;
 
+
 let foyerUtilisateur =
     null;
+
 
 let membresFoyer =
     [];
@@ -139,8 +183,10 @@ function afficherErreur(
     chargementCompte.hidden =
         true;
 
+
     contenuMonCompte.hidden =
         true;
+
 
     messageErreurCompte.hidden =
         false;
@@ -384,6 +430,7 @@ async function recupererMembresFoyer(
         membresFoyer =
             [];
 
+
         return [];
     }
 
@@ -459,7 +506,6 @@ async function recupererMembresFoyer(
 
     return membresFoyer;
 }
-
 
 /* =================================
    RÔLES
@@ -560,6 +606,33 @@ function afficherFoyer() {
         nombreMembres === 1
             ? "1 membre"
             : `${nombreMembres} membres`;
+
+
+    /*
+        Nombre de personnes habituel.
+
+        Ce nombre peut être différent
+        du nombre de comptes du foyer.
+
+        Exemple :
+        2 comptes + 1 enfant
+        = 3 personnes.
+    */
+
+    const personnesParDefaut =
+        Number(
+            foyerUtilisateur
+                .personnes_par_defaut
+        );
+
+
+    champPersonnesParDefaut.value =
+        Number.isInteger(
+            personnesParDefaut
+        ) &&
+        personnesParDefaut > 0
+            ? personnesParDefaut
+            : 2;
 }
 
 
@@ -579,6 +652,7 @@ function afficherMembres() {
                 Aucun membre dans ce foyer.
             </p>
         `;
+
 
         return;
     }
@@ -685,6 +759,7 @@ function afficherMembres() {
 
                                 <strong>
                                     ${nomComplet}
+
                                     ${
                                         estMoi
                                             ? `
@@ -694,6 +769,7 @@ function afficherMembres() {
                                             `
                                             : ""
                                     }
+
                                 </strong>
 
                                 <span>
@@ -710,6 +786,236 @@ function afficherMembres() {
             .join("");
 }
 
+
+/* =================================
+   ENREGISTRER LE NOMBRE
+   DE PERSONNES DU FOYER
+================================= */
+
+boutonEnregistrerPersonnes
+    .addEventListener(
+        "click",
+        async function () {
+
+            messagePersonnesFoyer
+                .textContent =
+                    "";
+
+
+            const nombre =
+                Number(
+                    champPersonnesParDefaut
+                        .value
+                );
+
+
+            /*
+                On accepte uniquement
+                un entier supérieur à 0.
+            */
+
+            if (
+                !Number.isInteger(
+                    nombre
+                ) ||
+                nombre < 1
+            ) {
+
+                messagePersonnesFoyer
+                    .textContent =
+                        "Renseigne un nombre de personnes valide.";
+
+                return;
+            }
+
+
+            if (
+                !foyerUtilisateur ||
+                !foyerUtilisateur.id
+            ) {
+
+                messagePersonnesFoyer
+                    .textContent =
+                        "Impossible de déterminer votre foyer.";
+
+                return;
+            }
+
+
+            boutonEnregistrerPersonnes
+                .disabled =
+                    true;
+
+
+            boutonEnregistrerPersonnes
+                .textContent =
+                    "Enregistrement…";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await window.supabaseClient
+                        .from(
+                            "foyers"
+                        )
+                        .update({
+
+                            personnes_par_defaut:
+                                nombre
+
+                        })
+                        .eq(
+                            "id",
+                            foyerUtilisateur.id
+                        )
+                        .select(
+                            "id, personnes_par_defaut"
+                        )
+                        .single();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                /*
+                    Mise à jour locale pour
+                    que la page reste cohérente
+                    sans rechargement.
+                */
+
+                foyerUtilisateur
+                    .personnes_par_defaut =
+                        data
+                            .personnes_par_defaut;
+
+
+                champPersonnesParDefaut
+                    .value =
+                        data
+                            .personnes_par_defaut;
+
+
+                messagePersonnesFoyer
+                    .textContent =
+                        "Nombre de personnes enregistré ✓";
+
+
+                setTimeout(
+                    function () {
+
+                        messagePersonnesFoyer
+                            .textContent =
+                                "";
+
+                    },
+                    2200
+                );
+
+
+            } catch (
+                erreur
+            ) {
+
+                console.error(
+                    "Erreur pendant la modification du nombre de personnes :",
+                    erreur
+                );
+
+
+                messagePersonnesFoyer
+                    .textContent =
+                        erreur.message ||
+                        "Impossible d'enregistrer le nombre de personnes.";
+
+
+            } finally {
+
+                boutonEnregistrerPersonnes
+                    .disabled =
+                        false;
+
+
+                boutonEnregistrerPersonnes
+                    .textContent =
+                        "Enregistrer";
+            }
+        }
+    );
+
+
+/* =================================
+   ENTRÉE DANS LE CHAMP
+================================= */
+
+champPersonnesParDefaut
+    .addEventListener(
+        "keydown",
+        function (
+            evenement
+        ) {
+
+            if (
+                evenement.key ===
+                "Enter"
+            ) {
+
+                evenement.preventDefault();
+
+
+                boutonEnregistrerPersonnes
+                    .click();
+            }
+        }
+    );
+
+
+/* =================================
+   VALIDATION DU CHAMP
+================================= */
+
+champPersonnesParDefaut
+    .addEventListener(
+        "change",
+        function () {
+
+            const nombre =
+                Number(
+                    champPersonnesParDefaut
+                        .value
+                );
+
+
+            if (
+                !Number.isInteger(
+                    nombre
+                ) ||
+                nombre < 1
+            ) {
+
+                const valeurActuelle =
+                    Number(
+                        foyerUtilisateur
+                            ?.personnes_par_defaut
+                    );
+
+
+                champPersonnesParDefaut
+                    .value =
+                        Number.isInteger(
+                            valeurActuelle
+                        ) &&
+                        valeurActuelle > 0
+                            ? valeurActuelle
+                            : 2;
+            }
+        }
+    );
 
 /* =================================
    COPIER LE CODE DU FOYER
@@ -749,6 +1055,7 @@ boutonCopierCode.addEventListener(
 
                     boutonCopierCode.textContent =
                         "Copier le code";
+
 
                     messageCopieCode.textContent =
                         "";
@@ -840,6 +1147,10 @@ async function initialiserMonCompte() {
 
     try {
 
+        /*
+            1. Utilisateur connecté
+        */
+
         const utilisateur =
             await recupererUtilisateur();
 
@@ -850,14 +1161,14 @@ async function initialiserMonCompte() {
 
 
         /*
-            Profil utilisateur
+            2. Profil utilisateur
         */
 
         await recupererProfil();
 
 
         /*
-            Foyer de l'utilisateur
+            3. Appartenance au foyer
         */
 
         const appartenance =
@@ -870,7 +1181,11 @@ async function initialiserMonCompte() {
 
 
         /*
-            Informations du foyer
+            4. Informations du foyer
+
+            Grâce au select("*"),
+            personnes_par_defaut est
+            récupéré en même temps.
         */
 
         await recupererFoyer(
@@ -879,7 +1194,8 @@ async function initialiserMonCompte() {
 
 
         /*
-            Tous les membres
+            5. Tous les membres
+            du foyer
         */
 
         await recupererMembresFoyer(
@@ -888,7 +1204,7 @@ async function initialiserMonCompte() {
 
 
         /*
-            Affichage
+            6. Affichage
         */
 
         afficherProfil();
@@ -898,7 +1214,16 @@ async function initialiserMonCompte() {
         afficherMembres();
 
 
+        /*
+            7. Afficher réellement
+            le contenu de la page
+        */
+
         chargementCompte.hidden =
+            true;
+
+
+        messageErreurCompte.hidden =
             true;
 
 
@@ -914,5 +1239,9 @@ async function initialiserMonCompte() {
     }
 }
 
+
+/* =================================
+   DÉMARRAGE
+================================= */
 
 initialiserMonCompte();
