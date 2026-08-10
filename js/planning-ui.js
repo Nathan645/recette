@@ -122,7 +122,7 @@ function creerCreneauRepas(
                         </a>
 
                         <span class="personnes-repas-planifie">
-                            👥 ${textePersonnes}
+                           ${textePersonnes}
                         </span>
 
                     </div>
