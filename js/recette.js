@@ -507,7 +507,7 @@ async function supprimerRecette() {
 
 
         boutonSupprimer.textContent =
-            "🗑️ Supprimer la recette";
+            "Supprimer la recette";
 
 
         window.alert(
@@ -555,7 +555,7 @@ function afficherRecette(
                         )}"
                         class="bouton-modifier"
                     >
-                        ✏️ Modifier la recette
+                        Modifier la recette
                     </a>
 
                     <button
@@ -563,7 +563,7 @@ function afficherRecette(
                         class="bouton-supprimer"
                         id="supprimer-recette"
                     >
-                        🗑️ Supprimer la recette
+                        Supprimer la recette
                     </button>
 
                 </div>
