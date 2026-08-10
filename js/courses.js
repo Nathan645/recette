@@ -7,59 +7,116 @@ const boutonSemainePrecedenteCourses =
         "semaine-precedente-courses"
     );
 
+
 const boutonSemaineSuivanteCourses =
     document.getElementById(
         "semaine-suivante-courses"
     );
+
 
 const boutonAujourdhuiCourses =
     document.getElementById(
         "aller-aujourdhui-courses"
     );
 
+
 const numeroSemaineCourses =
     document.getElementById(
         "numero-semaine-courses"
     );
+
 
 const titreSemaineCourses =
     document.getElementById(
         "titre-semaine-courses"
     );
 
+
 const nombreRepasCourses =
     document.getElementById(
         "nombre-repas-courses"
     );
+
 
 const nombreRecettesCourses =
     document.getElementById(
         "nombre-recettes-courses"
     );
 
+
 const nombreArticlesCourses =
     document.getElementById(
         "nombre-articles-courses"
     );
+
 
 const listeCourses =
     document.getElementById(
         "liste-courses"
     );
 
+
 const messageVideCourses =
     document.getElementById(
         "message-vide-courses"
     );
+
 
 const messageErreurCourses =
     document.getElementById(
         "message-erreur-courses"
     );
 
+
 const texteErreurCourses =
     document.getElementById(
         "texte-erreur-courses"
+    );
+
+
+/* =================================
+   AJOUT MANUEL
+================================= */
+
+const formulaireArticleManuel =
+    document.getElementById(
+        "formulaire-article-manuel"
+    );
+
+
+const champNomArticleManuel =
+    document.getElementById(
+        "nom-article-manuel"
+    );
+
+
+const champQuantiteArticleManuel =
+    document.getElementById(
+        "quantite-article-manuel"
+    );
+
+
+const champCategorieArticleManuel =
+    document.getElementById(
+        "categorie-article-manuel"
+    );
+
+
+const boutonAjouterArticleManuel =
+    document.getElementById(
+        "ajouter-article-manuel"
+    );
+
+
+const messageArticleManuel =
+    document.getElementById(
+        "message-article-manuel"
+    );
+
+
+const boutonToutDecocher =
+    document.getElementById(
+        "tout-decocher-courses"
     );
 
 
@@ -70,22 +127,147 @@ const texteErreurCourses =
 let utilisateurConnecte =
     null;
 
+
 let foyerId =
     null;
+
 
 let debutSemaine =
     obtenirDebutSemaine(
         new Date()
     );
 
+
 let repasSemaine =
     [];
+
 
 let recettesSemaine =
     [];
 
+
 let articlesCourses =
     [];
+
+
+let articlesManuels =
+    [];
+
+
+/* =================================
+   CATÉGORIES
+================================= */
+
+const categoriesCourses = {
+
+    "fruits-legumes": {
+        nom:
+            "Fruits & légumes",
+
+        emoji:
+            "🥕",
+
+        ordre:
+            1
+    },
+
+
+    "frais": {
+        nom:
+            "Frais",
+
+        emoji:
+            "🧀",
+
+        ordre:
+            2
+    },
+
+
+    "viandes-poissons": {
+        nom:
+            "Viandes & poissons",
+
+        emoji:
+            "🥩",
+
+        ordre:
+            3
+    },
+
+
+    "epicerie": {
+        nom:
+            "Épicerie",
+
+        emoji:
+            "🥫",
+
+        ordre:
+            4
+    },
+
+
+    "boulangerie": {
+        nom:
+            "Boulangerie",
+
+        emoji:
+            "🥖",
+
+        ordre:
+            5
+    },
+
+
+    "surgeles": {
+        nom:
+            "Surgelés",
+
+        emoji:
+            "❄️",
+
+        ordre:
+            6
+    },
+
+
+    "boissons": {
+        nom:
+            "Boissons",
+
+        emoji:
+            "🥤",
+
+        ordre:
+            7
+    },
+
+
+    "maison": {
+        nom:
+            "Maison & entretien",
+
+        emoji:
+            "🏠",
+
+        ordre:
+            8
+    },
+
+
+    "divers": {
+        nom:
+            "Divers",
+
+        emoji:
+            "🛒",
+
+        ordre:
+            9
+    }
+
+};
 
 
 /* =================================
@@ -97,7 +279,10 @@ function obtenirDebutSemaine(
 ) {
 
     const copie =
-        new Date(date);
+        new Date(
+            date
+        );
+
 
     copie.setHours(
         0,
@@ -133,7 +318,9 @@ function ajouterJours(
 ) {
 
     const copie =
-        new Date(date);
+        new Date(
+            date
+        );
 
 
     copie.setDate(
@@ -261,7 +448,9 @@ function echapperHtml(
     }
 
 
-    return String(valeur)
+    return String(
+        valeur
+    )
         .replaceAll(
             "&",
             "&amp;"
@@ -294,7 +483,9 @@ function normaliserTexte(
     )
         .trim()
         .toLowerCase()
-        .normalize("NFD")
+        .normalize(
+            "NFD"
+        )
         .replace(
             /[\u0300-\u036f]/g,
             ""
@@ -311,11 +502,15 @@ function formaterQuantite(
 ) {
 
     const nombre =
-        Number(valeur);
+        Number(
+            valeur
+        );
 
 
     if (
-        !Number.isFinite(nombre)
+        !Number.isFinite(
+            nombre
+        )
     ) {
 
         return "";
@@ -323,15 +518,21 @@ function formaterQuantite(
 
 
     if (
-        Number.isInteger(nombre)
+        Number.isInteger(
+            nombre
+        )
     ) {
 
-        return String(nombre);
+        return String(
+            nombre
+        );
     }
 
 
     return nombre
-        .toFixed(2)
+        .toFixed(
+            2
+        )
         .replace(
             /\.00$/,
             ""
@@ -344,6 +545,363 @@ function formaterQuantite(
             ".",
             ","
         );
+}
+
+
+/* =================================
+   CATÉGORIE AUTOMATIQUE
+================================= */
+
+function determinerCategorieIngredient(
+    nomIngredient
+) {
+
+    const nom =
+        normaliserTexte(
+            nomIngredient
+        );
+
+
+    /* =========================
+       FRUITS & LÉGUMES
+    ========================= */
+
+    const fruitsLegumes = [
+
+        "tomate",
+        "tomates",
+        "courgette",
+        "courgettes",
+        "aubergine",
+        "aubergines",
+        "carotte",
+        "carottes",
+        "oignon",
+        "oignons",
+        "echalote",
+        "echalotes",
+        "ail",
+        "poireau",
+        "poireaux",
+        "poivron",
+        "poivrons",
+        "champignon",
+        "champignons",
+        "salade",
+        "laitue",
+        "epinard",
+        "epinards",
+        "brocoli",
+        "brocolis",
+        "chou",
+        "choux",
+        "haricot vert",
+        "haricots verts",
+        "concombre",
+        "concombres",
+        "avocat",
+        "avocats",
+        "pomme de terre",
+        "pommes de terre",
+        "patate douce",
+        "patates douces",
+        "citron",
+        "citrons",
+        "orange",
+        "oranges",
+        "pomme",
+        "pommes",
+        "poire",
+        "poires",
+        "banane",
+        "bananes",
+        "fraise",
+        "fraises",
+        "framboise",
+        "framboises",
+        "myrtille",
+        "myrtilles",
+        "persil",
+        "coriandre",
+        "basilic",
+        "menthe"
+    ];
+
+
+    if (
+        fruitsLegumes.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "fruits-legumes";
+    }
+
+
+    /* =========================
+       FRAIS
+    ========================= */
+
+    const frais = [
+
+        "lait",
+        "creme",
+        "beurre",
+        "fromage",
+        "parmesan",
+        "mozzarella",
+        "emmental",
+        "gruyere",
+        "chevre",
+        "feta",
+        "yaourt",
+        "yogourt",
+        "oeuf",
+        "oeufs",
+        "mascarpone",
+        "ricotta",
+        "burrata"
+    ];
+
+
+    if (
+        frais.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "frais";
+    }
+
+
+    /* =========================
+       VIANDES & POISSONS
+    ========================= */
+
+    const viandesPoissons = [
+
+        "poulet",
+        "boeuf",
+        "steak",
+        "porc",
+        "veau",
+        "agneau",
+        "dinde",
+        "jambon",
+        "lardon",
+        "lardons",
+        "saucisse",
+        "saucisses",
+        "merguez",
+        "saumon",
+        "thon",
+        "cabillaud",
+        "crevette",
+        "crevettes",
+        "poisson",
+        "poissons",
+        "viande",
+        "viande hachee",
+        "bacon"
+    ];
+
+
+    if (
+        viandesPoissons.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "viandes-poissons";
+    }
+
+
+    /* =========================
+       BOULANGERIE
+    ========================= */
+
+    const boulangerie = [
+
+        "pain",
+        "baguette",
+        "brioche",
+        "tortilla",
+        "tortillas",
+        "wrap",
+        "wraps",
+        "pain burger",
+        "pain hamburger"
+    ];
+
+
+    if (
+        boulangerie.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "boulangerie";
+    }
+
+
+    /* =========================
+       SURGELÉS
+    ========================= */
+
+    const surgeles = [
+
+        "surgele",
+        "surgeles",
+        "glace",
+        "glaces"
+    ];
+
+
+    if (
+        surgeles.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "surgeles";
+    }
+
+
+    /* =========================
+       BOISSONS
+    ========================= */
+
+    const boissons = [
+
+        "eau",
+        "jus",
+        "soda",
+        "limonade",
+        "coca",
+        "sirop"
+    ];
+
+
+    if (
+        boissons.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "boissons";
+    }
+
+
+    /* =========================
+       ÉPICERIE
+    ========================= */
+
+    const epicerie = [
+
+        "pate",
+        "pates",
+        "spaghetti",
+        "tagliatelle",
+        "riz",
+        "farine",
+        "sucre",
+        "sel",
+        "poivre",
+        "huile",
+        "vinaigre",
+        "moutarde",
+        "mayonnaise",
+        "ketchup",
+        "miel",
+        "chocolat",
+        "levure",
+        "semoule",
+        "quinoa",
+        "lentille",
+        "lentilles",
+        "pois chiche",
+        "pois chiches",
+        "haricot rouge",
+        "haricots rouges",
+        "conserve",
+        "bouillon",
+        "epice",
+        "epices",
+        "paprika",
+        "curry",
+        "cumin",
+        "cannelle",
+        "vanille",
+        "maizena",
+        "chapelure",
+        "noix",
+        "amande",
+        "amandes",
+        "noisette",
+        "noisettes"
+    ];
+
+
+    if (
+        epicerie.some(
+            function (
+                mot
+            ) {
+
+                return nom.includes(
+                    mot
+                );
+            }
+        )
+    ) {
+
+        return "epicerie";
+    }
+
+
+    return "divers";
 }
 
 
@@ -400,7 +958,9 @@ async function recupererUtilisateurEtFoyer() {
                 "user_id",
                 utilisateurConnecte.id
             )
-            .limit(1)
+            .limit(
+                1
+            )
             .maybeSingle();
 
 
@@ -496,7 +1056,9 @@ async function chargerRepasSemaine() {
 
 
     repasSemaine =
-        Array.isArray(data)
+        Array.isArray(
+            data
+        )
             ? data
             : [];
 }
@@ -575,7 +1137,72 @@ async function chargerRecettesSemaine() {
 
 
     recettesSemaine =
-        Array.isArray(data)
+        Array.isArray(
+            data
+        )
+            ? data
+            : [];
+}
+
+
+/* =================================
+   CHARGER LES ARTICLES MANUELS
+================================= */
+
+async function chargerArticlesManuels() {
+
+    const dateSemaine =
+        formaterDateISO(
+            debutSemaine
+        );
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "courses_manuelles"
+            )
+            .select(`
+                id,
+                foyer_id,
+                nom,
+                quantite,
+                categorie,
+                semaine,
+                created_by
+            `)
+            .eq(
+                "foyer_id",
+                foyerId
+            )
+            .eq(
+                "semaine",
+                dateSemaine
+            )
+            .order(
+                "created_at",
+                {
+                    ascending:
+                        true
+                }
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    articlesManuels =
+        Array.isArray(
+            data
+        )
             ? data
             : [];
 }
@@ -606,7 +1233,6 @@ function trouverRecette(
     );
 }
 
-
 /* =================================
    AJOUTER / REGROUPER UN ARTICLE
 ================================= */
@@ -630,13 +1256,11 @@ function ajouterArticle(
     const nom =
         String(
             ingredient.nom || ""
-        ).trim();
+        )
+            .trim();
 
 
-    if (
-        !nom
-    ) {
-
+    if (!nom) {
         return;
     }
 
@@ -644,21 +1268,24 @@ function ajouterArticle(
     const unite =
         String(
             ingredient.unite || ""
-        ).trim();
+        )
+            .trim();
+
+
+    const categorie =
+        determinerCategorieIngredient(
+            nom
+        );
 
 
     /*
-        On regroupe uniquement les
-        ingrédients qui ont le même
-        nom ET la même unité.
+        On regroupe les ingrédients
+        avec le même nom + même unité.
 
         Exemple :
-        tomates + tomates
-        500 g pâtes + 300 g pâtes
-
-        Mais :
-        2 oeufs et 200 g oeufs
-        restent séparés.
+        500 g pâtes
+        + 300 g pâtes
+        = 800 g pâtes.
     */
 
     const cle =
@@ -675,9 +1302,7 @@ function ajouterArticle(
         );
 
 
-    if (
-        !article
-    ) {
+    if (!article) {
 
         article = {
 
@@ -694,7 +1319,16 @@ function ajouterArticle(
                 null,
 
             quantiteNumerique:
-                true
+                true,
+
+            categorie:
+                categorie,
+
+            manuel:
+                false,
+
+            idManuel:
+                null
 
         };
 
@@ -707,11 +1341,8 @@ function ajouterArticle(
 
 
     /*
-        Quantité inexistante :
+        Pas de quantité exploitable :
         sel, poivre, huile selon goût...
-
-        On affiche seulement
-        le nom de l'article.
     */
 
     if (
@@ -749,10 +1380,11 @@ function ajouterArticle(
 
 
 /* =================================
-   CALCUL DE LA LISTE
+   CALCUL DES INGRÉDIENTS
+   DES RECETTES
 ================================= */
 
-function calculerListeCourses() {
+function calculerArticlesRecettes() {
 
     const collection =
         new Map();
@@ -782,10 +1414,7 @@ function calculerListeCourses() {
                 );
 
 
-            if (
-                !recette
-            ) {
-
+            if (!recette) {
                 return;
             }
 
@@ -823,9 +1452,9 @@ function calculerListeCourses() {
 
                     /*
                         Compatibilité avec
-                        d'éventuelles vieilles
-                        recettes enregistrées
-                        simplement en texte.
+                        les anciennes recettes
+                        éventuellement stockées
+                        sous forme de texte.
                     */
 
                     if (
@@ -860,11 +1489,12 @@ function calculerListeCourses() {
 
                     /*
                         Si proportionnel = false,
-                        la quantité reste telle
-                        quelle pour CE repas.
+                        la quantité reste identique.
 
-                        Sinon elle évolue selon
-                        le nombre de personnes.
+                        Sinon :
+                        quantité recette
+                        × personnes repas
+                        ÷ personnes recette.
                     */
 
                     if (
@@ -899,23 +1529,151 @@ function calculerListeCourses() {
     );
 
 
-    articlesCourses =
-        Array.from(
-            collection.values()
-        )
-            .sort(
-                function (
-                    articleA,
-                    articleB
-                ) {
+    return Array.from(
+        collection.values()
+    );
+}
 
-                    return articleA.nom
-                        .localeCompare(
-                            articleB.nom,
-                            "fr"
-                        );
-                }
-            );
+
+/* =================================
+   ARTICLES MANUELS
+================================= */
+
+function convertirArticlesManuels() {
+
+    return articlesManuels.map(
+        function (
+            article
+        ) {
+
+            const categorieExiste =
+                Boolean(
+                    categoriesCourses[
+                        article.categorie
+                    ]
+                );
+
+
+            return {
+
+                /*
+                    Préfixe différent pour
+                    éviter une collision
+                    avec un ingrédient
+                    automatique.
+                */
+
+                cle:
+                    `manuel__${article.id}`,
+
+                nom:
+                    article.nom,
+
+                unite:
+                    "",
+
+                quantite:
+                    null,
+
+                quantiteNumerique:
+                    false,
+
+                /*
+                    Pour un article manuel,
+                    la quantité est déjà un
+                    texte libre :
+                    "2 paquets", "1 bouteille"...
+                */
+
+                quantiteTexte:
+                    article.quantite ||
+                    "",
+
+                categorie:
+                    categorieExiste
+                        ? article.categorie
+                        : "divers",
+
+                manuel:
+                    true,
+
+                idManuel:
+                    article.id
+
+            };
+        }
+    );
+}
+
+
+/* =================================
+   CONSTRUIRE LA LISTE COMPLÈTE
+================================= */
+
+function calculerListeCourses() {
+
+    const articlesRecettes =
+        calculerArticlesRecettes();
+
+
+    const articlesManuelsFormates =
+        convertirArticlesManuels();
+
+
+    articlesCourses = [
+
+        ...articlesRecettes,
+
+        ...articlesManuelsFormates
+
+    ];
+
+
+    /*
+        Tri :
+        catégorie d'abord,
+        puis ordre alphabétique.
+    */
+
+    articlesCourses.sort(
+        function (
+            articleA,
+            articleB
+        ) {
+
+            const categorieA =
+                categoriesCourses[
+                    articleA.categorie
+                ] ||
+                categoriesCourses.divers;
+
+
+            const categorieB =
+                categoriesCourses[
+                    articleB.categorie
+                ] ||
+                categoriesCourses.divers;
+
+
+            if (
+                categorieA.ordre !==
+                categorieB.ordre
+            ) {
+
+                return (
+                    categorieA.ordre -
+                    categorieB.ordre
+                );
+            }
+
+
+            return articleA.nom
+                .localeCompare(
+                    articleB.nom,
+                    "fr"
+                );
+        }
+    );
 }
 
 
@@ -926,6 +1684,26 @@ function calculerListeCourses() {
 function construireQuantiteArticle(
     article
 ) {
+
+    /*
+        Article manuel :
+        quantité déjà saisie
+        sous forme libre.
+    */
+
+    if (
+        article.manuel
+    ) {
+
+        return article.quantiteTexte ||
+            "";
+    }
+
+
+    /*
+        Article automatique sans
+        quantité numérique.
+    */
 
     if (
         article.quantite === null ||
@@ -1099,6 +1877,194 @@ function afficherResume() {
 
 
 /* =================================
+   GROUPER LES ARTICLES
+================================= */
+
+function grouperArticlesParCategorie() {
+
+    const groupes =
+        new Map();
+
+
+    articlesCourses.forEach(
+        function (
+            article
+        ) {
+
+            const categorie =
+                categoriesCourses[
+                    article.categorie
+                ]
+                    ? article.categorie
+                    : "divers";
+
+
+            if (
+                !groupes.has(
+                    categorie
+                )
+            ) {
+
+                groupes.set(
+                    categorie,
+                    []
+                );
+            }
+
+
+            groupes
+                .get(
+                    categorie
+                )
+                .push(
+                    article
+                );
+        }
+    );
+
+
+    return Array.from(
+        groupes.entries()
+    )
+        .sort(
+            function (
+                groupeA,
+                groupeB
+            ) {
+
+                const infosA =
+                    categoriesCourses[
+                        groupeA[0]
+                    ];
+
+
+                const infosB =
+                    categoriesCourses[
+                        groupeB[0]
+                    ];
+
+
+                return (
+                    infosA.ordre -
+                    infosB.ordre
+                );
+            }
+        );
+}
+
+
+/* =================================
+   CRÉER UNE LIGNE D'ARTICLE
+================================= */
+
+function creerHtmlArticle(
+    article,
+    index,
+    articlesCoches
+) {
+
+    const estCoche =
+        articlesCoches.includes(
+            article.cle
+        );
+
+
+    const quantite =
+        construireQuantiteArticle(
+            article
+        );
+
+
+    return `
+
+        <div
+            class="article-course ${
+                estCoche
+                    ? "coche"
+                    : ""
+            } ${
+                article.manuel
+                    ? "article-course-manuel"
+                    : ""
+            }"
+            data-article-cle="${echapperHtml(
+                article.cle
+            )}"
+        >
+
+            <input
+                type="checkbox"
+                id="article-course-${index}"
+                class="case-article-course"
+                ${
+                    estCoche
+                        ? "checked"
+                        : ""
+                }
+            >
+
+
+            <label
+                for="article-course-${index}"
+            >
+
+                <span class="nom-article-course">
+
+                    ${echapperHtml(
+                        article.nom
+                    )}
+
+                    ${
+                        article.manuel
+                            ? `
+                                <span class="badge-article-manuel">
+                                    Manuel
+                                </span>
+                            `
+                            : ""
+                    }
+
+                </span>
+
+
+                ${
+                    quantite
+                        ? `
+                            <span class="quantite-article-course">
+                                ${echapperHtml(
+                                    quantite
+                                )}
+                            </span>
+                        `
+                        : ""
+                }
+
+            </label>
+
+
+            ${
+                article.manuel
+                    ? `
+                        <button
+                            type="button"
+                            class="bouton-supprimer-article-manuel"
+                            data-supprimer-article-id="${article.idManuel}"
+                            aria-label="Supprimer cet article"
+                            title="Supprimer cet article"
+                        >
+                            🗑️
+                        </button>
+                    `
+                    : ""
+            }
+
+        </div>
+
+    `;
+}
+
+
+/* =================================
    AFFICHER LA LISTE
 ================================= */
 
@@ -1115,6 +2081,7 @@ function afficherListeCourses() {
 
         listeCourses.innerHTML =
             "";
+
 
         document
             .querySelector(
@@ -1144,74 +2111,83 @@ function afficherListeCourses() {
         true;
 
 
-    const lignes =
-        articlesCourses
+    const groupes =
+        grouperArticlesParCategorie();
+
+
+    let indexGlobal =
+        0;
+
+
+    listeCourses.innerHTML =
+        groupes
             .map(
                 function (
-                    article,
-                    index
+                    groupe
                 ) {
 
-                    const estCoche =
-                        articlesCoches.includes(
-                            article.cle
-                        );
+                    const categorie =
+                        groupe[0];
 
 
-                    const quantite =
-                        construireQuantiteArticle(
-                            article
-                        );
+                    const articles =
+                        groupe[1];
+
+
+                    const informations =
+                        categoriesCourses[
+                            categorie
+                        ] ||
+                        categoriesCourses.divers;
+
+
+                    const lignes =
+                        articles
+                            .map(
+                                function (
+                                    article
+                                ) {
+
+                                    const html =
+                                        creerHtmlArticle(
+                                            article,
+                                            indexGlobal,
+                                            articlesCoches
+                                        );
+
+
+                                    indexGlobal +=
+                                        1;
+
+
+                                    return html;
+                                }
+                            )
+                            .join("");
 
 
                     return `
 
-                        <div
-                            class="article-course ${
-                                estCoche
-                                    ? "coche"
-                                    : ""
-                            }"
-                            data-article-cle="${echapperHtml(
-                                article.cle
-                            )}"
-                        >
+                        <div class="groupe-courses">
 
-                            <input
-                                type="checkbox"
-                                id="article-course-${index}"
-                                class="case-article-course"
-                                ${
-                                    estCoche
-                                        ? "checked"
-                                        : ""
-                                }
-                            >
+                            <div class="entete-groupe-courses">
 
-
-                            <label
-                                for="article-course-${index}"
-                            >
-
-                                <span class="nom-article-course">
-                                    ${echapperHtml(
-                                        article.nom
-                                    )}
+                                <span>
+                                    ${informations.emoji}
                                 </span>
 
-                                ${
-                                    quantite
-                                        ? `
-                                            <span class="quantite-article-course">
-                                                ${echapperHtml(
-                                                    quantite
-                                                )}
-                                            </span>
-                                        `
-                                        : ""
-                                }
+                                <span>
+                                    ${informations.nom}
+                                </span>
 
-                            </label>
+                            </div>
+
+
+                            <div class="liste-groupe-courses">
+
+                                ${lignes}
+
+                            </div>
 
                         </div>
 
@@ -1219,36 +2195,7 @@ function afficherListeCourses() {
                 }
             )
             .join("");
-
-
-    /*
-        Pour cette première version,
-        un seul groupe suffit.
-
-        On pourra ensuite classer
-        automatiquement en :
-        fruits/légumes,
-        frais,
-        épicerie, etc.
-    */
-
-    listeCourses.innerHTML = `
-
-        <div class="groupe-courses">
-
-            <div class="entete-groupe-courses">
-                Liste de courses
-            </div>
-
-            <div class="liste-groupe-courses">
-                ${lignes}
-            </div>
-
-        </div>
-
-    `;
 }
-
 
 /* =================================
    COCHER / DÉCOCHER
@@ -1295,8 +2242,7 @@ listeCourses.addEventListener(
 
 
         const cle =
-            ligne.dataset
-                .articleCle;
+            ligne.dataset.articleCle;
 
 
         let articlesCoches =
@@ -1343,6 +2289,323 @@ listeCourses.addEventListener(
 
 
 /* =================================
+   TOUT DÉCOCHER
+================================= */
+
+boutonToutDecocher.addEventListener(
+    "click",
+    function () {
+
+        enregistrerArticlesCoches(
+            []
+        );
+
+
+        afficherListeCourses();
+    }
+);
+
+
+/* =================================
+   AJOUT MANUEL
+================================= */
+
+formulaireArticleManuel.addEventListener(
+    "submit",
+    async function (
+        evenement
+    ) {
+
+        evenement.preventDefault();
+
+
+        messageArticleManuel.textContent =
+            "";
+
+
+        const nom =
+            champNomArticleManuel
+                .value
+                .trim();
+
+
+        const quantite =
+            champQuantiteArticleManuel
+                .value
+                .trim();
+
+
+        const categorie =
+            champCategorieArticleManuel
+                .value ||
+                "divers";
+
+
+        if (
+            !nom
+        ) {
+
+            messageArticleManuel.textContent =
+                "Renseigne le nom de l'article.";
+
+            return;
+        }
+
+
+        if (
+            !foyerId ||
+            !utilisateurConnecte
+        ) {
+
+            messageArticleManuel.textContent =
+                "Impossible de déterminer votre foyer.";
+
+            return;
+        }
+
+
+        boutonAjouterArticleManuel.disabled =
+            true;
+
+
+        boutonAjouterArticleManuel.textContent =
+            "Ajout…";
+
+
+        try {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from(
+                        "courses_manuelles"
+                    )
+                    .insert({
+
+                        foyer_id:
+                            foyerId,
+
+                        nom:
+                            nom,
+
+                        quantite:
+                            quantite ||
+                            null,
+
+                        categorie:
+                            categoriesCourses[
+                                categorie
+                            ]
+                                ? categorie
+                                : "divers",
+
+                        semaine:
+                            formaterDateISO(
+                                debutSemaine
+                            ),
+
+                        created_by:
+                            utilisateurConnecte.id
+
+                    });
+
+
+            if (
+                error
+            ) {
+
+                throw error;
+            }
+
+
+            champNomArticleManuel.value =
+                "";
+
+
+            champQuantiteArticleManuel.value =
+                "";
+
+
+            champCategorieArticleManuel.value =
+                "divers";
+
+
+            messageArticleManuel.textContent =
+                "Article ajouté ✓";
+
+
+            await rafraichirCourses();
+
+
+            /*
+                On remet le message
+                après le rafraîchissement.
+            */
+
+            messageArticleManuel.textContent =
+                "Article ajouté ✓";
+
+
+            setTimeout(
+                function () {
+
+                    messageArticleManuel.textContent =
+                        "";
+
+                },
+                1800
+            );
+
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur ajout article manuel :",
+                erreur
+            );
+
+
+            messageArticleManuel.textContent =
+                erreur.message ||
+                "Impossible d'ajouter l'article.";
+
+
+        } finally {
+
+            boutonAjouterArticleManuel.disabled =
+                false;
+
+
+            boutonAjouterArticleManuel.textContent =
+                "+ Ajouter";
+        }
+    }
+);
+
+
+/* =================================
+   SUPPRIMER ARTICLE MANUEL
+================================= */
+
+listeCourses.addEventListener(
+    "click",
+    async function (
+        evenement
+    ) {
+
+        const boutonSupprimer =
+            evenement.target.closest(
+                "[data-supprimer-article-id]"
+            );
+
+
+        if (
+            !boutonSupprimer
+        ) {
+
+            return;
+        }
+
+
+        const articleId =
+            boutonSupprimer.dataset
+                .supprimerArticleId;
+
+
+        if (
+            !articleId
+        ) {
+
+            return;
+        }
+
+
+        boutonSupprimer.disabled =
+            true;
+
+
+        try {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from(
+                        "courses_manuelles"
+                    )
+                    .delete()
+                    .eq(
+                        "id",
+                        articleId
+                    )
+                    .eq(
+                        "foyer_id",
+                        foyerId
+                    );
+
+
+            if (
+                error
+            ) {
+
+                throw error;
+            }
+
+
+            /*
+                Si l'article supprimé
+                était coché, on enlève
+                aussi sa clé du localStorage.
+            */
+
+            const cleArticle =
+                `manuel__${articleId}`;
+
+
+            const articlesCoches =
+                recupererArticlesCoches()
+                    .filter(
+                        function (
+                            cle
+                        ) {
+
+                            return (
+                                cle !==
+                                cleArticle
+                            );
+                        }
+                    );
+
+
+            enregistrerArticlesCoches(
+                articlesCoches
+            );
+
+
+            await rafraichirCourses();
+
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur suppression article manuel :",
+                erreur
+            );
+
+
+            boutonSupprimer.disabled =
+                false;
+        }
+    }
+);
+
+
+/* =================================
    CHARGEMENT COMPLET
 ================================= */
 
@@ -1358,6 +2621,7 @@ async function rafraichirCourses() {
     messageErreurCourses.hidden =
         true;
 
+
     messageVideCourses.hidden =
         true;
 
@@ -1367,17 +2631,45 @@ async function rafraichirCourses() {
 
     try {
 
+        /*
+            1. Repas planifiés
+        */
+
         await chargerRepasSemaine();
 
+
+        /*
+            2. Recettes utilisées
+        */
 
         await chargerRecettesSemaine();
 
 
+        /*
+            3. Articles manuels
+            de la semaine
+        */
+
+        await chargerArticlesManuels();
+
+
+        /*
+            4. Calcul complet
+        */
+
         calculerListeCourses();
 
 
+        /*
+            5. Résumé
+        */
+
         afficherResume();
 
+
+        /*
+            6. Affichage
+        */
 
         afficherListeCourses();
 
@@ -1431,6 +2723,15 @@ boutonSemainePrecedenteCourses
                 );
 
 
+            /*
+                On efface le message
+                d'ajout éventuel.
+            */
+
+            messageArticleManuel.textContent =
+                "";
+
+
             await rafraichirCourses();
         }
     );
@@ -1448,6 +2749,10 @@ boutonSemaineSuivanteCourses
                 );
 
 
+            messageArticleManuel.textContent =
+                "";
+
+
             await rafraichirCourses();
         }
     );
@@ -1462,6 +2767,10 @@ boutonAujourdhuiCourses
                 obtenirDebutSemaine(
                     new Date()
                 );
+
+
+            messageArticleManuel.textContent =
+                "";
 
 
             await rafraichirCourses();
