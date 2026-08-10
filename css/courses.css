@@ -158,12 +158,61 @@
 }
 
 
+/* =================================
+   ACTIONS SEMAINE
+================================= */
+
 .actions-semaine-courses {
     display: flex;
 
+    align-items: center;
     justify-content: center;
 
     margin-top: 14px;
+}
+
+
+/* =================================
+   BOUTON AUJOURD'HUI
+================================= */
+
+.actions-semaine-courses
+.bouton-aujourdhui {
+    padding: 8px 15px;
+
+    border: 1px solid var(--vert);
+    border-radius: 20px;
+
+    background-color: transparent;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.actions-semaine-courses
+.bouton-aujourdhui:hover {
+    background-color: var(--vert);
+
+    color: white;
+
+    transform: translateY(-1px);
+}
+
+
+.actions-semaine-courses
+.bouton-aujourdhui:active {
+    transform: translateY(0);
 }
 
 
@@ -276,13 +325,19 @@
 }
 
 
+/* =================================
+   CHAMPS ARTICLE / QUANTITÉ /
+   CATÉGORIE
+================================= */
+
 .champ-course input,
 .champ-course select {
     width: 100%;
+    height: 52px;
 
     box-sizing: border-box;
 
-    padding: 11px 12px;
+    padding: 0 14px;
 
     border: 1px solid #d8d2c7;
     border-radius: 10px;
@@ -292,6 +347,7 @@
     color: var(--texte);
 
     font: inherit;
+    font-size: 16px;
 
     outline: none;
 
@@ -312,16 +368,57 @@
 
 
 /* =================================
+   SELECT CATÉGORIE
+================================= */
+
+.champ-course select {
+    appearance: none;
+    -webkit-appearance: none;
+
+    padding-right: 42px;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--vert) 50%
+        ),
+        linear-gradient(
+            135deg,
+            var(--vert) 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 18px) 22px,
+        calc(100% - 12px) 22px;
+
+    background-size:
+        6px 6px,
+        6px 6px;
+
+    background-repeat:
+        no-repeat;
+
+    cursor: pointer;
+}
+
+
+/* =================================
    BOUTON AJOUTER
 ================================= */
 
 .actions-article-manuel {
     display: flex;
+
+    align-items: flex-end;
 }
 
 
 .bouton-ajouter-article {
-    padding: 11px 18px;
+    height: 52px;
+
+    padding: 0 18px;
 
     border: none;
     border-radius: 10px;
@@ -372,7 +469,6 @@
 
     font-size: 13px;
 }
-
 
 /* =================================
    CARTE LISTE DE COURSES
@@ -693,7 +789,6 @@
         scale(1.05);
 }
 
-
 /* =================================
    MESSAGE VIDE
 ================================= */
@@ -810,61 +905,6 @@
     }
 }
 
-/* =================================
-   BOUTON AUJOURD'HUI
-   IDENTIQUE AU PLANNING
-================================= */
-
-.actions-semaine-courses {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 14px;
-}
-
-
-.actions-semaine-courses
-.bouton-aujourdhui {
-    padding: 8px 15px;
-
-    border: 1px solid var(--vert);
-    border-radius: 20px;
-
-    background-color: transparent;
-
-    color: var(--vert);
-
-    font: inherit;
-    font-size: 13px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.actions-semaine-courses
-.bouton-aujourdhui:hover {
-    background-color: var(--vert);
-
-    color: white;
-
-    transform: translateY(-1px);
-}
-
-
-.actions-semaine-courses
-.bouton-aujourdhui:active {
-    transform: translateY(0);
-}
-
-
 
 /* =================================
    MOBILE
@@ -904,6 +944,13 @@
     }
 
 
+    .actions-semaine-courses
+    .bouton-aujourdhui {
+        padding:
+            8px 14px;
+    }
+
+
     .resume-courses {
         grid-template-columns:
             1fr;
@@ -935,12 +982,6 @@
     .quantite-article-course {
         white-space: normal;
     }
-
-   
-    .actions-semaine-courses
-    .bouton-aujourdhui {
-        padding: 8px 14px;
-    }
 }
 
 
@@ -971,4 +1012,146 @@
     .article-course-manuel {
         padding-right: 46px;
     }
+
+
+    .actions-article-manuel {
+        width: 100%;
+    }
+
+
+    .bouton-ajouter-article {
+        width: 100%;
+    }
+
+
+    .champ-course input,
+    .champ-course select {
+        width: 100%;
+    }
 }
+
+/* =================================
+   SÉCURITÉ ALIGNEMENT
+   FORMULAIRE AJOUT MANUEL
+================================= */
+
+/*
+    On force tous les champs de la ligne
+    à avoir exactement la même hauteur.
+*/
+
+.formulaire-article-manuel
+.champ-course input,
+.formulaire-article-manuel
+.champ-course select,
+.formulaire-article-manuel
+.bouton-ajouter-article {
+    min-height: 52px;
+}
+
+
+/*
+    Évite que Safari ajoute une hauteur
+    différente au select.
+*/
+
+.formulaire-article-manuel
+.champ-course select {
+    line-height: 52px;
+}
+
+
+/*
+    Les labels gardent tous exactement
+    la même hauteur visuelle.
+*/
+
+.formulaire-article-manuel
+.champ-course label {
+    min-height: 18px;
+
+    display: flex;
+
+    align-items: flex-end;
+}
+
+
+/*
+    Le bouton s'aligne sur le bas
+    des champs.
+*/
+
+.formulaire-article-manuel
+.actions-article-manuel {
+    display: flex;
+
+    align-items: flex-end;
+}
+
+
+/* =================================
+   SÉCURITÉ SAFARI
+================================= */
+
+@supports (-webkit-touch-callout: none) {
+
+    .formulaire-article-manuel
+    .champ-course select {
+        line-height: normal;
+    }
+
+
+    .formulaire-article-manuel
+    .champ-course input,
+    .formulaire-article-manuel
+    .champ-course select {
+        height: 52px;
+    }
+}
+
+
+/* =================================
+   RESPONSIVE TABLETTE
+================================= */
+
+@media (max-width: 900px) {
+
+    .formulaire-article-manuel
+    .champ-course input,
+    .formulaire-article-manuel
+    .champ-course select,
+    .formulaire-article-manuel
+    .bouton-ajouter-article {
+        height: 52px;
+    }
+}
+
+
+/* =================================
+   RESPONSIVE MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .formulaire-article-manuel
+    .champ-course input,
+    .formulaire-article-manuel
+    .champ-course select,
+    .formulaire-article-manuel
+    .bouton-ajouter-article {
+        width: 100%;
+        height: 52px;
+    }
+
+
+    .formulaire-article-manuel
+    .actions-article-manuel {
+        width: 100%;
+    }
+
+}
+
+
+/* =================================
+   FIN
+================================= */
