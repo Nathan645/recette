@@ -1227,6 +1227,35 @@ footer {
     color: var(--vert);
 }
 
+/* =================================
+   VISIBILITÉ RECETTE
+================================= */
+
+.visibilite-recette {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    margin-top: 24px;
+
+    padding: 8px 12px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.visibilite-foyer {
+    background-color: #eef2e9;
+    color: var(--vert);
+}
+
+.visibilite-publique {
+    background-color: #f4f2ed;
+    color: #6f6e68;
+}
+
 @media (max-width: 700px) {
 
     .entete-principale {
