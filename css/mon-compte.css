@@ -1139,6 +1139,209 @@
         start;
 }
 
+/* =================================
+   GRILLE FOYER - 2 COLONNES
+================================= */
+
+.grille-foyer-ligne {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(0, 1fr);
+
+    gap: 18px;
+
+    align-items: stretch;
+
+    margin-bottom: 16px;
+}
+
+
+/* =================================
+   NOM DU FOYER
+================================= */
+
+.bloc-nom-foyer {
+    padding: 16px 18px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+}
+
+
+.bloc-nom-foyer label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #8a8982;
+
+    font-size: 13px;
+    font-weight: 400;
+}
+
+
+.controle-nom-foyer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.controle-nom-foyer input {
+    flex: 1;
+
+    min-width: 0;
+
+    box-sizing: border-box;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 16px;
+    font-weight: 700;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.controle-nom-foyer input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            70,
+            95,
+            70,
+            0.10
+        );
+}
+
+
+.bouton-enregistrer-nom-foyer {
+    padding: 11px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+/* =================================
+   CODE DU FOYER COMPACT
+================================= */
+
+.bloc-code-foyer-compact {
+    margin-top: 0;
+
+    padding: 16px 18px;
+
+    border-style: solid;
+
+    background-color: #f8f7f2;
+}
+
+
+.bloc-code-foyer-compact .code-foyer {
+    font-size: 18px;
+
+    letter-spacing: 0.10em;
+}
+
+
+.bloc-code-foyer-compact
+.bouton-copier-code {
+    padding: 10px 14px;
+}
+
+
+/* =================================
+   MEMBRES
+================================= */
+
+.information-membres-foyer {
+    justify-content: center;
+
+    min-height: 0;
+
+    padding: 16px 18px;
+}
+
+
+/* =================================
+   NOMBRE HABITUEL
+================================= */
+
+.bloc-personnes-foyer {
+    padding: 16px 18px;
+
+    border-radius: 14px;
+
+    background-color: #f8f7f2;
+}
+
+
+.bloc-personnes-foyer label {
+    color: #8a8982;
+
+    font-size: 13px;
+    font-weight: 400;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .grille-foyer-ligne {
+        grid-template-columns: 1fr;
+    }
+
+    .controle-nom-foyer {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .bouton-enregistrer-nom-foyer {
+        width: 100%;
+    }
+
+    .bloc-code-foyer-compact {
+        flex-direction: row;
+
+        align-items: center;
+    }
+
+}
+
 
 /* =================================
    FIN
