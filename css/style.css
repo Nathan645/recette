@@ -1957,7 +1957,7 @@ input[type="radio"]:focus-visible {
         6px
         9px;
 
-    font-size: 10px;
+    font-size: 0px;
     font-weight: 700;
 }
 
@@ -1966,8 +1966,8 @@ input[type="radio"]:focus-visible {
 
 .option-proportionnelle
 .ingredient-proportionnel {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
 
     flex:
         0 0
