@@ -1,4 +1,215 @@
 /* =================================
+   PLANNING UI
+   À notre table
+
+   Ce fichier gère :
+   - l'affichage des créneaux
+   - l'affichage de la semaine
+   - le rafraîchissement du planning
+
+   La recherche de recettes et
+   les interactions de la popup
+   sont gérées dans planning.js.
+================================= */
+
+
+/* =================================
+   ÉCHAPPER LE TEXTE
+================================= */
+
+function echapperTextePlanningUI(
+    valeur
+) {
+
+    return String(
+        valeur ?? ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+/* =================================
+   RÉCUPÉRER LES ÉLÉMENTS
+   D'UN REPAS
+================================= */
+
+function obtenirElementsRepas(
+    repas
+) {
+
+    if (
+        !repas
+    ) {
+
+        return [];
+    }
+
+
+    /*
+        Nouveau format :
+
+        repas.elements contient
+        toutes les recettes et
+        tous les plats libres.
+    */
+
+    if (
+        Array.isArray(
+            repas.elements
+        ) &&
+        repas.elements.length > 0
+    ) {
+
+        return [
+            ...repas.elements
+        ]
+            .sort(
+                function (
+                    elementA,
+                    elementB
+                ) {
+
+                    const ordreA =
+                        Number(
+                            elementA.ordre
+                        ) || 0;
+
+
+                    const ordreB =
+                        Number(
+                            elementB.ordre
+                        ) || 0;
+
+
+                    return (
+                        ordreA -
+                        ordreB
+                    );
+                }
+            );
+    }
+
+
+    /*
+        Compatibilité avec les
+        anciens repas.
+
+        Avant la nouvelle table,
+        nom et recette_id étaient
+        directement stockés dans
+        repas_planning.
+    */
+
+    if (
+        repas.nom
+    ) {
+
+        return [
+
+            {
+
+                id:
+                    null,
+
+                recette_id:
+                    repas.recette_id ||
+                    null,
+
+                nom:
+                    repas.nom,
+
+                ordre:
+                    1,
+
+                ancien_format:
+                    true
+
+            }
+
+        ];
+    }
+
+
+    return [];
+}
+
+
+/* =================================
+   HTML D'UN PLAT
+================================= */
+
+function creerHTMLPlatPlanning(
+    element
+) {
+
+    const nom =
+        echapperTextePlanningUI(
+            element.nom ||
+            ""
+        );
+
+
+    /*
+        Si c'est une vraie recette,
+        son nom reste cliquable.
+    */
+
+    if (
+        element.recette_id
+    ) {
+
+        return `
+
+            <a
+                href="recette.html?id=${encodeURIComponent(
+                    element.recette_id
+                )}"
+                class="lien-repas-recette element-repas-planning"
+            >
+                ${nom}
+            </a>
+
+        `;
+    }
+
+
+    /*
+        Sinon c'est un plat ajouté
+        manuellement.
+    */
+
+    return `
+
+        <span
+            class="nom-repas-libre element-repas-planning"
+        >
+            ${nom}
+        </span>
+
+    `;
+}
+
+
+/* =================================
    CRÉNEAU REPAS
 ================================= */
 
@@ -13,13 +224,23 @@ function creerCreneauRepas(
         );
 
 
-    /*
-        Recherche robuste du repas.
+    const momentRecherche =
+        String(
+            moment ||
+            ""
+        )
+            .trim()
+            .toLowerCase();
 
-        On normalise la date et le moment
-        pour éviter qu'un repas présent
-        en base ne soit pas affiché à cause
-        d'une différence de format.
+
+    /*
+        Un créneau correspond désormais
+        à UN repas parent.
+
+        Ce repas parent peut contenir
+        plusieurs éléments dans :
+
+        repas.elements
     */
 
     const repas =
@@ -30,22 +251,16 @@ function creerCreneauRepas(
 
                 const dateRepas =
                     String(
-                        element.date || ""
+                        element.date ||
+                        ""
                     )
                         .trim();
 
 
                 const momentRepas =
                     String(
-                        element.moment || ""
-                    )
-                        .trim()
-                        .toLowerCase();
-
-
-                const momentRecherche =
-                    String(
-                        moment || ""
+                        element.moment ||
+                        ""
                     )
                         .trim()
                         .toLowerCase();
@@ -75,15 +290,22 @@ function creerCreneauRepas(
        REPAS EXISTANT
     ================================= */
 
-    if (repas) {
+    if (
+        repas
+    ) {
 
-        const nombrePersonnes =
+        const nombrePersonnesBrut =
             Number(
                 repas.personnes
-            ) > 0
-                ? Number(
-                    repas.personnes
-                )
+            );
+
+
+        const nombrePersonnes =
+            Number.isInteger(
+                nombrePersonnesBrut
+            ) &&
+            nombrePersonnesBrut > 0
+                ? nombrePersonnesBrut
                 : (
                     nombrePersonnesParDefaut ||
                     2
@@ -98,88 +320,97 @@ function creerCreneauRepas(
             }`;
 
 
-        /* =================================
-           REPAS AVEC RECETTE
-        ================================= */
+        /*
+            Récupération de TOUS
+            les plats du repas.
+        */
 
-        if (
-            repas.recette_id
-        ) {
+        const elements =
+            obtenirElementsRepas(
+                repas
+            );
 
-            contenu = `
 
-                <div class="repas-planifie">
+        /*
+            Création du HTML pour
+            chacun des plats.
+        */
 
-                    <div class="infos-repas-planifie">
+        const listePlatsHTML =
+            elements
+                .map(
+                    function (
+                        element
+                    ) {
 
-                        <a
-                            href="recette.html?id=${encodeURIComponent(
-                                repas.recette_id
-                            )}"
-                            class="lien-repas-recette"
-                        >
-                            ${repas.nom}
-                        </a>
+                        return creerHTMLPlatPlanning(
+                            element
+                        );
+                    }
+                )
+                .join("");
 
-                        <span class="personnes-repas-planifie">
-                           ${textePersonnes}
-                        </span>
+
+        /*
+            Si, pour une raison quelconque,
+            le repas parent existe mais
+            ne possède aucun élément.
+        */
+
+        const contenuPlats =
+            listePlatsHTML ||
+            `
+
+                <span
+                    class="nom-repas-libre element-repas-planning"
+                >
+                    Repas
+                </span>
+
+            `;
+
+
+        contenu = `
+
+            <div
+                class="repas-planifie repas-planifie-multiple"
+            >
+
+                <div
+                    class="infos-repas-planifie"
+                >
+
+                    <div
+                        class="liste-plats-planifies"
+                    >
+
+                        ${contenuPlats}
 
                     </div>
 
 
-                    <button
-                        type="button"
-                        class="bouton-editer-repas"
-                        data-repas-id="${repas.id}"
-                        aria-label="Modifier ce repas"
-                        title="Modifier ce repas"
+                    <span
+                        class="personnes-repas-planifie"
                     >
-                        ✏️
-                    </button>
+                        ${textePersonnes}
+                    </span>
 
                 </div>
 
-            `;
 
+                <button
+                    type="button"
+                    class="bouton-editer-repas"
+                    data-repas-id="${repas.id}"
+                    aria-label="Modifier ce repas"
+                    title="Modifier ce repas"
+                >
+                    ✏️
+                </button>
 
-        /* =================================
-           REPAS LIBRE
-        ================================= */
+            </div>
 
-        } else {
-
-            contenu = `
-
-                <div class="repas-planifie">
-
-                    <div class="infos-repas-planifie">
-
-                        <span class="nom-repas-libre">
-                            ${repas.nom}
-                        </span>
-
-                        <span class="personnes-repas-planifie">
-                            👥 ${textePersonnes}
-                        </span>
-
-                    </div>
-
-
-                    <button
-                        type="button"
-                        class="bouton-editer-repas"
-                        data-repas-id="${repas.id}"
-                        aria-label="Modifier ce repas"
-                        title="Modifier ce repas"
-                    >
-                        ✏️
-                    </button>
-
-                </div>
-
-            `;
-        }
+        `;
 
 
     /* =================================
@@ -256,6 +487,7 @@ function afficherSemaine() {
         )} – ${finSemaine.toLocaleDateString(
             "fr-FR",
             {
+
                 day:
                     "numeric",
 
@@ -264,12 +496,13 @@ function afficherSemaine() {
 
                 year:
                     "numeric"
+
             }
         )}`;
 
 
     /* =================================
-       DEBUG TEMPORAIRE
+       DEBUG
     ================================= */
 
     console.log(
@@ -290,11 +523,24 @@ function afficherSemaine() {
     );
 
 
+    /*
+        Ce tableau permet maintenant
+        de vérifier facilement dans
+        la console tous les plats
+        contenus dans chaque repas.
+    */
+
     console.table(
         repasSemaine.map(
             function (
                 repas
             ) {
+
+                const elements =
+                    obtenirElementsRepas(
+                        repas
+                    );
+
 
                 return {
 
@@ -307,14 +553,25 @@ function afficherSemaine() {
                     moment:
                         repas.moment,
 
-                    nom:
-                        repas.nom,
-
-                    recette_id:
-                        repas.recette_id,
-
                     personnes:
-                        repas.personnes
+                        repas.personnes,
+
+                    nombre_plats:
+                        elements.length,
+
+                    plats:
+                        elements
+                            .map(
+                                function (
+                                    element
+                                ) {
+
+                                    return element.nom;
+                                }
+                            )
+                            .join(
+                                " | "
+                            )
 
                 };
             }
@@ -347,8 +604,10 @@ function afficherSemaine() {
             date.toLocaleDateString(
                 "fr-FR",
                 {
+
                     weekday:
                         "long"
+
                 }
             );
 
@@ -357,7 +616,9 @@ function afficherSemaine() {
 
             <article
                 class="jour-planning ${
-                    estAujourdhui(date)
+                    estAujourdhui(
+                        date
+                    )
                         ? "aujourdhui"
                         : ""
                 }"
@@ -439,9 +700,8 @@ async function rafraichirPlanning() {
 
 
         /*
-            Chargement de la semaine
-            correspondant au nouveau
-            debutSemaine.
+            Rechargement depuis
+            planning-data.js.
         */
 
         await chargerRepasSemaine();
@@ -461,7 +721,9 @@ async function rafraichirPlanning() {
         afficherSemaine();
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur chargement planning :",
@@ -473,7 +735,10 @@ async function rafraichirPlanning() {
 
             <p>
                 Impossible de charger le planning.
-                ${erreur.message || ""}
+                ${echapperTextePlanningUI(
+                    erreur.message ||
+                    ""
+                )}
             </p>
 
         `;
@@ -482,86 +747,5 @@ async function rafraichirPlanning() {
 
 
 /* =================================
-   RECHERCHE RECETTES
+   FIN PLANNING UI
 ================================= */
-
-function afficherResultatsRecettes(
-    recherche
-) {
-
-    const texte =
-        recherche
-            .trim()
-            .toLowerCase();
-
-
-    const recettesFiltrees =
-        recettes
-            .filter(
-                function (
-                    recette
-                ) {
-
-                    return recette.nom
-                        .toLowerCase()
-                        .includes(
-                            texte
-                        );
-                }
-            )
-            .slice(
-                0,
-                12
-            );
-
-
-    /* =================================
-       AUCUN RÉSULTAT
-    ================================= */
-
-    if (
-        recettesFiltrees.length ===
-        0
-    ) {
-
-        resultatsRecettes.innerHTML = `
-
-            <p>
-                Aucune recette trouvée.
-            </p>
-
-        `;
-
-
-        return;
-    }
-
-
-    /* =================================
-       AFFICHAGE DES RECETTES
-    ================================= */
-
-    resultatsRecettes.innerHTML =
-        recettesFiltrees
-            .map(
-                function (
-                    recette
-                ) {
-
-                    return `
-
-                        <button
-                            type="button"
-                            class="resultat-recette-planning"
-                            data-recette-id="${recette.id}"
-                        >
-
-                            ${recette.nom}
-
-                        </button>
-
-                    `;
-                }
-            )
-            .join("");
-}
