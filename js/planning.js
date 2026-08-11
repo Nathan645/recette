@@ -4,7 +4,9 @@
 
    Ce fichier gère :
    - les éléments HTML
-   - la popup multi-plats
+   - la composition multi-plats
+   - le nombre de personnes
+   - la suppression personnalisée
    - les clics du planning
    - la navigation des semaines
    - la copie d'une semaine
@@ -17,7 +19,9 @@
 ================================= */
 
 
-/* SEMAINE */
+/* =========================
+   SEMAINE
+========================= */
 
 const grilleSemaine =
     document.getElementById(
@@ -55,9 +59,9 @@ const titreSemaine =
     );
 
 
-/* =================================
+/* =========================
    POPUP REPAS
-================================= */
+========================= */
 
 const popupRepas =
     document.getElementById(
@@ -79,15 +83,40 @@ const datePopupRepas =
         "date-popup-repas"
     );
 
+
+/* =========================
+   PERSONNES
+========================= */
+
 const champPersonnesRepas =
     document.getElementById(
         "personnes-repas"
     );
 
+const boutonDiminuerPersonnes =
+    document.getElementById(
+        "diminuer-personnes"
+    );
+
+const boutonAugmenterPersonnes =
+    document.getElementById(
+        "augmenter-personnes"
+    );
+
+
+/* =========================
+   ÉLÉMENTS DU REPAS
+========================= */
+
 const listeElementsRepas =
     document.getElementById(
         "liste-elements-repas"
     );
+
+
+/* =========================
+   RECHERCHE RECETTE
+========================= */
 
 const champRechercheRecette =
     document.getElementById(
@@ -99,6 +128,11 @@ const resultatsRecettesPlanning =
         "resultats-recettes-planning"
     );
 
+
+/* =========================
+   PLAT LIBRE
+========================= */
+
 const champNomRepasLibre =
     document.getElementById(
         "nom-repas-libre"
@@ -108,6 +142,11 @@ const boutonAjouterPlatManuel =
     document.getElementById(
         "ajouter-plat-manuel"
     );
+
+
+/* =========================
+   ACTIONS REPAS
+========================= */
 
 const boutonValiderRepas =
     document.getElementById(
@@ -125,9 +164,34 @@ const messagePlanning =
     );
 
 
-/* =================================
+/* =========================
+   CONFIRMATION SUPPRESSION
+========================= */
+
+const popupConfirmationSuppression =
+    document.getElementById(
+        "popup-confirmation-suppression"
+    );
+
+const texteConfirmationSuppression =
+    document.getElementById(
+        "texte-confirmation-suppression"
+    );
+
+const boutonAnnulerSuppression =
+    document.getElementById(
+        "annuler-suppression-repas"
+    );
+
+const boutonConfirmerSuppression =
+    document.getElementById(
+        "confirmer-suppression-repas"
+    );
+
+
+/* =========================
    POPUP COPIE SEMAINE
-================================= */
+========================= */
 
 const popupCopieSemaine =
     document.getElementById(
@@ -153,27 +217,6 @@ const messageCopieSemaine =
 /* =================================
    ÉTAT DE LA POPUP
 ================================= */
-
-/*
-    Contient les plats actuellement
-    présents dans la popup.
-
-    Exemple :
-
-    [
-        {
-            type: "recette",
-            recette_id: "...",
-            nom: "Houmous"
-        },
-
-        {
-            type: "libre",
-            recette_id: null,
-            nom: "Plateau de fromages"
-        }
-    ]
-*/
 
 let elementsRepasEnCours =
     [];
@@ -254,7 +297,7 @@ function afficherMessageCopie(
 
 
 /* =================================
-   SÉCURISER DU TEXTE HTML
+   SÉCURISER TEXTE HTML
 ================================= */
 
 function echapperHTML(
@@ -278,8 +321,92 @@ function echapperHTML(
 
 
 /* =================================
+   NOMBRE DE PERSONNES
+================================= */
+
+function obtenirNombrePersonnesPopup() {
+
+    const valeur =
+        Number(
+            champPersonnesRepas.value
+        );
+
+
+    if (
+        Number.isInteger(
+            valeur
+        ) &&
+        valeur >= 1
+    ) {
+
+        return valeur;
+
+    }
+
+
+    return 1;
+}
+
+
+function definirNombrePersonnesPopup(
+    nombre
+) {
+
+    let nouvelleValeur =
+        Number(
+            nombre
+        );
+
+
+    if (
+        !Number.isInteger(
+            nouvelleValeur
+        ) ||
+        nouvelleValeur < 1
+    ) {
+
+        nouvelleValeur =
+            1;
+
+    }
+
+
+    champPersonnesRepas.value =
+        nouvelleValeur;
+}
+
+
+function diminuerNombrePersonnes() {
+
+    const nombreActuel =
+        obtenirNombrePersonnesPopup();
+
+
+    definirNombrePersonnesPopup(
+        Math.max(
+            1,
+            nombreActuel - 1
+        )
+    );
+
+}
+
+
+function augmenterNombrePersonnes() {
+
+    const nombreActuel =
+        obtenirNombrePersonnesPopup();
+
+
+    definirNombrePersonnesPopup(
+        nombreActuel + 1
+    );
+
+}
+
+
+/* =================================
    AFFICHER LES PLATS
-   SÉLECTIONNÉS
 ================================= */
 
 function afficherElementsRepasEnCours() {
@@ -300,22 +427,39 @@ function afficherElementsRepasEnCours() {
         0
     ) {
 
-        const messageVide =
+        const blocVide =
             document.createElement(
-                "p"
+                "div"
             );
 
 
-        messageVide.className =
+        blocVide.className =
             "message-elements-vide";
 
 
-        messageVide.textContent =
-            "Aucun plat ajouté pour le moment.";
+        blocVide.innerHTML = `
+
+            <span class="icone-liste-vide">
+                🍽️
+            </span>
+
+            <div>
+
+                <strong>
+                    Le repas est encore vide
+                </strong>
+
+                <p>
+                    Ajoutez une recette ou un plat libre ci-dessous.
+                </p>
+
+            </div>
+
+        `;
 
 
         listeElementsRepas.appendChild(
-            messageVide
+            blocVide
         );
 
 
@@ -337,6 +481,26 @@ function afficherElementsRepasEnCours() {
 
             ligne.className =
                 "element-repas-selectionne";
+
+
+            /* =========================
+               ICÔNE
+            ========================= */
+
+            const icone =
+                document.createElement(
+                    "div"
+                );
+
+
+            icone.className =
+                "icone-element-repas";
+
+
+            icone.textContent =
+                element.recette_id
+                    ? "🍴"
+                    : "✍️";
 
 
             /* =========================
@@ -375,8 +539,8 @@ function afficherElementsRepasEnCours() {
 
             type.textContent =
                 element.recette_id
-                    ? "Recette"
-                    : "Plat libre";
+                    ? "Recette enregistrée"
+                    : "Ajout libre";
 
 
             informations.appendChild(
@@ -390,7 +554,7 @@ function afficherElementsRepasEnCours() {
 
 
             /* =========================
-               RETIRER
+               SUPPRIMER DE LA LISTE
             ========================= */
 
             const boutonRetirer =
@@ -441,6 +605,11 @@ function afficherElementsRepasEnCours() {
             /* =========================
                CONSTRUCTION
             ========================= */
+
+            ligne.appendChild(
+                icone
+            );
+
 
             ligne.appendChild(
                 informations
@@ -494,7 +663,9 @@ function afficherResultatsRecettes(
             recettes
         )
     ) {
+
         return;
+
     }
 
 
@@ -530,7 +701,7 @@ function afficherResultatsRecettes(
     recettesFiltrees =
         recettesFiltrees.slice(
             0,
-            15
+            10
         );
 
 
@@ -541,7 +712,7 @@ function afficherResultatsRecettes(
 
         const message =
             document.createElement(
-                "p"
+                "div"
             );
 
 
@@ -582,8 +753,50 @@ function afficherResultatsRecettes(
                 "resultat-recette-planning";
 
 
-            bouton.textContent =
+            /* =========================
+               NOM
+            ========================= */
+
+            const zoneNom =
+                document.createElement(
+                    "span"
+                );
+
+
+            zoneNom.className =
+                "nom-resultat-recette";
+
+
+            zoneNom.textContent =
                 recette.nom;
+
+
+            /* =========================
+               PLUS
+            ========================= */
+
+            const plus =
+                document.createElement(
+                    "span"
+                );
+
+
+            plus.className =
+                "plus-resultat-recette";
+
+
+            plus.textContent =
+                "+";
+
+
+            bouton.appendChild(
+                zoneNom
+            );
+
+
+            bouton.appendChild(
+                plus
+            );
 
 
             bouton.dataset.recetteId =
@@ -615,7 +828,6 @@ function afficherResultatsRecettes(
 
 /* =================================
    AJOUTER UNE RECETTE
-   DANS LA POPUP
 ================================= */
 
 function ajouterRecetteDansPopup(
@@ -628,11 +840,6 @@ function ajouterRecetteDansPopup(
         return;
     }
 
-
-    /*
-        On empêche la même recette
-        d'être ajoutée deux fois.
-    */
 
     const existeDeja =
         elementsRepasEnCours.some(
@@ -659,9 +866,10 @@ function ajouterRecetteDansPopup(
     ) {
 
         afficherMessagePlanning(
-            "Cette recette est déjà ajoutée au repas.",
+            "Cette recette est déjà présente dans le repas.",
             "erreur"
         );
+
 
         return;
     }
@@ -694,14 +902,8 @@ function ajouterRecetteDansPopup(
     );
 
 
-    if (
-        champRechercheRecette
-    ) {
-
-        champRechercheRecette.value =
-            "";
-
-    }
+    champRechercheRecette.value =
+        "";
 
 
     afficherResultatsRecettes(
@@ -717,13 +919,6 @@ function ajouterRecetteDansPopup(
 
 function ajouterPlatManuel() {
 
-    if (
-        !champNomRepasLibre
-    ) {
-        return;
-    }
-
-
     const nom =
         champNomRepasLibre
             .value
@@ -735,7 +930,7 @@ function ajouterPlatManuel() {
     ) {
 
         afficherMessagePlanning(
-            "Indique le nom du plat à ajouter.",
+            "Indique le nom de ce que tu souhaites ajouter.",
             "erreur"
         );
 
@@ -784,7 +979,7 @@ function ajouterPlatManuel() {
 
 
 /* =================================
-   ENREGISTRER LE REPAS COMPLET
+   ENREGISTRER LE REPAS
 ================================= */
 
 async function enregistrerCreneauComplet() {
@@ -795,9 +990,10 @@ async function enregistrerCreneauComplet() {
     ) {
 
         afficherMessagePlanning(
-            "Impossible d'identifier le créneau.",
+            "Impossible d'identifier ce repas.",
             "erreur"
         );
+
 
         return;
     }
@@ -809,34 +1005,17 @@ async function enregistrerCreneauComplet() {
     ) {
 
         afficherMessagePlanning(
-            "Ajoute au moins un plat au repas.",
+            "Ajoute au moins un plat avant de terminer le repas.",
             "erreur"
         );
+
 
         return;
     }
 
 
     const personnes =
-        Number(
-            champPersonnesRepas.value
-        );
-
-
-    if (
-        !Number.isInteger(
-            personnes
-        ) ||
-        personnes < 1
-    ) {
-
-        afficherMessagePlanning(
-            "Le nombre de personnes est invalide.",
-            "erreur"
-        );
-
-        return;
-    }
+        obtenirNombrePersonnesPopup();
 
 
     boutonValiderRepas.disabled =
@@ -848,24 +1027,11 @@ async function enregistrerCreneauComplet() {
 
 
     afficherMessagePlanning(
-        "Enregistrement du repas…"
+        ""
     );
 
 
     try {
-
-        /*
-            IMPORTANT :
-
-            Nouveau repas :
-            -> enregistrerRepasComplet()
-
-            Repas existant :
-            -> modifierRepasComplet()
-
-            Ces fonctions sont dans
-            planning-data.js.
-        */
 
         if (
             repasEnModification
@@ -887,16 +1053,8 @@ async function enregistrerCreneauComplet() {
         }
 
 
-        /* =========================
-           RECHARGER
-        ========================= */
-
         await rafraichirPlanning();
 
-
-        /* =========================
-           FERMER
-        ========================= */
 
         fermerPopup();
 
@@ -935,10 +1093,10 @@ async function enregistrerCreneauComplet() {
 
 
 /* =================================
-   SUPPRIMER LE REPAS
+   OUVRIR CONFIRMATION SUPPRESSION
 ================================= */
 
-async function supprimerRepasPlanning() {
+function ouvrirConfirmationSuppression() {
 
     if (
         !repasEnModification
@@ -948,42 +1106,93 @@ async function supprimerRepasPlanning() {
     }
 
 
-    const confirmation =
-        window.confirm(
-            "Supprimer complètement ce repas ?"
-        );
+    /*
+        On personnalise légèrement
+        le texte avec le créneau.
+    */
+
+    let texte =
+        "Tous les plats prévus pour ce repas seront supprimés.";
 
 
     if (
-        !confirmation
+        datePopupRepas &&
+        datePopupRepas.textContent
     ) {
+
+        texte =
+            `Tous les plats prévus pour ${datePopupRepas.textContent.toLowerCase()} seront supprimés.`;
+
+    }
+
+
+    texteConfirmationSuppression.textContent =
+        texte;
+
+
+    popupConfirmationSuppression.hidden =
+        false;
+
+}
+
+
+/* =================================
+   FERMER CONFIRMATION SUPPRESSION
+================================= */
+
+function fermerConfirmationSuppression() {
+
+    popupConfirmationSuppression.hidden =
+        true;
+
+
+    boutonConfirmerSuppression.disabled =
+        false;
+
+
+    boutonConfirmerSuppression.textContent =
+        "Vider le créneau";
+
+}
+
+
+/* =================================
+   SUPPRIMER RÉELLEMENT LE REPAS
+================================= */
+
+async function confirmerSuppressionRepas() {
+
+    if (
+        !repasEnModification
+    ) {
+
+        fermerConfirmationSuppression();
 
         return;
     }
+
+
+    boutonConfirmerSuppression.disabled =
+        true;
+
+
+    boutonConfirmerSuppression.textContent =
+        "Suppression…";
 
 
     boutonSupprimerRepas.disabled =
         true;
 
 
-    boutonSupprimerRepas.textContent =
-        "Suppression…";
-
-
     try {
-
-        /*
-            supprimerRepas()
-            vient de planning-data.js.
-
-            ON DELETE CASCADE supprime
-            automatiquement les éléments.
-        */
 
         await supprimerRepas();
 
 
         await rafraichirPlanning();
+
+
+        fermerConfirmationSuppression();
 
 
         fermerPopup();
@@ -997,6 +1206,9 @@ async function supprimerRepasPlanning() {
             "Erreur suppression repas :",
             erreur
         );
+
+
+        fermerConfirmationSuppression();
 
 
         afficherMessagePlanning(
@@ -1023,16 +1235,6 @@ async function supprimerRepasPlanning() {
 /* =================================
    CLICS DANS LA GRILLE
 ================================= */
-
-/*
-    IMPORTANT :
-
-    Les boutons + Ajouter et ✏️
-    sont générés dynamiquement
-    par afficherSemaine().
-
-    On écoute donc la grille entière.
-*/
 
 grilleSemaine.addEventListener(
     "click",
@@ -1062,13 +1264,6 @@ grilleSemaine.addEventListener(
                 boutonAjouter.dataset.moment;
 
 
-            console.log(
-                "OUVERTURE AJOUT :",
-                dateISO,
-                moment
-            );
-
-
             if (
                 !dateISO ||
                 !moment
@@ -1077,6 +1272,7 @@ grilleSemaine.addEventListener(
                 console.error(
                     "Date ou moment absent."
                 );
+
 
                 return;
             }
@@ -1094,7 +1290,7 @@ grilleSemaine.addEventListener(
 
 
         /* =========================
-           ✏️ MODIFIER
+           MODIFIER
         ========================= */
 
         const boutonModifier =
@@ -1126,6 +1322,7 @@ grilleSemaine.addEventListener(
                     repasId
                 );
 
+
                 return;
             }
 
@@ -1139,6 +1336,34 @@ grilleSemaine.addEventListener(
 
             return;
         }
+
+    }
+);
+
+
+/* =================================
+   PERSONNES + / -
+================================= */
+
+boutonDiminuerPersonnes.addEventListener(
+    "click",
+    diminuerNombrePersonnes
+);
+
+
+boutonAugmenterPersonnes.addEventListener(
+    "click",
+    augmenterNombrePersonnes
+);
+
+
+champPersonnesRepas.addEventListener(
+    "change",
+    function () {
+
+        definirNombrePersonnesPopup(
+            champPersonnesRepas.value
+        );
 
     }
 );
@@ -1203,12 +1428,51 @@ boutonValiderRepas.addEventListener(
 
 
 /* =================================
-   SUPPRESSION REPAS
+   SUPPRESSION
 ================================= */
+
+/*
+    Plus de window.confirm().
+*/
 
 boutonSupprimerRepas.addEventListener(
     "click",
-    supprimerRepasPlanning
+    ouvrirConfirmationSuppression
+);
+
+
+boutonAnnulerSuppression.addEventListener(
+    "click",
+    fermerConfirmationSuppression
+);
+
+
+boutonConfirmerSuppression.addEventListener(
+    "click",
+    confirmerSuppressionRepas
+);
+
+
+/* =================================
+   CLIC FOND CONFIRMATION
+================================= */
+
+popupConfirmationSuppression.addEventListener(
+    "click",
+    function (
+        evenement
+    ) {
+
+        if (
+            evenement.target ===
+            popupConfirmationSuppression
+        ) {
+
+            fermerConfirmationSuppression();
+
+        }
+
+    }
 );
 
 
@@ -1304,6 +1568,7 @@ function ouvrirPopupCopieSemaine() {
     if (
         !popupCopieSemaine
     ) {
+
         return;
     }
 
@@ -1327,6 +1592,7 @@ function fermerPopupCopieSemaine() {
     if (
         !popupCopieSemaine
     ) {
+
         return;
     }
 
@@ -1366,6 +1632,7 @@ async function copierSemainePlanning() {
             "erreur"
         );
 
+
         return;
     }
 
@@ -1379,6 +1646,7 @@ async function copierSemainePlanning() {
             "Il n'y a aucun repas à copier.",
             "erreur"
         );
+
 
         return;
     }
@@ -1420,7 +1688,7 @@ async function copierSemainePlanning() {
 
 
         /* =========================
-           REPAS DÉJÀ PRÉSENTS
+           CRÉNEAUX EXISTANTS
         ========================= */
 
         const {
@@ -1534,7 +1802,7 @@ async function copierSemainePlanning() {
 
 
             /* =========================
-               ÉLÉMENTS
+               ÉLÉMENTS DU REPAS
             ========================= */
 
             let elements =
@@ -1546,12 +1814,12 @@ async function copierSemainePlanning() {
 
 
             /*
-                Compatibilité avec
-                anciens repas.
+                Compatibilité anciens repas.
             */
 
             if (
-                elements.length === 0 &&
+                elements.length ===
+                    0 &&
                 repasSource.nom
             ) {
 
@@ -1574,7 +1842,8 @@ async function copierSemainePlanning() {
 
 
             if (
-                elements.length === 0
+                elements.length ===
+                0
             ) {
 
                 continue;
@@ -1582,7 +1851,7 @@ async function copierSemainePlanning() {
 
 
             /* =========================
-               CRÉER PARENT
+               PARENT
             ========================= */
 
             const premierElement =
@@ -1638,7 +1907,7 @@ async function copierSemainePlanning() {
 
 
             /* =========================
-               CRÉER LES ÉLÉMENTS
+               ENFANTS
             ========================= */
 
             const lignesElements =
@@ -1685,11 +1954,6 @@ async function copierSemainePlanning() {
                 erreurElements
             ) {
 
-                /*
-                    Nettoyage si les enfants
-                    ne peuvent pas être créés.
-                */
-
                 await window.supabaseClient
                     .from(
                         "repas_planning"
@@ -1729,8 +1993,10 @@ async function copierSemainePlanning() {
         ========================= */
 
         if (
-            nombreCopies === 0 &&
-            nombreIgnores > 0
+            nombreCopies ===
+                0 &&
+            nombreIgnores >
+                0
         ) {
 
             afficherMessageCopie(
@@ -1757,7 +2023,8 @@ async function copierSemainePlanning() {
 
 
             if (
-                nombreIgnores > 0
+                nombreIgnores >
+                0
             ) {
 
                 texte +=
@@ -1868,6 +2135,24 @@ document.addEventListener(
             evenement.key !==
             "Escape"
         ) {
+
+            return;
+        }
+
+
+        /*
+            Priorité à la confirmation
+            de suppression.
+        */
+
+        if (
+            popupConfirmationSuppression &&
+            !popupConfirmationSuppression.hidden
+        ) {
+
+            fermerConfirmationSuppression();
+
+
             return;
         }
 
