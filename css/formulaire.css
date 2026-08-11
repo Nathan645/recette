@@ -1,328 +1,1430 @@
 .page-formulaire {
     max-width: 950px;
+
     margin: 0 auto;
-    padding: 40px 20px 80px;
+
+    padding:
+        40px
+        20px
+        80px;
 }
+
+
+/* =================================
+   ENTÊTE FORMULAIRE
+================================= */
 
 .entete-formulaire {
     margin-bottom: 35px;
+
     text-align: center;
 }
 
+
 .entete-formulaire h1 {
     margin-bottom: 10px;
+
     font-size: 38px;
 }
 
+
 .entete-formulaire p {
-    color: var(--texte-secondaire);
+    color:
+        var(--texte-secondaire);
+
     line-height: 1.6;
 }
 
+
+/* =================================
+   CARTE FORMULAIRE
+================================= */
+
 .formulaire-recette {
     padding: 35px;
-    background-color: var(--blanc);
+
+    background-color:
+        var(--blanc);
+
     border-radius: 20px;
-    box-shadow: 0 10px 35px var(--ombre);
+
+    box-shadow:
+        0 10px 35px
+        var(--ombre);
 }
+
+
+/* =================================
+   GROUPES DE CHAMPS
+================================= */
 
 .groupe-champs {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+
+    grid-template-columns:
+        repeat(
+            2,
+            1fr
+        );
+
     gap: 20px;
 }
+
 
 .champ {
     margin-bottom: 22px;
 }
 
+
 .champ label,
 .titre-champ {
     display: block;
+
     margin-bottom: 8px;
+
     font-weight: bold;
 }
+
+
+/* =================================
+   INPUTS / SELECTS / TEXTAREA
+================================= */
 
 .champ input,
 .champ select,
 .champ textarea,
 .ligne-ingredient input {
     width: 100%;
-    padding: 13px 15px;
-    border: 1px solid #d8d1c5;
-    border-radius: 10px;
-    background-color: white;
-    color: var(--texte);
-    font: inherit;
+
     box-sizing: border-box;
+
+    padding:
+        13px
+        15px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 10px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
+
+
+.champ input:focus,
+.champ select:focus,
+.champ textarea:focus,
+.ligne-ingredient input:focus {
+    border-color:
+        var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            102,
+            112,
+            90,
+            0.10
+        );
+}
+
+
+/* =================================
+   SELECTS
+================================= */
+
+.champ select {
+    height: 48px;
+
+    min-height: 48px;
+
+    padding:
+        0
+        42px
+        0
+        14px;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--vert) 50%
+        ),
+        linear-gradient(
+            135deg,
+            var(--vert) 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 18px)
+        20px,
+
+        calc(100% - 12px)
+        20px;
+
+    background-size:
+        6px 6px,
+        6px 6px;
+
+    background-repeat:
+        no-repeat;
+
+    cursor: pointer;
+}
+
+
+/* =================================
+   TEXTAREA
+================================= */
 
 .champ textarea {
     min-height: 120px;
+
     resize: vertical;
 }
+
+
+/* =================================
+   AIDES
+================================= */
 
 .champ small,
 .aide {
     display: block;
+
     margin-top: 7px;
-    color: var(--texte-secondaire);
+
+    color:
+        var(--texte-secondaire);
+
     line-height: 1.4;
 }
+
+
+/* =================================
+   INGRÉDIENTS
+================================= */
 
 .bloc-ingredients {
     margin-bottom: 25px;
 }
 
+
 .entete-ingredients {
     display: grid;
-    grid-template-columns: 120px 100px 1fr 125px 44px;
+
+    grid-template-columns:
+        120px
+        100px
+        1fr
+        110px
+        44px;
+
     gap: 10px;
-    margin: 12px 0 8px;
-    padding: 0 4px;
-    color: var(--texte-secondaire);
+
+    margin:
+        12px
+        0
+        8px;
+
+    padding:
+        0
+        4px;
+
+    color:
+        var(--texte-secondaire);
+
     font-size: 13px;
     font-weight: bold;
 }
 
+
 .ligne-ingredient {
     display: grid;
-    grid-template-columns: 120px 100px 1fr 125px 44px;
+
+    grid-template-columns:
+        120px
+        100px
+        1fr
+        110px
+        44px;
+
     align-items: center;
+
     gap: 10px;
+
     margin-bottom: 12px;
 }
 
-.ligne-ingredient input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin: 0;
-    accent-color: var(--vert);
-    cursor: pointer;
-}
+
+/* =================================
+   PROPORTIONNEL
+================================= */
 
 .option-proportionnelle {
     display: flex;
+
     align-items: center;
     justify-content: center;
-    gap: 7px;
-    padding: 10px 8px;
-    border: 1px solid #d8d1c5;
+
+    gap: 5px;
+
+    width: 100%;
+    height: 42px;
+
+    padding:
+        6px
+        7px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
     border-radius: 10px;
-    background-color: white;
-    font-size: 13px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font-size: 11px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.option-proportionnelle:hover {
+    border-color:
+        var(--vert);
+}
+
+
+.option-proportionnelle:has(
+    .ingredient-proportionnel:checked
+) {
+    border-color:
+        var(--vert);
+
+    background-color:
+        #eef0e8;
+}
+
+
+/* =================================
+   CHECKBOX PROPORTIONNEL
+================================= */
+
+.ligne-ingredient
+input[type="checkbox"].ingredient-proportionnel {
+    width: 14px;
+    height: 14px;
+
+    flex:
+        0 0
+        14px;
+
+    margin: 0;
+
+    padding: 0;
+
+    position: relative;
+
+    border:
+        1.5px solid
+        #cfc8bc;
+
+    border-radius: 4px;
+
+    background-color:
+        #ffffff;
+
+    -webkit-appearance: none;
+    appearance: none;
+
     cursor: pointer;
 }
+
+
+.ligne-ingredient
+input[type="checkbox"].ingredient-proportionnel:checked {
+    border-color:
+        var(--vert);
+
+    background-color:
+        var(--vert);
+}
+
+
+.ligne-ingredient
+input[type="checkbox"].ingredient-proportionnel:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -54%
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* =================================
+   SUPPRIMER UN INGRÉDIENT
+================================= */
 
 .supprimer-ingredient {
     width: 42px;
     height: 42px;
-    border: 1px solid #c9a99a;
+
+    border:
+        1px solid
+        #c9a99a;
+
     border-radius: 10px;
-    background-color: white;
-    color: #9b4d35;
+
+    background-color:
+        #ffffff;
+
+    color:
+        #9b4d35;
+
     font-size: 20px;
+
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
+
 
 .supprimer-ingredient:hover {
-    background-color: #f8ece7;
+    background-color:
+        #f8ece7;
+
+    transform:
+        translateY(-1px);
 }
+
+
+/* =================================
+   AJOUTER UNE LIGNE
+================================= */
 
 .bouton-ajouter-ligne {
-    padding: 11px 17px;
-    border: 1px solid var(--vert);
+    padding:
+        11px
+        17px;
+
+    border:
+        1px solid
+        var(--vert);
+
     border-radius: 10px;
-    background-color: white;
-    color: var(--vert);
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--vert);
+
     font: inherit;
     font-weight: bold;
+
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
 
+
 .bouton-ajouter-ligne:hover {
-    background-color: var(--beige);
+    background-color:
+        var(--beige);
+
+    transform:
+        translateY(-1px);
 }
+
+
+/* =================================
+   BOUTON ENREGISTRER
+================================= */
 
 .bouton-generer {
     width: 100%;
-    padding: 15px 20px;
+
+    padding:
+        15px
+        20px;
+
     border: none;
+
     border-radius: 10px;
-    background-color: var(--vert);
-    color: white;
+
+    background-color:
+        var(--vert);
+
+    color:
+        #ffffff;
+
     font-size: 17px;
     font-weight: bold;
+
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
 }
+
 
 .bouton-generer:hover {
-    background-color: var(--vert-fonce);
-}
+    background-color:
+        var(--vert-fonce);
 
-.resultat-json {
-    display: none;
-    margin-top: 35px;
-    padding: 30px;
-    background-color: var(--blanc);
-    border-radius: 20px;
-    box-shadow: 0 10px 35px var(--ombre);
-}
-
-.resultat-json.visible {
-    display: block;
-}
-
-.resultat-json h2 {
-    margin-top: 0;
-}
-
-.resultat-json pre {
-    overflow-x: auto;
-    padding: 20px;
-    border-radius: 12px;
-    background-color: #272b25;
-    color: #f7f5ef;
-    white-space: pre-wrap;
-    word-break: break-word;
-    line-height: 1.5;
-}
-
-.actions-json {
-    display: flex;
-    gap: 12px;
-    flex-wrap: wrap;
-    margin-top: 20px;
-}
-
-.bouton-secondaire {
-    padding: 12px 18px;
-    border: 1px solid var(--vert);
-    border-radius: 10px;
-    background-color: white;
-    color: var(--vert);
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.bouton-secondaire:hover {
-    background-color: var(--beige);
-}
-
-.confirmation {
-    min-height: 24px;
-    margin-top: 12px;
-    color: var(--vert);
-    font-weight: bold;
-}
-
-@media (max-width: 760px) {
-
-    .groupe-champs {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
-
-    .entete-ingredients {
-        display: none;
-    }
-
-    .ligne-ingredient {
-        grid-template-columns: 1fr 1fr 44px;
-        padding: 15px;
-        border: 1px solid #e1dbd0;
-        border-radius: 14px;
-        background-color: #fbf8f2;
-    }
-
-    .ingredient-nom {
-        grid-column: 1 / -1;
-    }
-
-    .option-proportionnelle {
-        grid-column: 1 / 3;
-    }
-
-    .supprimer-ingredient {
-        grid-column: 3;
-        grid-row: 2;
-    }
-
-    .formulaire-recette,
-    .resultat-json {
-        padding: 24px 18px;
-    }
-
-    .entete-formulaire h1 {
-        font-size: 31px;
-    }
-}
-
-.bloc-filtres-recette {
-    margin: 30px 0;
-}
-
-.choix-multiples {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
-.choix-multiples label {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-
-    padding: 10px 14px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 20px;
-
-    background-color: var(--blanc);
-
-    cursor: pointer;
-}
-
-.choix-multiples input[type="checkbox"] {
-    accent-color: var(--vert);
+    transform:
+        translateY(-1px);
 }
 
 /* =================================
-   VISIBILITÉ RECETTE
+   FILTRES RECETTE
+================================= */
+
+.bloc-filtres-recette {
+    margin:
+        30px
+        0;
+}
+
+
+/* =================================
+   ÉTIQUETTES / OCCASIONS / SAISONS
+================================= */
+
+.choix-multiples {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.choix-multiples label {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: flex-start;
+
+    gap: 8px;
+
+    min-height: 46px;
+
+    padding:
+        9px
+        13px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 14px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.2;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.choix-multiples label:hover {
+    border-color:
+        var(--vert);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =================================
+   CHECKBOX FILTRES
+================================= */
+
+.choix-multiples
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+
+    flex:
+        0 0
+        16px;
+
+    margin: 0;
+
+    padding: 0;
+
+    position: relative;
+
+    border:
+        1.5px solid
+        #cfc8bc;
+
+    border-radius: 5px;
+
+    background-color:
+        #ffffff;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
+}
+
+
+.choix-multiples
+input[type="checkbox"]:hover {
+    border-color:
+        var(--vert);
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked {
+    border-color:
+        var(--vert);
+
+    background-color:
+        var(--vert);
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -54%
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* =================================
+   FILTRE SÉLECTIONNÉ
+================================= */
+
+.choix-multiples label:has(
+    input[type="checkbox"]:checked
+) {
+    border-color:
+        var(--vert);
+
+    background-color:
+        #eef0e8;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(
+            102,
+            112,
+            90,
+            0.08
+        );
+}
+
+
+/* =================================
+   VISIBILITÉ
 ================================= */
 
 .choix-visibilite {
     display: flex;
+
     flex-wrap: wrap;
-    gap: 12px;
+
+    gap: 10px;
 
     margin-top: 8px;
 }
 
 
+/*
+   Même apparence que les étiquettes.
+*/
+
 .option-visibilite {
-    display: flex;
+    display: inline-flex;
+
     align-items: center;
+    justify-content: flex-start;
 
     gap: 8px;
 
-    padding: 11px 14px;
+    min-height: 46px;
 
-    border: 1px solid #ddd7cc;
-    border-radius: 10px;
+    padding:
+        9px
+        13px;
 
-    background-color: #fbfaf6;
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius: 14px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font-size: 13px;
+    font-weight: 700;
+
+    line-height: 1.2;
 
     cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 
-.option-visibilite input {
-    accent-color: var(--vert);
+.option-visibilite:hover {
+    border-color:
+        var(--vert);
+
+    transform:
+        translateY(-1px);
 }
 
 
-.option-visibilite:has(input:checked) {
-    border-color: var(--vert);
-    background-color: #eef2e9;
+/* =================================
+   RADIO VISIBILITÉ
+   STYLE CHECKBOX
+================================= */
+
+.option-visibilite
+input[type="radio"] {
+    width: 16px;
+    height: 16px;
+
+    flex:
+        0 0
+        16px;
+
+    margin: 0;
+
+    padding: 0;
+
+    position: relative;
+
+    border:
+        1.5px solid
+        #cfc8bc;
+
+    border-radius: 5px;
+
+    background-color:
+        #ffffff;
+
+    -webkit-appearance: none;
+    appearance: none;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
 }
+
+
+.option-visibilite
+input[type="radio"]:hover {
+    border-color:
+        var(--vert);
+}
+
+
+.option-visibilite
+input[type="radio"]:checked {
+    border-color:
+        var(--vert);
+
+    background-color:
+        var(--vert);
+}
+
+
+.option-visibilite
+input[type="radio"]:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -54%
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+/* =================================
+   VISIBILITÉ SÉLECTIONNÉE
+================================= */
+
+.option-visibilite:has(
+    input[type="radio"]:checked
+) {
+    border-color:
+        var(--vert);
+
+    background-color:
+        #eef0e8;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(
+            102,
+            112,
+            90,
+            0.08
+        );
+}
+
+
+/* =================================
+   FOCUS CLAVIER
+================================= */
+
+.choix-multiples
+input[type="checkbox"]:focus-visible,
+
+.option-visibilite
+input[type="radio"]:focus-visible,
+
+.option-proportionnelle
+input[type="checkbox"]:focus-visible {
+    outline:
+        3px solid
+        rgba(
+            102,
+            112,
+            90,
+            0.18
+        );
+
+    outline-offset: 2px;
+}
+
+
+/* =================================
+   RÉSULTAT JSON
+================================= */
+
+.resultat-json {
+    display: none;
+
+    margin-top: 35px;
+
+    padding: 30px;
+
+    background-color:
+        var(--blanc);
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 35px
+        var(--ombre);
+}
+
+
+.resultat-json.visible {
+    display: block;
+}
+
+
+.resultat-json h2 {
+    margin-top: 0;
+}
+
+
+.resultat-json pre {
+    overflow-x: auto;
+
+    padding: 20px;
+
+    border-radius: 12px;
+
+    background-color:
+        #272b25;
+
+    color:
+        #f7f5ef;
+
+    white-space: pre-wrap;
+
+    word-break: break-word;
+
+    line-height: 1.5;
+}
+
+
+/* =================================
+   ACTIONS JSON
+================================= */
+
+.actions-json {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+
+.bouton-secondaire {
+    padding:
+        12px
+        18px;
+
+    border:
+        1px solid
+        var(--vert);
+
+    border-radius: 10px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--vert);
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.bouton-secondaire:hover {
+    background-color:
+        var(--beige);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =================================
+   CONFIRMATION
+================================= */
+
+.confirmation {
+    min-height: 24px;
+
+    margin-top: 12px;
+
+    color:
+        var(--vert);
+
+    font-weight: bold;
+}
+
+/* =================================
+   RESPONSIVE TABLETTE / MOBILE
+================================= */
+
+@media (max-width: 760px) {
+
+    .page-formulaire {
+        padding:
+            30px
+            14px
+            60px;
+    }
+
+
+    .formulaire-recette,
+    .resultat-json {
+        padding:
+            24px
+            18px;
+    }
+
+
+    .entete-formulaire h1 {
+        font-size: 31px;
+    }
+
+
+    .groupe-champs {
+        grid-template-columns:
+            1fr;
+
+        gap: 0;
+    }
+
+
+    /* =================================
+       INGRÉDIENTS MOBILE
+    ================================= */
+
+    .entete-ingredients {
+        display: none;
+    }
+
+
+    .ligne-ingredient {
+        grid-template-columns:
+            1fr
+            1fr
+            44px;
+
+        gap: 10px;
+
+        padding: 15px;
+
+        border:
+            1px solid
+            #e1dbd0;
+
+        border-radius: 14px;
+
+        background-color:
+            #fbf8f2;
+    }
+
+
+    .ingredient-nom {
+        grid-column:
+            1 / -1;
+    }
+
+
+    .option-proportionnelle {
+        grid-column:
+            1 / 3;
+
+        width: 100%;
+
+        height: 40px;
+
+        min-height: 40px;
+
+        justify-content:
+            flex-start;
+
+        padding:
+            6px
+            9px;
+
+        font-size: 11px;
+    }
+
+
+    .supprimer-ingredient {
+        grid-column: 3;
+
+        grid-row: 2;
+
+        align-self: center;
+    }
+
+
+    /* =================================
+       SELECTS MOBILE
+    ================================= */
+
+    .champ select {
+        height: 48px;
+
+        min-height: 48px;
+    }
+
+
+    /* =================================
+       FILTRES MOBILE
+    ================================= */
+
+    .choix-multiples {
+        gap: 8px;
+    }
+
+
+    .choix-multiples label {
+        min-height: 42px;
+
+        padding:
+            8px
+            11px;
+
+        font-size: 12px;
+    }
+
+
+    .choix-multiples
+    input[type="checkbox"] {
+        width: 15px;
+
+        height: 15px;
+
+        flex:
+            0 0
+            15px;
+    }
+
+
+    /* =================================
+       VISIBILITÉ MOBILE
+    ================================= */
+
+    .choix-visibilite {
+        gap: 8px;
+    }
+
+
+    .option-visibilite {
+        min-height: 42px;
+
+        padding:
+            8px
+            11px;
+
+        font-size: 12px;
+    }
+
+
+    .option-visibilite
+    input[type="radio"] {
+        width: 15px;
+
+        height: 15px;
+
+        flex:
+            0 0
+            15px;
+    }
+}
+
+
+/* =================================
+   PETIT MOBILE
+================================= */
+
+@media (max-width: 520px) {
+
+    .page-formulaire {
+        padding:
+            24px
+            10px
+            50px;
+    }
+
+
+    .formulaire-recette {
+        padding:
+            20px
+            14px;
+    }
+
+
+    .entete-formulaire h1 {
+        font-size: 28px;
+    }
+
+
+    .entete-formulaire p {
+        font-size: 14px;
+    }
+
+
+    /* =================================
+       INGRÉDIENTS PETIT MOBILE
+    ================================= */
+
+    .ligne-ingredient {
+        grid-template-columns:
+            1fr
+            1fr
+            40px;
+
+        padding:
+            12px;
+    }
+
+
+    .supprimer-ingredient {
+        width: 38px;
+
+        height: 38px;
+    }
+
+
+    .option-proportionnelle {
+        height: 38px;
+
+        min-height: 38px;
+
+        font-size: 10px;
+
+        gap: 5px;
+    }
+
+
+    .ligne-ingredient
+    input[type="checkbox"].ingredient-proportionnel {
+        width: 13px;
+
+        height: 13px;
+
+        flex:
+            0 0
+            13px;
+    }
+
+
+    .ligne-ingredient
+    input[type="checkbox"].ingredient-proportionnel:checked::after {
+        font-size: 8px;
+    }
+
+
+    /* =================================
+       ÉTIQUETTES / VISIBILITÉ
+    ================================= */
+
+    .choix-multiples label,
+    .option-visibilite {
+        min-height: 40px;
+
+        padding:
+            7px
+            10px;
+
+        font-size: 12px;
+    }
+}
+
+
+/* =================================
+   SÉCURITÉ PRIORITÉ
+   SUR STYLE.CSS
+================================= */
+
+/*
+   formulaire.css est chargé après style.css.
+   On garde ici des sélecteurs plus précis
+   pour éviter qu'anciens styles généraux
+   ne reprennent la main.
+*/
+
+.formulaire-recette
+.option-proportionnelle {
+    font-size: 11px;
+
+    min-height: 42px;
+
+    height: 42px;
+}
+
+
+.formulaire-recette
+.option-proportionnelle
+.ingredient-proportionnel {
+    width: 14px;
+
+    height: 14px;
+
+    min-width: 14px;
+
+    min-height: 14px;
+
+    flex:
+        0 0
+        14px;
+
+    padding: 0;
+}
+
+
+.formulaire-recette
+.option-proportionnelle
+.ingredient-proportionnel:checked::after {
+    font-size: 9px;
+}
+
+
+/* =================================
+   VISIBILITÉ = ÉTIQUETTES
+================================= */
+
+.formulaire-recette
+.option-visibilite {
+    min-height: 46px;
+
+    padding:
+        9px
+        13px;
+
+    border-radius: 14px;
+
+    font-size: 13px;
+}
+
+
+.formulaire-recette
+.option-visibilite
+input[type="radio"] {
+    width: 16px;
+
+    height: 16px;
+
+    min-width: 16px;
+
+    min-height: 16px;
+
+    flex:
+        0 0
+        16px;
+
+    padding: 0;
+
+    border-radius: 5px;
+}
+
+
+/* =================================
+   ÉTIQUETTES
+================================= */
+
+.formulaire-recette
+.choix-multiples label {
+    min-height: 46px;
+
+    padding:
+        9px
+        13px;
+
+    border-radius: 14px;
+
+    font-size: 13px;
+}
+
+
+.formulaire-recette
+.choix-multiples
+input[type="checkbox"] {
+    width: 16px;
+
+    height: 16px;
+
+    min-width: 16px;
+
+    min-height: 16px;
+
+    flex:
+        0 0
+        16px;
+
+    padding: 0;
+}
+
+
+/* =================================
+   FIN
+================================= */
