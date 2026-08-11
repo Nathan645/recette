@@ -1,73 +1,160 @@
+/* ==========================================
+   PLANNING.CSS
+   À notre table
+
+   Version nettoyée
+   - planning de la semaine
+   - repas multi-plats
+   - popup composition
+   - popup suppression
+   - popup copie semaine
+========================================== */
+
+
+/* ==========================================
+   PAGE
+========================================== */
+
 .page-planning {
-    width: 94%;
-    max-width: 1500px;
+    width: 100%;
+    box-sizing: border-box;
 
-    margin: 0 auto;
+    padding:
+        55px
+        clamp(24px, 4vw, 70px)
+        80px;
 
-    padding: 45px 0 70px;
+    background-color: #f8f4eb;
+
+    color: var(--texte);
 }
 
 
-/* =================================
-   EN-TÊTE
-================================= */
+/* ==========================================
+   ENTÊTE PAGE
+========================================== */
 
 .entete-planning {
-    margin-bottom: 35px;
+    margin-bottom: 42px;
 }
 
 
 .sur-titre-planning {
+    display: block;
+
+    margin-bottom: 8px;
+
     color: var(--vert);
 
-    font-size: 13px;
-    font-weight: bold;
+    font-size: 14px;
+    font-weight: 800;
 
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-
-    letter-spacing: 0.8px;
 }
 
 
 .entete-planning h2 {
-    margin: 7px 0 10px;
+    margin:
+        0
+        0
+        10px;
 
-    font-size: 38px;
+    color: var(--texte);
+
+    font-size: clamp(36px, 4vw, 52px);
+    line-height: 1.05;
+
+    letter-spacing: -0.03em;
 }
 
 
 .entete-planning p {
-    max-width: 650px;
+    max-width: 760px;
 
     margin: 0;
 
     color: var(--texte-secondaire);
 
-    line-height: 1.6;
+    font-size: 17px;
+    line-height: 1.55;
 }
 
 
-/* =================================
+/* ==========================================
    NAVIGATION SEMAINE
-================================= */
+========================================== */
 
 .navigation-semaine {
     display: grid;
 
     grid-template-columns:
-        50px
+        64px
         minmax(0, 1fr)
-        50px;
+        64px;
 
     align-items: center;
 
-    max-width: 650px;
+    gap: 28px;
 
-    margin: 0 auto 12px;
+    margin:
+        30px
+        auto
+        12px;
+
+    max-width: 1080px;
+}
+
+
+.bouton-navigation-semaine {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin: auto;
+
+    padding: 0;
+
+    border: 1px solid #d9d1c4;
+    border-radius: 50%;
+
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 31px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 18px
+        rgba(59, 67, 51, 0.04);
+
+    transition:
+        transform 0.16s ease,
+        border-color 0.16s ease,
+        background-color 0.16s ease;
+}
+
+
+.bouton-navigation-semaine:hover {
+    transform: translateY(-2px);
+
+    border-color: var(--vert);
+
+    background-color: #fbfaf6;
 }
 
 
 .semaine-actuelle {
+    min-width: 0;
+
     text-align: center;
 }
 
@@ -75,47 +162,84 @@
 .numero-semaine {
     display: block;
 
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
     color: var(--texte-secondaire);
 
-    font-size: 12px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 800;
 
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-
-    letter-spacing: 0.7px;
 }
 
 
 .semaine-actuelle h3 {
     margin: 0;
 
-    font-size: 23px;
+    color: var(--texte);
+
+    font-size: clamp(25px, 3vw, 36px);
+    line-height: 1.15;
 }
 
 
-.bouton-navigation-semaine {
-    width: 42px;
-    height: 42px;
+/* ==========================================
+   ACTIONS SEMAINE
+========================================== */
 
-    padding: 0;
+.actions-semaine {
+    display: flex;
 
-    border: 1px solid #d8d1c5;
-    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
 
-    background-color: var(--blanc);
+    gap: 12px;
 
-    color: var(--vert);
+    margin-bottom: 38px;
+}
 
-    font-size: 22px;
+
+.bouton-aujourdhui,
+.bouton-copier-semaine {
+    min-height: 45px;
+
+    padding:
+        10px
+        20px;
+
+    border-radius: 999px;
+
+    font: inherit;
+    font-size: 15px;
+    font-weight: 750;
 
     cursor: pointer;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease;
 }
 
 
-.bouton-navigation-semaine:hover {
-    border-color: var(--vert);
+.bouton-aujourdhui {
+    border: 1.5px solid var(--vert);
+
+    background-color: transparent;
+
+    color: var(--vert);
+}
+
+
+.bouton-aujourdhui:hover {
+    background-color: var(--blanc);
+
+    transform: translateY(-1px);
+}
+
+
+.bouton-copier-semaine {
+    border: 1.5px solid var(--vert);
 
     background-color: var(--vert);
 
@@ -123,706 +247,1287 @@
 }
 
 
-.actions-semaine {
-    margin-bottom: 28px;
+.bouton-copier-semaine:hover {
+    background-color: var(--vert-fonce);
 
-    text-align: center;
+    transform: translateY(-1px);
 }
 
 
-.bouton-aujourdhui {
-    padding: 8px 15px;
-
-    border: 1px solid var(--vert);
-    border-radius: 20px;
-
-    background-color: transparent;
-
-    color: var(--vert);
-
-    font: inherit;
-    font-size: 13px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-/* =================================
-   SEMAINE
-================================= */
+/* ==========================================
+   GRILLE SEMAINE
+========================================== */
 
 .grille-semaine {
     display: grid;
 
     grid-template-columns:
-        repeat(7, minmax(150px, 1fr));
+        repeat(
+            7,
+            minmax(190px, 1fr)
+        );
 
-    gap: 12px;
+    gap: 16px;
 
-    align-items: stretch;
+    width: 100%;
+
+    overflow-x: auto;
+
+    padding:
+        4px
+        2px
+        15px;
+
+    scrollbar-width: thin;
 }
 
 
+/* ==========================================
+   JOUR
+========================================== */
+
 .jour-planning {
     min-width: 0;
+    min-height: 390px;
 
-    padding: 18px;
+    padding: 24px 19px;
 
-    border-radius: 17px;
+    border: 2px solid transparent;
+    border-radius: 22px;
 
     background-color: var(--blanc);
 
     box-shadow:
-        0 6px 20px
-        rgba(52, 59, 47, 0.08);
+        0 10px 28px
+        rgba(57, 63, 49, 0.035);
+
+    box-sizing: border-box;
 }
 
 
 .jour-planning.aujourdhui {
-    outline:
-        2px solid
-        var(--vert);
+    border-color: var(--vert);
+
+    box-shadow:
+        0 12px 32px
+        rgba(75, 89, 64, 0.08);
 }
 
 
-.entete-jour {
-    padding-bottom: 14px;
+/* ==========================================
+   ENTÊTE JOUR
+========================================== */
 
-    border-bottom:
-        1px solid
-        var(--beige);
+.entete-jour {
+    padding-bottom: 18px;
+
+    border-bottom: 1px solid #e7dfd1;
 }
 
 
 .nom-jour {
     display: block;
 
-    font-weight: bold;
+    margin-bottom: 3px;
 
-    text-transform: capitalize;
+    color: var(--texte);
+
+    font-size: 19px;
+    font-weight: 800;
 }
 
 
 .date-jour {
-    margin-top: 3px;
-
     color: var(--texte-secondaire);
 
-    font-size: 13px;
+    font-size: 15px;
 }
 
 
-/* =================================
-   REPAS
-================================= */
+/* ==========================================
+   CRÉNEAU MIDI / SOIR
+========================================== */
 
 .creneau-repas {
-    padding-top: 17px;
+    padding-top: 18px;
 }
 
 
 .creneau-repas + .creneau-repas {
-    margin-top: 17px;
+    margin-top: 18px;
 
-    border-top:
-        1px solid
-        var(--beige);
+    border-top: 1px solid #e7dfd1;
 }
 
 
 .titre-creneau {
     display: block;
 
-    margin-bottom: 9px;
+    margin-bottom: 11px;
 
     color: var(--texte-secondaire);
 
-    font-size: 11px;
-    font-weight: bold;
+    font-size: 13px;
+    font-weight: 800;
 
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-
-    letter-spacing: 0.7px;
 }
 
 
+/* ==========================================
+   BOUTON AJOUTER
+========================================== */
+
 .bouton-ajouter-repas {
     width: 100%;
+    min-height: 58px;
 
-    padding: 11px 8px;
+    padding:
+        12px
+        14px;
 
-    border:
-        1px dashed
-        #cfc8bc;
+    border: 1.5px dashed #d5cbbb;
+    border-radius: 14px;
 
-    border-radius: 10px;
-
-    background-color: var(--creme);
+    background-color: #faf6ed;
 
     color: var(--texte-secondaire);
 
     font: inherit;
-    font-size: 13px;
+    font-size: 15px;
+    font-weight: 600;
 
     cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease,
+        color 0.15s ease;
 }
 
 
 .bouton-ajouter-repas:hover {
     border-color: var(--vert);
 
+    background-color: #f2f4ed;
+
     color: var(--vert);
 }
 
 
+/* ==========================================
+   REPAS PLANIFIÉ
+========================================== */
+
 .repas-planifie {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    position: relative;
 
-    gap: 8px;
+    display: grid;
 
-    padding: 10px 8px 10px 11px;
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
 
-    border-radius: 10px;
+    align-items: start;
 
-    background-color: #eef0e8;
+    gap: 10px;
+
+    padding:
+        15px
+        12px
+        13px;
+
+    border-radius: 15px;
+
+    background-color: #eef1e8;
+
+    color: var(--texte);
 }
 
 
-.lien-repas-recette {
-    flex: 1;
+.infos-repas-planifie {
+    min-width: 0;
+}
+
+
+.liste-plats-planifies {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    min-width: 0;
+}
+
+
+.element-repas-planning {
+    display: block;
 
     min-width: 0;
 
     color: var(--texte);
 
-    font-size: 14px;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.22;
 
+    overflow-wrap: anywhere;
+}
+
+
+.lien-repas-recette {
     text-decoration: none;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
 }
 
 
 .lien-repas-recette:hover {
-    color: var(--vert);
     text-decoration: underline;
 }
 
 
 .nom-repas-libre {
-    flex: 1;
-
-    min-width: 0;
-
-    font-size: 14px;
-    font-weight: bold;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
+    cursor: default;
 }
 
 
-.bouton-editer-repas {
-    flex: 0 0 auto;
+.personnes-repas-planifie {
+    display: block;
 
-    width: 30px;
-    height: 30px;
+    margin-top: 10px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+    font-weight: 650;
+}
+
+
+/* ==========================================
+   MODIFIER REPAS
+========================================== */
+
+.bouton-editer-repas {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
 
     padding: 0;
 
     border: none;
-    border-radius: 8px;
+    border-radius: 9px;
 
     background-color: transparent;
 
+    font-size: 18px;
+
     cursor: pointer;
 
-    font-size: 14px;
-
-    opacity: 0.55;
-
     transition:
-        opacity 0.2s ease,
-        background-color 0.2s ease;
+        background-color 0.15s ease,
+        transform 0.15s ease;
 }
 
 
 .bouton-editer-repas:hover {
-    opacity: 1;
+    background-color: rgba(255, 255, 255, 0.72);
 
-    background-color: var(--blanc);
+    transform: scale(1.04);
 }
 
 
-a.repas-planifie:hover {
-    background-color: #dde4d4;
-}
+/* ==========================================================
+   FOND DES POPUPS
+========================================================== */
 
-
-/* =================================
-   POP-UP
-================================= */
-
-.fond-popup-planning {
+.fond-popup-planning,
+.fond-confirmation-suppression {
     position: fixed;
 
     inset: 0;
 
-    z-index: 1200;
-
     display: flex;
+
     align-items: center;
     justify-content: center;
 
-    padding: 20px;
+    padding: 28px;
+
+    box-sizing: border-box;
 
     background-color:
-        rgba(30, 35, 28, 0.55);
+        rgba(35, 43, 32, 0.66);
 
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+
+    z-index: 1000;
 }
 
 
-.fond-popup-planning[hidden] {
-    display: none;
+.fond-confirmation-suppression {
+    z-index: 1100;
+
+    background-color:
+        rgba(35, 43, 32, 0.74);
 }
 
+
+.fond-popup-planning[hidden],
+.fond-confirmation-suppression[hidden] {
+    display: none !important;
+}
+
+
+/* ==========================================================
+   POPUP REPAS
+========================================================== */
 
 .popup-repas {
     position: relative;
 
-    width: 100%;
-    max-width: 520px;
-
-    max-height: 85vh;
+    width: min(690px, 100%);
+    max-height: calc(100vh - 56px);
 
     overflow-y: auto;
 
-    padding: 32px;
+    padding:
+        38px
+        40px
+        38px;
 
-    border-radius: 20px;
+    box-sizing: border-box;
 
-    background-color: var(--blanc);
+    border: 1px solid
+        rgba(214, 207, 194, 0.8);
+
+    border-radius: 26px;
+
+    background-color: #fffefa;
+
+    color: var(--texte);
 
     box-shadow:
-        0 20px 60px
-        rgba(30, 35, 28, 0.25);
+        0 28px 90px
+        rgba(30, 35, 27, 0.26);
 }
 
 
-.popup-repas h2 {
-    margin: 0 0 5px;
-
-    font-size: 28px;
+.popup-composition-repas {
+    width: min(720px, 100%);
 }
 
 
-.date-popup-repas {
-    margin:
-        0
-        0
-        24px;
-
-    color: var(--texte-secondaire);
-}
-
+/* ==========================================
+   BOUTON FERMER
+========================================== */
 
 .fermer-popup-repas {
     position: absolute;
 
-    top: 17px;
-    right: 17px;
+    top: 22px;
+    right: 22px;
 
-    width: 34px;
-    height: 34px;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    padding: 0;
 
     border: none;
     border-radius: 50%;
 
-    background-color: var(--creme);
+    background-color: #f6f0e5;
 
     color: var(--texte);
 
-    font-size: 22px;
+    font: inherit;
+    font-size: 27px;
+    font-weight: 500;
+    line-height: 1;
 
     cursor: pointer;
+
+    z-index: 5;
+
+    transition:
+        transform 0.15s ease,
+        background-color 0.15s ease;
 }
 
 
-/* =================================
-   TYPE DE REPAS
-================================= */
+.fermer-popup-repas:hover {
+    transform: rotate(4deg);
 
-.choix-type-repas {
+    background-color: #ece5d8;
+}
+
+
+/* ==========================================
+   ENTÊTE POPUP
+========================================== */
+
+.entete-popup-composition {
+    padding-right: 60px;
+
+    margin-bottom: 28px;
+}
+
+
+.sur-titre-popup {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: var(--vert);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+.popup-repas h2 {
+    margin:
+        0
+        0
+        5px;
+
+    color: var(--texte);
+
+    font-size: 32px;
+    line-height: 1.12;
+
+    letter-spacing: -0.025em;
+}
+
+
+.date-popup-repas {
+    margin: 0;
+
+    color: var(--texte-secondaire);
+
+    font-size: 16px;
+    line-height: 1.45;
+}
+
+
+/* ==========================================================
+   SECTIONS DE LA POPUP
+========================================================== */
+
+.section-popup-repas {
+    margin-top: 18px;
+
+    padding: 20px;
+
+    border: 1px solid #e2dbcf;
+    border-radius: 18px;
+
+    background-color: var(--blanc);
+}
+
+
+.entete-section-popup {
+    margin-bottom: 17px;
+}
+
+
+.entete-section-popup > div {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+}
+
+
+.numero-etape {
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 31px;
+    height: 31px;
+
+    border-radius: 50%;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+
+.entete-section-popup h3,
+.entete-section-simple h3 {
+    margin: 0;
+
+    color: var(--texte);
+
+    font-size: 17px;
+    line-height: 1.3;
+}
+
+
+.entete-section-popup p,
+.entete-section-simple p {
+    margin:
+        3px
+        0
+        0;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* ==========================================
+   PERSONNES
+========================================== */
+
+.section-personnes-repas {
+    background-color: #f9f7f1;
+}
+
+
+.selecteur-personnes {
+    display: inline-grid;
+
+    grid-template-columns:
+        48px
+        minmax(130px, auto)
+        48px;
+
+    align-items: stretch;
+
+    overflow: hidden;
+
+    border: 1.5px solid #d8d0c3;
+    border-radius: 14px;
+
+    background-color: var(--blanc);
+}
+
+
+.bouton-personnes {
+    width: 48px;
+    min-height: 50px;
+
+    padding: 0;
+
+    border: none;
+
+    background-color: #f3f0e8;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 24px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease;
+}
+
+
+.bouton-personnes:hover {
+    background-color: #e8ebdf;
+}
+
+
+.valeur-personnes {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    padding:
+        0
+        14px;
+
+    background-color: var(--blanc);
+}
+
+
+.valeur-personnes input {
+    width: 38px;
+
+    padding: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 18px;
+    font-weight: 800;
+
+    text-align: right;
+
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+
+.valeur-personnes input::-webkit-outer-spin-button,
+.valeur-personnes input::-webkit-inner-spin-button {
+    margin: 0;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+
+.valeur-personnes span {
+    color: var(--texte-secondaire);
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ==========================================================
+   PLATS DU REPAS
+========================================================== */
+
+.bloc-elements-repas {
+    background-color: #f9f7f1;
+}
+
+
+.liste-elements-repas {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+
+/* ==========================================
+   VIDE
+========================================== */
+
+.message-elements-vide {
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    margin: 0;
+
+    padding:
+        15px
+        16px;
+
+    border: 1px dashed #d8d0c2;
+    border-radius: 13px;
+
+    background-color: rgba(
+        255,
+        255,
+        255,
+        0.56
+    );
+
+    color: var(--texte-secondaire);
+}
+
+
+.icone-liste-vide {
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 10px;
+
+    background-color: #f0ecdf;
+
+    font-size: 18px;
+}
+
+
+.message-elements-vide strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: var(--texte);
+
+    font-size: 14px;
+}
+
+
+.message-elements-vide p {
+    margin: 0;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   UN PLAT
+========================================== */
+
+.element-repas-selectionne {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        39px
+        minmax(0, 1fr)
+        34px;
 
-    gap: 4px;
+    align-items: center;
 
-    margin-bottom: 22px;
+    gap: 11px;
 
-    padding: 4px;
+    min-height: 59px;
 
-    border-radius: 12px;
+    padding:
+        9px
+        10px;
 
-    background-color: var(--creme);
+    border: 1px solid #ded8cd;
+    border-radius: 13px;
+
+    background-color: var(--blanc);
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 
-.type-repas {
-    padding: 10px;
+.element-repas-selectionne:hover {
+    border-color: #c9c3b6;
+
+    box-shadow:
+        0 4px 12px
+        rgba(52, 59, 47, 0.035);
+}
+
+
+.icone-element-repas {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 39px;
+    height: 39px;
+
+    border-radius: 11px;
+
+    background-color: #eef1e8;
+
+    font-size: 17px;
+}
+
+
+.infos-element-repas {
+    display: flex;
+
+    flex-direction: column;
+
+    min-width: 0;
+
+    gap: 2px;
+}
+
+
+.infos-element-repas strong {
+    color: var(--texte);
+
+    font-size: 15px;
+    font-weight: 750;
+    line-height: 1.25;
+
+    overflow-wrap: anywhere;
+}
+
+
+.type-element-repas {
+    color: var(--texte-secondaire);
+
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+
+.supprimer-element-repas {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
 
     border: none;
     border-radius: 9px;
 
-    background-color: transparent;
+    background-color: #f7f3ed;
 
-    color: var(--texte-secondaire);
+    color: #a94f38;
 
     font: inherit;
-    font-weight: bold;
+    font-size: 20px;
+    line-height: 1;
 
     cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
 }
 
 
-.type-repas.actif {
+.supprimer-element-repas:hover {
+    background-color: #fae9e3;
+
+    color: #8f3d28;
+}
+
+
+/* ==========================================================
+   AJOUT RECETTE / AJOUT LIBRE
+========================================================== */
+
+.bloc-ajout-recette-repas,
+.bloc-ajout-manuel-repas {
     background-color: var(--blanc);
-
-    color: var(--vert);
-
-    box-shadow:
-        0 2px 8px
-        rgba(52, 59, 47, 0.08);
 }
 
 
-/* =================================
-   CHAMPS
-================================= */
+.entete-section-simple {
+    display: flex;
 
-.bloc-recette-planning label,
-.bloc-repas-libre label {
-    display: block;
+    align-items: flex-start;
 
-    margin-bottom: 7px;
+    gap: 11px;
 
-    font-size: 14px;
-    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 
-.bloc-recette-planning input,
-.bloc-repas-libre input {
-    width: 100%;
+.icone-section-popup {
+    flex: 0 0 auto;
 
-    padding: 12px 13px;
+    display: flex;
 
-    border:
-        1px solid
-        #d8d1c5;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
 
     border-radius: 10px;
 
-    font: inherit;
+    background-color: #f1eee5;
+
+    font-size: 16px;
+}
+
+
+/* ==========================================
+   CHAMPS
+========================================== */
+
+.champ-recherche-popup input,
+.controle-ajout-manuel-repas input {
+    width: 100%;
+
+    min-width: 0;
+
+    padding:
+        13px
+        15px;
+
+    border: 1.5px solid #d9d1c5;
+    border-radius: 12px;
 
     outline: none;
+
+    background-color: #fff;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-size: 14px;
+
+    box-sizing: border-box;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
 
-.bloc-recette-planning input:focus,
-.bloc-repas-libre input:focus {
+.champ-recherche-popup input:focus,
+.controle-ajout-manuel-repas input:focus {
     border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(101, 115, 88, 0.11);
 }
 
+
+.champ-recherche-popup input::placeholder,
+.controle-ajout-manuel-repas input::placeholder {
+    color: #aaa69d;
+}
+
+
+/* ==========================================================
+   RÉSULTATS RECETTES
+========================================================== */
 
 .resultats-recettes-planning {
     display: flex;
+
     flex-direction: column;
 
     gap: 7px;
 
-    margin-top: 12px;
+    margin-top: 10px;
+
+    max-height: 220px;
+
+    overflow-y: auto;
 }
 
 
 .resultat-recette-planning {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
     width: 100%;
 
-    padding: 11px 13px;
+    padding:
+        11px
+        13px;
 
-    border: none;
-    border-radius: 9px;
+    border: 1px solid #e1dbcf;
+    border-radius: 11px;
 
-    background-color: var(--creme);
+    background-color: #faf7f0;
 
     color: var(--texte);
 
+    font: inherit;
+    font-size: 14px;
+
     text-align: left;
 
-    font: inherit;
-
     cursor: pointer;
+
+    transition:
+        border-color 0.15s ease,
+        background-color 0.15s ease;
 }
 
 
 .resultat-recette-planning:hover {
-    background-color: #e9ede3;
+    border-color: #b8c0aa;
+
+    background-color: #eef2e9;
+}
+
+
+.nom-resultat-recette {
+    min-width: 0;
+
+    overflow: hidden;
+
+    font-weight: 700;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.plus-resultat-recette {
+    flex: 0 0 auto;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    border-radius: 8px;
+
+    background-color: var(--vert);
+
+    color: var(--blanc);
+
+    font-size: 18px;
+    line-height: 1;
+}
+
+
+.aucune-recette-planning {
+    padding:
+        12px
+        13px;
+
+    border-radius: 11px;
+
+    background-color: #f8f5ee;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   SÉPARATEUR "OU"
+========================================== */
+
+.separateur-ajouts-popup {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin:
+        17px
+        0;
+
+    color: #969187;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+}
+
+
+.separateur-ajouts-popup::before,
+.separateur-ajouts-popup::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background-color: #e2dbcf;
+}
+
+
+.separateur-ajouts-popup span {
+    padding:
+        0
+        12px;
+}
+
+
+/* ==========================================
+   AJOUT MANUEL
+========================================== */
+
+.controle-ajout-manuel-repas {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 9px;
+}
+
+
+.bouton-ajouter-plat-manuel {
+    min-height: 47px;
+
+    padding:
+        10px
+        17px;
+
+    border: 1.5px solid var(--vert);
+    border-radius: 12px;
+
+    background-color: var(--blanc);
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 750;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.bouton-ajouter-plat-manuel:hover {
+    background-color: var(--vert);
+
+    color: var(--blanc);
+}
+
+
+/* ==========================================================
+   MESSAGES
+========================================================== */
+
+.message-planning {
+    min-height: 18px;
+
+    margin:
+        13px
+        0
+        0;
+
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+    font-weight: 650;
+
+    text-align: center;
+}
+
+
+.message-planning:empty {
+    display: none;
+}
+
+
+.message-planning.erreur {
+    display: block;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    background-color: #faebe6;
+
+    color: #9f4833;
+}
+
+
+.message-planning.succes {
+    display: block;
+
+    padding: 10px 12px;
+
+    border-radius: 10px;
+
+    background-color: #edf2e8;
+
+    color: var(--vert);
+}
+
+
+/* ==========================================================
+   ACTIONS POPUP
+========================================================== */
+
+.actions-popup-repas {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+
+    margin-top: 22px;
 }
 
 
 .bouton-valider-repas {
     width: 100%;
 
-    margin-top: 15px;
+    min-height: 50px;
 
-    padding: 13px;
+    padding:
+        12px
+        18px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 13px;
 
     background-color: var(--vert);
 
     color: var(--blanc);
 
     font: inherit;
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 800;
 
     cursor: pointer;
-}
 
-
-.message-planning {
-    min-height: 20px;
-
-    margin: 15px 0 0;
-
-    color: #a54f3c;
-
-    text-align: center;
-
-    font-size: 13px;
-}
-
-.bouton-supprimer-repas {
-    width: 100%;
-
-    margin-top: 10px;
-
-    padding: 12px;
-
-    border: 1px solid #c96b58;
-    border-radius: 10px;
-
-    background-color: transparent;
-
-    color: #a54f3c;
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-.bouton-supprimer-repas:hover {
-    background-color: #fff2ef;
-}
-
-.bouton-supprimer-repas {
-    width: 100%;
-
-    margin-top: 16px;
-
-    padding: 12px;
-
-    border: 1px solid #c96b58;
-    border-radius: 10px;
-
-    background-color: transparent;
-
-    color: #a54f3c;
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
+    box-shadow:
+        0 6px 15px
+        rgba(72, 84, 62, 0.08);
 
     transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
+        background-color 0.15s ease,
+        transform 0.15s ease;
 }
 
 
-.bouton-supprimer-repas:hover {
-    background-color: #fff2ef;
-}
+.bouton-valider-repas:hover {
+    background-color: var(--vert-fonce);
 
-
-.bouton-supprimer-repas:disabled {
-    opacity: 0.6;
-
-    cursor: default;
-}
-
-.bloc-personnes-repas {
-    margin-top: 20px;
-}
-
-.bloc-personnes-repas label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 700;
-}
-
-.controle-personnes-repas {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.controle-personnes-repas input {
-    width: 120px;
-    height: 44px;
-
-    padding: 0 12px;
-
-    border: 1px solid #d8d2c7;
-    border-radius: 10px;
-
-    text-align: center;
-
-    font: inherit;
-    font-weight: 700;
-}
-
-.infos-repas-planifie {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    min-width: 0;
-}
-
-.personnes-repas-planifie {
-    font-size: 13px;
-    color: #77766f;
-    font-weight: 600;
-}
-
-/* =================================
-   REPAS + NOMBRE DE PERSONNES
-================================= */
-
-.repas-planifie {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    height: auto;
-    min-height: 76px;
-
-    padding: 14px 16px;
-
-    overflow: visible;
-}
-
-
-.infos-repas-planifie {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-
-    gap: 6px;
-
-    min-width: 0;
-    flex: 1;
-}
-
-
-.lien-repas-recette,
-.nom-repas-libre {
-    display: block;
-
-    font-weight: 700;
-    line-height: 1.2;
-}
-
-
-.personnes-repas-planifie {
-    display: block;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    color: #77766f;
-
-    line-height: 1.2;
-}
-
-
-.bouton-editer-repas {
-    flex: 0 0 auto;
-}
-
-/* =================================
-   ACTIONS DE LA SEMAINE
-================================= */
-
-.actions-semaine {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 10px;
-
-    margin-bottom: 28px;
-}
-
-
-/* =================================
-   BOUTON COPIER LA SEMAINE
-================================= */
-
-.bouton-copier-semaine {
-    padding: 8px 15px;
-
-    border: 1px solid var(--vert);
-    border-radius: 20px;
-
-    background-color: var(--vert);
-
-    color: var(--blanc);
-
-    font: inherit;
-    font-size: 13px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.bouton-copier-semaine:hover {
     transform: translateY(-1px);
 }
 
 
-.bouton-copier-semaine:disabled {
-    opacity: 0.55;
+.bouton-valider-repas:disabled {
+    opacity: 0.6;
 
     cursor: default;
 
@@ -830,67 +1535,276 @@ a.repas-planifie:hover {
 }
 
 
-/* =================================
-   POPUP COPIE DE SEMAINE
-================================= */
+.bouton-supprimer-repas {
+    align-self: center;
+
+    padding:
+        9px
+        14px;
+
+    border: none;
+
+    background-color: transparent;
+
+    color: #a6533c;
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    cursor: pointer;
+}
+
+
+.bouton-supprimer-repas:hover {
+    color: #873d29;
+}
+
+
+/* ==========================================================
+   CONFIRMATION SUPPRESSION
+========================================================== */
+
+.popup-confirmation-suppression {
+    width: min(410px, 100%);
+
+    padding:
+        32px
+        30px
+        28px;
+
+    box-sizing: border-box;
+
+    border-radius: 22px;
+
+    background-color: #fffefa;
+
+    color: var(--texte);
+
+    box-shadow:
+        0 28px 85px
+        rgba(25, 31, 23, 0.3);
+
+    text-align: center;
+}
+
+
+.icone-confirmation-suppression {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 54px;
+    height: 54px;
+
+    margin:
+        0
+        auto
+        17px;
+
+    border-radius: 16px;
+
+    background-color: #faebe6;
+
+    font-size: 23px;
+}
+
+
+.popup-confirmation-suppression h2 {
+    margin:
+        0
+        0
+        9px;
+
+    color: var(--texte);
+
+    font-size: 22px;
+    line-height: 1.25;
+}
+
+
+.popup-confirmation-suppression p {
+    margin:
+        0
+        auto
+        23px;
+
+    max-width: 330px;
+
+    color: var(--texte-secondaire);
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.actions-confirmation-suppression {
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        1fr;
+
+    gap: 9px;
+}
+
+
+.bouton-annuler-suppression,
+.bouton-confirmer-suppression {
+    min-height: 46px;
+
+    padding:
+        10px
+        14px;
+
+    border-radius: 12px;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease;
+}
+
+
+.bouton-annuler-suppression {
+    border: 1.5px solid #d9d1c5;
+
+    background-color: var(--blanc);
+
+    color: var(--texte);
+}
+
+
+.bouton-annuler-suppression:hover {
+    background-color: #f4f1ea;
+}
+
+
+.bouton-confirmer-suppression {
+    border: 1.5px solid #a8513a;
+
+    background-color: #a8513a;
+
+    color: #fff;
+}
+
+
+.bouton-confirmer-suppression:hover {
+    border-color: #8e412d;
+
+    background-color: #8e412d;
+}
+
+
+.bouton-confirmer-suppression:disabled {
+    opacity: 0.6;
+
+    cursor: default;
+}
+
+
+/* ==========================================================
+   COPIE SEMAINE
+========================================================== */
 
 .popup-copie-semaine {
-    max-width: 470px;
+    width: min(480px, 100%);
+
+    padding:
+        36px
+        36px
+        32px;
+}
+
+
+.popup-copie-semaine h2 {
+    padding-right: 50px;
+
+    margin-bottom: 9px;
+
+    font-size: 27px;
 }
 
 
 .texte-copie-semaine {
     margin:
-        8px 0
-        24px;
+        0
+        0
+        23px;
 
     color: var(--texte-secondaire);
 
+    font-size: 14px;
     line-height: 1.55;
 }
 
-
-/* =================================
-   CHOIX DE LA DESTINATION
-================================= */
 
 .choix-destination-copie {
     display: flex;
 
     flex-direction: column;
 
-    gap: 10px;
+    gap: 9px;
 
-    margin-bottom: 22px;
+    margin-bottom: 21px;
 }
 
 
 .option-copie-semaine {
+    position: relative;
+
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 11px;
 
-    padding: 14px 16px;
+    min-height: 52px;
 
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
+    padding:
+        10px
+        14px;
 
-    background-color: var(--creme);
+    border: 1.5px solid #ddd6ca;
+    border-radius: 13px;
+
+    background-color: #faf8f2;
+
+    color: var(--texte);
+
+    font-size: 14px;
+    font-weight: 650;
 
     cursor: pointer;
 
+    box-sizing: border-box;
+
     transition:
-        border-color 0.2s ease,
-        background-color 0.2s ease;
+        border-color 0.15s ease,
+        background-color 0.15s ease;
 }
 
 
 .option-copie-semaine:hover {
+    border-color: #b9c1ac;
+}
+
+
+.option-copie-semaine:has(
+    input:checked
+) {
     border-color: var(--vert);
 
-    background-color: #eef0e8;
+    background-color: #eef2e9;
 }
 
 
@@ -906,759 +1820,228 @@ a.repas-planifie:hover {
 }
 
 
-.option-copie-semaine span {
-    font-size: 14px;
-    font-weight: bold;
-
-    color: var(--texte);
-}
-
-
-/* =================================
-   BOUTON VALIDER LA COPIE
-================================= */
-
 .bouton-valider-copie-semaine {
     width: 100%;
 
-    padding: 13px;
+    min-height: 48px;
+
+    padding:
+        11px
+        16px;
 
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
 
     background-color: var(--vert);
 
     color: var(--blanc);
 
     font: inherit;
-    font-weight: bold;
+    font-size: 15px;
+    font-weight: 800;
 
     cursor: pointer;
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
 }
 
 
 .bouton-valider-copie-semaine:hover {
-    transform: translateY(-1px);
+    background-color: var(--vert-fonce);
 }
 
 
-.bouton-valider-copie-semaine:disabled {
-    opacity: 0.55;
+/* ==========================================================
+   ERREUR DE CHARGEMENT
+========================================================== */
 
-    cursor: default;
+.erreur-chargement-planning {
+    grid-column:
+        1 / -1;
 
-    transform: none;
+    padding:
+        25px;
+
+    border-radius: 18px;
+
+    background-color: #faebe6;
+
+    color: #984833;
 }
 
 
-/* =================================
-   MESSAGE COPIE
-================================= */
+.erreur-chargement-planning strong {
+    display: block;
 
-#message-copie-semaine {
-    margin-top: 14px;
+    margin-bottom: 6px;
+
+    font-size: 17px;
 }
 
-/* =================================
-   RESPONSIVE
-================================= */
 
-@media (max-width: 1150px) {
+.erreur-chargement-planning p {
+    margin: 0;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================================
+   RESPONSIVE TABLETTE
+========================================================== */
+
+@media (
+    max-width: 1200px
+) {
 
     .grille-semaine {
         grid-template-columns:
-            repeat(4, minmax(180px, 1fr));
+            repeat(
+                7,
+                minmax(200px, 1fr)
+            );
     }
 
 }
 
 
-@media (max-width: 750px) {
+/* ==========================================================
+   RESPONSIVE MOBILE
+========================================================== */
+
+@media (
+    max-width: 700px
+) {
 
     .page-planning {
-        width: 92%;
+        padding:
+            35px
+            16px
+            60px;
+    }
+
+
+    .entete-planning {
+        margin-bottom: 30px;
     }
 
 
     .entete-planning h2 {
-        font-size: 32px;
+        font-size: 36px;
     }
 
 
-    .grille-semaine {
-        grid-template-columns: 1fr;
+    .navigation-semaine {
+        grid-template-columns:
+            45px
+            minmax(0, 1fr)
+            45px;
+
+        gap: 8px;
     }
 
 
-    .jour-planning {
-        padding: 17px;
+    .bouton-navigation-semaine {
+        width: 43px;
+        height: 43px;
+
+        font-size: 25px;
     }
 
 
-    .choix-type-repas {
-        grid-template-columns: 1fr;
+    .semaine-actuelle h3 {
+        font-size: 21px;
     }
+
+
+    .numero-semaine {
+        font-size: 11px;
+    }
+
 
     .actions-semaine {
         flex-wrap: wrap;
+
+        margin-bottom: 28px;
     }
 
 
     .bouton-aujourdhui,
     .bouton-copier-semaine {
-        flex:
-            1 1
-            150px;
-    }
+        min-height: 41px;
 
-
-    .popup-copie-semaine {
         padding:
-            28px 20px;
+            9px
+            15px;
+
+        font-size: 13px;
     }
 
 
-}
+    .grille-semaine {
+        grid-template-columns:
+            repeat(
+                7,
+                215px
+            );
 
-/* =================================
-   POPUP REPAS MULTI-PLATS
-================================= */
+        gap: 12px;
+    }
 
-.fond-popup-planning {
-    position: fixed;
-    inset: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    .jour-planning {
+        min-height: 360px;
 
-    padding: 30px;
+        padding:
+            21px
+            17px;
 
-    background-color: rgba(39, 48, 35, 0.68);
+        border-radius: 19px;
+    }
 
-    z-index: 1000;
-}
 
+    /* POPUP */
 
-/* IMPORTANT :
-   permet à hidden de réellement masquer
-   la popup malgré display:flex
-*/
+    .fond-popup-planning,
+    .fond-confirmation-suppression {
+        align-items: flex-end;
 
-.fond-popup-planning[hidden] {
-    display: none !important;
-}
-
-
-/* =================================
-   CONTENEUR POPUP
-================================= */
-
-.popup-repas {
-    position: relative;
-
-    width: min(720px, 100%);
-    max-height: calc(100vh - 60px);
-
-    overflow-y: auto;
-
-    padding: 38px 42px 42px;
-
-    border-radius: 26px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 22px 70px rgba(42, 48, 37, 0.22);
-}
-
-
-/* =================================
-   BOUTON FERMER
-================================= */
-
-.fermer-popup-repas {
-    position: absolute;
-
-    top: 22px;
-    right: 22px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 48px;
-    height: 48px;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background-color: var(--beige);
-
-    color: var(--texte);
-
-    font-size: 28px;
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.15s ease,
-        background-color 0.15s ease;
-}
-
-
-.fermer-popup-repas:hover {
-    transform: scale(1.05);
-}
-
-
-/* =================================
-   TITRE POPUP
-================================= */
-
-.popup-repas h2 {
-    margin:
-        0
-        70px
-        4px
-        0;
-
-    font-size: 34px;
-    line-height: 1.15;
-
-    color: var(--texte);
-}
-
-
-.date-popup-repas {
-    margin:
-        0
-        0
-        28px;
-
-    color: var(--texte-secondaire);
-
-    font-size: 18px;
-}
-
-
-/* =================================
-   NOMBRE DE PERSONNES
-================================= */
-
-.bloc-personnes-repas {
-    margin-bottom: 30px;
-}
-
-
-.bloc-personnes-repas label {
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: var(--texte);
-
-    font-weight: bold;
-    font-size: 17px;
-}
-
-
-.controle-personnes-repas {
-    display: flex;
-}
-
-
-.controle-personnes-repas input {
-    width: 130px;
-
-    padding: 12px 14px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-
-    color: var(--texte);
-
-    font: inherit;
-    font-weight: bold;
-    font-size: 17px;
-
-    box-sizing: border-box;
-}
-
-
-/* =================================
-   BLOC PLATS SÉLECTIONNÉS
-================================= */
-
-.bloc-elements-repas {
-    margin-bottom: 30px;
-
-    padding: 24px;
-
-    border-radius: 18px;
-
-    background-color: #f8f6f0;
-}
-
-
-.entete-elements-repas {
-    margin-bottom: 16px;
-}
-
-
-.petit-titre-elements {
-    display: block;
-
-    margin-bottom: 3px;
-
-    color: var(--texte-secondaire);
-
-    font-size: 12px;
-    font-weight: bold;
-
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-
-.entete-elements-repas h3 {
-    margin: 0;
-
-    color: var(--texte);
-
-    font-size: 21px;
-}
-
-
-/* =================================
-   LISTE DES PLATS
-================================= */
-
-.liste-elements-repas {
-    display: flex;
-    flex-direction: column;
-
-    gap: 10px;
-}
-
-
-.message-elements-vide {
-    margin: 0;
-
-    color: var(--texte-secondaire);
-
-    font-size: 15px;
-}
-
-
-/* =================================
-   UN PLAT SÉLECTIONNÉ
-================================= */
-
-.element-repas-selectionne {
-    display: flex;
-
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 16px;
-
-    padding: 13px 14px;
-
-    border: 1px solid #ded9ce;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-}
-
-
-.infos-element-repas {
-    display: flex;
-    flex-direction: column;
-
-    gap: 2px;
-
-    min-width: 0;
-}
-
-
-.infos-element-repas strong {
-    color: var(--texte);
-
-    font-size: 16px;
-
-    line-height: 1.25;
-
-    overflow-wrap: anywhere;
-}
-
-
-.type-element-repas {
-    color: var(--texte-secondaire);
-
-    font-size: 12px;
-}
-
-
-/* =================================
-   RETIRER UN PLAT
-================================= */
-
-.supprimer-element-repas {
-    flex: 0 0 auto;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 34px;
-    height: 34px;
-
-    padding: 0;
-
-    border: 1px solid #d7b5aa;
-    border-radius: 9px;
-
-    background-color: var(--blanc);
-
-    color: #a54f39;
-
-    font-size: 20px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-
-.supprimer-element-repas:hover {
-    background-color: #fbefeb;
-}
-
-
-/* =================================
-   AJOUT RECETTE
-================================= */
-
-.bloc-ajout-recette-repas {
-    margin-bottom: 26px;
-}
-
-
-.bloc-ajout-recette-repas > label {
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: var(--texte);
-
-    font-size: 17px;
-    font-weight: bold;
-}
-
-
-.bloc-ajout-recette-repas input {
-    width: 100%;
-
-    padding: 13px 15px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-
-    color: var(--texte);
-
-    font: inherit;
-
-    box-sizing: border-box;
-}
-
-
-/* =================================
-   RÉSULTATS RECETTES
-================================= */
-
-.resultats-recettes-planning {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin-top: 10px;
-}
-
-
-.resultat-recette-planning {
-    padding: 9px 13px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 999px;
-
-    background-color: var(--blanc);
-
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.15s ease,
-        border-color 0.15s ease;
-}
-
-
-.resultat-recette-planning:hover {
-    border-color: var(--vert);
-
-    background-color: #eef2e9;
-}
-
-
-.aucune-recette-planning,
-.resultats-recettes-planning p {
-    width: 100%;
-
-    margin: 2px 0 0;
-
-    color: var(--texte-secondaire);
-
-    font-size: 14px;
-}
-
-
-/* =================================
-   AJOUT MANUEL
-================================= */
-
-.bloc-ajout-manuel-repas {
-    margin-bottom: 28px;
-}
-
-
-.bloc-ajout-manuel-repas > label {
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: var(--texte);
-
-    font-size: 17px;
-    font-weight: bold;
-}
-
-
-.controle-ajout-manuel-repas {
-    display: grid;
-
-    grid-template-columns:
-        minmax(0, 1fr)
-        auto;
-
-    gap: 10px;
-}
-
-
-.controle-ajout-manuel-repas input {
-    width: 100%;
-
-    min-width: 0;
-
-    padding: 13px 15px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-
-    color: var(--texte);
-
-    font: inherit;
-
-    box-sizing: border-box;
-}
-
-
-.bouton-ajouter-plat-manuel {
-    padding: 12px 18px;
-
-    border: 1px solid var(--vert);
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-
-    color: var(--vert);
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-.bouton-ajouter-plat-manuel:hover {
-    background-color: var(--beige);
-}
-
-
-/* =================================
-   BOUTON ENREGISTRER
-================================= */
-
-.bouton-valider-repas {
-    width: 100%;
-
-    padding: 15px 20px;
-
-    border: none;
-    border-radius: 13px;
-
-    background-color: var(--vert);
-
-    color: var(--blanc);
-
-    font: inherit;
-    font-size: 17px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.15s ease,
-        transform 0.15s ease;
-}
-
-
-.bouton-valider-repas:hover {
-    transform: translateY(-1px);
-
-    background-color: var(--vert-fonce);
-}
-
-
-.bouton-valider-repas:disabled {
-    opacity: 0.65;
-
-    cursor: default;
-
-    transform: none;
-}
-
-
-/* =================================
-   VIDER LE CRÉNEAU
-================================= */
-
-.bouton-supprimer-repas {
-    width: 100%;
-
-    margin-top: 14px;
-
-    padding: 14px 20px;
-
-    border: 1.5px solid #c9654c;
-    border-radius: 13px;
-
-    background-color: var(--blanc);
-
-    color: #a84f39;
-
-    font: inherit;
-    font-size: 16px;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-
-.bouton-supprimer-repas:hover {
-    background-color: #fbefeb;
-}
-
-
-/* =================================
-   MESSAGE
-================================= */
-
-.message-planning {
-    min-height: 20px;
-
-    margin:
-        13px
-        0
-        0;
-
-    text-align: center;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
-
-.message-planning.erreur {
-    color: #a84f39;
-}
-
-
-.message-planning.succes {
-    color: var(--vert);
-}
-
-
-/* =================================
-   RESPONSIVE
-================================= */
-
-@media (
-    max-width: 650px
-) {
-
-    .fond-popup-planning {
-        padding: 14px;
+        padding: 0;
     }
 
 
     .popup-repas {
-        max-height:
-            calc(
-                100vh - 28px
-            );
+        width: 100%;
+        max-height: 92vh;
+
+        padding:
+            28px
+            18px
+            25px;
+
+        border-radius:
+            24px
+            24px
+            0
+            0;
+    }
+
+
+    .popup-confirmation-suppression {
+        width: calc(100% - 24px);
+
+        margin-bottom: 12px;
 
         padding:
             28px
             20px
-            26px;
+            22px;
 
         border-radius: 20px;
     }
 
 
-    .popup-repas h2 {
-        margin-right: 56px;
-
-        font-size: 28px;
-    }
-
-
-    .date-popup-repas {
-        font-size: 16px;
-    }
-
-
     .fermer-popup-repas {
-        top: 16px;
-        right: 16px;
+        top: 17px;
+        right: 17px;
 
         width: 42px;
         height: 42px;
@@ -1667,8 +2050,54 @@ a.repas-planifie:hover {
     }
 
 
-    .bloc-elements-repas {
-        padding: 18px;
+    .entete-popup-composition {
+        padding-right: 52px;
+
+        margin-bottom: 22px;
+    }
+
+
+    .popup-repas h2 {
+        font-size: 28px;
+    }
+
+
+    .date-popup-repas {
+        font-size: 14px;
+    }
+
+
+    .section-popup-repas {
+        padding: 16px;
+
+        border-radius: 16px;
+    }
+
+
+    .entete-section-popup > div {
+        gap: 9px;
+    }
+
+
+    .numero-etape {
+        width: 28px;
+        height: 28px;
+    }
+
+
+    .entete-section-popup h3,
+    .entete-section-simple h3 {
+        font-size: 16px;
+    }
+
+
+    .selecteur-personnes {
+        width: 100%;
+
+        grid-template-columns:
+            48px
+            1fr
+            48px;
     }
 
 
@@ -1683,8 +2112,82 @@ a.repas-planifie:hover {
     }
 
 
-    .controle-personnes-repas input {
-        width: 110px;
+    .element-repas-selectionne {
+        grid-template-columns:
+            36px
+            minmax(0, 1fr)
+            32px;
+    }
+
+
+    .icone-element-repas {
+        width: 36px;
+        height: 36px;
+    }
+
+
+    .actions-confirmation-suppression {
+        grid-template-columns: 1fr;
+    }
+
+
+    .bouton-annuler-suppression {
+        order: 2;
+    }
+
+
+    .bouton-confirmer-suppression {
+        order: 1;
+    }
+
+}
+
+
+/* ==========================================================
+   TRÈS PETITS ÉCRANS
+========================================================== */
+
+@media (
+    max-width: 420px
+) {
+
+    .entete-planning h2 {
+        font-size: 31px;
+    }
+
+
+    .semaine-actuelle h3 {
+        font-size: 18px;
+    }
+
+
+    .actions-semaine {
+        gap: 8px;
+    }
+
+
+    .popup-repas {
+        padding:
+            25px
+            15px
+            22px;
+    }
+
+
+    .section-popup-repas {
+        padding: 14px;
+    }
+
+
+    .valeur-personnes {
+        padding:
+            0
+            8px;
+    }
+
+
+    .valeur-personnes span {
+        font-size: 13px;
     }
 
 }
