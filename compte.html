@@ -1,762 +1,327 @@
-const ongletConnexion =
-    document.getElementById(
-        "onglet-connexion"
-    );
+<!DOCTYPE html>
 
-const ongletInscription =
-    document.getElementById(
-        "onglet-inscription"
-    );
+<html lang="fr">
 
-const formulaireConnexion =
-    document.getElementById(
-        "formulaire-connexion"
-    );
+<head>
 
-const formulaireInscription =
-    document.getElementById(
-        "formulaire-inscription"
-    );
+    <meta charset="UTF-8">
 
-const boutonConnexion =
-    document.getElementById(
-        "bouton-connexion"
-    );
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-const boutonInscription =
-    document.getElementById(
-        "bouton-inscription"
-    );
+    <title>
+        Compte | À notre table
+    </title>
 
-const boutonMotDePasseOublie =
-    document.getElementById(
-        "mot-de-passe-oublie"
-    );
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
-const messageCompte =
-    document.getElementById(
-        "message-compte"
-    );
+    <link
+        rel="stylesheet"
+        href="css/compte.css"
+    >
 
+</head>
 
-/* =================================
-   OUTILS
-================================= */
 
-function afficherMessage(
-    texte,
-    type = ""
-) {
+<body class="page-compte">
 
-    messageCompte.textContent =
-        texte;
 
+    <main class="conteneur-compte">
 
-    messageCompte.classList.remove(
-        "erreur",
-        "succes"
-    );
 
+        <section class="carte-compte">
 
-    if (type) {
 
-        messageCompte.classList.add(
-            type
-        );
+            <!-- =========================
+                 ENTÊTE
+            ========================== -->
 
-    }
-}
+            <div class="entete-compte">
 
+                <div class="icone-compte">
+                    🍽️
+                </div>
 
-function changerOnglet(
-    onglet
-) {
 
-    afficherMessage("");
+                <h1>
+                    À notre table
+                </h1>
 
 
-    const modeConnexion =
-        onglet === "connexion";
+                <p>
+                    Retrouvez vos recettes,
+                    vos favoris
+                    et votre planning repas.
+                </p>
 
+            </div>
 
-    ongletConnexion.classList.toggle(
-        "actif",
-        modeConnexion
-    );
 
+            <!-- =========================
+                 ONGLETS
+            ========================== -->
 
-    ongletInscription.classList.toggle(
-        "actif",
-        !modeConnexion
-    );
+            <div
+                class="onglets-compte"
+                role="tablist"
+                aria-label="Connexion ou inscription"
+            >
 
 
-    ongletConnexion.setAttribute(
-        "aria-selected",
-        modeConnexion
-            ? "true"
-            : "false"
-    );
+                <button
+                    type="button"
+                    class="onglet-compte actif"
+                    id="onglet-connexion"
+                    data-onglet="connexion"
+                    role="tab"
+                    aria-selected="true"
+                >
+                    Connexion
+                </button>
 
 
-    ongletInscription.setAttribute(
-        "aria-selected",
-        modeConnexion
-            ? "false"
-            : "true"
-    );
+                <button
+                    type="button"
+                    class="onglet-compte"
+                    id="onglet-inscription"
+                    data-onglet="inscription"
+                    role="tab"
+                    aria-selected="false"
+                >
+                    Inscription
+                </button>
 
+            </div>
 
-    formulaireConnexion.classList.toggle(
-        "actif",
-        modeConnexion
-    );
 
+            <!-- =========================
+                 FORMULAIRE CONNEXION
+            ========================== -->
 
-    formulaireInscription.classList.toggle(
-        "actif",
-        !modeConnexion
-    );
-}
+            <form
+                class="formulaire-compte actif"
+                id="formulaire-connexion"
+            >
 
 
-/* =================================
-   ONGLETS
-================================= */
+                <div class="champ-compte">
 
-ongletConnexion.addEventListener(
-    "click",
-    function () {
+                    <label for="email-connexion">
+                        Adresse e-mail
+                    </label>
 
-        changerOnglet(
-            "connexion"
-        );
 
-    }
-);
+                    <input
+                        type="email"
+                        id="email-connexion"
+                        autocomplete="email"
+                        required
+                        placeholder="exemple@email.com"
+                    >
 
+                </div>
 
-ongletInscription.addEventListener(
-    "click",
-    function () {
 
-        changerOnglet(
-            "inscription"
-        );
+                <div class="champ-compte">
 
-    }
-);
+                    <label for="mot-de-passe-connexion">
+                        Mot de passe
+                    </label>
 
 
-/* =================================
-   INSCRIPTION
-================================= */
+                    <input
+                        type="password"
+                        id="mot-de-passe-connexion"
+                        autocomplete="current-password"
+                        required
+                        placeholder="Votre mot de passe"
+                    >
 
-formulaireInscription.addEventListener(
-    "submit",
-    async function (
-        evenement
-    ) {
+                </div>
 
-        evenement.preventDefault();
 
+                <!-- =========================
+                     MOT DE PASSE OUBLIÉ
+                ========================== -->
 
-        const prenom =
-            document.getElementById(
-                "prenom"
-            )
-                .value
-                .trim();
+                <div class="action-mot-de-passe-oublie">
 
+                    <button
+                        type="button"
+                        class="bouton-mot-de-passe-oublie"
+                        id="mot-de-passe-oublie"
+                    >
+                        Mot de passe oublié ?
+                    </button>
 
-        const nom =
-            document.getElementById(
-                "nom"
-            )
-                .value
-                .trim();
+                </div>
 
 
-        const email =
-            document.getElementById(
-                "email-inscription"
-            )
-                .value
-                .trim();
+                <button
+                    type="submit"
+                    class="bouton-compte"
+                    id="bouton-connexion"
+                >
+                    Se connecter
+                </button>
 
 
-        const motDePasse =
-            document.getElementById(
-                "mot-de-passe-inscription"
-            ).value;
+            </form>
 
 
-        const confirmationMotDePasse =
-            document.getElementById(
-                "confirmation-mot-de-passe"
-            ).value;
+            <!-- =========================
+                 FORMULAIRE INSCRIPTION
+            ========================== -->
 
+            <form
+                class="formulaire-compte"
+                id="formulaire-inscription"
+            >
 
-        if (
-            motDePasse !==
-            confirmationMotDePasse
-        ) {
 
-            afficherMessage(
-                "Les mots de passe ne correspondent pas.",
-                "erreur"
-            );
+                <div class="groupe-champs-compte">
 
-            return;
-        }
 
+                    <div class="champ-compte">
 
-        boutonInscription.disabled =
-            true;
+                        <label for="prenom">
+                            Prénom
+                        </label>
 
 
-        boutonInscription.textContent =
-            "Création du compte…";
+                        <input
+                            type="text"
+                            id="prenom"
+                            autocomplete="given-name"
+                            required
+                        >
 
+                    </div>
 
-        afficherMessage(
-            "Création de votre compte…"
-        );
 
+                    <div class="champ-compte">
 
-        try {
+                        <label for="nom">
+                            Nom
+                        </label>
 
-            const {
-                data,
-                error
-            } =
-                await window.supabaseClient
-                    .auth
-                    .signUp({
 
-                        email:
-                            email,
+                        <input
+                            type="text"
+                            id="nom"
+                            autocomplete="family-name"
+                            required
+                        >
 
-                        password:
-                            motDePasse,
+                    </div>
 
-                        options: {
 
-                            data: {
+                </div>
 
-                                prenom:
-                                    prenom,
 
-                                nom:
-                                    nom
+                <div class="champ-compte">
 
-                            }
+                    <label for="email-inscription">
+                        Adresse e-mail
+                    </label>
 
-                        }
 
-                    });
+                    <input
+                        type="email"
+                        id="email-inscription"
+                        autocomplete="email"
+                        required
+                        placeholder="exemple@email.com"
+                    >
 
+                </div>
 
-            if (error) {
-                throw error;
-            }
 
+                <div class="champ-compte">
 
-            /*
-                Si la confirmation d'e-mail
-                est activée dans Supabase,
-                data.session sera null.
-            */
+                    <label for="mot-de-passe-inscription">
+                        Mot de passe
+                    </label>
 
-            if (
-                !data.session
-            ) {
 
-                afficherMessage(
-                    "Votre compte a été créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis revenez vous connecter.",
-                    "succes"
-                );
+                    <input
+                        type="password"
+                        id="mot-de-passe-inscription"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="6 caractères minimum"
+                    >
 
+                </div>
 
-                formulaireInscription.reset();
 
+                <div class="champ-compte">
 
-                changerOnglet(
-                    "connexion"
-                );
+                    <label for="confirmation-mot-de-passe">
+                        Confirmer le mot de passe
+                    </label>
 
 
-                return;
-            }
+                    <input
+                        type="password"
+                        id="confirmation-mot-de-passe"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="Retapez votre mot de passe"
+                    >
 
+                </div>
 
-            /*
-                Si la confirmation d'e-mail
-                est désactivée, l'utilisateur
-                est déjà connecté.
-            */
 
-            window.location.href =
-                "foyer.html";
+                <button
+                    type="submit"
+                    class="bouton-compte"
+                    id="bouton-inscription"
+                >
+                    Créer mon compte
+                </button>
 
 
-        } catch (
-            erreur
-        ) {
+            </form>
 
-            console.error(
-                "Erreur d'inscription :",
-                erreur
-            );
 
+            <!-- =========================
+                 MESSAGE
+            ========================== -->
 
-            afficherMessage(
-                obtenirMessageErreur(
-                    erreur
-                ),
-                "erreur"
-            );
+            <p
+                class="message-compte"
+                id="message-compte"
+                aria-live="polite"
+            ></p>
 
 
-        } finally {
+        </section>
 
-            boutonInscription.disabled =
-                false;
 
+    </main>
 
-            boutonInscription.textContent =
-                "Créer mon compte";
 
-        }
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
 
-    }
-);
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+    <script src="js/config.js"></script>
 
-/* =================================
-   CONNEXION
-================================= */
+    <script src="js/supabase.js"></script>
 
-formulaireConnexion.addEventListener(
-    "submit",
-    async function (
-        evenement
-    ) {
+    <script src="js/compte.js"></script>
 
-        evenement.preventDefault();
 
+</body>
 
-        const email =
-            document.getElementById(
-                "email-connexion"
-            )
-                .value
-                .trim();
-
-
-        const motDePasse =
-            document.getElementById(
-                "mot-de-passe-connexion"
-            ).value;
-
-
-        boutonConnexion.disabled =
-            true;
-
-
-        boutonConnexion.textContent =
-            "Connexion…";
-
-
-        afficherMessage(
-            "Connexion en cours…"
-        );
-
-
-        try {
-
-            const {
-                data,
-                error
-            } =
-                await window.supabaseClient
-                    .auth
-                    .signInWithPassword({
-
-                        email:
-                            email,
-
-                        password:
-                            motDePasse
-
-                    });
-
-
-            if (error) {
-                throw error;
-            }
-
-
-            if (
-                !data.user ||
-                !data.session
-            ) {
-
-                throw new Error(
-                    "Impossible de démarrer la session."
-                );
-
-            }
-
-
-            /*
-                Après connexion :
-                on envoie l'utilisateur
-                vers foyer.html.
-
-                La page foyer pourra ensuite
-                gérer la présence ou non
-                d'un foyer existant.
-            */
-
-            window.location.href =
-                "foyer.html";
-
-
-        } catch (
-            erreur
-        ) {
-
-            console.error(
-                "Erreur de connexion :",
-                erreur
-            );
-
-
-            afficherMessage(
-                obtenirMessageErreur(
-                    erreur
-                ),
-                "erreur"
-            );
-
-
-        } finally {
-
-            boutonConnexion.disabled =
-                false;
-
-
-            boutonConnexion.textContent =
-                "Se connecter";
-
-        }
-
-    }
-);
-
-
-/* =================================
-   MOT DE PASSE OUBLIÉ
-================================= */
-
-if (
-    boutonMotDePasseOublie
-) {
-
-    boutonMotDePasseOublie.addEventListener(
-        "click",
-        async function () {
-
-            const champEmail =
-                document.getElementById(
-                    "email-connexion"
-                );
-
-
-            const email =
-                champEmail
-                    .value
-                    .trim();
-
-
-            /*
-                On demande d'abord l'e-mail
-                pour savoir où envoyer
-                le lien.
-            */
-
-            if (
-                !email
-            ) {
-
-                afficherMessage(
-                    "Renseignez votre adresse e-mail avant de demander un nouveau mot de passe.",
-                    "erreur"
-                );
-
-
-                champEmail.focus();
-
-
-                return;
-            }
-
-
-            boutonMotDePasseOublie.disabled =
-                true;
-
-
-            boutonMotDePasseOublie.textContent =
-                "Envoi en cours…";
-
-
-            afficherMessage(
-                "Envoi du lien de réinitialisation…"
-            );
-
-
-            try {
-
-                /*
-                    Génère automatiquement
-                    l'URL correspondant au
-                    dossier actuel du site.
-
-                    Exemple :
-                    https://site.fr/nouveau-mot-de-passe.html
-                */
-
-                const urlRedirection =
-                    new URL(
-                        "nouveau-mot-de-passe.html",
-                        window.location.href
-                    ).href;
-
-
-                const {
-                    error
-                } =
-                    await window.supabaseClient
-                        .auth
-                        .resetPasswordForEmail(
-                            email,
-                            {
-                                redirectTo:
-                                    urlRedirection
-                            }
-                        );
-
-
-                if (error) {
-                    throw error;
-                }
-
-
-                afficherMessage(
-                    "Si un compte existe avec cette adresse e-mail, un lien de réinitialisation vient d'être envoyé.",
-                    "succes"
-                );
-
-
-            } catch (
-                erreur
-            ) {
-
-                console.error(
-                    "Erreur réinitialisation du mot de passe :",
-                    erreur
-                );
-
-
-                afficherMessage(
-                    obtenirMessageErreur(
-                        erreur
-                    ),
-                    "erreur"
-                );
-
-
-            } finally {
-
-                boutonMotDePasseOublie.disabled =
-                    false;
-
-
-                boutonMotDePasseOublie.textContent =
-                    "Mot de passe oublié ?";
-
-            }
-
-        }
-    );
-
-}
-
-
-/* =================================
-   MESSAGES D'ERREUR
-================================= */
-
-function obtenirMessageErreur(
-    erreur
-) {
-
-    const message =
-        erreur &&
-        erreur.message
-            ? erreur.message
-            : "";
-
-
-    const messageMinuscule =
-        message.toLowerCase();
-
-
-    if (
-        messageMinuscule.includes(
-            "invalid login credentials"
-        )
-    ) {
-
-        return (
-            "Adresse e-mail ou mot de passe incorrect."
-        );
-
-    }
-
-
-    if (
-        messageMinuscule.includes(
-            "email not confirmed"
-        )
-    ) {
-
-        return (
-            "Votre adresse e-mail n'a pas encore été confirmée."
-        );
-
-    }
-
-
-    if (
-        messageMinuscule.includes(
-            "user already registered"
-        )
-    ) {
-
-        return (
-            "Un compte existe déjà avec cette adresse e-mail."
-        );
-
-    }
-
-
-    if (
-        messageMinuscule.includes(
-            "password"
-        ) &&
-        messageMinuscule.includes(
-            "characters"
-        )
-    ) {
-
-        return (
-            "Le mot de passe n'est pas assez long."
-        );
-
-    }
-
-
-    if (
-        messageMinuscule.includes(
-            "email rate limit"
-        )
-    ) {
-
-        return (
-            "Trop de demandes ont été effectuées. Réessayez dans quelques minutes."
-        );
-
-    }
-
-
-    if (
-        messageMinuscule.includes(
-            "rate limit"
-        )
-    ) {
-
-        return (
-            "Trop de tentatives ont été effectuées. Réessayez dans quelques minutes."
-        );
-
-    }
-
-
-    return (
-        message ||
-        "Une erreur est survenue."
-    );
-
-}
-
-
-/* =================================
-   UTILISATEUR DÉJÀ CONNECTÉ
-================================= */
-
-async function verifierSessionExistante() {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await window.supabaseClient
-                .auth
-                .getSession();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        if (
-            data.session &&
-            data.session.user
-        ) {
-
-            /*
-                Pour l'instant :
-                utilisateur connecté
-                => foyer.html
-            */
-
-            window.location.href =
-                "foyer.html";
-
-        }
-
-
-    } catch (
-        erreur
-    ) {
-
-        console.error(
-            "Erreur de vérification de session :",
-            erreur
-        );
-
-    }
-
-}
-
-
-/* =================================
-   DÉMARRAGE
-================================= */
-
-verifierSessionExistante();
+</html>
