@@ -1728,6 +1728,117 @@ async function validerCopieSemaine() {
 
 }
 
+/* =================================
+   CLICS DANS LE PLANNING
+================================= */
+
+if (
+    grilleSemaine
+) {
+
+    grilleSemaine.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            /* =========================
+               AJOUTER UN REPAS
+            ========================= */
+
+            const boutonAjouter =
+                evenement.target.closest(
+                    ".bouton-ajouter-repas"
+                );
+
+
+            if (
+                boutonAjouter
+            ) {
+
+                const dateISO =
+                    boutonAjouter.dataset.date;
+
+
+                const moment =
+                    boutonAjouter.dataset.moment;
+
+
+                if (
+                    !dateISO ||
+                    !moment
+                ) {
+
+                    console.error(
+                        "Date ou moment manquant sur le bouton Ajouter."
+                    );
+
+                    return;
+                }
+
+
+                ouvrirPopup(
+                    dateISO,
+                    moment,
+                    null
+                );
+
+
+                return;
+            }
+
+
+            /* =========================
+               MODIFIER UN REPAS
+            ========================= */
+
+            const boutonModifier =
+                evenement.target.closest(
+                    ".bouton-editer-repas"
+                );
+
+
+            if (
+                boutonModifier
+            ) {
+
+                const repasId =
+                    boutonModifier.dataset.repasId;
+
+
+                const repas =
+                    trouverRepasParId(
+                        repasId
+                    );
+
+
+                if (
+                    !repas
+                ) {
+
+                    console.error(
+                        "Repas introuvable :",
+                        repasId
+                    );
+
+                    return;
+                }
+
+
+                ouvrirPopup(
+                    repas.date,
+                    repas.moment,
+                    repas
+                );
+
+
+                return;
+            }
+
+        }
+    );
+
+}
 
 /* =================================
 ÉVÉNEMENTS NAVIGATION
