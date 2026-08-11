@@ -1,6 +1,20 @@
 /* =================================
    ÉLÉMENTS HTML
 ================================= */
+const champNomFoyer =
+    document.getElementById(
+        "nom-foyer-modifiable"
+    );
+
+const boutonEnregistrerNomFoyer =
+    document.getElementById(
+        "enregistrer-nom-foyer"
+    );
+
+const messageNomFoyer =
+    document.getElementById(
+        "message-nom-foyer"
+    );
 
 const chargementCompte =
     document.getElementById(
@@ -586,10 +600,8 @@ function afficherProfil() {
 
 function afficherFoyer() {
 
-    foyerNom.textContent =
-        valeurOuTiret(
-            foyerUtilisateur.nom
-        );
+    champNomFoyer.value =
+    foyerUtilisateur.nom || "";
 
 
     foyerCode.textContent =
@@ -995,6 +1007,170 @@ champPersonnesParDefaut
                             ? valeurActuelle
                             : 2;
             }
+        }
+    );
+
+/* =================================
+   ENREGISTRER LE NOM DU FOYER
+================================= */
+
+boutonEnregistrerNomFoyer
+    .addEventListener(
+        "click",
+        async function () {
+
+            messageNomFoyer.textContent =
+                "";
+
+
+            const nouveauNom =
+                champNomFoyer
+                    .value
+                    .trim();
+
+
+            if (!nouveauNom) {
+
+                messageNomFoyer.textContent =
+                    "Renseigne un nom de foyer.";
+
+                return;
+            }
+
+
+            if (
+                !foyerUtilisateur ||
+                !foyerUtilisateur.id
+            ) {
+
+                messageNomFoyer.textContent =
+                    "Impossible de déterminer votre foyer.";
+
+                return;
+            }
+
+
+            boutonEnregistrerNomFoyer.disabled =
+                true;
+
+
+            boutonEnregistrerNomFoyer.textContent =
+                "Enregistrement…";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await window.supabaseClient
+                        .from(
+                            "foyers"
+                        )
+                        .update({
+
+                            nom:
+                                nouveauNom
+
+                        })
+                        .eq(
+                            "id",
+                            foyerUtilisateur.id
+                        )
+                        .select(
+                            "id, nom"
+                        )
+                        .maybeSingle();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data) {
+
+                    throw new Error(
+                        "La modification du foyer n'a pas été autorisée."
+                    );
+                }
+
+
+                foyerUtilisateur.nom =
+                    data.nom;
+
+
+                champNomFoyer.value =
+                    data.nom;
+
+
+                nomFoyerUtilisateur.textContent =
+                    data.nom;
+
+
+                messageNomFoyer.textContent =
+                    "Nom du foyer enregistré ✓";
+
+
+                setTimeout(
+                    function () {
+
+                        messageNomFoyer.textContent =
+                            "";
+
+                    },
+                    2200
+                );
+
+
+            } catch (erreur) {
+
+                console.error(
+                    "Erreur pendant la modification du nom du foyer :",
+                    erreur
+                );
+
+
+                messageNomFoyer.textContent =
+                    erreur.message ||
+                    "Impossible d'enregistrer le nom du foyer.";
+
+
+            } finally {
+
+                boutonEnregistrerNomFoyer.disabled =
+                    false;
+
+
+                boutonEnregistrerNomFoyer.textContent =
+                    "Enregistrer";
+
+            }
+
+        }
+    );
+
+champNomFoyer
+    .addEventListener(
+        "keydown",
+        function (
+            evenement
+        ) {
+
+            if (
+                evenement.key ===
+                "Enter"
+            ) {
+
+                evenement.preventDefault();
+
+
+                boutonEnregistrerNomFoyer
+                    .click();
+
+            }
+
         }
     );
 
