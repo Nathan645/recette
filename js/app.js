@@ -683,7 +683,7 @@ function obtenirNomFiltre(
     const noms = {
 
         "gros-gros":
-            "Gros gros",
+            "Grogros",
 
         "healthy":
             "Healthy",
