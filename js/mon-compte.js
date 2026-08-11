@@ -1,38 +1,21 @@
 /* =================================
    ÉLÉMENTS HTML
 ================================= */
-const champNomFoyer =
-    document.getElementById(
-        "nom-foyer-modifiable"
-    );
-
-const boutonEnregistrerNomFoyer =
-    document.getElementById(
-        "enregistrer-nom-foyer"
-    );
-
-const messageNomFoyer =
-    document.getElementById(
-        "message-nom-foyer"
-    );
 
 const chargementCompte =
     document.getElementById(
         "chargement-compte"
     );
 
-
 const contenuMonCompte =
     document.getElementById(
         "contenu-mon-compte"
     );
 
-
 const messageErreurCompte =
     document.getElementById(
         "message-erreur-compte"
     );
-
 
 const texteErreurCompte =
     document.getElementById(
@@ -49,12 +32,10 @@ const infosUtilisateur =
         "infos-utilisateur"
     );
 
-
 const prenomUtilisateur =
     document.getElementById(
         "prenom-utilisateur"
     );
-
 
 const nomFoyerUtilisateur =
     document.getElementById(
@@ -71,12 +52,10 @@ const comptePrenom =
         "compte-prenom"
     );
 
-
 const compteNom =
     document.getElementById(
         "compte-nom"
     );
-
 
 const compteEmail =
     document.getElementById(
@@ -88,29 +67,35 @@ const compteEmail =
    FOYER
 ================================= */
 
-const foyerNom =
+const champNomFoyer =
     document.getElementById(
-        "foyer-nom"
+        "nom-foyer-modifiable"
     );
 
+const boutonEnregistrerNomFoyer =
+    document.getElementById(
+        "enregistrer-nom-foyer"
+    );
+
+const messageNomFoyer =
+    document.getElementById(
+        "message-nom-foyer"
+    );
 
 const foyerNombreMembres =
     document.getElementById(
         "foyer-nombre-membres"
     );
 
-
 const foyerCode =
     document.getElementById(
         "foyer-code"
     );
 
-
 const boutonCopierCode =
     document.getElementById(
         "copier-code-foyer"
     );
-
 
 const messageCopieCode =
     document.getElementById(
@@ -127,12 +112,10 @@ const champPersonnesParDefaut =
         "personnes-par-defaut"
     );
 
-
 const boutonEnregistrerPersonnes =
     document.getElementById(
         "enregistrer-personnes-foyer"
     );
-
 
 const messagePersonnesFoyer =
     document.getElementById(
@@ -164,47 +147,34 @@ const boutonDeconnexion =
    VARIABLES
 ================================= */
 
-let utilisateurConnecte =
-    null;
+let utilisateurConnecte = null;
 
+let profilUtilisateur = null;
 
-let profilUtilisateur =
-    null;
+let foyerUtilisateur = null;
 
-
-let foyerUtilisateur =
-    null;
-
-
-let membresFoyer =
-    [];
+let membresFoyer = [];
 
 
 /* =================================
    OUTILS
 ================================= */
 
-function afficherErreur(
-    erreur
-) {
+function afficherErreur(erreur) {
 
     console.error(
         "Erreur Mon compte :",
         erreur
     );
 
-
     chargementCompte.hidden =
         true;
-
 
     contenuMonCompte.hidden =
         true;
 
-
     messageErreurCompte.hidden =
         false;
-
 
     texteErreurCompte.textContent =
         erreur.message ||
@@ -212,9 +182,7 @@ function afficherErreur(
 }
 
 
-function valeurOuTiret(
-    valeur
-) {
+function valeurOuTiret(valeur) {
 
     if (
         valeur === null ||
@@ -224,7 +192,6 @@ function valeurOuTiret(
 
         return "—";
     }
-
 
     return valeur;
 }
@@ -243,7 +210,6 @@ function obtenirInitiales(
                 .toUpperCase()
             : "";
 
-
     const premiereLettreNom =
         nom
             ? nom
@@ -251,7 +217,6 @@ function obtenirInitiales(
                 .charAt(0)
                 .toUpperCase()
             : "";
-
 
     return (
         premiereLettrePrenom +
@@ -274,11 +239,9 @@ async function recupererUtilisateur() {
             .auth
             .getUser();
 
-
     if (error) {
         throw error;
     }
-
 
     if (!data.user) {
 
@@ -288,10 +251,8 @@ async function recupererUtilisateur() {
         return null;
     }
 
-
     utilisateurConnecte =
         data.user;
-
 
     return utilisateurConnecte;
 }
@@ -316,15 +277,12 @@ async function recupererProfil() {
             )
             .maybeSingle();
 
-
     if (error) {
         throw error;
     }
 
-
     profilUtilisateur =
         data;
-
 
     return data;
 }
@@ -350,11 +308,9 @@ async function recupererAppartenanceFoyer() {
             .limit(1)
             .maybeSingle();
 
-
     if (error) {
         throw error;
     }
-
 
     if (!data) {
 
@@ -363,7 +319,6 @@ async function recupererAppartenanceFoyer() {
 
         return null;
     }
-
 
     return data;
 }
@@ -390,15 +345,12 @@ async function recupererFoyer(
             )
             .single();
 
-
     if (error) {
         throw error;
     }
 
-
     foyerUtilisateur =
         data;
-
 
     return data;
 }
@@ -424,43 +376,33 @@ async function recupererMembresFoyer(
                 foyerId
             );
 
-
     if (error) {
         throw error;
     }
-
 
     const appartenances =
         Array.isArray(data)
             ? data
             : [];
 
-
     if (
-        appartenances.length ===
-        0
+        appartenances.length === 0
     ) {
 
-        membresFoyer =
-            [];
-
+        membresFoyer = [];
 
         return [];
     }
 
-
     const idsUtilisateurs =
         appartenances
             .map(
-                function (
-                    membre
-                ) {
+                function (membre) {
 
                     return membre.user_id;
                 }
             )
             .filter(Boolean);
-
 
     const {
         data: profils,
@@ -474,29 +416,22 @@ async function recupererMembresFoyer(
                 idsUtilisateurs
             );
 
-
     if (erreurProfils) {
         throw erreurProfils;
     }
-
 
     const profilsDisponibles =
         Array.isArray(profils)
             ? profils
             : [];
 
-
     membresFoyer =
         appartenances.map(
-            function (
-                appartenance
-            ) {
+            function (appartenance) {
 
                 const profil =
                     profilsDisponibles.find(
-                        function (
-                            element
-                        ) {
+                        function (element) {
 
                             return (
                                 element.id ===
@@ -504,7 +439,6 @@ async function recupererMembresFoyer(
                             );
                         }
                     );
-
 
                 return {
 
@@ -517,9 +451,9 @@ async function recupererMembresFoyer(
             }
         );
 
-
     return membresFoyer;
 }
+
 
 /* =================================
    RÔLES
@@ -537,7 +471,6 @@ function obtenirRoleFoyer(
 
         return "Propriétaire";
     }
-
 
     return "Membre";
 }
@@ -557,18 +490,15 @@ function afficherProfil() {
         profilUtilisateur?.nom ||
         "";
 
-
     comptePrenom.textContent =
         valeurOuTiret(
             prenom
         );
 
-
     compteNom.textContent =
         valeurOuTiret(
             nom
         );
-
 
     compteEmail.textContent =
         valeurOuTiret(
@@ -583,11 +513,9 @@ function afficherProfil() {
         utilisateurConnecte.email ||
         "";
 
-
     nomFoyerUtilisateur.textContent =
         foyerUtilisateur?.nom ||
         "";
-
 
     infosUtilisateur.hidden =
         false;
@@ -600,19 +528,25 @@ function afficherProfil() {
 
 function afficherFoyer() {
 
-    champNomFoyer.value =
-    foyerUtilisateur.nom || "";
+    /* Nom du foyer */
 
+    champNomFoyer.value =
+        foyerUtilisateur?.nom ||
+        "";
+
+
+    /* Code du foyer */
 
     foyerCode.textContent =
         valeurOuTiret(
-            foyerUtilisateur.code
+            foyerUtilisateur?.code
         );
 
 
+    /* Nombre de membres */
+
     const nombreMembres =
         membresFoyer.length;
-
 
     foyerNombreMembres.textContent =
         nombreMembres === 1
@@ -620,12 +554,13 @@ function afficherFoyer() {
             : `${nombreMembres} membres`;
 
 
+    /* Nombre habituel de personnes */
+
     const personnesParDefaut =
         Number(
             foyerUtilisateur
-                .personnes_par_defaut
+                ?.personnes_par_defaut
         );
-
 
     champPersonnesParDefaut.value =
         Number.isInteger(
@@ -644,8 +579,7 @@ function afficherFoyer() {
 function afficherMembres() {
 
     if (
-        membresFoyer.length ===
-        0
+        membresFoyer.length === 0
     ) {
 
         listeMembresFoyer.innerHTML = `
@@ -653,7 +587,6 @@ function afficherMembres() {
                 Aucun membre dans ce foyer.
             </p>
         `;
-
 
         return;
     }
@@ -675,7 +608,6 @@ function afficherMembres() {
                         return -1;
                     }
 
-
                     if (
                         membreB.user_id ===
                         foyerUtilisateur.created_by
@@ -684,7 +616,6 @@ function afficherMembres() {
                         return 1;
                     }
 
-
                     const prenomA =
                         membreA.profil?.prenom ||
                         "";
@@ -692,7 +623,6 @@ function afficherMembres() {
                     const prenomB =
                         membreB.profil?.prenom ||
                         "";
-
 
                     return prenomA.localeCompare(
                         prenomB,
@@ -705,9 +635,7 @@ function afficherMembres() {
     listeMembresFoyer.innerHTML =
         membresTries
             .map(
-                function (
-                    membre
-                ) {
+                function (membre) {
 
                     const prenom =
                         membre.profil?.prenom ||
@@ -717,23 +645,19 @@ function afficherMembres() {
                         membre.profil?.nom ||
                         "";
 
-
                     const nomComplet =
                         `${prenom} ${nom}`
                             .trim() ||
                         "Membre";
-
 
                     const role =
                         obtenirRoleFoyer(
                             membre.user_id
                         );
 
-
                     const estMoi =
                         membre.user_id ===
                         utilisateurConnecte.id;
-
 
                     const initiales =
                         obtenirInitiales(
@@ -750,10 +674,10 @@ function afficherMembres() {
                                 ${initiales}
                             </div>
 
-
                             <div class="infos-membre">
 
                                 <strong>
+
                                     ${nomComplet}
 
                                     ${
@@ -784,6 +708,165 @@ function afficherMembres() {
 
 
 /* =================================
+   ENREGISTRER LE NOM DU FOYER
+================================= */
+
+boutonEnregistrerNomFoyer
+    .addEventListener(
+        "click",
+        async function () {
+
+            messageNomFoyer.textContent =
+                "";
+
+            const nouveauNom =
+                champNomFoyer
+                    .value
+                    .trim();
+
+
+            if (!nouveauNom) {
+
+                messageNomFoyer.textContent =
+                    "Renseigne un nom de foyer.";
+
+                return;
+            }
+
+
+            if (
+                !foyerUtilisateur ||
+                !foyerUtilisateur.id
+            ) {
+
+                messageNomFoyer.textContent =
+                    "Impossible de déterminer votre foyer.";
+
+                return;
+            }
+
+
+            boutonEnregistrerNomFoyer.disabled =
+                true;
+
+            boutonEnregistrerNomFoyer.textContent =
+                "Enregistrement…";
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } =
+                    await window.supabaseClient
+                        .from("foyers")
+                        .update({
+                            nom:
+                                nouveauNom
+                        })
+                        .eq(
+                            "id",
+                            foyerUtilisateur.id
+                        )
+                        .select(
+                            "id, nom"
+                        )
+                        .maybeSingle();
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data) {
+
+                    throw new Error(
+                        "La modification du foyer n'a pas été autorisée."
+                    );
+                }
+
+
+                /* Mise à jour locale */
+
+                foyerUtilisateur.nom =
+                    data.nom;
+
+                champNomFoyer.value =
+                    data.nom;
+
+
+                /* Mise à jour du header */
+
+                nomFoyerUtilisateur.textContent =
+                    data.nom;
+
+
+                /* Confirmation */
+
+                messageNomFoyer.textContent =
+                    "Nom du foyer enregistré ✓";
+
+
+                setTimeout(
+                    function () {
+
+                        messageNomFoyer.textContent =
+                            "";
+
+                    },
+                    2200
+                );
+
+
+            } catch (erreur) {
+
+                console.error(
+                    "Erreur pendant la modification du nom du foyer :",
+                    erreur
+                );
+
+                messageNomFoyer.textContent =
+                    erreur.message ||
+                    "Impossible d'enregistrer le nom du foyer.";
+
+            } finally {
+
+                boutonEnregistrerNomFoyer.disabled =
+                    false;
+
+                boutonEnregistrerNomFoyer.textContent =
+                    "Enregistrer";
+            }
+        }
+    );
+
+
+/* =================================
+   ENTRÉE = ENREGISTRER NOM
+================================= */
+
+champNomFoyer
+    .addEventListener(
+        "keydown",
+        function (evenement) {
+
+            if (
+                evenement.key ===
+                "Enter"
+            ) {
+
+                evenement.preventDefault();
+
+                boutonEnregistrerNomFoyer
+                    .click();
+            }
+        }
+    );
+
+
+/* =================================
    ENREGISTRER LE NOMBRE
    DE PERSONNES DU FOYER
 ================================= */
@@ -796,7 +879,6 @@ boutonEnregistrerPersonnes
             messagePersonnesFoyer
                 .textContent =
                     "";
-
 
             const nombre =
                 Number(
@@ -837,7 +919,6 @@ boutonEnregistrerPersonnes
                 .disabled =
                     true;
 
-
             boutonEnregistrerPersonnes
                 .textContent =
                     "Enregistrement…";
@@ -850,9 +931,7 @@ boutonEnregistrerPersonnes
                     error
                 } =
                     await window.supabaseClient
-                        .from(
-                            "foyers"
-                        )
+                        .from("foyers")
                         .update({
 
                             personnes_par_defaut:
@@ -911,9 +990,7 @@ boutonEnregistrerPersonnes
                 );
 
 
-            } catch (
-                erreur
-            ) {
+            } catch (erreur) {
 
                 console.error(
                     "Erreur pendant la modification du nombre de personnes :",
@@ -933,7 +1010,6 @@ boutonEnregistrerPersonnes
                     .disabled =
                         false;
 
-
                 boutonEnregistrerPersonnes
                     .textContent =
                         "Enregistrer";
@@ -943,15 +1019,13 @@ boutonEnregistrerPersonnes
 
 
 /* =================================
-   ENTRÉE DANS LE CHAMP
+   ENTRÉE = ENREGISTRER PERSONNES
 ================================= */
 
 champPersonnesParDefaut
     .addEventListener(
         "keydown",
-        function (
-            evenement
-        ) {
+        function (evenement) {
 
             if (
                 evenement.key ===
@@ -959,7 +1033,6 @@ champPersonnesParDefaut
             ) {
 
                 evenement.preventDefault();
-
 
                 boutonEnregistrerPersonnes
                     .click();
@@ -969,7 +1042,7 @@ champPersonnesParDefaut
 
 
 /* =================================
-   VALIDATION DU CHAMP
+   VALIDATION NOMBRE DE PERSONNES
 ================================= */
 
 champPersonnesParDefaut
@@ -982,7 +1055,6 @@ champPersonnesParDefaut
                     champPersonnesParDefaut
                         .value
                 );
-
 
             if (
                 !Number.isInteger(
@@ -997,7 +1069,6 @@ champPersonnesParDefaut
                             ?.personnes_par_defaut
                     );
 
-
                 champPersonnesParDefaut
                     .value =
                         Number.isInteger(
@@ -1010,169 +1081,6 @@ champPersonnesParDefaut
         }
     );
 
-/* =================================
-   ENREGISTRER LE NOM DU FOYER
-================================= */
-
-boutonEnregistrerNomFoyer
-    .addEventListener(
-        "click",
-        async function () {
-
-            messageNomFoyer.textContent =
-                "";
-
-
-            const nouveauNom =
-                champNomFoyer
-                    .value
-                    .trim();
-
-
-            if (!nouveauNom) {
-
-                messageNomFoyer.textContent =
-                    "Renseigne un nom de foyer.";
-
-                return;
-            }
-
-
-            if (
-                !foyerUtilisateur ||
-                !foyerUtilisateur.id
-            ) {
-
-                messageNomFoyer.textContent =
-                    "Impossible de déterminer votre foyer.";
-
-                return;
-            }
-
-
-            boutonEnregistrerNomFoyer.disabled =
-                true;
-
-
-            boutonEnregistrerNomFoyer.textContent =
-                "Enregistrement…";
-
-
-            try {
-
-                const {
-                    data,
-                    error
-                } =
-                    await window.supabaseClient
-                        .from(
-                            "foyers"
-                        )
-                        .update({
-
-                            nom:
-                                nouveauNom
-
-                        })
-                        .eq(
-                            "id",
-                            foyerUtilisateur.id
-                        )
-                        .select(
-                            "id, nom"
-                        )
-                        .maybeSingle();
-
-
-                if (error) {
-                    throw error;
-                }
-
-
-                if (!data) {
-
-                    throw new Error(
-                        "La modification du foyer n'a pas été autorisée."
-                    );
-                }
-
-
-                foyerUtilisateur.nom =
-                    data.nom;
-
-
-                champNomFoyer.value =
-                    data.nom;
-
-
-                nomFoyerUtilisateur.textContent =
-                    data.nom;
-
-
-                messageNomFoyer.textContent =
-                    "Nom du foyer enregistré ✓";
-
-
-                setTimeout(
-                    function () {
-
-                        messageNomFoyer.textContent =
-                            "";
-
-                    },
-                    2200
-                );
-
-
-            } catch (erreur) {
-
-                console.error(
-                    "Erreur pendant la modification du nom du foyer :",
-                    erreur
-                );
-
-
-                messageNomFoyer.textContent =
-                    erreur.message ||
-                    "Impossible d'enregistrer le nom du foyer.";
-
-
-            } finally {
-
-                boutonEnregistrerNomFoyer.disabled =
-                    false;
-
-
-                boutonEnregistrerNomFoyer.textContent =
-                    "Enregistrer";
-
-            }
-
-        }
-    );
-
-champNomFoyer
-    .addEventListener(
-        "keydown",
-        function (
-            evenement
-        ) {
-
-            if (
-                evenement.key ===
-                "Enter"
-            ) {
-
-                evenement.preventDefault();
-
-
-                boutonEnregistrerNomFoyer
-                    .click();
-
-            }
-
-        }
-    );
 
 /* =================================
    COPIER LE CODE DU FOYER
@@ -1213,7 +1121,6 @@ boutonCopierCode.addEventListener(
                     boutonCopierCode.textContent =
                         "Copier le code";
 
-
                     messageCopieCode.textContent =
                         "";
 
@@ -1228,7 +1135,6 @@ boutonCopierCode.addEventListener(
                 "Impossible de copier le code :",
                 erreur
             );
-
 
             messageCopieCode.textContent =
                 `Code du foyer : ${code}`;
@@ -1247,7 +1153,6 @@ boutonDeconnexion.addEventListener(
 
         boutonDeconnexion.disabled =
             true;
-
 
         boutonDeconnexion.textContent =
             "Déconnexion…";
@@ -1268,8 +1173,9 @@ boutonDeconnexion.addEventListener(
             }
 
 
-            window.location.href =
-                "compte.html";
+            window.location.replace(
+                "compte.html"
+            );
 
 
         } catch (erreur) {
@@ -1279,14 +1185,11 @@ boutonDeconnexion.addEventListener(
                 erreur
             );
 
-
             boutonDeconnexion.disabled =
                 false;
 
-
             boutonDeconnexion.textContent =
                 "Se déconnecter";
-
 
             window.alert(
                 "Impossible de vous déconnecter."
@@ -1304,9 +1207,7 @@ async function initialiserMonCompte() {
 
     try {
 
-        /*
-            1. Utilisateur connecté
-        */
+        /* 1. Utilisateur connecté */
 
         const utilisateur =
             await recupererUtilisateur();
@@ -1317,16 +1218,12 @@ async function initialiserMonCompte() {
         }
 
 
-        /*
-            2. Profil utilisateur
-        */
+        /* 2. Profil */
 
         await recupererProfil();
 
 
-        /*
-            3. Appartenance au foyer
-        */
+        /* 3. Appartenance foyer */
 
         const appartenance =
             await recupererAppartenanceFoyer();
@@ -1337,27 +1234,21 @@ async function initialiserMonCompte() {
         }
 
 
-        /*
-            4. Informations du foyer
-        */
+        /* 4. Informations foyer */
 
         await recupererFoyer(
             appartenance.foyer_id
         );
 
 
-        /*
-            5. Membres du foyer
-        */
+        /* 5. Membres */
 
         await recupererMembresFoyer(
             appartenance.foyer_id
         );
 
 
-        /*
-            6. Affichage
-        */
+        /* 6. Affichage */
 
         afficherProfil();
 
@@ -1366,17 +1257,13 @@ async function initialiserMonCompte() {
         afficherMembres();
 
 
-        /*
-            7. Fin du chargement
-        */
+        /* 7. Fin du chargement */
 
         chargementCompte.hidden =
             true;
 
-
         messageErreurCompte.hidden =
             true;
-
 
         contenuMonCompte.hidden =
             false;
@@ -1396,4 +1283,3 @@ async function initialiserMonCompte() {
 ================================= */
 
 initialiserMonCompte();
-
