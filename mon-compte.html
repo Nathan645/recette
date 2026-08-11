@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 
 <head>
@@ -29,18 +30,27 @@
 
 <body>
 
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+
     <header class="entete-principale">
 
+
         <div class="bloc-marque">
+
 
             <h1>
                 À notre table
             </h1>
 
+
             <p>
                 Nos recettes, nos souvenirs
                 et nos petits secrets de cuisine.
             </p>
+
 
             <div
                 class="infos-utilisateur"
@@ -53,9 +63,11 @@
                     <strong id="prenom-utilisateur"></strong>
                 </span>
 
+
                 <span class="separateur-utilisateur">
                     •
                 </span>
+
 
                 <span>
                     Foyer :
@@ -64,10 +76,16 @@
 
             </div>
 
+
         </div>
 
 
+        <!-- =========================
+             NAVIGATION
+        ========================== -->
+
         <nav class="navigation-principale">
+
 
             <a
                 href="index.html"
@@ -76,12 +94,14 @@
                 Recettes
             </a>
 
+
             <a
                 href="planning.html"
                 class="lien-navigation"
             >
                 Planning
             </a>
+
 
             <a
                 href="courses.html"
@@ -90,6 +110,7 @@
                 Courses
             </a>
 
+
             <a
                 href="mon-compte.html"
                 class="lien-navigation actif"
@@ -97,30 +118,49 @@
                 Compte
             </a>
 
+
         </nav>
+
 
     </header>
 
 
+    <!-- =========================
+         PAGE
+    ========================== -->
+
     <main class="page-mon-compte">
 
+
+        <!-- =========================
+             ENTÊTE PAGE
+        ========================== -->
+
         <section class="entete-page-compte">
+
 
             <span class="sur-titre-compte">
                 Espace personnel
             </span>
 
+
             <h2>
                 Mon compte
             </h2>
+
 
             <p>
                 Retrouvez vos informations personnelles
                 et les membres de votre foyer.
             </p>
 
+
         </section>
 
+
+        <!-- =========================
+             CHARGEMENT
+        ========================== -->
 
         <div
             class="message-chargement-compte"
@@ -129,6 +169,10 @@
             Chargement de votre compte…
         </div>
 
+
+        <!-- =========================
+             CONTENU
+        ========================== -->
 
         <div
             class="contenu-mon-compte"
@@ -143,90 +187,92 @@
 
             <section class="carte-espace-compte">
 
+
                 <div class="entete-carte-compte">
+
 
                     <div class="icone-carte-compte">
                         👤
                     </div>
 
+
                     <div>
+
 
                         <span class="petit-titre-compte">
                             Profil
                         </span>
 
+
                         <h3>
                             Mes informations
                         </h3>
 
+
                     </div>
+
 
                 </div>
 
 
                 <div class="grille-informations-compte">
 
+
                     <div class="information-compte">
+
 
                         <span class="label-information">
                             Prénom
                         </span>
 
+
                         <strong id="compte-prenom">
                             —
                         </strong>
+
 
                     </div>
 
 
                     <div class="information-compte">
 
+
                         <span class="label-information">
                             Nom
                         </span>
+
 
                         <strong id="compte-nom">
                             —
                         </strong>
 
+
                     </div>
 
 
-                    <div class="bloc-nom-foyer">
+                    <div
+                        class="
+                            information-compte
+                            information-large
+                        "
+                    >
 
-    <label for="nom-foyer-modifiable">
-        Nom du foyer
-    </label>
 
-    <div class="controle-nom-foyer">
+                        <span class="label-information">
+                            Adresse e-mail
+                        </span>
 
-        <input
-            type="text"
-            id="nom-foyer-modifiable"
-            maxlength="80"
-        >
 
-        <button
-            type="button"
-            id="enregistrer-nom-foyer"
-            class="bouton-enregistrer-nom-foyer"
-        >
-            Enregistrer
-        </button>
+                        <strong id="compte-email">
+                            —
+                        </strong>
 
-    </div>
 
-    <p
-        class="message-nom-foyer"
-        id="message-nom-foyer"
-        aria-live="polite"
-    ></p>
-
-</div>
-
+                    </div>
 
 
                 </div>
+
 
             </section>
 
@@ -237,98 +283,184 @@
 
             <section class="carte-espace-compte">
 
+
                 <div class="entete-carte-compte">
+
 
                     <div class="icone-carte-compte">
                         🏠
                     </div>
 
+
                     <div>
+
 
                         <span class="petit-titre-compte">
                             Foyer
                         </span>
 
+
                         <h3>
                             Mon foyer
                         </h3>
 
+
                     </div>
+
 
                 </div>
 
 
+                <!--
+                    Compatibilité temporaire
+                    avec l'ancien JS.
+                -->
+
+                <strong
+                    id="foyer-nom"
+                    hidden
+                ></strong>
+
+
+                <!-- =========================
+                     INFORMATIONS FOYER
+                ========================== -->
+
                 <div class="grille-informations-compte">
 
-                    <div class="information-compte information-large">
 
-                        <span class="label-information">
+                    <!-- =========================
+                         NOM DU FOYER MODIFIABLE
+                    ========================== -->
+
+                    <div class="bloc-nom-foyer">
+
+
+                        <label for="nom-foyer-modifiable">
                             Nom du foyer
-                        </span>
+                        </label>
 
-                        <strong id="foyer-nom">
-                            —
-                        </strong>
+
+                        <div class="controle-nom-foyer">
+
+
+                            <input
+                                type="text"
+                                id="nom-foyer-modifiable"
+                                maxlength="80"
+                                autocomplete="off"
+                            >
+
+
+                            <button
+                                type="button"
+                                id="enregistrer-nom-foyer"
+                                class="bouton-enregistrer-nom-foyer"
+                            >
+                                Enregistrer
+                            </button>
+
+
+                        </div>
+
+
+                        <p
+                            class="message-nom-foyer"
+                            id="message-nom-foyer"
+                            aria-live="polite"
+                        ></p>
+
 
                     </div>
 
 
+                    <!-- =========================
+                         MEMBRES
+                    ========================== -->
 
-                    <div class="information-compte">
+                    <div
+                        class="
+                            information-compte
+                            information-membres-foyer
+                        "
+                    >
+
 
                         <span class="label-information">
                             Membres
                         </span>
 
+
                         <strong id="foyer-nombre-membres">
                             —
                         </strong>
 
+
                     </div>
+
+
+                    <!-- =========================
+                         NOMBRE HABITUEL
+                    ========================== -->
 
                     <div class="bloc-personnes-foyer">
 
-    <label for="personnes-par-defaut">
-        Nombre habituel de personnes
-    </label>
 
-    <div class="controle-personnes-foyer">
+                        <label for="personnes-par-defaut">
+                            Nombre habituel de personnes
+                        </label>
 
-        <input
-            type="number"
-            id="personnes-par-defaut"
-            min="1"
-            step="1"
-        >
 
-        <button
-            type="button"
-            id="enregistrer-personnes-foyer"
-            class="bouton-enregistrer-personnes"
-        >
-            Enregistrer
-        </button>
+                        <div class="controle-personnes-foyer">
 
-    </div>
 
-    <p
-        class="message-personnes-foyer"
-        id="message-personnes-foyer"
-        aria-live="polite"
-    ></p>
+                            <input
+                                type="number"
+                                id="personnes-par-defaut"
+                                min="1"
+                                step="1"
+                            >
 
-</div>
+
+                            <button
+                                type="button"
+                                id="enregistrer-personnes-foyer"
+                                class="bouton-enregistrer-personnes"
+                            >
+                                Enregistrer
+                            </button>
+
+
+                        </div>
+
+
+                        <p
+                            class="message-personnes-foyer"
+                            id="message-personnes-foyer"
+                            aria-live="polite"
+                        ></p>
+
+
+                    </div>
+
 
                 </div>
 
 
+                <!-- =========================
+                     CODE DU FOYER
+                ========================== -->
+
                 <div class="bloc-code-foyer">
 
+
                     <div>
+
 
                         <span class="label-information">
                             Code du foyer
                         </span>
+
 
                         <strong
                             class="code-foyer"
@@ -336,6 +468,7 @@
                         >
                             —
                         </strong>
+
 
                     </div>
 
@@ -348,6 +481,7 @@
                         Copier le code
                     </button>
 
+
                 </div>
 
 
@@ -357,32 +491,40 @@
                     aria-live="polite"
                 ></p>
 
+
             </section>
 
 
             <!-- =========================
-                 MEMBRES
+                 MEMBRES DU FOYER
             ========================== -->
 
             <section class="carte-espace-compte">
 
+
                 <div class="entete-carte-compte">
+
 
                     <div class="icone-carte-compte">
                         👥
                     </div>
 
+
                     <div>
+
 
                         <span class="petit-titre-compte">
                             Famille
                         </span>
 
+
                         <h3>
                             Membres du foyer
                         </h3>
 
+
                     </div>
+
 
                 </div>
 
@@ -393,25 +535,35 @@
                 >
                 </div>
 
+
             </section>
 
 
             <!-- =========================
-                 ACTIONS
+                 SESSION
             ========================== -->
 
-            <section class="carte-espace-compte carte-actions-compte">
+            <section
+                class="
+                    carte-espace-compte
+                    carte-actions-compte
+                "
+            >
+
 
                 <div>
+
 
                     <h3>
                         Session
                     </h3>
 
+
                     <p>
                         Vous pouvez vous déconnecter
                         de cet appareil à tout moment.
                     </p>
+
 
                 </div>
 
@@ -424,10 +576,16 @@
                     Se déconnecter
                 </button>
 
+
             </section>
+
 
         </div>
 
+
+        <!-- =========================
+             ERREUR
+        ========================== -->
 
         <div
             class="message-erreur-compte"
@@ -435,13 +593,16 @@
             hidden
         >
 
+
             <h3>
                 Impossible de charger votre compte
             </h3>
 
+
             <p id="texte-erreur-compte">
                 Une erreur est survenue.
             </p>
+
 
             <a
                 href="index.html"
@@ -450,25 +611,44 @@
                 Retour aux recettes
             </a>
 
+
         </div>
+
 
     </main>
 
 
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
     <footer>
+
 
         <p>
             À notre table ❤️
         </p>
 
+
     </footer>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
     <script src="js/config.js"></script>
+
     <script src="js/supabase.js"></script>
+
     <script src="js/session.js"></script>
+
     <script src="js/mon-compte.js"></script>
+
 
 </body>
 
