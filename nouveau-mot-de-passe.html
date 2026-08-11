@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Nouveau mot de passe | À notre table
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="css/compte.css"
+    >
+
+</head>
+
+
+<body class="page-compte">
+
+
+    <main class="conteneur-compte">
+
+
+        <section class="carte-compte">
+
+
+            <div class="entete-compte">
+
+                <div class="icone-compte">
+                    🔐
+                </div>
+
+
+                <h1>
+                    Nouveau mot de passe
+                </h1>
+
+
+                <p>
+                    Choisissez votre nouveau mot de passe.
+                </p>
+
+            </div>
+
+
+            <form
+                class="formulaire-compte actif"
+                id="formulaire-nouveau-mot-de-passe"
+            >
+
+
+                <div class="champ-compte">
+
+                    <label for="nouveau-mot-de-passe">
+                        Nouveau mot de passe
+                    </label>
+
+
+                    <input
+                        type="password"
+                        id="nouveau-mot-de-passe"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="6 caractères minimum"
+                    >
+
+                </div>
+
+
+                <div class="champ-compte">
+
+                    <label for="confirmation-nouveau-mot-de-passe">
+                        Confirmer le mot de passe
+                    </label>
+
+
+                    <input
+                        type="password"
+                        id="confirmation-nouveau-mot-de-passe"
+                        autocomplete="new-password"
+                        minlength="6"
+                        required
+                        placeholder="Retapez votre mot de passe"
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="bouton-compte"
+                    id="bouton-nouveau-mot-de-passe"
+                >
+                    Enregistrer le nouveau mot de passe
+                </button>
+
+
+            </form>
+
+
+            <p
+                class="message-compte"
+                id="message-compte"
+                aria-live="polite"
+            ></p>
+
+
+        </section>
+
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="js/nouveau-mot-de-passe.js"></script>
+
+
+</body>
+
+</html>
