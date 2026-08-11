@@ -192,17 +192,37 @@
                     </div>
 
 
-                    <div class="information-compte information-large">
+                    <div class="bloc-nom-foyer">
 
-                        <span class="label-information">
-                            Adresse e-mail
-                        </span>
+    <label for="nom-foyer-modifiable">
+        Nom du foyer
+    </label>
 
-                        <strong id="compte-email">
-                            —
-                        </strong>
+    <div class="controle-nom-foyer">
 
-                    </div>
+        <input
+            type="text"
+            id="nom-foyer-modifiable"
+            maxlength="80"
+        >
+
+        <button
+            type="button"
+            id="enregistrer-nom-foyer"
+            class="bouton-enregistrer-nom-foyer"
+        >
+            Enregistrer
+        </button>
+
+    </div>
+
+    <p
+        class="message-nom-foyer"
+        id="message-nom-foyer"
+        aria-live="polite"
+    ></p>
+
+</div>
 
 
 
