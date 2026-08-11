@@ -1,3 +1,7 @@
+/* =================================
+   ÉLÉMENTS HTML
+================================= */
+
 const ongletConnexion =
     document.getElementById(
         "onglet-connexion"
@@ -28,6 +32,11 @@ const boutonInscription =
         "bouton-inscription"
     );
 
+const boutonMotDePasseOublie =
+    document.getElementById(
+        "mot-de-passe-oublie"
+    );
+
 const messageCompte =
     document.getElementById(
         "message-compte"
@@ -42,23 +51,31 @@ function afficherMessage(
     texte,
     type = ""
 ) {
+
     messageCompte.textContent =
         texte;
+
 
     messageCompte.classList.remove(
         "erreur",
         "succes"
     );
 
+
     if (type) {
+
         messageCompte.classList.add(
             type
         );
+
     }
+
 }
 
 
-function changerOnglet(onglet) {
+function changerOnglet(
+    onglet
+) {
 
     afficherMessage("");
 
@@ -71,6 +88,7 @@ function changerOnglet(onglet) {
         "actif",
         modeConnexion
     );
+
 
     ongletInscription.classList.toggle(
         "actif",
@@ -85,6 +103,7 @@ function changerOnglet(onglet) {
             : "false"
     );
 
+
     ongletInscription.setAttribute(
         "aria-selected",
         modeConnexion
@@ -98,10 +117,12 @@ function changerOnglet(onglet) {
         modeConnexion
     );
 
+
     formulaireInscription.classList.toggle(
         "actif",
         !modeConnexion
     );
+
 }
 
 
@@ -112,9 +133,11 @@ function changerOnglet(onglet) {
 ongletConnexion.addEventListener(
     "click",
     function () {
+
         changerOnglet(
             "connexion"
         );
+
     }
 );
 
@@ -122,9 +145,11 @@ ongletConnexion.addEventListener(
 ongletInscription.addEventListener(
     "click",
     function () {
+
         changerOnglet(
             "inscription"
         );
+
     }
 );
 
@@ -135,7 +160,9 @@ ongletInscription.addEventListener(
 
 formulaireInscription.addEventListener(
     "submit",
-    async function (evenement) {
+    async function (
+        evenement
+    ) {
 
         evenement.preventDefault();
 
@@ -147,12 +174,14 @@ formulaireInscription.addEventListener(
                 .value
                 .trim();
 
+
         const nom =
             document.getElementById(
                 "nom"
             )
                 .value
                 .trim();
+
 
         const email =
             document.getElementById(
@@ -161,10 +190,12 @@ formulaireInscription.addEventListener(
                 .value
                 .trim();
 
+
         const motDePasse =
             document.getElementById(
                 "mot-de-passe-inscription"
             ).value;
+
 
         const confirmationMotDePasse =
             document.getElementById(
@@ -183,14 +214,17 @@ formulaireInscription.addEventListener(
             );
 
             return;
+
         }
 
 
         boutonInscription.disabled =
             true;
 
+
         boutonInscription.textContent =
             "Création du compte…";
+
 
         afficherMessage(
             "Création de votre compte…"
@@ -199,24 +233,34 @@ formulaireInscription.addEventListener(
 
         try {
 
-            const { data, error } =
+            const {
+                data,
+                error
+            } =
                 await window.supabaseClient
                     .auth
                     .signUp({
-                        email: email,
+
+                        email:
+                            email,
 
                         password:
                             motDePasse,
 
                         options: {
+
                             data: {
+
                                 prenom:
                                     prenom,
 
                                 nom:
                                     nom
+
                             }
+
                         }
+
                     });
 
 
@@ -225,19 +269,7 @@ formulaireInscription.addEventListener(
             }
 
 
-            /*
-                Si la confirmation d'e-mail
-                est activée dans Supabase,
-                data.session sera null.
-            */
-
             if (!data.session) {
-
-                afficherMessage(
-                    "Votre compte a été créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis revenez vous connecter.",
-                    "succes"
-                );
-
 
                 formulaireInscription
                     .reset();
@@ -248,15 +280,16 @@ formulaireInscription.addEventListener(
                 );
 
 
+                afficherMessage(
+                    "Votre compte a été créé. Vérifiez votre boîte mail pour confirmer votre adresse, puis revenez vous connecter.",
+                    "succes"
+                );
+
+
                 return;
+
             }
 
-
-            /*
-                Si la confirmation d'e-mail
-                est désactivée, l'utilisateur
-                est déjà connecté.
-            */
 
             window.location.href =
                 "foyer.html";
@@ -283,6 +316,7 @@ formulaireInscription.addEventListener(
             boutonInscription.disabled =
                 false;
 
+
             boutonInscription.textContent =
                 "Créer mon compte";
 
@@ -298,7 +332,9 @@ formulaireInscription.addEventListener(
 
 formulaireConnexion.addEventListener(
     "submit",
-    async function (evenement) {
+    async function (
+        evenement
+    ) {
 
         evenement.preventDefault();
 
@@ -310,6 +346,7 @@ formulaireConnexion.addEventListener(
                 .value
                 .trim();
 
+
         const motDePasse =
             document.getElementById(
                 "mot-de-passe-connexion"
@@ -319,8 +356,10 @@ formulaireConnexion.addEventListener(
         boutonConnexion.disabled =
             true;
 
+
         boutonConnexion.textContent =
             "Connexion…";
+
 
         afficherMessage(
             "Connexion en cours…"
@@ -329,14 +368,20 @@ formulaireConnexion.addEventListener(
 
         try {
 
-            const { data, error } =
+            const {
+                data,
+                error
+            } =
                 await window.supabaseClient
                     .auth
                     .signInWithPassword({
-                        email: email,
+
+                        email:
+                            email,
 
                         password:
                             motDePasse
+
                     });
 
 
@@ -353,19 +398,9 @@ formulaireConnexion.addEventListener(
                 throw new Error(
                     "Impossible de démarrer la session."
                 );
+
             }
 
-
-            /*
-                Pour le moment :
-                après connexion, on envoie
-                l'utilisateur vers foyer.html.
-
-                Plus tard, on vérifiera s'il
-                appartient déjà à un foyer :
-                - oui -> index.html
-                - non -> foyer.html
-            */
 
             window.location.href =
                 "foyer.html";
@@ -392,6 +427,7 @@ formulaireConnexion.addEventListener(
             boutonConnexion.disabled =
                 false;
 
+
             boutonConnexion.textContent =
                 "Se connecter";
 
@@ -399,6 +435,171 @@ formulaireConnexion.addEventListener(
 
     }
 );
+
+
+/* =================================
+   MOT DE PASSE OUBLIÉ
+================================= */
+
+if (boutonMotDePasseOublie) {
+
+    boutonMotDePasseOublie.addEventListener(
+        "click",
+        async function () {
+
+            const champEmail =
+                document.getElementById(
+                    "email-connexion"
+                );
+
+
+            const email =
+                champEmail
+                    .value
+                    .trim();
+
+
+            /* =========================
+               E-MAIL VIDE
+            ========================= */
+
+            if (!email) {
+
+                afficherMessage(
+                    "Renseignez votre adresse e-mail avant de demander un nouveau mot de passe.",
+                    "erreur"
+                );
+
+
+                champEmail.focus();
+
+
+                return;
+
+            }
+
+
+            /* =========================
+               E-MAIL INVALIDE
+            ========================= */
+
+            if (
+                !champEmail.checkValidity()
+            ) {
+
+                afficherMessage(
+                    "Renseignez une adresse e-mail valide.",
+                    "erreur"
+                );
+
+
+                champEmail.focus();
+
+
+                return;
+
+            }
+
+
+            /* =========================
+               CHARGEMENT
+            ========================= */
+
+            boutonMotDePasseOublie.disabled =
+                true;
+
+
+            boutonMotDePasseOublie.textContent =
+                "Envoi en cours…";
+
+
+            afficherMessage(
+                "Envoi du lien de réinitialisation…"
+            );
+
+
+            try {
+
+                /*
+                    Exemple :
+
+                    https://monsite.fr/compte.html
+
+                    devient :
+
+                    https://monsite.fr/
+                    nouveau-mot-de-passe.html
+                */
+
+                const urlRedirection =
+                    new URL(
+                        "./nouveau-mot-de-passe.html",
+                        window.location.href
+                    ).href;
+
+
+                console.log(
+                    "Redirection mot de passe :",
+                    urlRedirection
+                );
+
+
+                const {
+                    error
+                } =
+                    await window.supabaseClient
+                        .auth
+                        .resetPasswordForEmail(
+                            email,
+                            {
+                                redirectTo:
+                                    urlRedirection
+                            }
+                        );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                afficherMessage(
+                    "Un e-mail de réinitialisation vient de vous être envoyé. Vérifiez également vos courriers indésirables.",
+                    "succes"
+                );
+
+
+            } catch (erreur) {
+
+                console.error(
+                    "Erreur mot de passe oublié :",
+                    erreur
+                );
+
+
+                afficherMessage(
+                    obtenirMessageErreur(
+                        erreur
+                    ),
+                    "erreur"
+                );
+
+
+            } finally {
+
+                boutonMotDePasseOublie.disabled =
+                    false;
+
+
+                boutonMotDePasseOublie.textContent =
+                    "Mot de passe oublié ?";
+
+            }
+
+        }
+    );
+
+}
 
 
 /* =================================
@@ -475,10 +676,37 @@ function obtenirMessageErreur(
     }
 
 
+    if (
+        messageMinuscule.includes(
+            "email rate limit"
+        )
+    ) {
+
+        return (
+            "Trop de demandes ont été effectuées. Réessayez dans quelques minutes."
+        );
+
+    }
+
+
+    if (
+        messageMinuscule.includes(
+            "rate limit"
+        )
+    ) {
+
+        return (
+            "Trop de tentatives ont été effectuées. Réessayez dans quelques minutes."
+        );
+
+    }
+
+
     return (
         message ||
         "Une erreur est survenue."
     );
+
 }
 
 
@@ -490,7 +718,10 @@ async function verifierSessionExistante() {
 
     try {
 
-        const { data, error } =
+        const {
+            data,
+            error
+        } =
             await window.supabaseClient
                 .auth
                 .getSession();
@@ -506,16 +737,6 @@ async function verifierSessionExistante() {
             data.session.user
         ) {
 
-            /*
-                Pour l'instant on envoie
-                sur foyer.html.
-
-                Une fois les foyers créés,
-                cette fonction vérifiera
-                automatiquement où envoyer
-                l'utilisateur.
-            */
-
             window.location.href =
                 "foyer.html";
 
@@ -530,6 +751,7 @@ async function verifierSessionExistante() {
         );
 
     }
+
 }
 
 
