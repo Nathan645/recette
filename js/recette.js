@@ -160,8 +160,8 @@ function creerBadges(
 
     const noms = {
 
-        "gros-gros":
-            "Gros gros",
+        "Grogros":
+            "Grogros",
 
         "healthy":
             "Healthy",
