@@ -21,7 +21,7 @@
 
     <link
         rel="stylesheet"
-        href="css/planning.css"
+        href="css/planning.css?v=3"
     >
 
 </head>
@@ -36,19 +36,15 @@
 
     <header class="entete-principale">
 
-
         <div class="bloc-marque">
-
 
             <h1>
                 À notre table
             </h1>
 
-
             <p>
                 Nos recettes, nos souvenirs et nos petits secrets de cuisine.
             </p>
-
 
             <div
                 class="infos-utilisateur"
@@ -61,11 +57,9 @@
                     <strong id="prenom-utilisateur"></strong>
                 </span>
 
-
                 <span class="separateur-utilisateur">
                     •
                 </span>
-
 
                 <span>
                     Foyer :
@@ -74,16 +68,10 @@
 
             </div>
 
-
         </div>
 
 
-        <!-- =========================
-             NAVIGATION
-        ========================== -->
-
         <nav class="navigation-principale">
-
 
             <a
                 href="index.html"
@@ -92,14 +80,12 @@
                 Recettes
             </a>
 
-
             <a
                 href="planning.html"
                 class="lien-navigation actif"
             >
                 Planning
             </a>
-
 
             <a
                 href="courses.html"
@@ -108,7 +94,6 @@
                 Courses
             </a>
 
-
             <a
                 href="mon-compte.html"
                 class="lien-navigation"
@@ -116,9 +101,7 @@
                 Compte
             </a>
 
-
         </nav>
-
 
     </header>
 
@@ -130,28 +113,19 @@
 
     <main class="page-planning">
 
-
-        <!-- =========================
-             ENTÊTE
-        ========================== -->
-
         <section class="entete-planning">
-
 
             <span class="sur-titre-planning">
                 Organisation
             </span>
 
-
             <h2>
                 Planning des repas
             </h2>
 
-
             <p>
                 Préparez les repas de votre foyer semaine par semaine.
             </p>
-
 
         </section>
 
@@ -162,7 +136,6 @@
         ========================== -->
 
         <section class="navigation-semaine">
-
 
             <button
                 type="button"
@@ -176,7 +149,6 @@
 
             <div class="semaine-actuelle">
 
-
                 <span
                     class="numero-semaine"
                     id="numero-semaine"
@@ -184,11 +156,9 @@
                     Semaine
                 </span>
 
-
                 <h3 id="titre-semaine">
                     Chargement…
                 </h3>
-
 
             </div>
 
@@ -202,17 +172,15 @@
                 →
             </button>
 
-
         </section>
 
 
 
         <!-- =========================
-             ACTIONS SEMAINE
+             ACTIONS
         ========================== -->
 
         <div class="actions-semaine">
-
 
             <button
                 type="button"
@@ -222,7 +190,6 @@
                 Aujourd'hui
             </button>
 
-
             <button
                 type="button"
                 class="bouton-copier-semaine"
@@ -231,13 +198,12 @@
                 Copier cette semaine
             </button>
 
-
         </div>
 
 
 
         <!-- =========================
-             GRILLE DE LA SEMAINE
+             SEMAINE
         ========================== -->
 
         <section
@@ -251,14 +217,13 @@
 
         </section>
 
-
     </main>
 
 
 
-    <!-- =========================
-         POPUP REPAS
-    ========================== -->
+    <!-- ==================================================
+         POPUP COMPOSITION DU REPAS
+    =================================================== -->
 
     <div
         class="fond-popup-planning"
@@ -266,18 +231,12 @@
         hidden
     >
 
-
         <div
-            class="popup-repas"
+            class="popup-repas popup-composition-repas"
             role="dialog"
             aria-modal="true"
             aria-labelledby="titre-popup-repas"
         >
-
-
-            <!-- =========================
-                 FERMER
-            ========================== -->
 
             <button
                 type="button"
@@ -289,82 +248,131 @@
             </button>
 
 
-
             <!-- =========================
-                 TITRE
+                 ENTÊTE
             ========================== -->
 
-            <h2 id="titre-popup-repas">
-                Composer le repas
-            </h2>
+            <div class="entete-popup-composition">
 
+                <span class="sur-titre-popup">
+                    Organisation du repas
+                </span>
 
-            <p
-                class="date-popup-repas"
-                id="date-popup-repas"
-            ></p>
+                <h2 id="titre-popup-repas">
+                    Composer le repas
+                </h2>
 
-
-
-            <!-- =========================
-                 NOMBRE DE PERSONNES
-            ========================== -->
-
-            <div class="bloc-personnes-repas">
-
-
-                <label for="personnes-repas">
-                    Nombre de personnes
-                </label>
-
-
-                <div class="controle-personnes-repas">
-
-
-                    <input
-                        type="number"
-                        id="personnes-repas"
-                        min="1"
-                        step="1"
-                        value="2"
-                    >
-
-
-                </div>
-
+                <p
+                    class="date-popup-repas"
+                    id="date-popup-repas"
+                ></p>
 
             </div>
 
 
 
             <!-- =========================
-                 PLATS SÉLECTIONNÉS
+                 PERSONNES
             ========================== -->
 
-            <section class="bloc-elements-repas">
+            <section class="section-popup-repas section-personnes-repas">
 
-
-                <div class="entete-elements-repas">
-
+                <div class="entete-section-popup">
 
                     <div>
 
-
-                        <span class="petit-titre-elements">
-                            Repas
+                        <span class="numero-etape">
+                            1
                         </span>
 
+                        <div>
 
-                        <h3>
-                            Plats sélectionnés
-                        </h3>
+                            <h3>
+                                Nombre de personnes
+                            </h3>
 
+                            <p>
+                                Les quantités seront adaptées à ce nombre.
+                            </p>
+
+                        </div>
 
                     </div>
 
+                </div>
+
+
+                <div class="selecteur-personnes">
+
+                    <button
+                        type="button"
+                        class="bouton-personnes"
+                        id="diminuer-personnes"
+                        aria-label="Retirer une personne"
+                    >
+                        −
+                    </button>
+
+                    <div class="valeur-personnes">
+
+                        <input
+                            type="number"
+                            id="personnes-repas"
+                            min="1"
+                            step="1"
+                            value="2"
+                        >
+
+                        <span>
+                            personnes
+                        </span>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        class="bouton-personnes"
+                        id="augmenter-personnes"
+                        aria-label="Ajouter une personne"
+                    >
+                        +
+                    </button>
 
                 </div>
 
+            </section>
+
+
+
+            <!-- =========================
+                 PLATS
+            ========================== -->
+
+            <section class="section-popup-repas bloc-elements-repas">
+
+                <div class="entete-section-popup">
+
+                    <div>
+
+                        <span class="numero-etape">
+                            2
+                        </span>
+
+                        <div>
+
+                            <h3>
+                                Plats du repas
+                            </h3>
+
+                            <p>
+                                Ajoutez autant de recettes ou de plats libres que nécessaire.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
                 <div
@@ -372,37 +380,53 @@
                     id="liste-elements-repas"
                 >
 
-
                     <p class="message-elements-vide">
                         Aucun plat ajouté pour le moment.
                     </p>
 
-
                 </div>
-
 
             </section>
 
 
 
             <!-- =========================
-                 AJOUT DEPUIS RECETTES
+                 AJOUTER RECETTE
             ========================== -->
 
-            <section class="bloc-ajout-recette-repas">
+            <section class="section-popup-repas bloc-ajout-recette-repas">
+
+                <div class="entete-section-simple">
+
+                    <span class="icone-section-popup">
+                        🔎
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Ajouter une recette
+                        </h3>
+
+                        <p>
+                            Choisissez parmi les recettes déjà enregistrées.
+                        </p>
+
+                    </div>
+
+                </div>
 
 
-                <label for="recherche-recette-planning">
-                    Ajouter une recette
-                </label>
+                <div class="champ-recherche-popup">
 
+                    <input
+                        type="search"
+                        id="recherche-recette-planning"
+                        placeholder="Rechercher une recette…"
+                        autocomplete="off"
+                    >
 
-                <input
-                    type="search"
-                    id="recherche-recette-planning"
-                    placeholder="Rechercher une recette…"
-                    autocomplete="off"
-                >
+                </div>
 
 
                 <div
@@ -411,8 +435,21 @@
                 >
                 </div>
 
-
             </section>
+
+
+
+            <!-- =========================
+                 SÉPARATEUR
+            ========================== -->
+
+            <div class="separateur-ajouts-popup">
+
+                <span>
+                    ou
+                </span>
+
+            </div>
 
 
 
@@ -420,16 +457,30 @@
                  AJOUT MANUEL
             ========================== -->
 
-            <section class="bloc-ajout-manuel-repas">
+            <section class="section-popup-repas bloc-ajout-manuel-repas">
 
+                <div class="entete-section-simple">
 
-                <label for="nom-repas-libre">
-                    Ajouter un plat libre
-                </label>
+                    <span class="icone-section-popup">
+                        ✍️
+                    </span>
+
+                    <div>
+
+                        <h3>
+                            Ajouter autre chose
+                        </h3>
+
+                        <p>
+                            Idéal pour un apéritif, du pain, un plateau de fromages…
+                        </p>
+
+                    </div>
+
+                </div>
 
 
                 <div class="controle-ajout-manuel-repas">
-
 
                     <input
                         type="text"
@@ -437,7 +488,6 @@
                         placeholder="Ex. Plateau de fromages"
                         autocomplete="off"
                     >
-
 
                     <button
                         type="button"
@@ -447,40 +497,9 @@
                         + Ajouter
                     </button>
 
-
                 </div>
 
-
             </section>
-
-
-
-            <!-- =========================
-                 VALIDATION
-            ========================== -->
-
-            <button
-                type="button"
-                class="bouton-valider-repas"
-                id="valider-repas-libre"
-            >
-                Terminer le repas
-            </button>
-
-
-
-            <!-- =========================
-                 SUPPRESSION DU CRÉNEAU
-            ========================== -->
-
-            <button
-                type="button"
-                class="bouton-supprimer-repas"
-                id="supprimer-repas-planning"
-                hidden
-            >
-                Vider ce créneau
-            </button>
 
 
 
@@ -495,16 +514,98 @@
             ></p>
 
 
-        </div>
 
+            <!-- =========================
+                 ACTIONS
+            ========================== -->
+
+            <div class="actions-popup-repas">
+
+                <button
+                    type="button"
+                    class="bouton-valider-repas"
+                    id="valider-repas-libre"
+                >
+                    Terminer le repas
+                </button>
+
+
+                <button
+                    type="button"
+                    class="bouton-supprimer-repas"
+                    id="supprimer-repas-planning"
+                    hidden
+                >
+                    Vider ce créneau
+                </button>
+
+            </div>
+
+        </div>
 
     </div>
 
 
 
-    <!-- =========================
+    <!-- ==================================================
+         CONFIRMATION SUPPRESSION
+    =================================================== -->
+
+    <div
+        class="fond-confirmation-suppression"
+        id="popup-confirmation-suppression"
+        hidden
+    >
+
+        <div
+            class="popup-confirmation-suppression"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="titre-confirmation-suppression"
+        >
+
+            <div class="icone-confirmation-suppression">
+                🗑️
+            </div>
+
+            <h2 id="titre-confirmation-suppression">
+                Vider ce créneau ?
+            </h2>
+
+            <p id="texte-confirmation-suppression">
+                Tous les plats prévus pour ce repas seront supprimés.
+            </p>
+
+
+            <div class="actions-confirmation-suppression">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-suppression"
+                    id="annuler-suppression-repas"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-confirmer-suppression"
+                    id="confirmer-suppression-repas"
+                >
+                    Vider le créneau
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
          POPUP COPIE SEMAINE
-    ========================== -->
+    =================================================== -->
 
     <div
         class="fond-popup-planning"
@@ -512,18 +613,12 @@
         hidden
     >
 
-
         <div
             class="popup-repas popup-copie-semaine"
             role="dialog"
             aria-modal="true"
             aria-labelledby="titre-copie-semaine"
         >
-
-
-            <!-- =========================
-                 FERMER
-            ========================== -->
 
             <button
                 type="button"
@@ -535,15 +630,13 @@
             </button>
 
 
-
-            <!-- =========================
-                 TITRE
-            ========================== -->
+            <span class="sur-titre-popup">
+                Planning
+            </span>
 
             <h2 id="titre-copie-semaine">
                 Copier cette semaine
             </h2>
-
 
             <p class="texte-copie-semaine">
                 Choisis vers quelle semaine copier
@@ -551,16 +644,9 @@
             </p>
 
 
-
-            <!-- =========================
-                 DESTINATION
-            ========================== -->
-
             <div class="choix-destination-copie">
 
-
                 <label class="option-copie-semaine">
-
 
                     <input
                         type="radio"
@@ -569,18 +655,14 @@
                         checked
                     >
 
-
                     <span>
                         Semaine suivante
                     </span>
 
-
                 </label>
 
 
-
                 <label class="option-copie-semaine">
-
 
                     <input
                         type="radio"
@@ -588,22 +670,14 @@
                         value="precedente"
                     >
 
-
                     <span>
                         Semaine précédente
                     </span>
 
-
                 </label>
-
 
             </div>
 
-
-
-            <!-- =========================
-                 VALIDATION COPIE
-            ========================== -->
 
             <button
                 type="button"
@@ -614,20 +688,13 @@
             </button>
 
 
-
-            <!-- =========================
-                 MESSAGE COPIE
-            ========================== -->
-
             <p
                 class="message-planning"
                 id="message-copie-semaine"
                 aria-live="polite"
             ></p>
 
-
         </div>
-
 
     </div>
 
@@ -640,17 +707,14 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="js/config.js"></script>
-
     <script src="js/supabase.js"></script>
-
     <script src="js/session.js"></script>
 
-   <script src="js/planning-core.js?v=2"></script>
-    <script src="js/planning-data.js?v=2"></script>
-    <script src="js/planning-popup.js?v=2"></script>
-    <script src="js/planning-ui.js?v=2"></script>
-    <script src="js/planning.js?v=2"></script>
-
+    <script src="js/planning-core.js?v=3"></script>
+    <script src="js/planning-data.js?v=3"></script>
+    <script src="js/planning-popup.js?v=3"></script>
+    <script src="js/planning-ui.js?v=3"></script>
+    <script src="js/planning.js?v=3"></script>
 
 </body>
 
