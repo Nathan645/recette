@@ -351,3 +351,201 @@
 
     text-decoration: none;
 }
+
+/* =================================
+   NOM DU FOYER MODIFIABLE
+================================= */
+
+.bloc-nom-foyer {
+    grid-column: span 2;
+}
+
+.bloc-nom-foyer label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--texte);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.controle-nom-foyer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.controle-nom-foyer input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-weight: 700;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.controle-nom-foyer input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            70,
+            95,
+            70,
+            0.10
+        );
+}
+
+.bouton-enregistrer-nom-foyer {
+    padding: 11px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.bouton-enregistrer-nom-foyer:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+}
+
+.message-nom-foyer {
+    min-height: 18px;
+
+    margin:
+        8px 0
+        0;
+
+    color: #77766f;
+
+    font-size: 13px;
+}
+
+/* =================================
+   NOM DU FOYER MODIFIABLE
+================================= */
+
+.bloc-nom-foyer {
+    grid-column: span 2;
+}
+
+.bloc-nom-foyer label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--texte);
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.controle-nom-foyer {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.controle-nom-foyer input {
+    flex: 1;
+
+    min-width: 0;
+
+    padding: 11px 12px;
+
+    border: 1px solid #d8d2c7;
+    border-radius: 10px;
+
+    background-color: #ffffff;
+
+    color: var(--texte);
+
+    font: inherit;
+    font-weight: 700;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.controle-nom-foyer input:focus {
+    border-color: var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            70,
+            95,
+            70,
+            0.10
+        );
+}
+
+.bouton-enregistrer-nom-foyer {
+    padding: 11px 16px;
+
+    border: none;
+    border-radius: 10px;
+
+    background-color: var(--vert);
+
+    color: #ffffff;
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.bouton-enregistrer-nom-foyer:disabled {
+    opacity: 0.55;
+
+    cursor: default;
+}
+
+.message-nom-foyer {
+    min-height: 18px;
+
+    margin:
+        8px 0
+        0;
+
+    color: #77766f;
+
+    font-size: 13px;
+}
