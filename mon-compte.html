@@ -276,269 +276,146 @@
 
             </section>
 
+<!-- =========================
+     LIGNE 1 : NOM + CODE
+========================== -->
 
-            <!-- =========================
-                 MON FOYER
-            ========================== -->
+<div class="grille-foyer-ligne">
 
-            <section class="carte-espace-compte">
 
+    <!-- NOM DU FOYER -->
 
-                <div class="entete-carte-compte">
+    <div class="bloc-nom-foyer">
 
+        <label for="nom-foyer-modifiable">
+            Nom du foyer
+        </label>
 
-                    <div class="icone-carte-compte">
-                        🏠
-                    </div>
+        <div class="controle-nom-foyer">
 
+            <input
+                type="text"
+                id="nom-foyer-modifiable"
+                maxlength="80"
+                autocomplete="off"
+            >
 
-                    <div>
+            <button
+                type="button"
+                id="enregistrer-nom-foyer"
+                class="bouton-enregistrer-nom-foyer"
+            >
+                Enregistrer
+            </button>
 
+        </div>
 
-                        <span class="petit-titre-compte">
-                            Foyer
-                        </span>
+        <p
+            class="message-nom-foyer"
+            id="message-nom-foyer"
+            aria-live="polite"
+        ></p>
 
+    </div>
 
-                        <h3>
-                            Mon foyer
-                        </h3>
 
+    <!-- CODE DU FOYER -->
 
-                    </div>
+    <div class="bloc-code-foyer bloc-code-foyer-compact">
 
+        <div>
 
-                </div>
+            <span class="label-information">
+                Code du foyer
+            </span>
 
+            <strong
+                class="code-foyer"
+                id="foyer-code"
+            >
+                —
+            </strong>
 
-                <!--
-                    Compatibilité temporaire
-                    avec l'ancien JS.
-                -->
+        </div>
 
-                <strong
-                    id="foyer-nom"
-                    hidden
-                ></strong>
+        <button
+            type="button"
+            class="bouton-copier-code"
+            id="copier-code-foyer"
+        >
+            Copier
+        </button>
 
+    </div>
 
-                <!-- =========================
-                     INFORMATIONS FOYER
-                ========================== -->
+</div>
 
-                <div class="grille-informations-compte">
 
+<p
+    class="message-copie-code"
+    id="message-copie-code"
+    aria-live="polite"
+></p>
 
-                    <!-- =========================
-                         NOM DU FOYER MODIFIABLE
-                    ========================== -->
 
-                    <div class="bloc-nom-foyer">
+<!-- =========================
+     LIGNE 2 : MEMBRES + PERSONNES
+========================== -->
 
+<div class="grille-foyer-ligne">
 
-                        <label for="nom-foyer-modifiable">
-                            Nom du foyer
-                        </label>
 
+    <!-- MEMBRES -->
 
-                        <div class="controle-nom-foyer">
+    <div class="information-compte information-membres-foyer">
 
+        <span class="label-information">
+            Membres
+        </span>
 
-                            <input
-                                type="text"
-                                id="nom-foyer-modifiable"
-                                maxlength="80"
-                                autocomplete="off"
-                            >
+        <strong id="foyer-nombre-membres">
+            —
+        </strong>
 
+    </div>
 
-                            <button
-                                type="button"
-                                id="enregistrer-nom-foyer"
-                                class="bouton-enregistrer-nom-foyer"
-                            >
-                                Enregistrer
-                            </button>
 
+    <!-- NOMBRE HABITUEL -->
 
-                        </div>
+    <div class="bloc-personnes-foyer">
 
+        <label for="personnes-par-defaut">
+            Nombre habituel de personnes
+        </label>
 
-                        <p
-                            class="message-nom-foyer"
-                            id="message-nom-foyer"
-                            aria-live="polite"
-                        ></p>
+        <div class="controle-personnes-foyer">
 
+            <input
+                type="number"
+                id="personnes-par-defaut"
+                min="1"
+                step="1"
+            >
 
-                    </div>
+            <button
+                type="button"
+                id="enregistrer-personnes-foyer"
+                class="bouton-enregistrer-personnes"
+            >
+                Enregistrer
+            </button>
 
+        </div>
 
-                    <!-- =========================
-                         MEMBRES
-                    ========================== -->
+        <p
+            class="message-personnes-foyer"
+            id="message-personnes-foyer"
+            aria-live="polite"
+        ></p>
 
-                    <div
-                        class="
-                            information-compte
-                            information-membres-foyer
-                        "
-                    >
+    </div>
 
-
-                        <span class="label-information">
-                            Membres
-                        </span>
-
-
-                        <strong id="foyer-nombre-membres">
-                            —
-                        </strong>
-
-
-                    </div>
-
-
-                    <!-- =========================
-                         NOMBRE HABITUEL
-                    ========================== -->
-
-                    <div class="bloc-personnes-foyer">
-
-
-                        <label for="personnes-par-defaut">
-                            Nombre habituel de personnes
-                        </label>
-
-
-                        <div class="controle-personnes-foyer">
-
-
-                            <input
-                                type="number"
-                                id="personnes-par-defaut"
-                                min="1"
-                                step="1"
-                            >
-
-
-                            <button
-                                type="button"
-                                id="enregistrer-personnes-foyer"
-                                class="bouton-enregistrer-personnes"
-                            >
-                                Enregistrer
-                            </button>
-
-
-                        </div>
-
-
-                        <p
-                            class="message-personnes-foyer"
-                            id="message-personnes-foyer"
-                            aria-live="polite"
-                        ></p>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <!-- =========================
-                     CODE DU FOYER
-                ========================== -->
-
-                <div class="bloc-code-foyer">
-
-
-                    <div>
-
-
-                        <span class="label-information">
-                            Code du foyer
-                        </span>
-
-
-                        <strong
-                            class="code-foyer"
-                            id="foyer-code"
-                        >
-                            —
-                        </strong>
-
-
-                    </div>
-
-
-                    <button
-                        type="button"
-                        class="bouton-copier-code"
-                        id="copier-code-foyer"
-                    >
-                        Copier le code
-                    </button>
-
-
-                </div>
-
-
-                <p
-                    class="message-copie-code"
-                    id="message-copie-code"
-                    aria-live="polite"
-                ></p>
-
-
-            </section>
-
-
-            <!-- =========================
-                 MEMBRES DU FOYER
-            ========================== -->
-
-            <section class="carte-espace-compte">
-
-
-                <div class="entete-carte-compte">
-
-
-                    <div class="icone-carte-compte">
-                        👥
-                    </div>
-
-
-                    <div>
-
-
-                        <span class="petit-titre-compte">
-                            Famille
-                        </span>
-
-
-                        <h3>
-                            Membres du foyer
-                        </h3>
-
-
-                    </div>
-
-
-                </div>
-
-
-                <div
-                    class="liste-membres-foyer"
-                    id="liste-membres-foyer"
-                >
-                </div>
-
-
-            </section>
-
-
+</div>
             <!-- =========================
                  SESSION
             ========================== -->
