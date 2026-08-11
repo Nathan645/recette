@@ -10,7 +10,9 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Planning | À notre table</title>
+    <title>
+        Planning | À notre table
+    </title>
 
     <link
         rel="stylesheet"
@@ -34,15 +36,19 @@
 
     <header class="entete-principale">
 
+
         <div class="bloc-marque">
+
 
             <h1>
                 À notre table
             </h1>
 
+
             <p>
                 Nos recettes, nos souvenirs et nos petits secrets de cuisine.
             </p>
+
 
             <div
                 class="infos-utilisateur"
@@ -55,9 +61,11 @@
                     <strong id="prenom-utilisateur"></strong>
                 </span>
 
+
                 <span class="separateur-utilisateur">
                     •
                 </span>
+
 
                 <span>
                     Foyer :
@@ -66,10 +74,16 @@
 
             </div>
 
+
         </div>
 
 
+        <!-- =========================
+             NAVIGATION
+        ========================== -->
+
         <nav class="navigation-principale">
+
 
             <a
                 href="index.html"
@@ -78,12 +92,14 @@
                 Recettes
             </a>
 
+
             <a
                 href="planning.html"
                 class="lien-navigation actif"
             >
                 Planning
             </a>
+
 
             <a
                 href="courses.html"
@@ -92,6 +108,7 @@
                 Courses
             </a>
 
+
             <a
                 href="mon-compte.html"
                 class="lien-navigation"
@@ -99,9 +116,12 @@
                 Compte
             </a>
 
+
         </nav>
 
+
     </header>
+
 
 
     <!-- =========================
@@ -110,21 +130,31 @@
 
     <main class="page-planning">
 
+
+        <!-- =========================
+             ENTÊTE
+        ========================== -->
+
         <section class="entete-planning">
+
 
             <span class="sur-titre-planning">
                 Organisation
             </span>
 
+
             <h2>
                 Planning des repas
             </h2>
+
 
             <p>
                 Préparez les repas de votre foyer semaine par semaine.
             </p>
 
+
         </section>
+
 
 
         <!-- =========================
@@ -132,6 +162,7 @@
         ========================== -->
 
         <section class="navigation-semaine">
+
 
             <button
                 type="button"
@@ -145,6 +176,7 @@
 
             <div class="semaine-actuelle">
 
+
                 <span
                     class="numero-semaine"
                     id="numero-semaine"
@@ -152,9 +184,11 @@
                     Semaine
                 </span>
 
+
                 <h3 id="titre-semaine">
                     Chargement…
                 </h3>
+
 
             </div>
 
@@ -168,10 +202,17 @@
                 →
             </button>
 
+
         </section>
 
 
+
+        <!-- =========================
+             ACTIONS SEMAINE
+        ========================== -->
+
         <div class="actions-semaine">
+
 
             <button
                 type="button"
@@ -181,15 +222,18 @@
                 Aujourd'hui
             </button>
 
+
             <button
-    type="button"
-    class="bouton-copier-semaine"
-    id="copier-semaine"
->
-    Copier cette semaine
-</button>
+                type="button"
+                class="bouton-copier-semaine"
+                id="copier-semaine"
+            >
+                Copier cette semaine
+            </button>
+
 
         </div>
+
 
 
         <!-- =========================
@@ -207,7 +251,9 @@
 
         </section>
 
+
     </main>
+
 
 
     <!-- =========================
@@ -220,11 +266,18 @@
         hidden
     >
 
+
         <div
             class="popup-repas"
             role="dialog"
             aria-modal="true"
+            aria-labelledby="titre-popup-repas"
         >
+
+
+            <!-- =========================
+                 FERMER
+            ========================== -->
 
             <button
                 type="button"
@@ -236,8 +289,13 @@
             </button>
 
 
-            <h2>
-                Ajouter un repas
+
+            <!-- =========================
+                 TITRE
+            ========================== -->
+
+            <h2 id="titre-popup-repas">
+                Composer le repas
             </h2>
 
 
@@ -247,91 +305,21 @@
             ></p>
 
 
-            <!-- =========================
-                 TYPE DE REPAS
-            ========================== -->
-
-            <div class="choix-type-repas">
-
-                <button
-                    type="button"
-                    class="type-repas actif"
-                    id="choisir-recette"
-                >
-                    Depuis les recettes
-                </button>
-
-                <button
-                    type="button"
-                    class="type-repas"
-                    id="choisir-libre"
-                >
-                    Repas libre
-                </button>
-
-            </div>
-
-
-            <!-- =========================
-                 RECETTE
-            ========================== -->
-
-            <div
-                class="bloc-recette-planning"
-                id="bloc-recette-planning"
-            >
-
-                <label for="recherche-recette-planning">
-                    Rechercher une recette
-                </label>
-
-                <input
-                    type="search"
-                    id="recherche-recette-planning"
-                >
-
-                <div
-                    class="resultats-recettes-planning"
-                    id="resultats-recettes-planning"
-                ></div>
-
-            </div>
-
-
-            <!-- =========================
-                 REPAS LIBRE
-            ========================== -->
-
-            <div
-                class="bloc-repas-libre"
-                id="bloc-repas-libre"
-                hidden
-            >
-
-                <label for="nom-repas-libre">
-                    Nom du repas
-                </label>
-
-                <input
-                    type="text"
-                    id="nom-repas-libre"
-                >
-
-            </div>
-
 
             <!-- =========================
                  NOMBRE DE PERSONNES
-                 COMMUN AUX DEUX MODES
             ========================== -->
 
             <div class="bloc-personnes-repas">
+
 
                 <label for="personnes-repas">
                     Nombre de personnes
                 </label>
 
+
                 <div class="controle-personnes-repas">
+
 
                     <input
                         type="number"
@@ -341,13 +329,134 @@
                         value="2"
                     >
 
+
                 </div>
+
 
             </div>
 
 
+
             <!-- =========================
-                 VALIDATION REPAS LIBRE
+                 PLATS SÉLECTIONNÉS
+            ========================== -->
+
+            <section class="bloc-elements-repas">
+
+
+                <div class="entete-elements-repas">
+
+
+                    <div>
+
+
+                        <span class="petit-titre-elements">
+                            Repas
+                        </span>
+
+
+                        <h3>
+                            Plats sélectionnés
+                        </h3>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div
+                    class="liste-elements-repas"
+                    id="liste-elements-repas"
+                >
+
+
+                    <p class="message-elements-vide">
+                        Aucun plat ajouté pour le moment.
+                    </p>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =========================
+                 AJOUT DEPUIS RECETTES
+            ========================== -->
+
+            <section class="bloc-ajout-recette-repas">
+
+
+                <label for="recherche-recette-planning">
+                    Ajouter une recette
+                </label>
+
+
+                <input
+                    type="search"
+                    id="recherche-recette-planning"
+                    placeholder="Rechercher une recette…"
+                    autocomplete="off"
+                >
+
+
+                <div
+                    class="resultats-recettes-planning"
+                    id="resultats-recettes-planning"
+                >
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =========================
+                 AJOUT MANUEL
+            ========================== -->
+
+            <section class="bloc-ajout-manuel-repas">
+
+
+                <label for="nom-repas-libre">
+                    Ajouter un plat libre
+                </label>
+
+
+                <div class="controle-ajout-manuel-repas">
+
+
+                    <input
+                        type="text"
+                        id="nom-repas-libre"
+                        placeholder="Ex. Plateau de fromages"
+                        autocomplete="off"
+                    >
+
+
+                    <button
+                        type="button"
+                        class="bouton-ajouter-plat-manuel"
+                        id="ajouter-plat-manuel"
+                    >
+                        + Ajouter
+                    </button>
+
+
+                </div>
+
+
+            </section>
+
+
+
+            <!-- =========================
+                 VALIDATION
             ========================== -->
 
             <button
@@ -355,12 +464,13 @@
                 class="bouton-valider-repas"
                 id="valider-repas-libre"
             >
-                Ajouter au planning
+                Terminer le repas
             </button>
 
 
+
             <!-- =========================
-                 SUPPRESSION
+                 SUPPRESSION DU CRÉNEAU
             ========================== -->
 
             <button
@@ -373,6 +483,7 @@
             </button>
 
 
+
             <!-- =========================
                  MESSAGE
             ========================== -->
@@ -383,96 +494,144 @@
                 aria-live="polite"
             ></p>
 
+
         </div>
 
+
     </div>
-<div
-    class="fond-popup-planning"
-    id="popup-copie-semaine"
-    hidden
->
+
+
+
+    <!-- =========================
+         POPUP COPIE SEMAINE
+    ========================== -->
 
     <div
-        class="popup-repas popup-copie-semaine"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="titre-copie-semaine"
+        class="fond-popup-planning"
+        id="popup-copie-semaine"
+        hidden
     >
 
-        <button
-            type="button"
-            class="fermer-popup-repas"
-            id="fermer-copie-semaine"
-            aria-label="Fermer"
+
+        <div
+            class="popup-repas popup-copie-semaine"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titre-copie-semaine"
         >
-            ×
-        </button>
 
 
-        <h2 id="titre-copie-semaine">
-            Copier cette semaine
-        </h2>
+            <!-- =========================
+                 FERMER
+            ========================== -->
+
+            <button
+                type="button"
+                class="fermer-popup-repas"
+                id="fermer-copie-semaine"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
 
 
-        <p class="texte-copie-semaine">
-            Choisis vers quelle semaine copier
-            les repas actuellement planifiés.
-        </p>
+
+            <!-- =========================
+                 TITRE
+            ========================== -->
+
+            <h2 id="titre-copie-semaine">
+                Copier cette semaine
+            </h2>
 
 
-        <div class="choix-destination-copie">
-
-            <label class="option-copie-semaine">
-
-                <input
-                    type="radio"
-                    name="destination-copie-semaine"
-                    value="suivante"
-                    checked
-                >
-
-                <span>
-                    Semaine suivante
-                </span>
-
-            </label>
+            <p class="texte-copie-semaine">
+                Choisis vers quelle semaine copier
+                les repas actuellement planifiés.
+            </p>
 
 
-            <label class="option-copie-semaine">
 
-                <input
-                    type="radio"
-                    name="destination-copie-semaine"
-                    value="precedente"
-                >
+            <!-- =========================
+                 DESTINATION
+            ========================== -->
 
-                <span>
-                    Semaine précédente
-                </span>
+            <div class="choix-destination-copie">
 
-            </label>
+
+                <label class="option-copie-semaine">
+
+
+                    <input
+                        type="radio"
+                        name="destination-copie-semaine"
+                        value="suivante"
+                        checked
+                    >
+
+
+                    <span>
+                        Semaine suivante
+                    </span>
+
+
+                </label>
+
+
+
+                <label class="option-copie-semaine">
+
+
+                    <input
+                        type="radio"
+                        name="destination-copie-semaine"
+                        value="precedente"
+                    >
+
+
+                    <span>
+                        Semaine précédente
+                    </span>
+
+
+                </label>
+
+
+            </div>
+
+
+
+            <!-- =========================
+                 VALIDATION COPIE
+            ========================== -->
+
+            <button
+                type="button"
+                class="bouton-valider-copie-semaine"
+                id="valider-copie-semaine"
+            >
+                Copier les repas
+            </button>
+
+
+
+            <!-- =========================
+                 MESSAGE COPIE
+            ========================== -->
+
+            <p
+                class="message-planning"
+                id="message-copie-semaine"
+                aria-live="polite"
+            ></p>
+
 
         </div>
 
 
-        <button
-            type="button"
-            class="bouton-valider-copie-semaine"
-            id="valider-copie-semaine"
-        >
-            Copier les repas
-        </button>
-
-
-        <p
-            class="message-planning"
-            id="message-copie-semaine"
-            aria-live="polite"
-        ></p>
-
     </div>
 
-</div>
+
 
     <!-- =========================
          SCRIPTS
@@ -481,14 +640,21 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script src="js/config.js"></script>
+
     <script src="js/supabase.js"></script>
+
     <script src="js/session.js"></script>
 
-<script src="js/planning-core.js"></script>
-<script src="js/planning-data.js"></script>
-<script src="js/planning-popup.js"></script>
-<script src="js/planning-ui.js"></script>
-<script src="js/planning.js"></script>
+    <script src="js/planning-core.js"></script>
+
+    <script src="js/planning-data.js"></script>
+
+    <script src="js/planning-popup.js"></script>
+
+    <script src="js/planning-ui.js"></script>
+
+    <script src="js/planning.js"></script>
+
 
 </body>
 
