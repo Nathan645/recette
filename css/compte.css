@@ -296,3 +296,58 @@
     }
 
 }
+
+/* =================================
+   MOT DE PASSE OUBLIÉ
+================================= */
+
+.action-mot-de-passe-oublie {
+    display: flex;
+    justify-content: flex-end;
+
+    margin:
+        -6px
+        0
+        18px;
+}
+
+
+.bouton-mot-de-passe-oublie {
+    padding: 0;
+
+    border: none;
+    border-radius: 0;
+
+    background: transparent;
+
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    appearance: none;
+    -webkit-appearance: none;
+
+    transition:
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+.bouton-mot-de-passe-oublie:hover {
+    color: var(--vert-fonce);
+
+    text-decoration: underline;
+}
+
+
+.bouton-mot-de-passe-oublie:disabled {
+    opacity: 0.5;
+
+    cursor: default;
+
+    text-decoration: none;
+}
