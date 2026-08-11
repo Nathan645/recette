@@ -1326,69 +1326,9 @@ footer {
 
 }
 
-*/
-
-form label:has(
-    input[type="checkbox"]
-) {
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        flex-start;
-
-    gap:
-        12px;
-
-    min-height:
-        64px;
-
-    padding:
-        14px 18px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius:
-        16px;
-
-    background-color:
-        #ffffff;
-
-    color:
-        var(--texte);
-
-    font-weight:
-        700;
-
-    cursor:
-        pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-form label:has(
-    input[type="checkbox"]
-):hover {
-    border-color:
-        var(--vert);
-
-    transform:
-        translateY(-1px);
-}
-
-
 /* =================================
    FORMULAIRE AJOUT RECETTE
+   CORRECTIONS VISUELLES
 ================================= */
 
 
@@ -1478,126 +1418,40 @@ form label:has(
 
 
 /* =================================
-   CHECKBOX PERSONNALISÉE
-   BASE COMMUNE
-================================= */
-
-.choix-multiples
-input[type="checkbox"],
-.option-proportionnelle
-input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-
-    flex:
-        0 0
-        22px;
-
-    margin: 0;
-
-    position: relative;
-
-    border:
-        2px solid
-        #cfc8bc;
-
-    border-radius: 7px;
-
-    background-color:
-        #ffffff;
-
-    -webkit-appearance: none;
-    appearance: none;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.15s ease;
-}
-
-
-.choix-multiples
-input[type="checkbox"]:hover,
-.option-proportionnelle
-input[type="checkbox"]:hover {
-    border-color:
-        var(--vert);
-}
-
-
-.choix-multiples
-input[type="checkbox"]:checked,
-.option-proportionnelle
-input[type="checkbox"]:checked {
-    border-color:
-        var(--vert);
-
-    background-color:
-        var(--vert);
-}
-
-
-.choix-multiples
-input[type="checkbox"]:checked::after,
-.option-proportionnelle
-input[type="checkbox"]:checked::after {
-    content: "✓";
-
-    position: absolute;
-
-    top: 50%;
-    left: 50%;
-
-    transform:
-        translate(
-            -50%,
-            -52%
-        );
-
-    color:
-        #ffffff;
-
-    font-size: 14px;
-    font-weight: 900;
-
-    line-height: 1;
-}
-
-
-/* =================================
-   ÉTIQUETTES / OCCASIONS /
-   SAISONS
+   CASES ÉTIQUETTES /
+   OCCASIONS / SAISONS
 ================================= */
 
 .choix-multiples label {
-    display: inline-flex;
+    display: inline-flex !important;
 
-    align-items: center;
-    justify-content: flex-start;
+    align-items: center !important;
+    justify-content: flex-start !important;
 
-    gap: 10px;
+    gap: 10px !important;
 
-    min-height: 58px;
+    min-height: 58px !important;
 
     padding:
         12px
-        16px;
+        16px !important;
 
     border:
         1px solid
-        #d8d1c5;
+        #d8d1c5 !important;
 
-    border-radius: 15px;
+    border-radius: 15px !important;
 
     background-color:
-        #ffffff;
+        #ffffff !important;
 
     color:
-        var(--texte);
+        var(--texte) !important;
 
-    font-weight: 700;
+    font-size: 16px !important;
+    font-weight: 700 !important;
+
+    line-height: 1.2 !important;
 
     cursor: pointer;
 
@@ -1611,10 +1465,75 @@ input[type="checkbox"]:checked::after {
 
 .choix-multiples label:hover {
     border-color:
-        var(--vert);
+        var(--vert) !important;
 
     transform:
         translateY(-1px);
+}
+
+
+.choix-multiples
+input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+
+    min-width: 18px !important;
+
+    flex:
+        0 0
+        18px !important;
+
+    margin: 0 !important;
+
+    position: relative;
+
+    border:
+        1.5px solid
+        #cfc8bc !important;
+
+    border-radius: 5px !important;
+
+    background-color:
+        #ffffff !important;
+
+    -webkit-appearance: none !important;
+    appearance: none !important;
+
+    cursor: pointer;
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked {
+    border-color:
+        var(--vert) !important;
+
+    background-color:
+        var(--vert) !important;
+}
+
+
+.choix-multiples
+input[type="checkbox"]:checked::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -53%
+        );
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    line-height: 1;
 }
 
 
@@ -1622,10 +1541,10 @@ input[type="checkbox"]:checked::after {
     input[type="checkbox"]:checked
 ) {
     border-color:
-        var(--vert);
+        var(--vert) !important;
 
     background-color:
-        #eef0e8;
+        #eef0e8 !important;
 
     box-shadow:
         0 0 0 1px
@@ -1640,59 +1559,55 @@ input[type="checkbox"]:checked::after {
 
 /* =================================
    PROPORTIONNEL
-   INGRÉDIENTS
+   VERSION COMPACTE
 ================================= */
 
-/*
-   Ce bloc est volontairement séparé
-   des Étiquettes / Occasions / Saisons.
-
-   Il reste compact afin de tenir dans
-   la colonne "Calcul".
-*/
-
+.ligne-ingredient
 .option-proportionnelle {
-    width: 100%;
-    min-width: 0;
+    width: 100% !important;
+    min-width: 0 !important;
 
-    height: 48px;
-    min-height: 48px;
+    height: 48px !important;
+    min-height: 48px !important;
 
     box-sizing: border-box;
 
-    display: flex;
+    display: flex !important;
 
-    align-items: center;
-    justify-content: flex-start;
+    align-items: center !important;
+    justify-content: center !important;
 
-    gap: 8px;
+    gap: 5px !important;
 
     padding:
-        7px
-        10px;
+        5px
+        7px !important;
 
     border:
         1px solid
-        #d8d1c5;
+        #d8d1c5 !important;
 
-    border-radius: 12px;
+    border-radius: 12px !important;
 
     background-color:
-        #ffffff;
+        #ffffff !important;
 
     color:
-        var(--texte);
+        var(--texte) !important;
 
-    font-size: 13px;
-    font-weight: 700;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
 
-    line-height: 1;
+    line-height: 1 !important;
 
-    white-space: nowrap;
+    white-space: nowrap !important;
 
     cursor: pointer;
 
-    overflow: hidden;
+    overflow: hidden !important;
+
+    transform: none !important;
 
     transition:
         background-color 0.2s ease,
@@ -1700,98 +1615,208 @@ input[type="checkbox"]:checked::after {
 }
 
 
+.ligne-ingredient
 .option-proportionnelle:hover {
     border-color:
-        var(--vert);
+        var(--vert) !important;
+
+    transform: none !important;
 }
 
 
+.ligne-ingredient
 .option-proportionnelle:has(
     .ingredient-proportionnel:checked
 ) {
     border-color:
-        var(--vert);
+        var(--vert) !important;
 
     background-color:
-        #eef0e8;
+        #eef0e8 !important;
 }
 
 
-/* Checkbox un peu plus compacte ici */
-
+.ligne-ingredient
 .option-proportionnelle
 .ingredient-proportionnel {
-    width: 20px;
-    height: 20px;
+    width: 14px !important;
+    height: 14px !important;
+
+    min-width: 14px !important;
 
     flex:
         0 0
-        20px;
+        14px !important;
 
-    border-radius: 6px;
+    margin: 0 !important;
+
+    position: relative;
+
+    border:
+        1.5px solid
+        #cfc8bc !important;
+
+    border-radius: 4px !important;
+
+    background-color:
+        #ffffff !important;
+
+    -webkit-appearance: none !important;
+    appearance: none !important;
+
+    cursor: pointer;
 }
 
 
+.ligne-ingredient
+.option-proportionnelle
+.ingredient-proportionnel:checked {
+    border-color:
+        var(--vert) !important;
+
+    background-color:
+        var(--vert) !important;
+}
+
+
+.ligne-ingredient
 .option-proportionnelle
 .ingredient-proportionnel:checked::after {
-    font-size: 13px;
+    content: "✓";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    transform:
+        translate(
+            -50%,
+            -53%
+        );
+
+    color: #ffffff;
+
+    font-size: 9px !important;
+    font-weight: 900;
+
+    line-height: 1;
 }
 
 
 /* =================================
    VISIBILITÉ
+   MÊME STYLE QUE LES ÉTIQUETTES
 ================================= */
 
+.choix-visibilite {
+    display: flex;
+
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+
+.choix-visibilite
+.option-visibilite {
+    display: inline-flex !important;
+
+    align-items: center !important;
+    justify-content: flex-start !important;
+
+    gap: 10px !important;
+
+    min-height: 58px !important;
+
+    padding:
+        12px
+        16px !important;
+
+    border:
+        1px solid
+        #d8d1c5 !important;
+
+    border-radius: 15px !important;
+
+    background-color:
+        #ffffff !important;
+
+    color:
+        var(--texte) !important;
+
+    font-size: 16px !important;
+    font-weight: 700 !important;
+
+    line-height: 1.2 !important;
+
+    cursor: pointer;
+
+    transform: none !important;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.choix-visibilite
+.option-visibilite:hover {
+    border-color:
+        var(--vert) !important;
+
+    transform:
+        translateY(-1px) !important;
+}
+
+
+.choix-visibilite
 .option-visibilite
 input[type="radio"] {
-    width: 22px;
-    height: 22px;
+    width: 18px !important;
+    height: 18px !important;
+
+    min-width: 18px !important;
 
     flex:
         0 0
-        22px;
+        18px !important;
 
-    margin: 0;
+    margin: 0 !important;
 
     position: relative;
 
     border:
-        2px solid
-        #cfc8bc;
+        1.5px solid
+        #cfc8bc !important;
 
-    border-radius: 7px;
+    border-radius: 5px !important;
 
     background-color:
-        #ffffff;
+        #ffffff !important;
 
-    -webkit-appearance: none;
-    appearance: none;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
     cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease;
 }
 
 
-.option-visibilite
-input[type="radio"]:hover {
-    border-color:
-        var(--vert);
-}
-
-
+.choix-visibilite
 .option-visibilite
 input[type="radio"]:checked {
     border-color:
-        var(--vert);
+        var(--vert) !important;
 
     background-color:
-        var(--vert);
+        var(--vert) !important;
 }
 
 
+.choix-visibilite
 .option-visibilite
 input[type="radio"]:checked::after {
     content: "✓";
@@ -1804,78 +1829,27 @@ input[type="radio"]:checked::after {
     transform:
         translate(
             -50%,
-            -52%
+            -53%
         );
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-size: 14px;
+    font-size: 11px !important;
     font-weight: 900;
 
     line-height: 1;
 }
 
 
-/* =================================
-   CARTES VISIBILITÉ
-================================= */
-
-.option-visibilite {
-    display: inline-flex;
-
-    align-items: center;
-    justify-content: flex-start;
-
-    gap: 12px;
-
-    min-height: 58px;
-
-    padding:
-        12px
-        16px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius: 15px;
-
-    background-color:
-        #ffffff;
-
-    color:
-        var(--texte);
-
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.option-visibilite:hover {
-    border-color:
-        var(--vert);
-
-    transform:
-        translateY(-1px);
-}
-
-
+.choix-visibilite
 .option-visibilite:has(
     input[type="radio"]:checked
 ) {
     border-color:
-        var(--vert);
+        var(--vert) !important;
 
     background-color:
-        #eef0e8;
+        #eef0e8 !important;
 
     box-shadow:
         0 0 0 1px
@@ -1895,10 +1869,10 @@ input[type="radio"]:checked::after {
 .choix-multiples
 input[type="checkbox"]:focus-visible,
 
-.option-proportionnelle
-input[type="checkbox"]:focus-visible,
+.ligne-ingredient
+.ingredient-proportionnel:focus-visible,
 
-.option-visibilite
+.choix-visibilite
 input[type="radio"]:focus-visible {
     outline:
         3px solid
@@ -1925,69 +1899,26 @@ input[type="radio"]:focus-visible {
     }
 
 
-    .choix-multiples label {
-        min-height: 54px;
+    .choix-multiples label,
+    .choix-visibilite
+    .option-visibilite {
+        min-height: 54px !important;
     }
 
 
+    .choix-visibilite
     .option-visibilite {
         width: 100%;
-
-        min-height: 54px;
     }
 
 
+    .ligne-ingredient
     .option-proportionnelle {
-        height: 46px;
-        min-height: 46px;
+        height: 44px !important;
+        min-height: 44px !important;
 
-        font-size: 12px;
+        font-size: 11px !important;
     }
 
 }
 
-/* =================================
-   PROPORTIONNEL PLUS COMPACT
-================================= */
-
-.option-proportionnelle {
-    gap: 6px;
-
-    padding:
-        6px
-        9px;
-
-    font-size: 0px;
-    font-weight: 700;
-}
-
-
-/* Petite checkbox */
-
-.option-proportionnelle
-.ingredient-proportionnel {
-    width: 13px;
-    height: 13px;
-
-    flex:
-        0 0
-        14px;
-
-    border-width: 1.5px;
-
-    border-radius: 5px;
-}
-
-
-/* Petit ✓ */
-
-.option-proportionnelle
-.ingredient-proportionnel:checked::after {
-    font-size: 10px;
-
-    transform:
-        translate(
-            -50%,
-            -53%
-        );
-}
