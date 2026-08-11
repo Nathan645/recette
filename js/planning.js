@@ -1,48 +1,150 @@
 /* =================================
-   ÉTAT DE LA SÉLECTION
+PLANNING.JS
+À notre table
+
+Ce fichier :
+- démarre la page
+- charge les données
+- gère la navigation entre semaines
+- ouvre les popups
+- recharge l'affichage après modification
+
+Les fonctions métier sont réparties dans :
+- planning-core.js
+- planning-data.js
+- planning-popup.js
+- planning-ui.js
 ================================= */
-
-let recetteSelectionneePlanning =
-    null;
-
-
-let modeRepasPlanning =
-    "recette";
-
-
-const champPersonnesRepas =
-    document.getElementById(
-        "personnes-repas"
-    );
 
 
 /* =================================
-   COPIE DE SEMAINE
+ÉLÉMENTS DU DOM
 ================================= */
+
+const boutonSemainePrecedente =
+    document.getElementById(
+        "semaine-precedente"
+    );
+
+const boutonSemaineSuivante =
+    document.getElementById(
+        "semaine-suivante"
+    );
+
+const boutonAujourdhui =
+    document.getElementById(
+        "aller-aujourdhui"
+    );
 
 const boutonCopierSemaine =
     document.getElementById(
         "copier-semaine"
     );
 
+const grilleSemaine =
+    document.getElementById(
+        "grille-semaine"
+    );
+
+const titreSemaine =
+    document.getElementById(
+        "titre-semaine"
+    );
+
+const numeroSemaine =
+    document.getElementById(
+        "numero-semaine"
+    );
+
+
+/* =================================
+POPUP REPAS
+================================= */
+
+const popupRepas =
+    document.getElementById(
+        "popup-repas"
+    );
+
+const boutonFermerPopupRepas =
+    document.getElementById(
+        "fermer-popup-repas"
+    );
+
+const titrePopupRepas =
+    document.getElementById(
+        "titre-popup-repas"
+    );
+
+const datePopupRepas =
+    document.getElementById(
+        "date-popup-repas"
+    );
+
+const champPersonnesRepas =
+    document.getElementById(
+        "personnes-repas"
+    );
+
+const listeElementsRepas =
+    document.getElementById(
+        "liste-elements-repas"
+    );
+
+const champRechercheRecette =
+    document.getElementById(
+        "recherche-recette-planning"
+    );
+
+const resultatsRecettesPlanning =
+    document.getElementById(
+        "resultats-recettes-planning"
+    );
+
+const champNomRepasLibre =
+    document.getElementById(
+        "nom-repas-libre"
+    );
+
+const boutonAjouterPlatManuel =
+    document.getElementById(
+        "ajouter-plat-manuel"
+    );
+
+const boutonValiderRepas =
+    document.getElementById(
+        "valider-repas-libre"
+    );
+
+const boutonSupprimerRepas =
+    document.getElementById(
+        "supprimer-repas-planning"
+    );
+
+const messagePlanning =
+    document.getElementById(
+        "message-planning"
+    );
+
+
+/* =================================
+POPUP COPIE SEMAINE
+================================= */
 
 const popupCopieSemaine =
     document.getElementById(
         "popup-copie-semaine"
     );
 
-
 const boutonFermerCopieSemaine =
     document.getElementById(
         "fermer-copie-semaine"
     );
 
-
 const boutonValiderCopieSemaine =
     document.getElementById(
         "valider-copie-semaine"
     );
-
 
 const messageCopieSemaine =
     document.getElementById(
@@ -51,488 +153,1030 @@ const messageCopieSemaine =
 
 
 /* =================================
-   OUTILS
+ÉTAT LOCAL DE LA POPUP
 ================================= */
 
-function recupererNombrePersonnes() {
-
-    const nombre =
-        Number(
-            champPersonnesRepas.value
-        );
-
-
-    if (
-        !Number.isInteger(nombre) ||
-        nombre < 1
-    ) {
-
-        throw new Error(
-            "Le nombre de personnes doit être supérieur ou égal à 1."
-        );
-    }
-
-
-    return nombre;
-}
-
-
-function definirNombrePersonnes(
-    repas = null
-) {
-
-    /*
-        Si le repas existe déjà,
-        on reprend sa valeur.
-
-        Pour les anciens repas qui ont
-        personnes = null, on utilise
-        la valeur par défaut du foyer.
-    */
-
-    if (
-        repas &&
-        Number(repas.personnes) > 0
-    ) {
-
-        champPersonnesRepas.value =
-            repas.personnes;
-
-        return;
-    }
-
-
-    champPersonnesRepas.value =
-        nombrePersonnesParDefaut || 2;
-}
-
-
-function deselectionnerRecettes() {
-
-    document
-        .querySelectorAll(
-            ".resultat-recette-planning"
-        )
-        .forEach(
-            function (bouton) {
-
-                bouton.classList.remove(
-                    "selectionnee"
-                );
-            }
-        );
-}
-
-
-function marquerRecetteSelectionnee() {
-
-    deselectionnerRecettes();
-
-
-    if (!recetteSelectionneePlanning) {
-        return;
-    }
-
-
-    const bouton =
-        document.querySelector(
-            `[data-recette-id="${recetteSelectionneePlanning.id}"]`
-        );
-
-
-    if (bouton) {
-
-        bouton.classList.add(
-            "selectionnee"
-        );
-    }
-}
-
-
-/* =================================
-   OUTIL DATE ISO POUR LA COPIE
-================================= */
-
-function decalerDateISO(
-    dateISO,
-    nombreJours
-) {
-
-    /*
-        On parse manuellement la date
-        pour éviter les décalages liés
-        aux fuseaux horaires.
-    */
-
-    const morceaux =
-        String(dateISO)
-            .split("-")
-            .map(Number);
-
-
-    if (
-        morceaux.length !== 3 ||
-        morceaux.some(
-            function (valeur) {
-                return !Number.isFinite(valeur);
-            }
-        )
-    ) {
-
-        throw new Error(
-            "Une date du planning est invalide."
-        );
-    }
-
-
-    const date =
-        new Date(
-            morceaux[0],
-            morceaux[1] - 1,
-            morceaux[2]
-        );
-
-
-    date.setDate(
-        date.getDate() +
-        nombreJours
-    );
-
-
-    return formaterDateISO(
-        date
-    );
-}
-
-
-/* =================================
-   OUVRIR / FERMER
-   POPUP COPIE SEMAINE
-================================= */
-
-function ouvrirPopupCopieSemaine() {
-
-    messageCopieSemaine.textContent =
-        "";
-
-
-    const choixSemaineSuivante =
-        document.querySelector(
-            'input[name="destination-copie-semaine"][value="suivante"]'
-        );
-
-
-    if (
-        choixSemaineSuivante
-    ) {
-
-        choixSemaineSuivante.checked =
-            true;
-    }
-
-
-    popupCopieSemaine.hidden =
-        false;
-}
-
-
-function fermerPopupCopieSemaine() {
-
-    popupCopieSemaine.hidden =
-        true;
-
-
-    messageCopieSemaine.textContent =
-        "";
-
-
-    boutonValiderCopieSemaine.disabled =
-        false;
-
-
-    boutonValiderCopieSemaine.textContent =
-        "Copier les repas";
-}
-
-
-/* =================================
-   COPIER UNE SEMAINE
-================================= */
-
-async function copierSemainePlanning() {
-
-    if (
-        repasSemaine.length === 0
-    ) {
-
-        messageCopieSemaine.textContent =
-            "Il n'y a aucun repas à copier cette semaine.";
-
-        return;
-    }
-
-
-    const choixDestination =
-        document.querySelector(
-            'input[name="destination-copie-semaine"]:checked'
-        );
-
-
-    const destination =
-        choixDestination
-            ? choixDestination.value
-            : "suivante";
-
-
-    const decalage =
-        destination === "precedente"
-            ? -7
-            : 7;
-
-
-    const debutSemaineCible =
-        ajouterJours(
-            debutSemaine,
-            decalage
-        );
-
-
-    const finSemaineCible =
-        ajouterJours(
-            debutSemaineCible,
-            6
-        );
-
-
-    const dateDebutCible =
-        formaterDateISO(
-            debutSemaineCible
-        );
-
-
-    const dateFinCible =
-        formaterDateISO(
-            finSemaineCible
-        );
-
-
-    boutonValiderCopieSemaine.disabled =
-        true;
-
-
-    boutonValiderCopieSemaine.textContent =
-        "Copie en cours…";
-
-
-    messageCopieSemaine.textContent =
-        "";
-
-
-    try {
-
-        /* =================================
-           1. CRÉNEAUX DÉJÀ OCCUPÉS
-        ================================= */
-
-        const {
-            data: repasExistants,
-            error: erreurRepasExistants
-        } =
-            await window.supabaseClient
-                .from("repas_planning")
-                .select(`
-                    id,
-                    date,
-                    moment
-                `)
-                .eq(
-                    "foyer_id",
-                    foyerId
-                )
-                .gte(
-                    "date",
-                    dateDebutCible
-                )
-                .lte(
-                    "date",
-                    dateFinCible
-                );
-
-
-        if (
-            erreurRepasExistants
-        ) {
-
-            throw erreurRepasExistants;
+/*
+    Cette liste contient temporairement
+    tous les plats ajoutés dans le repas
+    avant validation.
+
+    Exemple :
+
+    [
+        {
+            type: "recette",
+            recette_id: 12,
+            nom: "Lasagnes"
+        },
+        {
+            type: "libre",
+            recette_id: null,
+            nom: "Plateau de fromages"
         }
+    ]
+*/
+
+let elementsRepasEnCours = [];
 
 
-        const creneauxOccupes =
-            new Set(
-                (
-                    Array.isArray(
-                        repasExistants
-                    )
-                        ? repasExistants
-                        : []
-                )
-                    .map(
-                        function (
-                            repas
-                        ) {
+/* =================================
+OUTILS MESSAGE
+================================= */
 
-                            return (
-                                repas.date +
-                                "__" +
-                                repas.moment
-                            );
-                        }
-                    )
+function afficherMessagePlanning(
+    texte,
+    type = ""
+) {
+
+    if (!messagePlanning) {
+        return;
+    }
+
+
+    messagePlanning.textContent =
+        texte;
+
+
+    messagePlanning.classList.remove(
+        "erreur",
+        "succes"
+    );
+
+
+    if (type) {
+
+        messagePlanning.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+function afficherMessageCopie(
+    texte,
+    type = ""
+) {
+
+    if (!messageCopieSemaine) {
+        return;
+    }
+
+
+    messageCopieSemaine.textContent =
+        texte;
+
+
+    messageCopieSemaine.classList.remove(
+        "erreur",
+        "succes"
+    );
+
+
+    if (type) {
+
+        messageCopieSemaine.classList.add(
+            type
+        );
+
+    }
+
+}
+
+
+/* =================================
+ÉCHAPPER LE HTML
+================================= */
+
+function echapperHTML(texte) {
+
+    const element =
+        document.createElement(
+            "div"
+        );
+
+
+    element.textContent =
+        texte ?? "";
+
+
+    return element.innerHTML;
+
+}
+
+
+/* =================================
+AFFICHER LES ÉLÉMENTS DU REPAS
+================================= */
+
+function afficherElementsRepasEnCours() {
+
+    if (!listeElementsRepas) {
+        return;
+    }
+
+
+    listeElementsRepas.innerHTML = "";
+
+
+    if (
+        elementsRepasEnCours.length === 0
+    ) {
+
+        const messageVide =
+            document.createElement(
+                "p"
             );
 
 
-        /* =================================
-           2. PRÉPARER LES REPAS
-        ================================= */
-
-        const repasACopier =
-            [];
+        messageVide.className =
+            "message-elements-vide";
 
 
-        let nombreIgnores =
-            0;
+        messageVide.textContent =
+            "Aucun plat ajouté pour le moment.";
 
 
-        repasSemaine.forEach(
+        listeElementsRepas.appendChild(
+            messageVide
+        );
+
+
+        return;
+
+    }
+
+
+    elementsRepasEnCours.forEach(
+        function (
+            element,
+            index
+        ) {
+
+            const ligne =
+                document.createElement(
+                    "div"
+                );
+
+
+            ligne.className =
+                "element-repas-selectionne";
+
+
+            const informations =
+                document.createElement(
+                    "div"
+                );
+
+
+            informations.className =
+                "infos-element-repas";
+
+
+            const nom =
+                document.createElement(
+                    "strong"
+                );
+
+
+            nom.textContent =
+                element.nom;
+
+
+            const type =
+                document.createElement(
+                    "span"
+                );
+
+
+            type.className =
+                "type-element-repas";
+
+
+            type.textContent =
+                element.type ===
+                "recette"
+                    ? "Recette"
+                    : "Plat libre";
+
+
+            informations.appendChild(
+                nom
+            );
+
+
+            informations.appendChild(
+                type
+            );
+
+
+            const boutonSupprimer =
+                document.createElement(
+                    "button"
+                );
+
+
+            boutonSupprimer.type =
+                "button";
+
+
+            boutonSupprimer.className =
+                "supprimer-element-repas";
+
+
+            boutonSupprimer.textContent =
+                "×";
+
+
+            boutonSupprimer.setAttribute(
+                "aria-label",
+                "Retirer " +
+                    element.nom
+            );
+
+
+            boutonSupprimer.addEventListener(
+                "click",
+                function () {
+
+                    elementsRepasEnCours.splice(
+                        index,
+                        1
+                    );
+
+
+                    afficherElementsRepasEnCours();
+
+                }
+            );
+
+
+            ligne.appendChild(
+                informations
+            );
+
+
+            ligne.appendChild(
+                boutonSupprimer
+            );
+
+
+            listeElementsRepas.appendChild(
+                ligne
+            );
+
+        }
+    );
+
+}
+
+
+/* =================================
+RECHERCHE DE RECETTES
+================================= */
+
+function afficherResultatsRecettes(
+    recherche = ""
+) {
+
+    if (
+        !resultatsRecettesPlanning
+    ) {
+        return;
+    }
+
+
+    const rechercheNormalisee =
+        recherche
+            .trim()
+            .toLowerCase();
+
+
+    resultatsRecettesPlanning.innerHTML =
+        "";
+
+
+    if (
+        !Array.isArray(
+            recettes
+        )
+    ) {
+        return;
+    }
+
+
+    let recettesFiltrees =
+        recettes;
+
+
+    if (
+        rechercheNormalisee
+    ) {
+
+        recettesFiltrees =
+            recettes.filter(
+                function (
+                    recette
+                ) {
+
+                    return (
+                        recette.nom &&
+                        recette.nom
+                            .toLowerCase()
+                            .includes(
+                                rechercheNormalisee
+                            )
+                    );
+
+                }
+            );
+
+    }
+
+
+    /*
+        On évite d'afficher 200 recettes
+        d'un coup dans la popup.
+    */
+
+    recettesFiltrees =
+        recettesFiltrees.slice(
+            0,
+            20
+        );
+
+
+    if (
+        recettesFiltrees.length === 0
+    ) {
+
+        const message =
+            document.createElement(
+                "p"
+            );
+
+
+        message.className =
+            "aucune-recette-planning";
+
+
+        message.textContent =
+            "Aucune recette trouvée.";
+
+
+        resultatsRecettesPlanning
+            .appendChild(
+                message
+            );
+
+
+        return;
+
+    }
+
+
+    recettesFiltrees.forEach(
+        function (
+            recette
+        ) {
+
+            const bouton =
+                document.createElement(
+                    "button"
+                );
+
+
+            bouton.type =
+                "button";
+
+
+            bouton.className =
+                "resultat-recette-planning";
+
+
+            bouton.textContent =
+                recette.nom;
+
+
+            bouton.addEventListener(
+                "click",
+                function () {
+
+                    /*
+                        On empêche d'ajouter
+                        exactement la même
+                        recette deux fois.
+                    */
+
+                    const dejaAjoutee =
+                        elementsRepasEnCours
+                            .some(
+                                function (
+                                    element
+                                ) {
+
+                                    return (
+                                        element.type ===
+                                            "recette" &&
+                                        String(
+                                            element.recette_id
+                                        ) ===
+                                        String(
+                                            recette.id
+                                        )
+                                    );
+
+                                }
+                            );
+
+
+                    if (
+                        dejaAjoutee
+                    ) {
+
+                        afficherMessagePlanning(
+                            "Cette recette est déjà ajoutée au repas.",
+                            "erreur"
+                        );
+
+                        return;
+
+                    }
+
+
+                    elementsRepasEnCours.push(
+                        {
+
+                            type:
+                                "recette",
+
+                            recette_id:
+                                recette.id,
+
+                            nom:
+                                recette.nom
+
+                        }
+                    );
+
+
+                    afficherElementsRepasEnCours();
+
+
+                    afficherMessagePlanning(
+                        ""
+                    );
+
+
+                    if (
+                        champRechercheRecette
+                    ) {
+
+                        champRechercheRecette.value =
+                            "";
+
+                    }
+
+
+                    afficherResultatsRecettes(
+                        ""
+                    );
+
+                }
+            );
+
+
+            resultatsRecettesPlanning
+                .appendChild(
+                    bouton
+                );
+
+        }
+    );
+
+}
+
+
+/* =================================
+AJOUT MANUEL
+================================= */
+
+function ajouterPlatManuel() {
+
+    if (!champNomRepasLibre) {
+        return;
+    }
+
+
+    const nom =
+        champNomRepasLibre
+            .value
+            .trim();
+
+
+    if (!nom) {
+
+        afficherMessagePlanning(
+            "Indique le nom du plat à ajouter.",
+            "erreur"
+        );
+
+        champNomRepasLibre.focus();
+
+        return;
+
+    }
+
+
+    elementsRepasEnCours.push(
+        {
+
+            type:
+                "libre",
+
+            recette_id:
+                null,
+
+            nom:
+                nom
+
+        }
+    );
+
+
+    champNomRepasLibre.value =
+        "";
+
+
+    afficherElementsRepasEnCours();
+
+
+    afficherMessagePlanning(
+        ""
+    );
+
+
+    champNomRepasLibre.focus();
+
+}
+
+
+/* =================================
+OUVRIR POPUP MULTI-REPAS
+================================= */
+
+function ouvrirPopupMultiRepas(
+    date,
+    moment
+) {
+
+    dateSelectionnee =
+        formaterDateISO(
+            date
+        );
+
+
+    momentSelectionne =
+        moment;
+
+
+    /*
+        On récupère TOUS les repas
+        du créneau.
+
+        Avant :
+        trouverRepas() retournait
+        seulement le premier.
+
+        Maintenant on veut pouvoir
+        en avoir plusieurs.
+    */
+
+    const repasDuCreneau =
+        repasSemaine.filter(
             function (
                 repas
             ) {
 
-                const dateCible =
-                    decalerDateISO(
-                        repas.date,
-                        decalage
-                    );
-
-
-                const cleCreneau =
-                    dateCible +
-                    "__" +
-                    repas.moment;
-
-
-                if (
-                    creneauxOccupes.has(
-                        cleCreneau
-                    )
-                ) {
-
-                    nombreIgnores +=
-                        1;
-
-                    return;
-                }
-
-
-                repasACopier.push({
-
-                    foyer_id:
-                        foyerId,
-
-                    date:
-                        dateCible,
-
-                    moment:
-                        repas.moment,
-
-                    nom:
-                        repas.nom,
-
-                    recette_id:
-                        repas.recette_id ||
-                        null,
-
-                    personnes:
-                        Number(
-                            repas.personnes
-                        ) > 0
-                            ? Number(
-                                repas.personnes
-                            )
-                            : (
-                                nombrePersonnesParDefaut ||
-                                2
-                            ),
-
-                    created_by:
-                        utilisateurConnecte.id
-
-                });
-
-
-                creneauxOccupes.add(
-                    cleCreneau
+                return (
+                    repas.date ===
+                        dateSelectionnee &&
+                    repas.moment ===
+                        momentSelectionne
                 );
+
             }
         );
 
 
-        /* =================================
-           3. RIEN À COPIER
-        ================================= */
+    /*
+        On transforme les repas déjà
+        présents en éléments modifiables
+        dans la popup.
+    */
 
-        if (
-            repasACopier.length === 0
-        ) {
-
-            if (
-                nombreIgnores === 1
+    elementsRepasEnCours =
+        repasDuCreneau.map(
+            function (
+                repas
             ) {
 
-                messageCopieSemaine.textContent =
-                    "Aucun repas copié : le créneau cible est déjà occupé.";
+                return {
 
-            } else {
+                    id:
+                        repas.id,
 
-                messageCopieSemaine.textContent =
-                    `Aucun repas copié : ${nombreIgnores} créneaux sont déjà occupés.`;
+                    type:
+                        repas.recette_id
+                            ? "recette"
+                            : "libre",
+
+                    recette_id:
+                        repas.recette_id,
+
+                    nom:
+                        repas.nom
+
+                };
+
             }
+        );
 
 
-            boutonValiderCopieSemaine.disabled =
-                false;
+    /*
+        Nombre de personnes.
+
+        S'il existe déjà un repas,
+        on reprend son nombre.
+
+        Sinon :
+        valeur par défaut du foyer.
+    */
+
+    let nombrePersonnes =
+        nombrePersonnesParDefaut;
 
 
-            boutonValiderCopieSemaine.textContent =
-                "Copier les repas";
+    if (
+        repasDuCreneau.length > 0
+    ) {
+
+        const nombreExistant =
+            Number(
+                repasDuCreneau[0]
+                    .personnes
+            );
 
 
-            return;
+        if (
+            Number.isInteger(
+                nombreExistant
+            ) &&
+            nombreExistant > 0
+        ) {
+
+            nombrePersonnes =
+                nombreExistant;
+
+        }
+
+    }
+
+
+    if (
+        champPersonnesRepas
+    ) {
+
+        champPersonnesRepas.value =
+            nombrePersonnes;
+
+    }
+
+
+    /*
+        Titre
+    */
+
+    if (
+        titrePopupRepas
+    ) {
+
+        titrePopupRepas.textContent =
+            moment === "midi"
+                ? "Repas du midi"
+                : "Repas du soir";
+
+    }
+
+
+    /*
+        Date
+    */
+
+    if (
+        datePopupRepas
+    ) {
+
+        datePopupRepas.textContent =
+            date.toLocaleDateString(
+                "fr-FR",
+                {
+                    weekday:
+                        "long",
+
+                    day:
+                        "numeric",
+
+                    month:
+                        "long",
+
+                    year:
+                        "numeric"
+                }
+            );
+
+    }
+
+
+    /*
+        Suppression complète du créneau
+    */
+
+    if (
+        boutonSupprimerRepas
+    ) {
+
+        boutonSupprimerRepas.hidden =
+            repasDuCreneau.length === 0;
+
+    }
+
+
+    /*
+        Réinitialisation champs
+    */
+
+    if (
+        champRechercheRecette
+    ) {
+
+        champRechercheRecette.value =
+            "";
+
+    }
+
+
+    if (
+        champNomRepasLibre
+    ) {
+
+        champNomRepasLibre.value =
+            "";
+
+    }
+
+
+    afficherMessagePlanning(
+        ""
+    );
+
+
+    afficherElementsRepasEnCours();
+
+
+    afficherResultatsRecettes(
+        ""
+    );
+
+
+    if (
+        popupRepas
+    ) {
+
+        popupRepas.hidden =
+            false;
+
+    }
+
+}
+
+
+/* =================================
+FERMER POPUP REPAS
+================================= */
+
+function fermerPopupMultiRepas() {
+
+    if (
+        popupRepas
+    ) {
+
+        popupRepas.hidden =
+            true;
+
+    }
+
+
+    elementsRepasEnCours =
+        [];
+
+
+    dateSelectionnee =
+        null;
+
+
+    momentSelectionne =
+        null;
+
+
+    repasEnModification =
+        null;
+
+
+    afficherMessagePlanning(
+        ""
+    );
+
+}
+
+
+/* =================================
+ENREGISTRER LE CRÉNEAU COMPLET
+================================= */
+
+async function enregistrerCreneauComplet() {
+
+    if (
+        !dateSelectionnee ||
+        !momentSelectionne
+    ) {
+
+        afficherMessagePlanning(
+            "Impossible d'identifier ce repas.",
+            "erreur"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        elementsRepasEnCours.length === 0
+    ) {
+
+        afficherMessagePlanning(
+            "Ajoute au moins un plat avant de terminer le repas.",
+            "erreur"
+        );
+
+        return;
+
+    }
+
+
+    const personnes =
+        Number(
+            champPersonnesRepas
+                ? champPersonnesRepas.value
+                : nombrePersonnesParDefaut
+        );
+
+
+    if (
+        !Number.isInteger(
+            personnes
+        ) ||
+        personnes < 1
+    ) {
+
+        afficherMessagePlanning(
+            "Le nombre de personnes est invalide.",
+            "erreur"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        boutonValiderRepas
+    ) {
+
+        boutonValiderRepas.disabled =
+            true;
+
+
+        boutonValiderRepas.textContent =
+            "Enregistrement…";
+
+    }
+
+
+    afficherMessagePlanning(
+        "Enregistrement du repas…"
+    );
+
+
+    try {
+
+        /*
+            STRATÉGIE SIMPLE ET FIABLE :
+
+            1. supprimer le contenu actuel
+               de ce créneau ;
+
+            2. recréer tous les éléments
+               présents dans la popup.
+
+            Comme ça :
+            - ajout
+            - suppression
+            - modification
+
+            sont tous gérés d'un coup.
+        */
+
+
+        const {
+            error: erreurSuppression
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .delete()
+                .eq(
+                    "foyer_id",
+                    foyerId
+                )
+                .eq(
+                    "date",
+                    dateSelectionnee
+                )
+                .eq(
+                    "moment",
+                    momentSelectionne
+                );
+
+
+        if (
+            erreurSuppression
+        ) {
+
+            throw erreurSuppression;
+
         }
 
 
-        /* =================================
-           4. INSERTION SUPABASE
-        ================================= */
+        const lignesAInserer =
+            elementsRepasEnCours.map(
+                function (
+                    element
+                ) {
+
+                    return {
+
+                        foyer_id:
+                            foyerId,
+
+                        date:
+                            dateSelectionnee,
+
+                        moment:
+                            momentSelectionne,
+
+                        nom:
+                            element.nom,
+
+                        recette_id:
+                            element.recette_id,
+
+                        personnes:
+                            personnes,
+
+                        created_by:
+                            utilisateurConnecte.id
+
+                    };
+
+                }
+            );
+
 
         const {
-            data: repasCopies,
             error: erreurInsertion
         } =
             await window.supabaseClient
-                .from("repas_planning")
-                .insert(
-                    repasACopier
+                .from(
+                    "repas_planning"
                 )
-                .select(`
-                    id,
-                    foyer_id,
-                    date,
-                    moment,
-                    nom,
-                    recette_id,
-                    personnes
-                `);
+                .insert(
+                    lignesAInserer
+                );
 
 
         if (
@@ -540,86 +1184,511 @@ async function copierSemainePlanning() {
         ) {
 
             throw erreurInsertion;
+
         }
+
+
+        await chargerRepasSemaine();
 
 
         /*
-            Sécurité supplémentaire :
-            Supabase doit réellement
-            nous renvoyer les lignes créées.
+            planning-ui.js doit contenir
+            afficherSemaine().
         */
 
-        if (
-            !Array.isArray(
-                repasCopies
-            ) ||
-            repasCopies.length === 0
-        ) {
-
-            throw new Error(
-                "Aucun repas n'a été créé dans la semaine cible."
-            );
-        }
+        afficherSemaine();
 
 
-        console.log(
-            "Repas copiés :",
-            repasCopies
+        fermerPopupMultiRepas();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur enregistrement du repas :",
+            erreur
         );
 
 
-        /* =================================
-           5. MESSAGE
-        ================================= */
+        afficherMessagePlanning(
+            erreur.message ||
+            "Impossible d'enregistrer le repas.",
+            "erreur"
+        );
 
-        const nombreCopies =
-            repasCopies.length;
+
+    } finally {
+
+        if (
+            boutonValiderRepas
+        ) {
+
+            boutonValiderRepas.disabled =
+                false;
 
 
-        let message =
-            nombreCopies === 1
-                ? "1 repas copié"
-                : `${nombreCopies} repas copiés`;
+            boutonValiderRepas.textContent =
+                "Terminer le repas";
+
+        }
+
+    }
+
+}
+
+
+/* =================================
+VIDER COMPLÈTEMENT UN CRÉNEAU
+================================= */
+
+async function viderCreneau() {
+
+    if (
+        !dateSelectionnee ||
+        !momentSelectionne
+    ) {
+        return;
+    }
+
+
+    const confirmation =
+        window.confirm(
+            "Supprimer tous les plats de ce repas ?"
+        );
+
+
+    if (
+        !confirmation
+    ) {
+        return;
+    }
+
+
+    if (
+        boutonSupprimerRepas
+    ) {
+
+        boutonSupprimerRepas.disabled =
+            true;
+
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .delete()
+                .eq(
+                    "foyer_id",
+                    foyerId
+                )
+                .eq(
+                    "date",
+                    dateSelectionnee
+                )
+                .eq(
+                    "moment",
+                    momentSelectionne
+                );
 
 
         if (
-            nombreIgnores > 0
+            error
         ) {
 
-            message +=
-                nombreIgnores === 1
-                    ? ", 1 créneau déjà occupé"
-                    : `, ${nombreIgnores} créneaux déjà occupés`;
+            throw error;
+
         }
 
 
-        messageCopieSemaine.textContent =
-            `${message} ✓`;
+        await chargerRepasSemaine();
 
 
-        /* =================================
-           6. ALLER SUR LA SEMAINE COPIÉE
-        ================================= */
-
-        setTimeout(
-            async function () {
-
-                fermerPopupCopieSemaine();
+        afficherSemaine();
 
 
-                /*
-                    On affiche directement
-                    la semaine de destination.
-                */
-
-                debutSemaine =
-                    debutSemaineCible;
+        fermerPopupMultiRepas();
 
 
-                await rafraichirPlanning();
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur suppression créneau :",
+            erreur
+        );
+
+
+        afficherMessagePlanning(
+            erreur.message ||
+            "Impossible de supprimer le repas.",
+            "erreur"
+        );
+
+
+    } finally {
+
+        if (
+            boutonSupprimerRepas
+        ) {
+
+            boutonSupprimerRepas.disabled =
+                false;
+
+        }
+
+    }
+
+}
+
+
+/* =================================
+NAVIGATION ENTRE LES SEMAINES
+================================= */
+
+async function changerSemaine(
+    nombreSemaines
+) {
+
+    debutSemaine =
+        ajouterJours(
+            debutSemaine,
+            nombreSemaines * 7
+        );
+
+
+    try {
+
+        await chargerRepasSemaine();
+
+
+        afficherSemaine();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur changement semaine :",
+            erreur
+        );
+
+
+        if (
+            grilleSemaine
+        ) {
+
+            grilleSemaine.innerHTML =
+                "<p>Impossible de charger cette semaine.</p>";
+
+        }
+
+    }
+
+}
+
+
+/* =================================
+REVENIR À AUJOURD'HUI
+================================= */
+
+async function revenirAujourdhui() {
+
+    debutSemaine =
+        obtenirDebutSemaine(
+            new Date()
+        );
+
+
+    try {
+
+        await chargerRepasSemaine();
+
+
+        afficherSemaine();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur retour aujourd'hui :",
+            erreur
+        );
+
+    }
+
+}
+
+
+/* =================================
+COPIE DE SEMAINE
+================================= */
+
+function ouvrirPopupCopie() {
+
+    if (
+        !popupCopieSemaine
+    ) {
+        return;
+    }
+
+
+    afficherMessageCopie(
+        ""
+    );
+
+
+    popupCopieSemaine.hidden =
+        false;
+
+}
+
+
+function fermerPopupCopie() {
+
+    if (
+        !popupCopieSemaine
+    ) {
+        return;
+    }
+
+
+    popupCopieSemaine.hidden =
+        true;
+
+
+    afficherMessageCopie(
+        ""
+    );
+
+}
+
+
+/* =================================
+VALIDER COPIE SEMAINE
+================================= */
+
+async function validerCopieSemaine() {
+
+    const choix =
+        document.querySelector(
+            'input[name="destination-copie-semaine"]:checked'
+        );
+
+
+    if (
+        !choix
+    ) {
+
+        afficherMessageCopie(
+            "Choisis une semaine de destination.",
+            "erreur"
+        );
+
+        return;
+
+    }
+
+
+    const decalage =
+        choix.value ===
+            "precedente"
+            ? -7
+            : 7;
+
+
+    const nouveauDebut =
+        ajouterJours(
+            debutSemaine,
+            decalage
+        );
+
+
+    if (
+        repasSemaine.length === 0
+    ) {
+
+        afficherMessageCopie(
+            "Il n'y a aucun repas à copier.",
+            "erreur"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        boutonValiderCopieSemaine
+    ) {
+
+        boutonValiderCopieSemaine.disabled =
+            true;
+
+
+        boutonValiderCopieSemaine.textContent =
+            "Copie…";
+
+    }
+
+
+    try {
+
+        /*
+            On recrée chaque repas
+            avec exactement le même
+            décalage dans la semaine.
+        */
+
+        const lignes =
+            repasSemaine.map(
+                function (
+                    repas
+                ) {
+
+                    const dateOriginale =
+                        creerDateDepuisISO(
+                            repas.date
+                        );
+
+
+                    const nouvelleDate =
+                        ajouterJours(
+                            dateOriginale,
+                            decalage
+                        );
+
+
+                    return {
+
+                        foyer_id:
+                            foyerId,
+
+                        date:
+                            formaterDateISO(
+                                nouvelleDate
+                            ),
+
+                        moment:
+                            repas.moment,
+
+                        nom:
+                            repas.nom,
+
+                        recette_id:
+                            repas.recette_id,
+
+                        personnes:
+                            repas.personnes,
+
+                        created_by:
+                            utilisateurConnecte.id
+
+                    };
+
+                }
+            );
+
+
+        const dateFinDestination =
+            ajouterJours(
+                nouveauDebut,
+                6
+            );
+
+
+        /*
+            On vide d'abord la semaine
+            de destination pour éviter
+            les doublons.
+        */
+
+        const {
+            error: erreurSuppression
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .delete()
+                .eq(
+                    "foyer_id",
+                    foyerId
+                )
+                .gte(
+                    "date",
+                    formaterDateISO(
+                        nouveauDebut
+                    )
+                )
+                .lte(
+                    "date",
+                    formaterDateISO(
+                        dateFinDestination
+                    )
+                );
+
+
+        if (
+            erreurSuppression
+        ) {
+
+            throw erreurSuppression;
+
+        }
+
+
+        const {
+            error: erreurInsertion
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .insert(
+                    lignes
+                );
+
+
+        if (
+            erreurInsertion
+        ) {
+
+            throw erreurInsertion;
+
+        }
+
+
+        afficherMessageCopie(
+            "La semaine a bien été copiée.",
+            "succes"
+        );
+
+
+        /*
+            Petit délai uniquement pour
+            laisser voir la confirmation.
+        */
+
+        window.setTimeout(
+            function () {
+
+                fermerPopupCopie();
 
             },
-            900
+            700
         );
 
 
@@ -628,102 +1697,447 @@ async function copierSemainePlanning() {
     ) {
 
         console.error(
-            "Erreur copie de semaine :",
+            "Erreur copie semaine :",
             erreur
         );
 
 
-        messageCopieSemaine.textContent =
+        afficherMessageCopie(
             erreur.message ||
-            "Impossible de copier cette semaine.";
+            "Impossible de copier la semaine.",
+            "erreur"
+        );
 
 
-        boutonValiderCopieSemaine.disabled =
-            false;
+    } finally {
+
+        if (
+            boutonValiderCopieSemaine
+        ) {
+
+            boutonValiderCopieSemaine.disabled =
+                false;
 
 
-        boutonValiderCopieSemaine.textContent =
-            "Copier les repas";
+            boutonValiderCopieSemaine.textContent =
+                "Copier les repas";
+
+        }
+
     }
+
 }
 
 
 /* =================================
-   ÉVÉNEMENTS COPIE SEMAINE
+ÉVÉNEMENTS NAVIGATION
 ================================= */
 
-boutonCopierSemaine.addEventListener(
-    "click",
-    ouvrirPopupCopieSemaine
-);
+if (
+    boutonSemainePrecedente
+) {
+
+    boutonSemainePrecedente
+        .addEventListener(
+            "click",
+            function () {
+
+                changerSemaine(
+                    -1
+                );
+
+            }
+        );
+
+}
 
 
-boutonFermerCopieSemaine.addEventListener(
-    "click",
-    fermerPopupCopieSemaine
-);
+if (
+    boutonSemaineSuivante
+) {
+
+    boutonSemaineSuivante
+        .addEventListener(
+            "click",
+            function () {
+
+                changerSemaine(
+                    1
+                );
+
+            }
+        );
+
+}
 
 
-boutonValiderCopieSemaine.addEventListener(
-    "click",
-    copierSemainePlanning
-);
+if (
+    boutonAujourdhui
+) {
+
+    boutonAujourdhui
+        .addEventListener(
+            "click",
+            revenirAujourdhui
+        );
+
+}
 
 
-popupCopieSemaine.addEventListener(
-    "click",
-    function (evenement) {
+/* =================================
+ÉVÉNEMENTS POPUP REPAS
+================================= */
 
-        if (
-            evenement.target ===
-            popupCopieSemaine
+if (
+    boutonFermerPopupRepas
+) {
+
+    boutonFermerPopupRepas
+        .addEventListener(
+            "click",
+            fermerPopupMultiRepas
+        );
+
+}
+
+
+if (
+    champRechercheRecette
+) {
+
+    champRechercheRecette
+        .addEventListener(
+            "input",
+            function () {
+
+                afficherResultatsRecettes(
+                    champRechercheRecette
+                        .value
+                );
+
+            }
+        );
+
+}
+
+
+if (
+    boutonAjouterPlatManuel
+) {
+
+    boutonAjouterPlatManuel
+        .addEventListener(
+            "click",
+            ajouterPlatManuel
+        );
+
+}
+
+
+if (
+    champNomRepasLibre
+) {
+
+    champNomRepasLibre
+        .addEventListener(
+            "keydown",
+            function (
+                evenement
+            ) {
+
+                if (
+                    evenement.key ===
+                    "Enter"
+                ) {
+
+                    evenement.preventDefault();
+
+
+                    ajouterPlatManuel();
+
+                }
+
+            }
+        );
+
+}
+
+
+if (
+    boutonValiderRepas
+) {
+
+    boutonValiderRepas
+        .addEventListener(
+            "click",
+            enregistrerCreneauComplet
+        );
+
+}
+
+
+if (
+    boutonSupprimerRepas
+) {
+
+    boutonSupprimerRepas
+        .addEventListener(
+            "click",
+            viderCreneau
+        );
+
+}
+
+
+/* =================================
+FERMER EN CLIQUANT SUR LE FOND
+================================= */
+
+if (
+    popupRepas
+) {
+
+    popupRepas.addEventListener(
+        "click",
+        function (
+            evenement
         ) {
 
-            fermerPopupCopieSemaine();
+            if (
+                evenement.target ===
+                popupRepas
+            ) {
+
+                fermerPopupMultiRepas();
+
+            }
+
         }
+    );
+
+}
+
+
+/* =================================
+ÉVÉNEMENTS COPIE
+================================= */
+
+if (
+    boutonCopierSemaine
+) {
+
+    boutonCopierSemaine
+        .addEventListener(
+            "click",
+            ouvrirPopupCopie
+        );
+
+}
+
+
+if (
+    boutonFermerCopieSemaine
+) {
+
+    boutonFermerCopieSemaine
+        .addEventListener(
+            "click",
+            fermerPopupCopie
+        );
+
+}
+
+
+if (
+    boutonValiderCopieSemaine
+) {
+
+    boutonValiderCopieSemaine
+        .addEventListener(
+            "click",
+            validerCopieSemaine
+        );
+
+}
+
+
+if (
+    popupCopieSemaine
+) {
+
+    popupCopieSemaine
+        .addEventListener(
+            "click",
+            function (
+                evenement
+            ) {
+
+                if (
+                    evenement.target ===
+                    popupCopieSemaine
+                ) {
+
+                    fermerPopupCopie();
+
+                }
+
+            }
+        );
+
+}
+
+
+/* =================================
+TOUCHE ÉCHAP
+================================= */
+
+document.addEventListener(
+    "keydown",
+    function (
+        evenement
+    ) {
+
+        if (
+            evenement.key !==
+            "Escape"
+        ) {
+            return;
+        }
+
+
+        if (
+            popupRepas &&
+            !popupRepas.hidden
+        ) {
+
+            fermerPopupMultiRepas();
+
+            return;
+
+        }
+
+
+        if (
+            popupCopieSemaine &&
+            !popupCopieSemaine.hidden
+        ) {
+
+            fermerPopupCopie();
+
+        }
+
     }
 );
 
 
 /* =================================
-   NAVIGATION SEMAINE
+PERMETTRE À planning-ui.js
+D'OUVRIR LA NOUVELLE POPUP
 ================================= */
 
-boutonSemainePrecedente.addEventListener(
-    "click",
-    async function () {
+/*
+    Très important.
 
-        debutSemaine =
-            ajouterJours(
-                debutSemaine,
-                -7
-            );
+    Quand planning-ui.js crée les boutons
+    "+ Ajouter", il pourra appeler :
 
+    window.ouvrirPopupMultiRepas(
+        date,
+        "midi"
+    );
 
-        await rafraichirPlanning();
-    }
-);
+    ou :
 
+    window.ouvrirPopupMultiRepas(
+        date,
+        "soir"
+    );
+*/
 
-boutonSemaineSuivante.addEventListener(
-    "click",
-    async function () {
-
-        debutSemaine =
-            ajouterJours(
-                debutSemaine,
-                7
-            );
+window.ouvrirPopupMultiRepas =
+    ouvrirPopupMultiRepas;
 
 
-        await rafraichirPlanning();
-    }
-);
+/* =================================
+CHARGEMENT INITIAL
+================================= */
+
+async function initialiserPlanning() {
+
+    console.log(
+        "Initialisation du planning…"
+    );
 
 
-boutonAujourdhui.addEventListener(
-    "click",
-    async function () {
+    try {
+
+        /*
+            1. UTILISATEUR + FOYER
+        */
+
+        const utilisateurValide =
+            await recupererUtilisateurEtFoyer();
+
+
+        if (
+            !utilisateurValide
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+            2. INFORMATIONS DU HEADER
+
+            Cette fonction vient normalement
+            de session.js.
+
+            On ne bloque surtout pas le
+            planning si elle n'existe pas.
+        */
+
+        if (
+            typeof chargerInformationsUtilisateur ===
+            "function"
+        ) {
+
+            try {
+
+                await chargerInformationsUtilisateur();
+
+            } catch (
+                erreur
+            ) {
+
+                console.warn(
+                    "Impossible de charger les informations du header :",
+                    erreur
+                );
+
+            }
+
+        }
+
+
+        /*
+            3. NOMBRE DE PERSONNES
+        */
+
+        await chargerNombrePersonnesParDefaut();
+
+
+        /*
+            4. RECETTES
+        */
+
+        await chargerRecettes();
+
+
+        /*
+            5. SEMAINE ACTUELLE
+        */
 
         debutSemaine =
             obtenirDebutSemaine(
@@ -731,734 +2145,77 @@ boutonAujourdhui.addEventListener(
             );
 
 
-        await rafraichirPlanning();
-    }
-);
-
-
-/* =================================
-   CLICS DANS LE PLANNING
-================================= */
-
-grilleSemaine.addEventListener(
-    "click",
-    function (evenement) {
-
-        const boutonAjouter =
-            evenement.target.closest(
-                ".bouton-ajouter-repas"
-            );
-
-
-        if (boutonAjouter) {
-
-            recetteSelectionneePlanning =
-                null;
-
-
-            modeRepasPlanning =
-                "recette";
-
-
-            ouvrirPopup(
-                boutonAjouter.dataset.date,
-                boutonAjouter.dataset.moment
-            );
-
-
-            definirNombrePersonnes();
-
-
-            boutonValiderRepasLibre.textContent =
-                "Ajouter au planning";
-
-
-            return;
-        }
-
-
-        const boutonModifier =
-            evenement.target.closest(
-                ".bouton-editer-repas"
-            );
-
-
-        if (!boutonModifier) {
-            return;
-        }
-
-
-        evenement.preventDefault();
-
-        evenement.stopPropagation();
-
-
-        const repas =
-            trouverRepasParId(
-                boutonModifier.dataset.repasId
-            );
-
-
-        if (!repas) {
-            return;
-        }
-
-
         /*
-            Si le repas possède une recette,
-            on la sélectionne automatiquement.
-        */
-
-        if (repas.recette_id) {
-
-            modeRepasPlanning =
-                "recette";
-
-
-            recetteSelectionneePlanning =
-                recettes.find(
-                    function (recette) {
-
-                        return (
-                            String(recette.id) ===
-                            String(
-                                repas.recette_id
-                            )
-                        );
-                    }
-                ) || null;
-
-        } else {
-
-            modeRepasPlanning =
-                "libre";
-
-
-            recetteSelectionneePlanning =
-                null;
-        }
-
-
-        ouvrirPopup(
-            repas.date,
-            repas.moment,
-            repas
-        );
-
-
-        definirNombrePersonnes(
-            repas
-        );
-
-
-        boutonValiderRepasLibre.textContent =
-            "Enregistrer les modifications";
-
-
-        setTimeout(
-            marquerRecetteSelectionnee,
-            0
-        );
-    }
-);
-
-/* =================================
-   FERMER POP-UP
-================================= */
-
-boutonFermerPopup.addEventListener(
-    "click",
-    fermerPopup
-);
-
-
-popupRepas.addEventListener(
-    "click",
-    function (evenement) {
-
-        if (
-            evenement.target ===
-            popupRepas
-        ) {
-
-            fermerPopup();
-        }
-    }
-);
-
-
-document.addEventListener(
-    "keydown",
-    function (evenement) {
-
-        /*
-            Popup repas
-        */
-
-        if (
-            evenement.key ===
-                "Escape" &&
-            !popupRepas.hidden
-        ) {
-
-            fermerPopup();
-
-            return;
-        }
-
-
-        /*
-            Popup copie semaine
-        */
-
-        if (
-            evenement.key ===
-                "Escape" &&
-            !popupCopieSemaine.hidden
-        ) {
-
-            fermerPopupCopieSemaine();
-        }
-    }
-);
-
-
-/* =================================
-   TYPE DE REPAS
-================================= */
-
-boutonChoisirRecette.addEventListener(
-    "click",
-    function () {
-
-        modeRepasPlanning =
-            "recette";
-
-
-        afficherModeRecette();
-
-
-        messagePlanning.textContent =
-            "";
-
-
-        /*
-            Si une recette avait déjà
-            été sélectionnée, on conserve
-            la sélection.
-        */
-
-        setTimeout(
-            marquerRecetteSelectionnee,
-            0
-        );
-    }
-);
-
-
-boutonChoisirLibre.addEventListener(
-    "click",
-    function () {
-
-        modeRepasPlanning =
-            "libre";
-
-
-        afficherModeLibre();
-
-
-        messagePlanning.textContent =
-            "";
-    }
-);
-
-
-/* =================================
-   RECHERCHE RECETTES
-================================= */
-
-champRechercheRecette.addEventListener(
-    "input",
-    function () {
-
-        afficherResultatsRecettes(
-            champRechercheRecette.value
-        );
-
-
-        marquerRecetteSelectionnee();
-    }
-);
-
-
-/* =================================
-   CHOISIR UNE RECETTE
-================================= */
-
-resultatsRecettes.addEventListener(
-    "click",
-    function (evenement) {
-
-        const bouton =
-            evenement.target.closest(
-                "[data-recette-id]"
-            );
-
-
-        if (!bouton) {
-            return;
-        }
-
-
-        const recette =
-            recettes.find(
-                function (element) {
-
-                    return (
-                        String(element.id) ===
-                        String(
-                            bouton.dataset.recetteId
-                        )
-                    );
-                }
-            );
-
-
-        if (!recette) {
-            return;
-        }
-
-
-        /*
-            IMPORTANT :
-            on n'enregistre plus ici.
-
-            On sélectionne seulement
-            la recette.
-        */
-
-        recetteSelectionneePlanning =
-            recette;
-
-
-        marquerRecetteSelectionnee();
-
-
-        messagePlanning.textContent =
-            `Recette sélectionnée : ${recette.nom}`;
-    }
-);
-
-
-/* =================================
-   VALIDATION DU REPAS
-   RECETTE OU REPAS LIBRE
-================================= */
-
-boutonValiderRepasLibre.addEventListener(
-    "click",
-    async function () {
-
-        messagePlanning.textContent =
-            "";
-
-
-        let personnes;
-
-
-        try {
-
-            personnes =
-                recupererNombrePersonnes();
-
-        } catch (erreur) {
-
-            messagePlanning.textContent =
-                erreur.message;
-
-            return;
-        }
-
-
-        /*
-            =========================
-            MODE RECETTE
-            =========================
-        */
-
-        if (
-            modeRepasPlanning ===
-            "recette"
-        ) {
-
-            if (
-                !recetteSelectionneePlanning
-            ) {
-
-                messagePlanning.textContent =
-                    "Choisis une recette.";
-
-                return;
-            }
-
-
-            boutonValiderRepasLibre.disabled =
-                true;
-
-
-            boutonValiderRepasLibre.textContent =
-                repasEnModification
-                    ? "Modification…"
-                    : "Ajout…";
-
-
-            try {
-
-                if (
-                    repasEnModification
-                ) {
-
-                    await modifierRepas(
-                        recetteSelectionneePlanning.nom,
-                        recetteSelectionneePlanning.id,
-                        personnes
-                    );
-
-                } else {
-
-                    await enregistrerRepas(
-                        recetteSelectionneePlanning.nom,
-                        recetteSelectionneePlanning.id,
-                        personnes
-                    );
-                }
-
-
-                fermerPopup();
-
-
-                recetteSelectionneePlanning =
-                    null;
-
-
-                await rafraichirPlanning();
-
-
-            } catch (erreur) {
-
-                console.error(
-                    "Erreur ajout/modification recette au planning :",
-                    erreur
-                );
-
-
-                messagePlanning.textContent =
-                    erreur.message ||
-                    "Impossible d'enregistrer le repas.";
-
-
-            } finally {
-
-                boutonValiderRepasLibre.disabled =
-                    false;
-
-
-                boutonValiderRepasLibre.textContent =
-                    "Ajouter au planning";
-            }
-
-
-            return;
-        }
-
-
-        /*
-            =========================
-            MODE REPAS LIBRE
-            =========================
-        */
-
-        const nom =
-            champRepasLibre
-                .value
-                .trim();
-
-
-        if (!nom) {
-
-            messagePlanning.textContent =
-                "Renseigne le nom du repas.";
-
-            return;
-        }
-
-
-        boutonValiderRepasLibre.disabled =
-            true;
-
-
-        boutonValiderRepasLibre.textContent =
-            repasEnModification
-                ? "Modification…"
-                : "Ajout…";
-
-
-        try {
-
-            if (
-                repasEnModification
-            ) {
-
-                await modifierRepas(
-                    nom,
-                    null,
-                    personnes
-                );
-
-            } else {
-
-                await enregistrerRepas(
-                    nom,
-                    null,
-                    personnes
-                );
-            }
-
-
-            fermerPopup();
-
-
-            recetteSelectionneePlanning =
-                null;
-
-
-            await rafraichirPlanning();
-
-
-        } catch (erreur) {
-
-            console.error(
-                "Erreur ajout/modification repas libre :",
-                erreur
-            );
-
-
-            messagePlanning.textContent =
-                erreur.message ||
-                "Impossible d'enregistrer le repas.";
-
-
-        } finally {
-
-            boutonValiderRepasLibre.disabled =
-                false;
-
-
-            boutonValiderRepasLibre.textContent =
-                "Ajouter au planning";
-        }
-    }
-);
-
-
-/* =================================
-   VIDER UN CRÉNEAU
-================================= */
-
-boutonSupprimerRepas.addEventListener(
-    "click",
-    async function () {
-
-        if (
-            !repasEnModification
-        ) {
-
-            return;
-        }
-
-
-        boutonSupprimerRepas.disabled =
-            true;
-
-
-        boutonSupprimerRepas.textContent =
-            "Suppression…";
-
-
-        messagePlanning.textContent =
-            "";
-
-
-        try {
-
-            await supprimerRepas();
-
-
-            fermerPopup();
-
-
-            recetteSelectionneePlanning =
-                null;
-
-
-            await rafraichirPlanning();
-
-
-        } catch (erreur) {
-
-            console.error(
-                "Erreur suppression repas :",
-                erreur
-            );
-
-
-            messagePlanning.textContent =
-                erreur.message ||
-                "Impossible de vider ce créneau.";
-
-
-        } finally {
-
-            boutonSupprimerRepas.disabled =
-                false;
-
-
-            boutonSupprimerRepas.textContent =
-                "Vider ce créneau";
-        }
-    }
-);
-
-
-/* =================================
-   ENTRÉE POUR REPAS LIBRE
-================================= */
-
-champRepasLibre.addEventListener(
-    "keydown",
-    function (evenement) {
-
-        if (
-            evenement.key ===
-            "Enter"
-        ) {
-
-            evenement.preventDefault();
-
-
-            boutonValiderRepasLibre.click();
-        }
-    }
-);
-
-
-/* =================================
-   CONTRÔLE DU NOMBRE DE PERSONNES
-================================= */
-
-champPersonnesRepas.addEventListener(
-    "change",
-    function () {
-
-        let valeur =
-            Number(
-                champPersonnesRepas.value
-            );
-
-
-        if (
-            !Number.isInteger(valeur) ||
-            valeur < 1
-        ) {
-
-            valeur =
-                nombrePersonnesParDefaut ||
-                2;
-        }
-
-
-        champPersonnesRepas.value =
-            valeur;
-    }
-);
-
-/* =================================
-   INITIALISATION
-================================= */
-
-async function initialiserPlanning() {
-
-    try {
-
-        grilleSemaine.innerHTML = `
-            <p>
-                Chargement du planning…
-            </p>
-        `;
-
-
-        /*
-            1. Utilisateur + foyer
-        */
-
-        const utilisateurPret =
-            await recupererUtilisateurEtFoyer();
-
-
-        if (!utilisateurPret) {
-            return;
-        }
-
-
-        /*
-            2. Nombre habituel
-            de personnes du foyer
-        */
-
-        await chargerNombrePersonnesParDefaut();
-
-
-        /*
-            3. Recettes
-        */
-
-        await chargerRecettes();
-
-
-        /*
-            4. Planning
+            6. REPAS
         */
 
         await chargerRepasSemaine();
 
 
         /*
-            5. Affichage
+            7. AFFICHAGE
         */
 
         afficherSemaine();
 
 
-    } catch (erreur) {
+        console.log(
+            "Planning chargé avec succès."
+        );
+
+
+    } catch (
+        erreur
+    ) {
 
         console.error(
-            "Erreur d'initialisation du planning :",
+            "ERREUR INITIALISATION PLANNING :",
             erreur
         );
 
 
-        grilleSemaine.innerHTML = `
-            <p>
-                Impossible de charger le planning.
-                ${erreur.message || ""}
-            </p>
-        `;
+        if (
+            titreSemaine
+        ) {
+
+            titreSemaine.textContent =
+                "Erreur de chargement";
+
+        }
+
+
+        if (
+            grilleSemaine
+        ) {
+
+            grilleSemaine.innerHTML = `
+                <div class="erreur-chargement-planning">
+
+                    <strong>
+                        Impossible de charger le planning.
+                    </strong>
+
+                    <p>
+                        ${
+                            echapperHTML(
+                                erreur.message ||
+                                "Une erreur est survenue."
+                            )
+                        }
+                    </p>
+
+                </div>
+            `;
+
+        }
+
     }
+
 }
 
 
 /* =================================
-   DÉMARRAGE
+DÉMARRAGE
 ================================= */
 
 initialiserPlanning();
