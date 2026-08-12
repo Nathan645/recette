@@ -6308,6 +6308,276 @@ function preparerModeCuisine() {
     masquerMessageMinuteurCuisine();
 }
 
+/* =================================
+   POPUP AJOUT AU PLANNING
+================================= */
+
+function ouvrirPopupAjoutPlanning() {
+
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        return;
+    }
+
+
+    if (
+        !foyerIdPlanning
+    ) {
+
+        window.alert(
+            "Vous devez appartenir à un foyer pour ajouter une recette au planning."
+        );
+
+        return;
+    }
+
+
+    repasExistantPlanning =
+        null;
+
+
+    momentSelectionnePlanning =
+        "midi";
+
+
+    personnesSelectionneesPlanning =
+        personnesParDefautPlanning;
+
+
+    if (
+        nomRecettePopupPlanning
+    ) {
+
+        nomRecettePopupPlanning.textContent =
+            recetteChargee?.nom ||
+            "";
+    }
+
+
+    if (
+        dateAjoutPlanning
+    ) {
+
+        dateAjoutPlanning.value =
+            obtenirDateAujourdhuiPlanning();
+    }
+
+
+    mettreAJourMomentPlanning();
+
+
+    mettreAJourNombrePersonnesPlanning();
+
+
+    masquerMessagePlanning();
+
+
+    if (
+        confirmerAjoutPlanning
+    ) {
+
+        confirmerAjoutPlanning.disabled =
+            false;
+
+
+        confirmerAjoutPlanning.textContent =
+            "Ajouter au planning";
+    }
+
+
+    popupAjoutPlanning.hidden =
+        false;
+
+
+    document.body.classList.add(
+        "popup-ouverte"
+    );
+}
+
+
+/* =================================
+   FERMER POPUP AJOUT
+================================= */
+
+function fermerPopupAjoutPlanning() {
+
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        return;
+    }
+
+
+    popupAjoutPlanning.hidden =
+        true;
+
+
+    repasExistantPlanning =
+        null;
+
+
+    document.body.classList.remove(
+        "popup-ouverte"
+    );
+}
+
+
+/* =================================
+   MOMENT MIDI / SOIR
+================================= */
+
+function selectionnerMomentPlanning(
+    moment
+) {
+
+    if (
+        moment !== "midi" &&
+        moment !== "soir"
+    ) {
+
+        return;
+    }
+
+
+    momentSelectionnePlanning =
+        moment;
+
+
+    mettreAJourMomentPlanning();
+}
+
+
+/* =================================
+   AFFICHAGE MOMENT
+================================= */
+
+function mettreAJourMomentPlanning() {
+
+    if (
+        boutonMomentMidi
+    ) {
+
+        boutonMomentMidi.classList.toggle(
+            "actif",
+            momentSelectionnePlanning ===
+                "midi"
+        );
+
+
+        boutonMomentMidi.setAttribute(
+            "aria-pressed",
+            momentSelectionnePlanning ===
+                "midi"
+                ? "true"
+                : "false"
+        );
+    }
+
+
+    if (
+        boutonMomentSoir
+    ) {
+
+        boutonMomentSoir.classList.toggle(
+            "actif",
+            momentSelectionnePlanning ===
+                "soir"
+        );
+
+
+        boutonMomentSoir.setAttribute(
+            "aria-pressed",
+            momentSelectionnePlanning ===
+                "soir"
+                ? "true"
+                : "false"
+        );
+    }
+}
+
+
+/* =================================
+   NOMBRE DE PERSONNES
+================================= */
+
+function mettreAJourNombrePersonnesPlanning() {
+
+    if (
+        !nombrePersonnesPlanning
+    ) {
+
+        return;
+    }
+
+
+    nombrePersonnesPlanning.textContent =
+        personnesSelectionneesPlanning;
+}
+
+
+/* =================================
+   MESSAGE POPUP
+================================= */
+
+function afficherMessagePlanning(
+    texte,
+    type = "erreur"
+) {
+
+    if (
+        !messagePopupPlanning
+    ) {
+
+        return;
+    }
+
+
+    messagePopupPlanning.hidden =
+        false;
+
+
+    messagePopupPlanning.textContent =
+        texte;
+
+
+    messagePopupPlanning.classList.remove(
+        "succes",
+        "erreur"
+    );
+
+
+    messagePopupPlanning.classList.add(
+        type
+    );
+}
+
+
+function masquerMessagePlanning() {
+
+    if (
+        !messagePopupPlanning
+    ) {
+
+        return;
+    }
+
+
+    messagePopupPlanning.hidden =
+        true;
+
+
+    messagePopupPlanning.textContent =
+        "";
+
+
+    messagePopupPlanning.classList.remove(
+        "succes",
+        "erreur"
+    );
+}
 
 /* =================================
    PRÉPARER POPUP PLANNING
@@ -6336,7 +6606,7 @@ function preparerPopupPlanning() {
         "midi";
 
 
-    mettreAJourBoutonsMomentPlanning();
+    mettreAJourMomentPlanning();
 
 
     personnesSelectionneesPlanning =
