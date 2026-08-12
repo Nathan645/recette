@@ -1,8 +1,52 @@
+/* =================================
+   ÉLÉMENTS PRINCIPAUX
+================================= */
+
 const contenuRecette =
     document.getElementById(
-        "contenu-recette"
+        "fiche-recette-contenu"
     );
 
+
+const galerieRecette =
+    document.getElementById(
+        "galerie-recette"
+    );
+
+
+const carouselRecette =
+    document.getElementById(
+        "carousel-recette"
+    );
+
+
+const carouselImagesRecette =
+    document.getElementById(
+        "carousel-images-recette"
+    );
+
+
+const boutonPhotoPrecedente =
+    document.getElementById(
+        "photo-precedente"
+    );
+
+
+const boutonPhotoSuivante =
+    document.getElementById(
+        "photo-suivante"
+    );
+
+
+const indicateursCarouselRecette =
+    document.getElementById(
+        "indicateurs-carousel-recette"
+    );
+
+
+/* =================================
+   PARAMÈTRES URL
+================================= */
 
 const parametres =
     new URLSearchParams(
@@ -11,14 +55,60 @@ const parametres =
 
 
 const identifiantRecette =
-    parametres.get("id");
+    parametres.get(
+        "id"
+    );
 
+
+/* =================================
+   ÉTAT
+================================= */
 
 let utilisateurConnecte =
     null;
 
 
 let recetteChargee =
+    null;
+
+
+/*
+    Photos chargées depuis Supabase.
+
+    Chaque élément contient :
+
+    {
+        id,
+        recette_id,
+        chemin,
+        ordre,
+        url
+    }
+*/
+
+let photosRecette =
+    [];
+
+
+/*
+    Index de la photo actuellement
+    affichée dans le carousel.
+*/
+
+let indexPhotoActive =
+    0;
+
+
+/*
+    Positions utilisées pour
+    le swipe mobile.
+*/
+
+let positionTouchDebut =
+    null;
+
+
+let positionTouchFin =
     null;
 
 
@@ -30,7 +120,9 @@ async function chargerRecette() {
 
     try {
 
-        if (!identifiantRecette) {
+        if (
+            !identifiantRecette
+        ) {
 
             throw new Error(
                 "Aucune recette n’a été sélectionnée."
@@ -43,15 +135,22 @@ async function chargerRecette() {
         ========================= */
 
         const {
-            data: donneesUtilisateur,
-            error: erreurUtilisateur
+            data:
+                donneesUtilisateur,
+
+            error:
+                erreurUtilisateur
+
         } =
             await window.supabaseClient
                 .auth
                 .getUser();
 
 
-        if (erreurUtilisateur) {
+        if (
+            erreurUtilisateur
+        ) {
+
             throw erreurUtilisateur;
         }
 
@@ -60,7 +159,9 @@ async function chargerRecette() {
             donneesUtilisateur.user;
 
 
-        if (!utilisateurConnecte) {
+        if (
+            !utilisateurConnecte
+        ) {
 
             window.location.href =
                 "compte.html";
@@ -78,7 +179,9 @@ async function chargerRecette() {
             error
         } =
             await window.supabaseClient
-                .from("recettes")
+                .from(
+                    "recettes"
+                )
                 .select("*")
                 .eq(
                     "id",
@@ -87,12 +190,17 @@ async function chargerRecette() {
                 .single();
 
 
-        if (error) {
+        if (
+            error
+        ) {
+
             throw error;
         }
 
 
-        if (!data) {
+        if (
+            !data
+        ) {
 
             throw new Error(
                 "Cette recette n’existe pas."
@@ -104,12 +212,30 @@ async function chargerRecette() {
             data;
 
 
+        /* =========================
+           PHOTOS
+        ========================= */
+
+        await chargerPhotosRecette(
+            identifiantRecette
+        );
+
+
+        /* =========================
+           AFFICHAGE
+        ========================= */
+
+        afficherGalerieRecette();
+
+
         afficherRecette(
             recetteChargee
         );
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur de chargement de la recette :",
@@ -117,31 +243,287 @@ async function chargerRecette() {
         );
 
 
-        contenuRecette.innerHTML = `
+        /*
+            En cas d'erreur,
+            on masque la galerie.
+        */
 
-            <div class="message">
+        if (
+            galerieRecette
+        ) {
 
-                <h1>
-                    Recette introuvable
-                </h1>
+            galerieRecette.hidden =
+                true;
+        }
 
-                <p>
-                    Cette recette n’existe pas.
-                </p>
 
-                <a href="index.html">
-                    Retourner à toutes les recettes
-                </a>
+        /*
+            Et on affiche le message
+            dans la zone de la fiche.
+        */
 
-            </div>
+        if (
+            contenuRecette
+        ) {
 
-        `;
+            contenuRecette.innerHTML = `
+
+                <div class="message">
+
+                    <h1>
+                        Recette introuvable
+                    </h1>
+
+                    <p>
+                        ${
+                            echapperHtmlRecette(
+                                erreur?.message ||
+                                "Cette recette n’existe pas."
+                            )
+                        }
+                    </p>
+
+                    <a href="index.html">
+                        Retourner à toutes les recettes
+                    </a>
+
+                </div>
+
+            `;
+        }
     }
 }
 
 
 /* =================================
-   OUTILS
+   CHARGER LES PHOTOS
+================================= */
+
+async function chargerPhotosRecette(
+    recetteId
+) {
+
+    photosRecette =
+        [];
+
+
+    if (
+        !recetteId
+    ) {
+
+        return;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "recette_photos"
+            )
+            .select(
+                "id, recette_id, chemin, ordre"
+            )
+            .eq(
+                "recette_id",
+                recetteId
+            )
+            .order(
+                "ordre",
+                {
+                    ascending:
+                        true
+                }
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    const lignes =
+        Array.isArray(
+            data
+        )
+            ? data
+            : [];
+
+
+    /*
+        Aucune photo :
+        on laisse simplement le tableau vide.
+    */
+
+    if (
+        lignes.length ===
+        0
+    ) {
+
+        photosRecette =
+            [];
+
+        return;
+    }
+
+
+    /*
+        Le bucket "recettes" est privé.
+
+        Pour afficher les photos,
+        on crée donc une URL temporaire
+        pour chacune d'elles.
+    */
+
+    photosRecette =
+        await Promise.all(
+            lignes.map(
+                async function (
+                    photo
+                ) {
+
+                    const url =
+                        await creerUrlPhotoRecette(
+                            photo.chemin
+                        );
+
+
+                    return {
+
+                        ...photo,
+
+                        url:
+                            url
+
+                    };
+                }
+            )
+        );
+
+
+    /*
+        Si une URL n'a pas pu être créée,
+        on retire simplement cette photo
+        de la galerie.
+    */
+
+    photosRecette =
+        photosRecette.filter(
+            function (
+                photo
+            ) {
+
+                return Boolean(
+                    photo.url
+                );
+            }
+        );
+
+
+    /*
+        À chaque chargement de recette,
+        on commence par la première photo.
+    */
+
+    indexPhotoActive =
+        0;
+}
+
+
+/* =================================
+   CRÉER UNE URL SIGNÉE
+================================= */
+
+async function creerUrlPhotoRecette(
+    chemin
+) {
+
+    if (
+        !chemin
+    ) {
+
+        return "";
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .storage
+            .from(
+                "recettes"
+            )
+            .createSignedUrl(
+                chemin,
+                60 * 60
+            );
+
+
+    if (
+        error
+    ) {
+
+        console.error(
+            "Impossible de charger une photo :",
+            error
+        );
+
+
+        return "";
+    }
+
+
+    return (
+        data?.signedUrl ||
+        ""
+    );
+}
+
+
+/* =================================
+   OUTILS HTML
+================================= */
+
+function echapperHtmlRecette(
+    valeur
+) {
+
+    return String(
+        valeur ??
+        ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+/* =================================
+   BADGES
 ================================= */
 
 function creerBadges(
@@ -150,8 +532,11 @@ function creerBadges(
 ) {
 
     if (
-        !Array.isArray(valeurs) ||
-        valeurs.length === 0
+        !Array.isArray(
+            valeurs
+        ) ||
+        valeurs.length ===
+            0
     ) {
 
         return "";
@@ -161,6 +546,9 @@ function creerBadges(
     const noms = {
 
         "Grogros":
+            "Grogros",
+
+        "gros-gros":
             "Grogros",
 
         "healthy":
@@ -210,19 +598,27 @@ function creerBadges(
 
         "toute-annee":
             "Toute l'année"
+
     };
 
 
     return valeurs
         .map(
-            function (valeur) {
+            function (
+                valeur
+            ) {
 
                 return `
 
                     <span
                         class="badge-recette ${classeSupplementaire}"
                     >
-                        ${noms[valeur] || valeur}
+                        ${
+                            echapperHtmlRecette(
+                                noms[valeur] ||
+                                valeur
+                            )
+                        }
                     </span>
 
                 `;
@@ -241,7 +637,9 @@ function formaterQuantite(
 ) {
 
     if (
-        Number.isInteger(valeur)
+        Number.isInteger(
+            valeur
+        )
     ) {
 
         return valeur.toString();
@@ -249,7 +647,9 @@ function formaterQuantite(
 
 
     return valeur
-        .toFixed(2)
+        .toFixed(
+            2
+        )
         .replace(
             /\.00$/,
             ""
@@ -264,6 +664,778 @@ function formaterQuantite(
         );
 }
 
+/* =================================
+   AFFICHER LA GALERIE
+================================= */
+
+function afficherGalerieRecette() {
+
+    /*
+        Aucun élément HTML galerie :
+        on ne fait rien.
+    */
+
+    if (
+        !galerieRecette ||
+        !carouselImagesRecette
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Aucune photo :
+        on cache complètement le bloc.
+
+        Les anciennes recettes restent
+        donc exactement comme avant.
+    */
+
+    if (
+        !Array.isArray(
+            photosRecette
+        ) ||
+        photosRecette.length === 0
+    ) {
+
+        galerieRecette.hidden =
+            true;
+
+
+        carouselImagesRecette.innerHTML =
+            "";
+
+
+        if (
+            indicateursCarouselRecette
+        ) {
+
+            indicateursCarouselRecette.innerHTML =
+                "";
+
+            indicateursCarouselRecette.hidden =
+                true;
+        }
+
+
+        if (
+            boutonPhotoPrecedente
+        ) {
+
+            boutonPhotoPrecedente.hidden =
+                true;
+        }
+
+
+        if (
+            boutonPhotoSuivante
+        ) {
+
+            boutonPhotoSuivante.hidden =
+                true;
+        }
+
+
+        return;
+    }
+
+
+    /*
+        Au moins une photo :
+        on affiche la galerie.
+    */
+
+    galerieRecette.hidden =
+        false;
+
+
+    /*
+        Génération des images.
+
+        Elles sont toutes présentes
+        dans le DOM.
+
+        Seule la photo active est visible.
+    */
+
+    carouselImagesRecette.innerHTML =
+        photosRecette
+            .map(
+                function (
+                    photo,
+                    index
+                ) {
+
+                    return `
+
+                        <div
+                            class="slide-recette ${
+                                index ===
+                                indexPhotoActive
+                                    ? "active"
+                                    : ""
+                            }"
+                            data-index-photo="${index}"
+                        >
+
+                            <img
+                                src="${photo.url}"
+                                alt="Photo ${index + 1} de ${echapperHtmlRecette(
+                                    recetteChargee?.nom ||
+                                    "la recette"
+                                )}"
+                                loading="${
+                                    index === 0
+                                        ? "eager"
+                                        : "lazy"
+                                }"
+                            >
+
+                        </div>
+
+                    `;
+                }
+            )
+            .join("");
+
+
+    /*
+        Une seule photo :
+        aucune navigation nécessaire.
+    */
+
+    if (
+        photosRecette.length ===
+        1
+    ) {
+
+        if (
+            boutonPhotoPrecedente
+        ) {
+
+            boutonPhotoPrecedente.hidden =
+                true;
+        }
+
+
+        if (
+            boutonPhotoSuivante
+        ) {
+
+            boutonPhotoSuivante.hidden =
+                true;
+        }
+
+
+        if (
+            indicateursCarouselRecette
+        ) {
+
+            indicateursCarouselRecette.innerHTML =
+                "";
+
+            indicateursCarouselRecette.hidden =
+                true;
+        }
+
+
+        return;
+    }
+
+
+    /*
+        Plusieurs photos :
+        flèches + indicateurs.
+    */
+
+    if (
+        boutonPhotoPrecedente
+    ) {
+
+        boutonPhotoPrecedente.hidden =
+            false;
+    }
+
+
+    if (
+        boutonPhotoSuivante
+    ) {
+
+        boutonPhotoSuivante.hidden =
+            false;
+    }
+
+
+    afficherIndicateursCarousel();
+}
+
+
+/* =================================
+   INDICATEURS DU CAROUSEL
+================================= */
+
+function afficherIndicateursCarousel() {
+
+    if (
+        !indicateursCarouselRecette
+    ) {
+
+        return;
+    }
+
+
+    if (
+        photosRecette.length <=
+        1
+    ) {
+
+        indicateursCarouselRecette.innerHTML =
+            "";
+
+        indicateursCarouselRecette.hidden =
+            true;
+
+        return;
+    }
+
+
+    indicateursCarouselRecette.hidden =
+        false;
+
+
+    indicateursCarouselRecette.innerHTML =
+        photosRecette
+            .map(
+                function (
+                    photo,
+                    index
+                ) {
+
+                    return `
+
+                        <button
+                            type="button"
+                            class="indicateur-carousel-recette ${
+                                index ===
+                                indexPhotoActive
+                                    ? "actif"
+                                    : ""
+                            }"
+                            data-index-photo="${index}"
+                            aria-label="Afficher la photo ${index + 1}"
+                            aria-current="${
+                                index ===
+                                indexPhotoActive
+                                    ? "true"
+                                    : "false"
+                            }"
+                        ></button>
+
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =================================
+   CHANGER DE PHOTO
+================================= */
+
+function afficherPhotoCarousel(
+    nouvelIndex
+) {
+
+    if (
+        photosRecette.length <=
+        1
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Boucle du carousel :
+
+        depuis la dernière photo
+        → suivante = première
+
+        depuis la première
+        → précédente = dernière
+    */
+
+    if (
+        nouvelIndex <
+        0
+    ) {
+
+        nouvelIndex =
+            photosRecette.length -
+            1;
+    }
+
+
+    if (
+        nouvelIndex >=
+        photosRecette.length
+    ) {
+
+        nouvelIndex =
+            0;
+    }
+
+
+    indexPhotoActive =
+        nouvelIndex;
+
+
+    /*
+        Slides.
+    */
+
+    const slides =
+        carouselImagesRecette
+            .querySelectorAll(
+                ".slide-recette"
+            );
+
+
+    slides.forEach(
+        function (
+            slide,
+            index
+        ) {
+
+            slide.classList.toggle(
+                "active",
+                index ===
+                indexPhotoActive
+            );
+        }
+    );
+
+
+    /*
+        Points.
+    */
+
+    if (
+        indicateursCarouselRecette
+    ) {
+
+        const indicateurs =
+            indicateursCarouselRecette
+                .querySelectorAll(
+                    ".indicateur-carousel-recette"
+                );
+
+
+        indicateurs.forEach(
+            function (
+                indicateur,
+                index
+            ) {
+
+                const actif =
+                    index ===
+                    indexPhotoActive;
+
+
+                indicateur.classList.toggle(
+                    "actif",
+                    actif
+                );
+
+
+                indicateur.setAttribute(
+                    "aria-current",
+                    actif
+                        ? "true"
+                        : "false"
+                );
+            }
+        );
+    }
+}
+
+
+/* =================================
+   PHOTO PRÉCÉDENTE
+================================= */
+
+function afficherPhotoPrecedente() {
+
+    afficherPhotoCarousel(
+        indexPhotoActive -
+        1
+    );
+}
+
+
+/* =================================
+   PHOTO SUIVANTE
+================================= */
+
+function afficherPhotoSuivante() {
+
+    afficherPhotoCarousel(
+        indexPhotoActive +
+        1
+    );
+}
+
+
+/* =================================
+   FLÈCHES
+================================= */
+
+if (
+    boutonPhotoPrecedente
+) {
+
+    boutonPhotoPrecedente.addEventListener(
+        "click",
+        function () {
+
+            afficherPhotoPrecedente();
+        }
+    );
+}
+
+
+if (
+    boutonPhotoSuivante
+) {
+
+    boutonPhotoSuivante.addEventListener(
+        "click",
+        function () {
+
+            afficherPhotoSuivante();
+        }
+    );
+}
+
+
+/* =================================
+   CLIC SUR LES POINTS
+================================= */
+
+if (
+    indicateursCarouselRecette
+) {
+
+    indicateursCarouselRecette.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            const indicateur =
+                evenement.target.closest(
+                    ".indicateur-carousel-recette"
+                );
+
+
+            if (
+                !indicateur
+            ) {
+
+                return;
+            }
+
+
+            const index =
+                Number(
+                    indicateur.dataset.indexPhoto
+                );
+
+
+            if (
+                !Number.isInteger(
+                    index
+                )
+            ) {
+
+                return;
+            }
+
+
+            afficherPhotoCarousel(
+                index
+            );
+        }
+    );
+}
+
+
+/* =================================
+   SWIPE MOBILE
+================================= */
+
+if (
+    carouselRecette
+) {
+
+    /*
+        Début du geste.
+    */
+
+    carouselRecette.addEventListener(
+        "touchstart",
+        function (
+            evenement
+        ) {
+
+            if (
+                photosRecette.length <=
+                1
+            ) {
+
+                return;
+            }
+
+
+            const touche =
+                evenement.touches[
+                    0
+                ];
+
+
+            if (
+                !touche
+            ) {
+
+                return;
+            }
+
+
+            positionTouchDebut =
+                touche.clientX;
+
+
+            positionTouchFin =
+                null;
+        },
+        {
+            passive:
+                true
+        }
+    );
+
+
+    /*
+        Mouvement.
+    */
+
+    carouselRecette.addEventListener(
+        "touchmove",
+        function (
+            evenement
+        ) {
+
+            if (
+                positionTouchDebut ===
+                null
+            ) {
+
+                return;
+            }
+
+
+            const touche =
+                evenement.touches[
+                    0
+                ];
+
+
+            if (
+                !touche
+            ) {
+
+                return;
+            }
+
+
+            positionTouchFin =
+                touche.clientX;
+        },
+        {
+            passive:
+                true
+        }
+    );
+
+
+    /*
+        Fin du geste.
+    */
+
+    carouselRecette.addEventListener(
+        "touchend",
+        function () {
+
+            if (
+                positionTouchDebut ===
+                null ||
+                positionTouchFin ===
+                null
+            ) {
+
+                positionTouchDebut =
+                    null;
+
+                positionTouchFin =
+                    null;
+
+                return;
+            }
+
+
+            const difference =
+                positionTouchFin -
+                positionTouchDebut;
+
+
+            /*
+                Il faut environ 45 px
+                de mouvement horizontal.
+
+                Ça évite de changer de photo
+                au moindre petit mouvement
+                de doigt.
+            */
+
+            const seuil =
+                45;
+
+
+            if (
+                Math.abs(
+                    difference
+                ) <
+                seuil
+            ) {
+
+                positionTouchDebut =
+                    null;
+
+                positionTouchFin =
+                    null;
+
+                return;
+            }
+
+
+            /*
+                Glissement vers la gauche :
+                photo suivante.
+            */
+
+            if (
+                difference <
+                0
+            ) {
+
+                afficherPhotoSuivante();
+
+            } else {
+
+                /*
+                    Glissement vers la droite :
+                    photo précédente.
+                */
+
+                afficherPhotoPrecedente();
+            }
+
+
+            positionTouchDebut =
+                null;
+
+
+            positionTouchFin =
+                null;
+        },
+        {
+            passive:
+                true
+        }
+    );
+}
+
+
+/* =================================
+   NAVIGATION CLAVIER
+================================= */
+
+document.addEventListener(
+    "keydown",
+    function (
+        evenement
+    ) {
+
+        /*
+            Pas de galerie ou seulement
+            une photo : rien à faire.
+        */
+
+        if (
+            !galerieRecette ||
+            galerieRecette.hidden ||
+            photosRecette.length <=
+                1
+        ) {
+
+            return;
+        }
+
+
+        /*
+            On évite de changer de photo
+            si l'utilisateur écrit dans
+            un champ quelconque.
+        */
+
+        const cible =
+            evenement.target;
+
+
+        if (
+            cible &&
+            (
+                cible.tagName ===
+                    "INPUT" ||
+                cible.tagName ===
+                    "TEXTAREA" ||
+                cible.tagName ===
+                    "SELECT"
+            )
+        ) {
+
+            return;
+        }
+
+
+        if (
+            evenement.key ===
+            "ArrowLeft"
+        ) {
+
+            afficherPhotoPrecedente();
+
+
+        } else if (
+            evenement.key ===
+            "ArrowRight"
+        ) {
+
+            afficherPhotoSuivante();
+        }
+    }
+);
 
 /* =================================
    POP-UP DE SUPPRESSION
@@ -272,7 +1444,9 @@ function formaterQuantite(
 function demanderConfirmationSuppression() {
 
     return new Promise(
-        function (resolve) {
+        function (
+            resolve
+        ) {
 
             const fond =
                 document.createElement(
@@ -303,8 +1477,8 @@ function demanderConfirmationSuppression() {
 
                     <p>
                         Cette action est définitive.
-                        La recette sera supprimée
-                        du carnet familial.
+                        La recette ainsi que ses photos
+                        seront supprimées.
                     </p>
 
                     <div class="actions-popup">
@@ -356,6 +1530,7 @@ function demanderConfirmationSuppression() {
 
                 fond.remove();
 
+
                 resolve(
                     resultat
                 );
@@ -388,7 +1563,9 @@ function demanderConfirmationSuppression() {
 
             fond.addEventListener(
                 "click",
-                function (evenement) {
+                function (
+                    evenement
+                ) {
 
                     if (
                         evenement.target ===
@@ -407,6 +1584,68 @@ function demanderConfirmationSuppression() {
 
 
 /* =================================
+   SUPPRESSION DES PHOTOS STORAGE
+================================= */
+
+async function supprimerPhotosRecetteStorage() {
+
+    if (
+        !Array.isArray(
+            photosRecette
+        ) ||
+        photosRecette.length === 0
+    ) {
+
+        return;
+    }
+
+
+    const chemins =
+        photosRecette
+            .map(
+                function (
+                    photo
+                ) {
+
+                    return photo.chemin;
+                }
+            )
+            .filter(
+                Boolean
+            );
+
+
+    if (
+        chemins.length === 0
+    ) {
+
+        return;
+    }
+
+
+    const {
+        error
+    } =
+        await window.supabaseClient
+            .storage
+            .from(
+                "recettes"
+            )
+            .remove(
+                chemins
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+}
+
+
+/* =================================
    SUPPRESSION SUPABASE
 ================================= */
 
@@ -414,8 +1653,9 @@ async function supprimerRecette() {
 
     /*
         Vérification côté interface.
-        La vraie sécurité est assurée
-        par les policies RLS Supabase.
+
+        La vraie sécurité reste
+        assurée par les policies RLS.
     */
 
     if (
@@ -428,6 +1668,7 @@ async function supprimerRecette() {
         window.alert(
             "Vous ne pouvez pas supprimer cette recette."
         );
+
 
         return;
     }
@@ -469,11 +1710,29 @@ async function supprimerRecette() {
 
     try {
 
+        /*
+            1. Suppression des fichiers
+               dans Storage.
+
+            La table recette_photos est
+            supprimée automatiquement si
+            ON DELETE CASCADE est bien présent.
+        */
+
+        await supprimerPhotosRecetteStorage();
+
+
+        /*
+            2. Suppression de la recette.
+        */
+
         const {
             error
         } =
             await window.supabaseClient
-                .from("recettes")
+                .from(
+                    "recettes"
+                )
                 .delete()
                 .eq(
                     "id",
@@ -485,7 +1744,10 @@ async function supprimerRecette() {
                 );
 
 
-        if (error) {
+        if (
+            error
+        ) {
+
             throw error;
         }
 
@@ -494,7 +1756,9 @@ async function supprimerRecette() {
             "index.html";
 
 
-    } catch (erreur) {
+    } catch (
+        erreur
+    ) {
 
         console.error(
             "Erreur pendant la suppression :",
@@ -577,7 +1841,8 @@ function afficherRecette(
     ========================= */
 
     const visibiliteHtml =
-        recette.visibilite === "foyer"
+        recette.visibilite ===
+        "foyer"
             ? `
 
                 <div
@@ -681,7 +1946,7 @@ function afficherRecette(
                     /*
                         Compatibilité avec
                         les anciennes recettes
-                        éventuellement enregistrées
+                        éventuellement stockées
                         sous forme de texte.
                     */
 
@@ -703,7 +1968,9 @@ function afficherRecette(
                                 <label
                                     for="ingredient-${index}"
                                 >
-                                    ${ingredient}
+                                    ${echapperHtmlRecette(
+                                        ingredient
+                                    )}
                                 </label>
 
                             </li>
@@ -723,9 +1990,12 @@ function afficherRecette(
 
                     if (
                         ingredientProportionnel &&
-                        ingredient.quantite !== null &&
-                        ingredient.quantite !== undefined &&
-                        ingredient.quantite !== ""
+                        ingredient.quantite !==
+                            null &&
+                        ingredient.quantite !==
+                            undefined &&
+                        ingredient.quantite !==
+                            ""
                     ) {
 
                         quantiteAffichee =
@@ -742,9 +2012,12 @@ function afficherRecette(
 
 
                     if (
-                        quantiteAffichee !== null &&
-                        quantiteAffichee !== undefined &&
-                        quantiteAffichee !== ""
+                        quantiteAffichee !==
+                            null &&
+                        quantiteAffichee !==
+                            undefined &&
+                        quantiteAffichee !==
+                            ""
                     ) {
 
                         const unite =
@@ -759,7 +2032,8 @@ function afficherRecette(
                                     quantiteAffichee
                                 )
                             )}${unite} ${
-                                ingredient.nom || ""
+                                ingredient.nom ||
+                                ""
                             }`;
                     }
 
@@ -777,7 +2051,9 @@ function afficherRecette(
                             <label
                                 for="ingredient-${index}"
                             >
-                                ${texteIngredient}
+                                ${echapperHtmlRecette(
+                                    texteIngredient
+                                )}
                             </label>
 
                         </li>
@@ -787,6 +2063,7 @@ function afficherRecette(
             )
             .join("");
     }
+
 
     /* =========================
        ÉTAPES
@@ -821,7 +2098,9 @@ function afficherRecette(
                             <label
                                 for="etape-${index}"
                             >
-                                ${etape}
+                                ${echapperHtmlRecette(
+                                    etape
+                                )}
                             </label>
 
                         </li>
@@ -847,7 +2126,9 @@ function afficherRecette(
                     </h2>
 
                     <p>
-                        ${recette.astuce}
+                        ${echapperHtmlRecette(
+                            recette.astuce
+                        )}
                     </p>
 
                 </aside>
@@ -869,32 +2150,39 @@ function afficherRecette(
                 <div class="badges-principaux">
 
                     <span class="categorie">
-                        ${
+                        ${echapperHtmlRecette(
                             recette.categorie_affichee ||
                             recette.categorie ||
                             ""
-                        }
+                        )}
                     </span>
 
                 </div>
 
 
                 <h1>
-                    ${recette.nom}
+                    ${echapperHtmlRecette(
+                        recette.nom
+                    )}
                 </h1>
 
 
                 <p class="introduction">
-                    ${recette.description || ""}
+                    ${echapperHtmlRecette(
+                        recette.description ||
+                        ""
+                    )}
                 </p>
 
 
                 ${
                     badgesRecette
                         ? `
+
                             <div class="badges-recette">
                                 ${badgesRecette}
                             </div>
+
                         `
                         : ""
                 }
@@ -985,7 +2273,10 @@ function afficherRecette(
                         </strong>
 
                         <span>
-                            ${recette.difficulte}
+                            ${echapperHtmlRecette(
+                                recette.difficulte ||
+                                ""
+                            )}
                         </span>
 
                     </div>
@@ -1031,10 +2322,6 @@ function afficherRecette(
                 ${astuceHtml}
 
 
-                <!-- =========================
-                     VISIBILITÉ
-                ========================== -->
-
                 ${visibiliteHtml}
 
 
@@ -1079,11 +2366,9 @@ function afficherRecette(
         );
 
 
-    /*
-        Le bouton Supprimer n'existe
-        que si l'utilisateur connecté
-        est le créateur.
-    */
+    /* =========================
+       SUPPRESSION
+    ========================= */
 
     if (
         boutonSupprimer
@@ -1140,10 +2425,8 @@ function afficherRecette(
                                     "ingredient-coche",
                                     caseIngredient.checked
                                 );
-
                         }
                     );
-
             }
         );
     }
@@ -1165,6 +2448,7 @@ function afficherRecette(
 
         activerCasesIngredients();
     }
+
 
     /* =========================
        BOUTON -
@@ -1259,9 +2543,174 @@ function afficherRecette(
     );
 }
 
+/* =================================
+   NETTOYAGE DES URLS SIGNÉES
+================================= */
+
+/*
+    Les signed URLs Supabase n'ont pas besoin
+    d'être "révoquées" comme des blob URLs.
+
+    On remet simplement l'état local à zéro
+    lorsque la page est quittée.
+*/
+
+function nettoyerGalerieRecette() {
+
+    photosRecette =
+        [];
+
+    indexPhotoActive =
+        0;
+
+    positionTouchDebut =
+        null;
+
+    positionTouchFin =
+        null;
+}
+
+
+/* =================================
+   QUITTER LA PAGE
+================================= */
+
+window.addEventListener(
+    "pagehide",
+    function () {
+
+        nettoyerGalerieRecette();
+    }
+);
+
+
+/* =================================
+   SÉCURITÉ SI ÉLÉMENTS ABSENTS
+================================= */
+
+function verifierElementsRecette() {
+
+    if (
+        !contenuRecette
+    ) {
+
+        console.error(
+            "Le conteneur #fiche-recette-contenu est introuvable."
+        );
+
+        return false;
+    }
+
+
+    /*
+        La galerie peut techniquement
+        être absente sans empêcher
+        l'affichage de la recette.
+
+        On affiche simplement un warning.
+    */
+
+    if (
+        !galerieRecette ||
+        !carouselRecette ||
+        !carouselImagesRecette
+    ) {
+
+        console.warn(
+            "La galerie photo n'est pas complètement présente dans recette.html."
+        );
+    }
+
+
+    return true;
+}
+
+
+/* =================================
+   INITIALISATION
+================================= */
+
+async function initialiserPageRecette() {
+
+    const elementsValides =
+        verifierElementsRecette();
+
+
+    if (
+        !elementsValides
+    ) {
+
+        return;
+    }
+
+
+    /*
+        État de chargement initial.
+    */
+
+    contenuRecette.innerHTML = `
+
+        <div class="message">
+            Chargement de la recette…
+        </div>
+
+    `;
+
+
+    if (
+        galerieRecette
+    ) {
+
+        galerieRecette.hidden =
+            true;
+    }
+
+
+    try {
+
+        await chargerRecette();
+
+
+        console.log(
+            "Recette chargée :",
+            {
+
+                recette:
+                    recetteChargee?.id,
+
+                photos:
+                    photosRecette.length,
+
+                photoActive:
+                    indexPhotoActive
+
+            }
+        );
+
+
+    } catch (
+        erreur
+    ) {
+
+        /*
+            chargerRecette() gère déjà
+            ses propres erreurs.
+
+            Cette sécurité existe seulement
+            pour éviter une erreur silencieuse
+            inattendue.
+        */
+
+        console.error(
+            "Erreur inattendue pendant l'initialisation :",
+            erreur
+        );
+    }
+}
+
 
 /* =================================
    DÉMARRAGE
 ================================= */
 
-chargerRecette();
+initialiserPageRecette();
