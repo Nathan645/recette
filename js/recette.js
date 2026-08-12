@@ -7,40 +7,124 @@ const contenuRecette =
         "fiche-recette-contenu"
     );
 
-
 const galerieRecette =
     document.getElementById(
         "galerie-recette"
     );
-
 
 const carouselRecette =
     document.getElementById(
         "carousel-recette"
     );
 
-
 const carouselImagesRecette =
     document.getElementById(
         "carousel-images-recette"
     );
-
 
 const boutonPhotoPrecedente =
     document.getElementById(
         "photo-precedente"
     );
 
-
 const boutonPhotoSuivante =
     document.getElementById(
         "photo-suivante"
     );
 
-
 const indicateursCarouselRecette =
     document.getElementById(
         "indicateurs-carousel-recette"
+    );
+
+
+/* =================================
+   ÉLÉMENTS POPUP PLANNING
+================================= */
+
+const popupAjoutPlanning =
+    document.getElementById(
+        "popup-ajout-planning"
+    );
+
+const fermerPopupPlanning =
+    document.getElementById(
+        "fermer-popup-planning"
+    );
+
+const annulerAjoutPlanning =
+    document.getElementById(
+        "annuler-ajout-planning"
+    );
+
+const nomRecettePopupPlanning =
+    document.getElementById(
+        "nom-recette-popup-planning"
+    );
+
+const dateAjoutPlanning =
+    document.getElementById(
+        "date-ajout-planning"
+    );
+
+const boutonMomentMidi =
+    document.getElementById(
+        "moment-planning-midi"
+    );
+
+const boutonMomentSoir =
+    document.getElementById(
+        "moment-planning-soir"
+    );
+
+const diminuerPersonnesPlanning =
+    document.getElementById(
+        "diminuer-personnes-planning"
+    );
+
+const augmenterPersonnesPlanning =
+    document.getElementById(
+        "augmenter-personnes-planning"
+    );
+
+const nombrePersonnesPlanning =
+    document.getElementById(
+        "nombre-personnes-planning"
+    );
+
+const messagePopupPlanning =
+    document.getElementById(
+        "message-popup-planning"
+    );
+
+const confirmerAjoutPlanning =
+    document.getElementById(
+        "confirmer-ajout-planning"
+    );
+
+
+/* =================================
+   POPUP CONFIRMATION
+================================= */
+
+const popupConfirmationPlanning =
+    document.getElementById(
+        "popup-confirmation-planning"
+    );
+
+const texteConfirmationPlanning =
+    document.getElementById(
+        "texte-confirmation-planning"
+    );
+
+const annulerConfirmationPlanning =
+    document.getElementById(
+        "annuler-confirmation-planning"
+    );
+
+const confirmerAjoutMalgreRepas =
+    document.getElementById(
+        "confirmer-ajout-malgre-repas"
     );
 
 
@@ -53,7 +137,6 @@ const parametres =
         window.location.search
     );
 
-
 const identifiantRecette =
     parametres.get(
         "id"
@@ -61,12 +144,11 @@ const identifiantRecette =
 
 
 /* =================================
-   ÉTAT
+   ÉTAT RECETTE
 ================================= */
 
 let utilisateurConnecte =
     null;
-
 
 let recetteChargee =
     null;
@@ -107,9 +189,140 @@ let indexPhotoActive =
 let positionTouchDebut =
     null;
 
-
 let positionTouchFin =
     null;
+
+
+/* =================================
+   ÉTAT PLANNING
+================================= */
+
+/*
+    Identifiant du foyer de
+    l'utilisateur connecté.
+*/
+
+let foyerIdPlanning =
+    null;
+
+
+/*
+    Nombre de personnes configuré
+    par défaut dans le foyer.
+*/
+
+let personnesParDefautPlanning =
+    1;
+
+
+/*
+    Sélection actuelle de la popup.
+*/
+
+let momentSelectionnePlanning =
+    "midi";
+
+let personnesSelectionneesPlanning =
+    1;
+
+
+/*
+    Si un repas existe déjà sur
+    le créneau sélectionné,
+    on le conserve temporairement ici.
+*/
+
+let repasExistantPlanning =
+    null;
+
+
+/* =================================
+   OUTILS DATE PLANNING
+================================= */
+
+function obtenirDateAujourdhuiPlanning() {
+
+    const maintenant =
+        new Date();
+
+    const annee =
+        maintenant.getFullYear();
+
+    const mois =
+        String(
+            maintenant.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const jour =
+        String(
+            maintenant.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+    return `${annee}-${mois}-${jour}`;
+}
+
+
+/* =================================
+   FORMATER DATE PLANNING
+================================= */
+
+function formaterDatePlanning(
+    dateTexte
+) {
+
+    if (
+        !dateTexte
+    ) {
+
+        return "";
+    }
+
+    const morceaux =
+        dateTexte.split(
+            "-"
+        );
+
+    if (
+        morceaux.length !==
+        3
+    ) {
+
+        return dateTexte;
+    }
+
+    const date =
+        new Date(
+            Number(
+                morceaux[0]
+            ),
+            Number(
+                morceaux[1]
+            ) - 1,
+            Number(
+                morceaux[2]
+            )
+        );
+
+    return date.toLocaleDateString(
+        "fr-FR",
+        {
+            weekday:
+                "long",
+
+            day:
+                "numeric",
+
+            month:
+                "long"
+        }
+    );
+}
 
 
 /* =================================
@@ -171,6 +384,13 @@ async function chargerRecette() {
 
 
         /* =========================
+           FOYER / PLANNING
+        ========================= */
+
+        await chargerFoyerPlanning();
+
+
+        /* =========================
            RECETTE
         ========================= */
 
@@ -227,7 +447,6 @@ async function chargerRecette() {
 
         afficherGalerieRecette();
 
-
         afficherRecette(
             recetteChargee
         );
@@ -243,11 +462,6 @@ async function chargerRecette() {
         );
 
 
-        /*
-            En cas d'erreur,
-            on masque la galerie.
-        */
-
         if (
             galerieRecette
         ) {
@@ -256,11 +470,6 @@ async function chargerRecette() {
                 true;
         }
 
-
-        /*
-            Et on affiche le message
-            dans la zone de la fiche.
-        */
 
         if (
             contenuRecette
@@ -292,6 +501,145 @@ async function chargerRecette() {
             `;
         }
     }
+}
+
+
+/* =================================
+   CHARGER LE FOYER
+================================= */
+
+async function chargerFoyerPlanning() {
+
+    foyerIdPlanning =
+        null;
+
+    personnesParDefautPlanning =
+        1;
+
+    personnesSelectionneesPlanning =
+        1;
+
+
+    if (
+        !utilisateurConnecte
+    ) {
+
+        return;
+    }
+
+
+    /* =========================
+       MEMBRE DU FOYER
+    ========================= */
+
+    const {
+        data:
+            membreFoyer,
+
+        error:
+            erreurMembre
+
+    } =
+        await window.supabaseClient
+            .from(
+                "membres_foyer"
+            )
+            .select(
+                "foyer_id"
+            )
+            .eq(
+                "user_id",
+                utilisateurConnecte.id
+            )
+            .maybeSingle();
+
+
+    if (
+        erreurMembre
+    ) {
+
+        throw erreurMembre;
+    }
+
+
+    if (
+        !membreFoyer?.foyer_id
+    ) {
+
+        /*
+            L'utilisateur peut toujours
+            consulter la recette.
+
+            Le bouton planning pourra
+            simplement signaler qu'aucun
+            foyer n'est disponible.
+        */
+
+        return;
+    }
+
+
+    foyerIdPlanning =
+        membreFoyer.foyer_id;
+
+
+    /* =========================
+       PARAMÈTRES DU FOYER
+    ========================= */
+
+    const {
+        data:
+            foyer,
+
+        error:
+            erreurFoyer
+
+    } =
+        await window.supabaseClient
+            .from(
+                "foyers"
+            )
+            .select(
+                "personnes_par_defaut"
+            )
+            .eq(
+                "id",
+                foyerIdPlanning
+            )
+            .maybeSingle();
+
+
+    if (
+        erreurFoyer
+    ) {
+
+        throw erreurFoyer;
+    }
+
+
+    const nombre =
+        Number(
+            foyer?.personnes_par_defaut
+        );
+
+
+    if (
+        Number.isFinite(
+            nombre
+        ) &&
+        nombre >=
+            1
+    ) {
+
+        personnesParDefautPlanning =
+            Math.round(
+                nombre
+            );
+    }
+
+
+    personnesSelectionneesPlanning =
+        personnesParDefautPlanning;
 }
 
 
@@ -355,11 +703,6 @@ async function chargerPhotosRecette(
             : [];
 
 
-    /*
-        Aucune photo :
-        on laisse simplement le tableau vide.
-    */
-
     if (
         lignes.length ===
         0
@@ -373,11 +716,10 @@ async function chargerPhotosRecette(
 
 
     /*
-        Le bucket "recettes" est privé.
+        Le bucket est privé.
 
-        Pour afficher les photos,
-        on crée donc une URL temporaire
-        pour chacune d'elles.
+        On crée donc une URL signée
+        temporaire pour chaque photo.
     */
 
     photosRecette =
@@ -406,12 +748,6 @@ async function chargerPhotosRecette(
         );
 
 
-    /*
-        Si une URL n'a pas pu être créée,
-        on retire simplement cette photo
-        de la galerie.
-    */
-
     photosRecette =
         photosRecette.filter(
             function (
@@ -424,11 +760,6 @@ async function chargerPhotosRecette(
             }
         );
 
-
-    /*
-        À chaque chargement de recette,
-        on commence par la première photo.
-    */
 
     indexPhotoActive =
         0;
@@ -670,11 +1001,6 @@ function formaterQuantite(
 
 function afficherGalerieRecette() {
 
-    /*
-        Aucun élément HTML galerie :
-        on ne fait rien.
-    */
-
     if (
         !galerieRecette ||
         !carouselImagesRecette
@@ -686,17 +1012,15 @@ function afficherGalerieRecette() {
 
     /*
         Aucune photo :
-        on cache complètement le bloc.
-
-        Les anciennes recettes restent
-        donc exactement comme avant.
+        galerie complètement masquée.
     */
 
     if (
         !Array.isArray(
             photosRecette
         ) ||
-        photosRecette.length === 0
+        photosRecette.length ===
+            0
     ) {
 
         galerieRecette.hidden =
@@ -742,22 +1066,12 @@ function afficherGalerieRecette() {
 
 
     /*
-        Au moins une photo :
-        on affiche la galerie.
+        Au moins une photo.
     */
 
     galerieRecette.hidden =
         false;
 
-
-    /*
-        Génération des images.
-
-        Elles sont toutes présentes
-        dans le DOM.
-
-        Seule la photo active est visible.
-    */
 
     carouselImagesRecette.innerHTML =
         photosRecette
@@ -786,7 +1100,8 @@ function afficherGalerieRecette() {
                                     "la recette"
                                 )}"
                                 loading="${
-                                    index === 0
+                                    index ===
+                                    0
                                         ? "eager"
                                         : "lazy"
                                 }"
@@ -802,7 +1117,7 @@ function afficherGalerieRecette() {
 
     /*
         Une seule photo :
-        aucune navigation nécessaire.
+        pas de navigation.
     */
 
     if (
@@ -957,13 +1272,7 @@ function afficherPhotoCarousel(
 
 
     /*
-        Boucle du carousel :
-
-        depuis la dernière photo
-        → suivante = première
-
-        depuis la première
-        → précédente = dernière
+        Carousel en boucle.
     */
 
     if (
@@ -1018,7 +1327,7 @@ function afficherPhotoCarousel(
 
 
     /*
-        Points.
+        Indicateurs.
     */
 
     if (
@@ -1088,7 +1397,7 @@ function afficherPhotoSuivante() {
 
 
 /* =================================
-   FLÈCHES
+   FLÈCHES CAROUSEL
 ================================= */
 
 if (
@@ -1120,7 +1429,7 @@ if (
 
 
 /* =================================
-   CLIC SUR LES POINTS
+   CLIC SUR LES INDICATEURS
 ================================= */
 
 if (
@@ -1179,10 +1488,6 @@ if (
     carouselRecette
 ) {
 
-    /*
-        Début du geste.
-    */
-
     carouselRecette.addEventListener(
         "touchstart",
         function (
@@ -1226,10 +1531,6 @@ if (
     );
 
 
-    /*
-        Mouvement.
-    */
-
     carouselRecette.addEventListener(
         "touchmove",
         function (
@@ -1269,19 +1570,15 @@ if (
     );
 
 
-    /*
-        Fin du geste.
-    */
-
     carouselRecette.addEventListener(
         "touchend",
         function () {
 
             if (
                 positionTouchDebut ===
-                null ||
+                    null ||
                 positionTouchFin ===
-                null
+                    null
             ) {
 
                 positionTouchDebut =
@@ -1298,15 +1595,6 @@ if (
                 positionTouchFin -
                 positionTouchDebut;
 
-
-            /*
-                Il faut environ 45 px
-                de mouvement horizontal.
-
-                Ça évite de changer de photo
-                au moindre petit mouvement
-                de doigt.
-            */
 
             const seuil =
                 45;
@@ -1330,7 +1618,7 @@ if (
 
 
             /*
-                Glissement vers la gauche :
+                Swipe gauche :
                 photo suivante.
             */
 
@@ -1344,7 +1632,7 @@ if (
             } else {
 
                 /*
-                    Glissement vers la droite :
+                    Swipe droite :
                     photo précédente.
                 */
 
@@ -1377,11 +1665,6 @@ document.addEventListener(
         evenement
     ) {
 
-        /*
-            Pas de galerie ou seulement
-            une photo : rien à faire.
-        */
-
         if (
             !galerieRecette ||
             galerieRecette.hidden ||
@@ -1393,15 +1676,15 @@ document.addEventListener(
         }
 
 
-        /*
-            On évite de changer de photo
-            si l'utilisateur écrit dans
-            un champ quelconque.
-        */
-
         const cible =
             evenement.target;
 
+
+        /*
+            Si l'utilisateur interagit
+            avec un champ de formulaire,
+            on ne touche pas au carousel.
+        */
 
         if (
             cible &&
@@ -1530,7 +1813,6 @@ function demanderConfirmationSuppression() {
 
                 fond.remove();
 
-
                 resolve(
                     resultat
                 );
@@ -1616,7 +1898,8 @@ async function supprimerPhotosRecetteStorage() {
 
 
     if (
-        chemins.length === 0
+        chemins.length ===
+        0
     ) {
 
         return;
@@ -1646,17 +1929,10 @@ async function supprimerPhotosRecetteStorage() {
 
 
 /* =================================
-   SUPPRESSION SUPABASE
+   SUPPRESSION DE LA RECETTE
 ================================= */
 
 async function supprimerRecette() {
-
-    /*
-        Vérification côté interface.
-
-        La vraie sécurité reste
-        assurée par les policies RLS.
-    */
 
     if (
         !recetteChargee ||
@@ -1668,7 +1944,6 @@ async function supprimerRecette() {
         window.alert(
             "Vous ne pouvez pas supprimer cette recette."
         );
-
 
         return;
     }
@@ -1703,28 +1978,22 @@ async function supprimerRecette() {
     boutonSupprimer.disabled =
         true;
 
-
     boutonSupprimer.textContent =
         "Suppression…";
 
 
     try {
 
-        /*
-            1. Suppression des fichiers
-               dans Storage.
-
-            La table recette_photos est
-            supprimée automatiquement si
-            ON DELETE CASCADE est bien présent.
-        */
+        /* =========================
+           PHOTOS STORAGE
+        ========================= */
 
         await supprimerPhotosRecetteStorage();
 
 
-        /*
-            2. Suppression de la recette.
-        */
+        /* =========================
+           RECETTE
+        ========================= */
 
         const {
             error
@@ -1769,7 +2038,6 @@ async function supprimerRecette() {
         boutonSupprimer.disabled =
             false;
 
-
         boutonSupprimer.textContent =
             "Supprimer la recette";
 
@@ -1807,33 +2075,77 @@ function afficherRecette(
         );
 
 
-    const actionsGestionHtml =
+    /* =========================
+       BOUTON PLANNING
+    ========================= */
+
+    /*
+        Ce bouton est disponible
+        même si la recette a été créée
+        par un autre membre.
+
+        Il faut simplement appartenir
+        à un foyer pour pouvoir réellement
+        l'ajouter.
+    */
+
+    const boutonPlanningHtml = `
+
+        <button
+            type="button"
+            class="bouton-ajouter-planning-recette"
+            id="ajouter-recette-planning"
+        >
+            Ajouter au planning
+        </button>
+
+    `;
+
+
+    /* =========================
+       MODIFIER / SUPPRIMER
+    ========================= */
+
+    const actionsProprietaireHtml =
         estCreateur
             ? `
 
-                <div class="actions-gestion-recette">
+                <a
+                    href="ajouter.html?id=${encodeURIComponent(
+                        recette.id
+                    )}"
+                    class="bouton-modifier"
+                >
+                    Modifier la recette
+                </a>
 
-                    <a
-                        href="ajouter.html?id=${encodeURIComponent(
-                            recette.id
-                        )}"
-                        class="bouton-modifier"
-                    >
-                        Modifier la recette
-                    </a>
-
-                    <button
-                        type="button"
-                        class="bouton-supprimer"
-                        id="supprimer-recette"
-                    >
-                        Supprimer la recette
-                    </button>
-
-                </div>
+                <button
+                    type="button"
+                    class="bouton-supprimer"
+                    id="supprimer-recette"
+                >
+                    Supprimer la recette
+                </button>
 
             `
             : "";
+
+
+    /* =========================
+       TOUTES LES ACTIONS
+    ========================= */
+
+    const actionsGestionHtml = `
+
+        <div class="actions-gestion-recette">
+
+            ${boutonPlanningHtml}
+
+            ${actionsProprietaireHtml}
+
+        </div>
+
+    `;
 
 
     /* =========================
@@ -1944,8 +2256,7 @@ function afficherRecette(
                 ) {
 
                     /*
-                        Compatibilité avec
-                        les anciennes recettes
+                        Anciennes recettes
                         éventuellement stockées
                         sous forme de texte.
                     */
@@ -2138,7 +2449,7 @@ function afficherRecette(
 
 
     /* =========================
-       AFFICHAGE HTML
+       HTML PRINCIPAL
     ========================= */
 
     contenuRecette.innerHTML = `
@@ -2147,14 +2458,17 @@ function afficherRecette(
 
             <div class="contenu">
 
+
                 <div class="badges-principaux">
 
                     <span class="categorie">
+
                         ${echapperHtmlRecette(
                             recette.categorie_affichee ||
                             recette.categorie ||
                             ""
                         )}
+
                     </span>
 
                 </div>
@@ -2168,10 +2482,12 @@ function afficherRecette(
 
 
                 <p class="introduction">
+
                     ${echapperHtmlRecette(
                         recette.description ||
                         ""
                     )}
+
                 </p>
 
 
@@ -2180,7 +2496,9 @@ function afficherRecette(
                         ? `
 
                             <div class="badges-recette">
+
                                 ${badgesRecette}
+
                             </div>
 
                         `
@@ -2190,6 +2508,10 @@ function afficherRecette(
 
                 ${actionsGestionHtml}
 
+
+                <!-- =========================
+                     INFORMATIONS
+                ========================== -->
 
                 <div class="informations-recette">
 
@@ -2220,7 +2542,9 @@ function afficherRecette(
                     </div>
 
 
-                    <div class="information information-portions">
+                    <div
+                        class="information information-portions"
+                    >
 
                         <strong>
                             Portions
@@ -2281,8 +2605,13 @@ function afficherRecette(
 
                     </div>
 
+
                 </div>
 
+
+                <!-- =========================
+                     INGRÉDIENTS / PRÉPARATION
+                ========================== -->
 
                 <div class="colonnes">
 
@@ -2332,9 +2661,9 @@ function afficherRecette(
     `;
 
 
-    /* =========================
+    /* =================================
        ÉLÉMENTS APRÈS AFFICHAGE
-    ========================= */
+    ================================= */
 
     const listeIngredients =
         document.getElementById(
@@ -2366,9 +2695,39 @@ function afficherRecette(
         );
 
 
-    /* =========================
+    const boutonAjouterPlanning =
+        document.getElementById(
+            "ajouter-recette-planning"
+        );
+
+
+    /* =================================
+       AJOUT AU PLANNING
+    ================================= */
+
+    if (
+        boutonAjouterPlanning
+    ) {
+
+        boutonAjouterPlanning
+            .addEventListener(
+                "click",
+                function () {
+
+                    /*
+                        Cette fonction sera
+                        définie dans la partie 4.
+                    */
+
+                    ouvrirPopupAjoutPlanning();
+                }
+            );
+    }
+
+
+    /* =================================
        SUPPRESSION
-    ========================= */
+    ================================= */
 
     if (
         boutonSupprimer
@@ -2382,9 +2741,9 @@ function afficherRecette(
     }
 
 
-    /* =========================
+    /* =================================
        CASES INGRÉDIENTS
-    ========================= */
+    ================================= */
 
     function activerCasesIngredients() {
 
@@ -2432,9 +2791,9 @@ function afficherRecette(
     }
 
 
-    /* =========================
-       MAJ INGRÉDIENTS
-    ========================= */
+    /* =================================
+       METTRE À JOUR LES INGRÉDIENTS
+    ================================= */
 
     function mettreAJourIngredients() {
 
@@ -2450,9 +2809,9 @@ function afficherRecette(
     }
 
 
-    /* =========================
-       BOUTON -
-    ========================= */
+    /* =================================
+       PORTIONS -
+    ================================= */
 
     boutonDiminuer.addEventListener(
         "click",
@@ -2473,9 +2832,9 @@ function afficherRecette(
     );
 
 
-    /* =========================
-       BOUTON +
-    ========================= */
+    /* =================================
+       PORTIONS +
+    ================================= */
 
     boutonAugmenter.addEventListener(
         "click",
@@ -2490,16 +2849,16 @@ function afficherRecette(
     );
 
 
-    /* =========================
-       INITIALISER INGRÉDIENTS
-    ========================= */
+    /* =================================
+       INITIALISATION INGRÉDIENTS
+    ================================= */
 
     activerCasesIngredients();
 
 
-    /* =========================
+    /* =================================
        CASES ÉTAPES
-    ========================= */
+    ================================= */
 
     const casesEtapes =
         document.querySelectorAll(
@@ -2544,27 +2903,1644 @@ function afficherRecette(
 }
 
 /* =================================
-   NETTOYAGE DES URLS SIGNÉES
+   POPUP AJOUT AU PLANNING
 ================================= */
 
-/*
-    Les signed URLs Supabase n'ont pas besoin
-    d'être "révoquées" comme des blob URLs.
+function ouvrirPopupAjoutPlanning() {
 
-    On remet simplement l'état local à zéro
-    lorsque la page est quittée.
-*/
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Vérification du foyer.
+    */
+
+    if (
+        !foyerIdPlanning
+    ) {
+
+        window.alert(
+            "Vous devez appartenir à un foyer pour ajouter une recette au planning."
+        );
+
+        return;
+    }
+
+
+    /* =========================
+       RÉINITIALISATION
+    ========================= */
+
+    repasExistantPlanning =
+        null;
+
+
+    momentSelectionnePlanning =
+        "midi";
+
+
+    personnesSelectionneesPlanning =
+        personnesParDefautPlanning;
+
+
+    /* =========================
+       NOM DE LA RECETTE
+    ========================= */
+
+    if (
+        nomRecettePopupPlanning
+    ) {
+
+        nomRecettePopupPlanning.textContent =
+            recetteChargee?.nom ||
+            "";
+    }
+
+
+    /* =========================
+       DATE = AUJOURD'HUI
+    ========================= */
+
+    if (
+        dateAjoutPlanning
+    ) {
+
+        dateAjoutPlanning.value =
+            obtenirDateAujourdhuiPlanning();
+    }
+
+
+    /* =========================
+       MIDI PAR DÉFAUT
+    ========================= */
+
+    mettreAJourMomentPlanning();
+
+
+    /* =========================
+       PERSONNES
+    ========================= */
+
+    mettreAJourNombrePersonnesPlanning();
+
+
+    /* =========================
+       MESSAGE
+    ========================= */
+
+    masquerMessagePlanning();
+
+
+    /* =========================
+       BOUTON
+    ========================= */
+
+    if (
+        confirmerAjoutPlanning
+    ) {
+
+        confirmerAjoutPlanning.disabled =
+            false;
+
+
+        confirmerAjoutPlanning.textContent =
+            "Ajouter au planning";
+    }
+
+
+    /* =========================
+       AFFICHAGE
+    ========================= */
+
+    popupAjoutPlanning.hidden =
+        false;
+
+
+    document.body.classList.add(
+        "popup-ouverte"
+    );
+}
+
+
+/* =================================
+   FERMER POPUP AJOUT
+================================= */
+
+function fermerPopupAjoutPlanning() {
+
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        return;
+    }
+
+
+    popupAjoutPlanning.hidden =
+        true;
+
+
+    repasExistantPlanning =
+        null;
+
+
+    document.body.classList.remove(
+        "popup-ouverte"
+    );
+}
+
+
+/* =================================
+   MOMENT MIDI / SOIR
+================================= */
+
+function selectionnerMomentPlanning(
+    moment
+) {
+
+    if (
+        moment !== "midi" &&
+        moment !== "soir"
+    ) {
+
+        return;
+    }
+
+
+    momentSelectionnePlanning =
+        moment;
+
+
+    mettreAJourMomentPlanning();
+}
+
+
+/* =================================
+   AFFICHAGE MOMENT
+================================= */
+
+function mettreAJourMomentPlanning() {
+
+    if (
+        boutonMomentMidi
+    ) {
+
+        boutonMomentMidi.classList.toggle(
+            "actif",
+            momentSelectionnePlanning ===
+                "midi"
+        );
+
+
+        boutonMomentMidi.setAttribute(
+            "aria-pressed",
+            momentSelectionnePlanning ===
+                "midi"
+                ? "true"
+                : "false"
+        );
+    }
+
+
+    if (
+        boutonMomentSoir
+    ) {
+
+        boutonMomentSoir.classList.toggle(
+            "actif",
+            momentSelectionnePlanning ===
+                "soir"
+        );
+
+
+        boutonMomentSoir.setAttribute(
+            "aria-pressed",
+            momentSelectionnePlanning ===
+                "soir"
+                ? "true"
+                : "false"
+        );
+    }
+}
+
+
+/* =================================
+   NOMBRE DE PERSONNES
+================================= */
+
+function mettreAJourNombrePersonnesPlanning() {
+
+    if (
+        !nombrePersonnesPlanning
+    ) {
+
+        return;
+    }
+
+
+    nombrePersonnesPlanning.textContent =
+        personnesSelectionneesPlanning;
+}
+
+
+/* =================================
+   MESSAGE POPUP
+================================= */
+
+function afficherMessagePlanning(
+    texte,
+    type = "erreur"
+) {
+
+    if (
+        !messagePopupPlanning
+    ) {
+
+        return;
+    }
+
+
+    messagePopupPlanning.hidden =
+        false;
+
+
+    messagePopupPlanning.textContent =
+        texte;
+
+
+    messagePopupPlanning.classList.remove(
+        "succes",
+        "erreur"
+    );
+
+
+    messagePopupPlanning.classList.add(
+        type
+    );
+}
+
+
+function masquerMessagePlanning() {
+
+    if (
+        !messagePopupPlanning
+    ) {
+
+        return;
+    }
+
+
+    messagePopupPlanning.hidden =
+        true;
+
+
+    messagePopupPlanning.textContent =
+        "";
+
+
+    messagePopupPlanning.classList.remove(
+        "succes",
+        "erreur"
+    );
+}
+
+
+/* =================================
+   RECHERCHER LE REPAS DU CRÉNEAU
+================================= */
+
+async function rechercherRepasExistantPlanning(
+    date,
+    moment
+) {
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "repas_planning"
+            )
+            .select(
+                `
+                    id,
+                    foyer_id,
+                    date,
+                    moment,
+                    personnes,
+                    repas_planning_elements (
+                        id,
+                        repas_id,
+                        recette_id,
+                        nom_libre,
+                        ordre
+                    )
+                `
+            )
+            .eq(
+                "foyer_id",
+                foyerIdPlanning
+            )
+            .eq(
+                "date",
+                date
+            )
+            .eq(
+                "moment",
+                moment
+            )
+            .maybeSingle();
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    return (
+        data ||
+        null
+    );
+}
+
+
+/* =================================
+   NOM DES ÉLÉMENTS D'UN REPAS
+================================= */
+
+async function obtenirNomsRepasExistant(
+    repas
+) {
+
+    if (
+        !repas
+    ) {
+
+        return [];
+    }
+
+
+    const elements =
+        Array.isArray(
+            repas.repas_planning_elements
+        )
+            ? repas.repas_planning_elements
+            : [];
+
+
+    if (
+        elements.length ===
+        0
+    ) {
+
+        return [];
+    }
+
+
+    /*
+        Les repas libres ont déjà
+        leur nom dans nom_libre.
+    */
+
+    const nomsParIndex =
+        new Array(
+            elements.length
+        ).fill(
+            ""
+        );
+
+
+    const recettesACharger =
+        [];
+
+
+    elements.forEach(
+        function (
+            element,
+            index
+        ) {
+
+            if (
+                element.nom_libre
+            ) {
+
+                nomsParIndex[index] =
+                    element.nom_libre;
+
+                return;
+            }
+
+
+            if (
+                element.recette_id
+            ) {
+
+                recettesACharger.push(
+                    {
+                        index:
+                            index,
+
+                        recetteId:
+                            element.recette_id
+                    }
+                );
+            }
+        }
+    );
+
+
+    /*
+        On récupère les noms des recettes
+        présentes dans le repas.
+    */
+
+    if (
+        recettesACharger.length >
+        0
+    ) {
+
+        const idsRecettes =
+            [
+                ...new Set(
+                    recettesACharger.map(
+                        function (
+                            element
+                        ) {
+
+                            return element.recetteId;
+                        }
+                    )
+                )
+            ];
+
+
+        const {
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recettes"
+                )
+                .select(
+                    "id, nom"
+                )
+                .in(
+                    "id",
+                    idsRecettes
+                );
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        const recettesParId =
+            new Map();
+
+
+        (
+            Array.isArray(
+                data
+            )
+                ? data
+                : []
+        ).forEach(
+            function (
+                recette
+            ) {
+
+                recettesParId.set(
+                    recette.id,
+                    recette.nom
+                );
+            }
+        );
+
+
+        recettesACharger.forEach(
+            function (
+                element
+            ) {
+
+                nomsParIndex[
+                    element.index
+                ] =
+                    recettesParId.get(
+                        element.recetteId
+                    ) ||
+                    "Une recette";
+            }
+        );
+    }
+
+
+    return nomsParIndex.filter(
+        Boolean
+    );
+}
+
+
+/* =================================
+   DEMANDE D'AJOUT
+================================= */
+
+async function demanderAjoutPlanning() {
+
+    masquerMessagePlanning();
+
+
+    if (
+        !foyerIdPlanning
+    ) {
+
+        afficherMessagePlanning(
+            "Aucun foyer n’est associé à votre compte."
+        );
+
+        return;
+    }
+
+
+    if (
+        !recetteChargee?.id
+    ) {
+
+        afficherMessagePlanning(
+            "La recette n’a pas pu être identifiée."
+        );
+
+        return;
+    }
+
+
+    const date =
+        dateAjoutPlanning?.value;
+
+
+    if (
+        !date
+    ) {
+
+        afficherMessagePlanning(
+            "Choisissez une date."
+        );
+
+        return;
+    }
+
+
+    if (
+        momentSelectionnePlanning !==
+            "midi" &&
+        momentSelectionnePlanning !==
+            "soir"
+    ) {
+
+        afficherMessagePlanning(
+            "Choisissez midi ou soir."
+        );
+
+        return;
+    }
+
+
+    if (
+        personnesSelectionneesPlanning <
+        1
+    ) {
+
+        afficherMessagePlanning(
+            "Le nombre de personnes doit être supérieur à 0."
+        );
+
+        return;
+    }
+
+
+    if (
+        confirmerAjoutPlanning
+    ) {
+
+        confirmerAjoutPlanning.disabled =
+            true;
+
+
+        confirmerAjoutPlanning.textContent =
+            "Vérification…";
+    }
+
+
+    try {
+
+        /* =========================
+           REPAS EXISTANT ?
+        ========================= */
+
+        const repas =
+            await rechercherRepasExistantPlanning(
+                date,
+                momentSelectionnePlanning
+            );
+
+
+        /*
+            Aucun repas :
+            création immédiate.
+        */
+
+        if (
+            !repas
+        ) {
+
+            await creerRepasPlanningAvecRecette(
+                date,
+                momentSelectionnePlanning,
+                personnesSelectionneesPlanning
+            );
+
+
+            return;
+        }
+
+
+        /*
+            Un repas existe déjà.
+
+            On le mémorise avant
+            d'ouvrir la confirmation.
+        */
+
+        repasExistantPlanning =
+            repas;
+
+
+        const nomsRepas =
+            await obtenirNomsRepasExistant(
+                repas
+            );
+
+
+        afficherConfirmationRepasExistant(
+            repas,
+            nomsRepas
+        );
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur pendant la vérification du planning :",
+            erreur
+        );
+
+
+        afficherMessagePlanning(
+            erreur.message ||
+            "Impossible de vérifier le planning."
+        );
+
+
+        if (
+            confirmerAjoutPlanning
+        ) {
+
+            confirmerAjoutPlanning.disabled =
+                false;
+
+
+            confirmerAjoutPlanning.textContent =
+                "Ajouter au planning";
+        }
+    }
+}
+
+
+/* =================================
+   AFFICHER CONFIRMATION
+================================= */
+
+function afficherConfirmationRepasExistant(
+    repas,
+    nomsRepas
+) {
+
+    /*
+        On masque la première popup
+        pendant la confirmation.
+    */
+
+    if (
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            true;
+    }
+
+
+    const date =
+        formaterDatePlanning(
+            repas.date
+        );
+
+
+    const moment =
+        repas.moment ===
+        "midi"
+            ? "midi"
+            : "soir";
+
+
+    let texteRepas =
+        "un repas";
+
+
+    if (
+        Array.isArray(
+            nomsRepas
+        ) &&
+        nomsRepas.length >
+            0
+    ) {
+
+        texteRepas =
+            nomsRepas.join(
+                " + "
+            );
+    }
+
+
+    if (
+        texteConfirmationPlanning
+    ) {
+
+        texteConfirmationPlanning.textContent =
+            `Vous avez déjà prévu ${texteRepas} ${date} ${moment}. Êtes-vous sûr de vouloir ajouter ${recetteChargee.nom} à ce repas ?`;
+    }
+
+
+    if (
+        popupConfirmationPlanning
+    ) {
+
+        popupConfirmationPlanning.hidden =
+            false;
+    }
+
+
+    if (
+        confirmerAjoutPlanning
+    ) {
+
+        confirmerAjoutPlanning.disabled =
+            false;
+
+
+        confirmerAjoutPlanning.textContent =
+            "Ajouter au planning";
+    }
+}
+
+
+/* =================================
+   FERMER CONFIRMATION
+================================= */
+
+function fermerConfirmationPlanning(
+    rouvrirPopupPrincipale = true
+) {
+
+    if (
+        popupConfirmationPlanning
+    ) {
+
+        popupConfirmationPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        rouvrirPopupPrincipale &&
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            false;
+    }
+
+
+    if (
+        !rouvrirPopupPrincipale
+    ) {
+
+        document.body.classList.remove(
+            "popup-ouverte"
+        );
+    }
+}
+
+
+/* =================================
+   CRÉER UN NOUVEAU REPAS
+================================= */
+
+async function creerRepasPlanningAvecRecette(
+    date,
+    moment,
+    personnes
+) {
+
+    try {
+
+        /* =========================
+           CRÉATION DU REPAS
+        ========================= */
+
+        const {
+            data:
+                nouveauRepas,
+
+            error:
+                erreurRepas
+
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .insert(
+                    {
+                        foyer_id:
+                            foyerIdPlanning,
+
+                        date:
+                            date,
+
+                        moment:
+                            moment,
+
+                        personnes:
+                            personnes
+                    }
+                )
+                .select(
+                    "id"
+                )
+                .single();
+
+
+        if (
+            erreurRepas
+        ) {
+
+            throw erreurRepas;
+        }
+
+
+        if (
+            !nouveauRepas?.id
+        ) {
+
+            throw new Error(
+                "Le repas n’a pas pu être créé."
+            );
+        }
+
+
+        /* =========================
+           AJOUT DE LA RECETTE
+        ========================= */
+
+        const {
+            error:
+                erreurElement
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning_elements"
+                )
+                .insert(
+                    {
+                        repas_id:
+                            nouveauRepas.id,
+
+                        recette_id:
+                            recetteChargee.id,
+
+                        nom_libre:
+                            null,
+
+                        ordre:
+                            1
+                    }
+                );
+
+
+        if (
+            erreurElement
+        ) {
+
+            /*
+                Si l'élément n'a pas pu être créé,
+                on retire le repas vide afin
+                de ne pas laisser de donnée
+                inutile dans le planning.
+            */
+
+            await window.supabaseClient
+                .from(
+                    "repas_planning"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    nouveauRepas.id
+                );
+
+
+            throw erreurElement;
+        }
+
+
+        await terminerAjoutPlanning();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur pendant la création du repas :",
+            erreur
+        );
+
+
+        afficherMessagePlanning(
+            erreur.message ||
+            "Impossible d’ajouter la recette au planning."
+        );
+
+
+        if (
+            confirmerAjoutPlanning
+        ) {
+
+            confirmerAjoutPlanning.disabled =
+                false;
+
+
+            confirmerAjoutPlanning.textContent =
+                "Ajouter au planning";
+        }
+    }
+}
+
+
+/* =================================
+   AJOUTER À UN REPAS EXISTANT
+================================= */
+
+async function ajouterRecetteAuRepasExistant() {
+
+    if (
+        !repasExistantPlanning?.id
+    ) {
+
+        fermerConfirmationPlanning(
+            true
+        );
+
+
+        afficherMessagePlanning(
+            "Le repas existant n’a pas pu être identifié."
+        );
+
+
+        return;
+    }
+
+
+    if (
+        confirmerAjoutMalgreRepas
+    ) {
+
+        confirmerAjoutMalgreRepas.disabled =
+            true;
+
+
+        confirmerAjoutMalgreRepas.textContent =
+            "Ajout…";
+    }
+
+
+    try {
+
+        const elements =
+            Array.isArray(
+                repasExistantPlanning
+                    .repas_planning_elements
+            )
+                ? repasExistantPlanning
+                    .repas_planning_elements
+                : [];
+
+
+        /*
+            Ordre suivant.
+
+            On ne se contente pas du nombre
+            d'éléments au cas où les ordres
+            ne seraient pas parfaitement
+            consécutifs.
+        */
+
+        const ordres =
+            elements
+                .map(
+                    function (
+                        element
+                    ) {
+
+                        return Number(
+                            element.ordre
+                        ) || 0;
+                    }
+                );
+
+
+        const ordreSuivant =
+            ordres.length >
+            0
+                ? Math.max(
+                    ...ordres
+                ) + 1
+                : 1;
+
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "repas_planning_elements"
+                )
+                .insert(
+                    {
+                        repas_id:
+                            repasExistantPlanning.id,
+
+                        recette_id:
+                            recetteChargee.id,
+
+                        nom_libre:
+                            null,
+
+                        ordre:
+                            ordreSuivant
+                    }
+                );
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        /*
+            Important :
+
+            on ne modifie PAS le nombre
+            de personnes du repas existant.
+        */
+
+        await terminerAjoutPlanning();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur pendant l'ajout au repas existant :",
+            erreur
+        );
+
+
+        fermerConfirmationPlanning(
+            true
+        );
+
+
+        afficherMessagePlanning(
+            erreur.message ||
+            "Impossible d’ajouter la recette à ce repas."
+        );
+
+
+    } finally {
+
+        if (
+            confirmerAjoutMalgreRepas
+        ) {
+
+            confirmerAjoutMalgreRepas.disabled =
+                false;
+
+
+            confirmerAjoutMalgreRepas.textContent =
+                "Ajouter quand même";
+        }
+    }
+}
+
+
+/* =================================
+   AJOUT TERMINÉ
+================================= */
+
+async function terminerAjoutPlanning() {
+
+    /*
+        On ferme les deux popups.
+    */
+
+    if (
+        popupConfirmationPlanning
+    ) {
+
+        popupConfirmationPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            true;
+    }
+
+
+    document.body.classList.remove(
+        "popup-ouverte"
+    );
+
+
+    repasExistantPlanning =
+        null;
+
+
+    /*
+        Petit retour visuel directement
+        sur le bouton de la fiche.
+    */
+
+    const boutonAjouterPlanning =
+        document.getElementById(
+            "ajouter-recette-planning"
+        );
+
+
+    if (
+        boutonAjouterPlanning
+    ) {
+
+        const ancienTexte =
+            boutonAjouterPlanning.textContent;
+
+
+        boutonAjouterPlanning.textContent =
+            "Ajouté au planning";
+
+
+        boutonAjouterPlanning.classList.add(
+            "ajoute"
+        );
+
+
+        /*
+            Retour à l'état normal
+            après un court délai.
+        */
+
+        window.setTimeout(
+            function () {
+
+                if (
+                    document.body.contains(
+                        boutonAjouterPlanning
+                    )
+                ) {
+
+                    boutonAjouterPlanning.textContent =
+                        ancienTexte;
+
+
+                    boutonAjouterPlanning.classList.remove(
+                        "ajoute"
+                    );
+                }
+
+            },
+            2200
+        );
+    }
+}
+
+/* =================================
+   ÉVÉNEMENTS POPUP PLANNING
+================================= */
+
+
+/* =================================
+   FERMER AVEC LA CROIX
+================================= */
+
+if (
+    fermerPopupPlanning
+) {
+
+    fermerPopupPlanning.addEventListener(
+        "click",
+        function () {
+
+            fermerPopupAjoutPlanning();
+        }
+    );
+}
+
+
+/* =================================
+   BOUTON ANNULER
+================================= */
+
+if (
+    annulerAjoutPlanning
+) {
+
+    annulerAjoutPlanning.addEventListener(
+        "click",
+        function () {
+
+            fermerPopupAjoutPlanning();
+        }
+    );
+}
+
+
+/* =================================
+   CHOIX MIDI
+================================= */
+
+if (
+    boutonMomentMidi
+) {
+
+    boutonMomentMidi.addEventListener(
+        "click",
+        function () {
+
+            selectionnerMomentPlanning(
+                "midi"
+            );
+        }
+    );
+}
+
+
+/* =================================
+   CHOIX SOIR
+================================= */
+
+if (
+    boutonMomentSoir
+) {
+
+    boutonMomentSoir.addEventListener(
+        "click",
+        function () {
+
+            selectionnerMomentPlanning(
+                "soir"
+            );
+        }
+    );
+}
+
+
+/* =================================
+   DIMINUER PERSONNES
+================================= */
+
+if (
+    diminuerPersonnesPlanning
+) {
+
+    diminuerPersonnesPlanning.addEventListener(
+        "click",
+        function () {
+
+            if (
+                personnesSelectionneesPlanning <=
+                1
+            ) {
+
+                return;
+            }
+
+
+            personnesSelectionneesPlanning -=
+                1;
+
+
+            mettreAJourNombrePersonnesPlanning();
+        }
+    );
+}
+
+
+/* =================================
+   AUGMENTER PERSONNES
+================================= */
+
+if (
+    augmenterPersonnesPlanning
+) {
+
+    augmenterPersonnesPlanning.addEventListener(
+        "click",
+        function () {
+
+            /*
+                Limite volontairement généreuse
+                pour éviter une valeur aberrante.
+            */
+
+            if (
+                personnesSelectionneesPlanning >=
+                50
+            ) {
+
+                return;
+            }
+
+
+            personnesSelectionneesPlanning +=
+                1;
+
+
+            mettreAJourNombrePersonnesPlanning();
+        }
+    );
+}
+
+
+/* =================================
+   CONFIRMER AJOUT
+================================= */
+
+if (
+    confirmerAjoutPlanning
+) {
+
+    confirmerAjoutPlanning.addEventListener(
+        "click",
+        function () {
+
+            demanderAjoutPlanning();
+        }
+    );
+}
+
+
+/* =================================
+   ANNULER CONFIRMATION
+   REPAS EXISTANT
+================================= */
+
+if (
+    annulerConfirmationPlanning
+) {
+
+    annulerConfirmationPlanning.addEventListener(
+        "click",
+        function () {
+
+            /*
+                On retourne à la première
+                popup sans perdre la date,
+                le moment ou les personnes.
+            */
+
+            fermerConfirmationPlanning(
+                true
+            );
+        }
+    );
+}
+
+
+/* =================================
+   AJOUTER QUAND MÊME
+================================= */
+
+if (
+    confirmerAjoutMalgreRepas
+) {
+
+    confirmerAjoutMalgreRepas.addEventListener(
+        "click",
+        function () {
+
+            ajouterRecetteAuRepasExistant();
+        }
+    );
+}
+
+
+/* =================================
+   CHANGEMENT DE DATE
+================================= */
+
+if (
+    dateAjoutPlanning
+) {
+
+    dateAjoutPlanning.addEventListener(
+        "change",
+        function () {
+
+            /*
+                Si l'utilisateur change la date,
+                une éventuelle détection précédente
+                de repas existant n'est plus valable.
+            */
+
+            repasExistantPlanning =
+                null;
+
+
+            masquerMessagePlanning();
+        }
+    );
+}
+
+
+/* =================================
+   CLIC HORS POPUP PRINCIPALE
+================================= */
+
+if (
+    popupAjoutPlanning
+) {
+
+    popupAjoutPlanning.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            /*
+                On ferme uniquement si le clic
+                est directement sur le fond.
+
+                Un clic dans la popup ne fait rien.
+            */
+
+            if (
+                evenement.target ===
+                popupAjoutPlanning
+            ) {
+
+                fermerPopupAjoutPlanning();
+            }
+        }
+    );
+}
+
+
+/* =================================
+   CLIC HORS CONFIRMATION
+================================= */
+
+if (
+    popupConfirmationPlanning
+) {
+
+    popupConfirmationPlanning.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            if (
+                evenement.target ===
+                popupConfirmationPlanning
+            ) {
+
+                /*
+                    Même comportement que
+                    le bouton Annuler :
+                    retour à la première popup.
+                */
+
+                fermerConfirmationPlanning(
+                    true
+                );
+            }
+        }
+    );
+}
+
+
+/* =================================
+   TOUCHE ÉCHAP
+================================= */
+
+document.addEventListener(
+    "keydown",
+    function (
+        evenement
+    ) {
+
+        if (
+            evenement.key !==
+            "Escape"
+        ) {
+
+            return;
+        }
+
+
+        /*
+            La confirmation est prioritaire.
+        */
+
+        if (
+            popupConfirmationPlanning &&
+            !popupConfirmationPlanning.hidden
+        ) {
+
+            fermerConfirmationPlanning(
+                true
+            );
+
+            return;
+        }
+
+
+        /*
+            Sinon on ferme la popup principale.
+        */
+
+        if (
+            popupAjoutPlanning &&
+            !popupAjoutPlanning.hidden
+        ) {
+
+            fermerPopupAjoutPlanning();
+        }
+    }
+);
+
+
+/* =================================
+   NETTOYAGE GALERIE
+================================= */
 
 function nettoyerGalerieRecette() {
 
     photosRecette =
         [];
 
+
     indexPhotoActive =
         0;
 
+
     positionTouchDebut =
         null;
+
 
     positionTouchFin =
         null;
@@ -2585,7 +4561,7 @@ window.addEventListener(
 
 
 /* =================================
-   SÉCURITÉ SI ÉLÉMENTS ABSENTS
+   VÉRIFICATION DU HTML
 ================================= */
 
 function verifierElementsRecette() {
@@ -2602,14 +4578,6 @@ function verifierElementsRecette() {
     }
 
 
-    /*
-        La galerie peut techniquement
-        être absente sans empêcher
-        l'affichage de la recette.
-
-        On affiche simplement un warning.
-    */
-
     if (
         !galerieRecette ||
         !carouselRecette ||
@@ -2622,7 +4590,110 @@ function verifierElementsRecette() {
     }
 
 
+    /*
+        On ne bloque pas toute la recette
+        si la popup planning est absente.
+
+        Cela permet quand même de consulter
+        la fiche en cas de problème HTML.
+    */
+
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        console.warn(
+            "La popup #popup-ajout-planning est introuvable."
+        );
+    }
+
+
+    if (
+        !popupConfirmationPlanning
+    ) {
+
+        console.warn(
+            "La popup #popup-confirmation-planning est introuvable."
+        );
+    }
+
+
     return true;
+}
+
+
+/* =================================
+   PRÉPARER LA POPUP PLANNING
+================================= */
+
+function preparerPopupPlanning() {
+
+    /*
+        Date minimum = aujourd'hui.
+
+        Cela évite d'ajouter accidentellement
+        une recette dans le passé.
+    */
+
+    if (
+        dateAjoutPlanning
+    ) {
+
+        const aujourdHui =
+            obtenirDateAujourdhuiPlanning();
+
+
+        dateAjoutPlanning.min =
+            aujourdHui;
+
+
+        dateAjoutPlanning.value =
+            aujourdHui;
+    }
+
+
+    /*
+        Valeur visuelle initiale.
+    */
+
+    momentSelectionnePlanning =
+        "midi";
+
+
+    mettreAJourMomentPlanning();
+
+
+    personnesSelectionneesPlanning =
+        personnesParDefautPlanning;
+
+
+    mettreAJourNombrePersonnesPlanning();
+
+
+    masquerMessagePlanning();
+
+
+    /*
+        Les popups doivent être
+        fermées au chargement.
+    */
+
+    if (
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        popupConfirmationPlanning
+    ) {
+
+        popupConfirmationPlanning.hidden =
+            true;
+    }
 }
 
 
@@ -2644,9 +4715,9 @@ async function initialiserPageRecette() {
     }
 
 
-    /*
-        État de chargement initial.
-    */
+    /* =========================
+       ÉTAT DE CHARGEMENT
+    ========================= */
 
     contenuRecette.innerHTML = `
 
@@ -2666,9 +4737,36 @@ async function initialiserPageRecette() {
     }
 
 
+    /*
+        On prépare d'abord l'interface.
+
+        Le vrai nombre de personnes
+        du foyer sera ensuite récupéré
+        pendant chargerRecette().
+    */
+
+    preparerPopupPlanning();
+
+
     try {
 
         await chargerRecette();
+
+
+        /*
+            chargerRecette() vient de
+            récupérer le foyer.
+
+            On synchronise donc maintenant
+            le nombre de personnes de la popup
+            avec la vraie valeur du foyer.
+        */
+
+        personnesSelectionneesPlanning =
+            personnesParDefautPlanning;
+
+
+        mettreAJourNombrePersonnesPlanning();
 
 
         console.log(
@@ -2681,8 +4779,11 @@ async function initialiserPageRecette() {
                 photos:
                     photosRecette.length,
 
-                photoActive:
-                    indexPhotoActive
+                foyer:
+                    foyerIdPlanning,
+
+                personnesParDefaut:
+                    personnesParDefautPlanning
 
             }
         );
@@ -2694,11 +4795,10 @@ async function initialiserPageRecette() {
 
         /*
             chargerRecette() gère déjà
-            ses propres erreurs.
+            son affichage d'erreur.
 
-            Cette sécurité existe seulement
-            pour éviter une erreur silencieuse
-            inattendue.
+            Ceci sert uniquement de
+            sécurité supplémentaire.
         */
 
         console.error(
