@@ -3356,3 +3356,447 @@ img {
             12px !important;
     }
 }
+
+/* =================================
+   GALERIE / CAROUSEL RECETTE
+================================= */
+
+.galerie-recette {
+    width: 100%;
+    max-width: 1000px;
+
+    margin:
+        0
+        auto
+        24px;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    background-color:
+        var(--blanc);
+
+    box-shadow:
+        0 10px 35px
+        var(--ombre);
+}
+
+
+/*
+    Respecte bien l'attribut hidden.
+*/
+
+.galerie-recette[hidden] {
+    display: none !important;
+}
+
+
+/* =================================
+   CAROUSEL
+================================= */
+
+.carousel-recette {
+    position: relative;
+
+    width: 100%;
+
+    overflow: hidden;
+
+    background-color:
+        #ece8df;
+
+    border-radius:
+        22px;
+}
+
+
+/* =================================
+   CONTENEUR DES IMAGES
+================================= */
+
+.carousel-images-recette {
+    position: relative;
+
+    width: 100%;
+
+    /*
+        Hauteur stable du carousel.
+
+        Sur ordinateur :
+        grand format horizontal,
+        mais sans prendre tout l'écran.
+    */
+
+    aspect-ratio:
+        16 / 9;
+
+    overflow: hidden;
+}
+
+
+/* =================================
+   SLIDES
+================================= */
+
+.slide-recette {
+    position: absolute;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    background-color:
+        #ece8df;
+}
+
+
+.slide-recette.active {
+    display: flex;
+}
+
+
+/* =================================
+   IMAGE
+================================= */
+
+.slide-recette img {
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+/* =================================
+   FLÈCHES CAROUSEL
+================================= */
+
+.bouton-carousel-recette {
+    position: absolute;
+
+    top: 50%;
+
+    z-index: 5;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    transform:
+        translateY(-50%);
+
+    border:
+        1px solid
+        rgba(
+            255,
+            255,
+            255,
+            0.7
+        );
+
+    border-radius: 50%;
+
+    background-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.9
+        );
+
+    color:
+        var(--texte);
+
+    font-family:
+        inherit;
+
+    font-size: 34px;
+
+    font-weight: 400;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 15px
+        rgba(
+            0,
+            0,
+            0,
+            0.14
+        );
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+
+.bouton-carousel-recette:hover {
+    background-color:
+        var(--vert);
+
+    color:
+        var(--blanc);
+
+    transform:
+        translateY(-50%)
+        scale(1.05);
+}
+
+
+.bouton-carousel-recette[hidden] {
+    display: none !important;
+}
+
+
+.bouton-carousel-precedent {
+    left: 18px;
+}
+
+
+.bouton-carousel-suivant {
+    right: 18px;
+}
+
+
+/* =================================
+   INDICATEURS
+================================= */
+
+.indicateurs-carousel-recette {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding:
+        14px
+        18px;
+
+    background-color:
+        var(--blanc);
+}
+
+
+.indicateurs-carousel-recette[hidden] {
+    display: none !important;
+}
+
+
+/* =================================
+   UN POINT
+================================= */
+
+.indicateur-carousel-recette {
+    width: 9px;
+    height: 9px;
+
+    padding: 0;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background-color:
+        #cbc6bb;
+
+    cursor: pointer;
+
+    transition:
+        width 0.2s ease,
+        border-radius 0.2s ease,
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.indicateur-carousel-recette:hover {
+    transform:
+        scale(1.15);
+}
+
+
+.indicateur-carousel-recette.actif {
+    width: 24px;
+
+    border-radius: 999px;
+
+    background-color:
+        var(--vert);
+}
+
+
+/* =================================
+   FOCUS
+================================= */
+
+.bouton-carousel-recette:focus-visible,
+.indicateur-carousel-recette:focus-visible {
+    outline:
+        3px solid
+        rgba(
+            102,
+            112,
+            90,
+            0.22
+        );
+
+    outline-offset:
+        3px;
+}
+
+
+/* =================================
+   TABLETTE
+================================= */
+
+@media (max-width: 850px) {
+
+    .galerie-recette {
+        border-radius: 18px;
+    }
+
+
+    .carousel-recette {
+        border-radius: 18px;
+    }
+
+
+    .carousel-images-recette {
+        aspect-ratio:
+            4 / 3;
+    }
+
+
+    .bouton-carousel-recette {
+        width: 44px;
+        height: 44px;
+
+        font-size: 30px;
+    }
+
+
+    .bouton-carousel-precedent {
+        left: 12px;
+    }
+
+
+    .bouton-carousel-suivant {
+        right: 12px;
+    }
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 600px) {
+
+    .galerie-recette {
+        width: 100%;
+
+        margin-bottom: 18px;
+
+        border-radius: 16px;
+
+        box-shadow:
+            0 6px 20px
+            rgba(
+                52,
+                59,
+                47,
+                0.10
+            );
+    }
+
+
+    .carousel-recette {
+        border-radius: 16px;
+    }
+
+
+    /*
+        Photo légèrement plus carrée
+        sur téléphone.
+    */
+
+    .carousel-images-recette {
+        aspect-ratio:
+            4 / 3;
+    }
+
+
+    /*
+        Grâce au swipe,
+        les flèches peuvent être
+        plus discrètes.
+    */
+
+    .bouton-carousel-recette {
+        width: 38px;
+        height: 38px;
+
+        font-size: 27px;
+
+        background-color:
+            rgba(
+                255,
+                255,
+                255,
+                0.86
+            );
+    }
+
+
+    .bouton-carousel-precedent {
+        left: 9px;
+    }
+
+
+    .bouton-carousel-suivant {
+        right: 9px;
+    }
+
+
+    .indicateurs-carousel-recette {
+        gap: 7px;
+
+        padding:
+            11px
+            15px;
+    }
+
+
+    .indicateur-carousel-recette {
+        width: 8px;
+        height: 8px;
+    }
+
+
+    .indicateur-carousel-recette.actif {
+        width: 21px;
+    }
+}
