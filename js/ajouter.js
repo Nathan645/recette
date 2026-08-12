@@ -77,7 +77,9 @@ const parametres =
 
 
 const identifiantRecette =
-    parametres.get("id");
+    parametres.get(
+        "id"
+    );
 
 
 const modeModification =
@@ -113,15 +115,15 @@ const NOMBRE_MAX_PHOTOS =
 
 /*
     Nouvelles photos choisies
-    depuis le téléphone / ordinateur.
+    depuis le téléphone ou
+    l'ordinateur.
 
-    Chaque élément aura cette forme :
+    Structure :
 
     {
         idLocal: "...",
         fichier: File,
-        urlApercu: "blob:...",
-        ordre: 1
+        urlApercu: "blob:..."
     }
 */
 
@@ -130,13 +132,17 @@ let nouvellesPhotos =
 
 
 /*
-    Photos déjà présentes dans Supabase
-    lorsqu'on modifie une recette.
+    Photos déjà présentes dans
+    Supabase en modification.
+
+    Structure :
 
     {
         id: "...",
+        recette_id: "...",
         chemin: "...",
         ordre: 1,
+        created_by: "...",
         url: "..."
     }
 */
@@ -146,18 +152,590 @@ let photosExistantes =
 
 
 /*
-    Photos existantes que l'utilisateur
-    a demandé de supprimer.
+    Photos existantes que
+    l'utilisateur souhaite retirer.
 
-    On ne les supprime réellement
-    qu'au moment d'enregistrer la recette.
-
-    Ça évite qu'un clic accidentel
-    supprime immédiatement une photo.
+    La suppression réelle se fait
+    uniquement à l'enregistrement.
 */
 
 let photosASupprimer =
     [];
+
+
+/*
+    =================================
+    ORDRE GLOBAL DES PHOTOS
+    =================================
+
+    C'est désormais CETTE liste
+    qui détermine l'ordre visuel
+    des photos.
+
+    Elle permet de mélanger
+    librement :
+
+    - photos déjà enregistrées ;
+    - nouvelles photos.
+
+    Exemple :
+
+    [
+        {
+            type: "existante",
+            id: "abc"
+        },
+        {
+            type: "nouvelle",
+            id: "local-123"
+        },
+        {
+            type: "existante",
+            id: "def"
+        }
+    ]
+
+    La première entrée correspond
+    à la photo principale.
+*/
+
+let ordrePhotos =
+    [];
+
+
+/*
+    Indique si l'utilisateur
+    a réellement changé l'ordre.
+
+    Cela permet d'enregistrer
+    l'ordre même s'il n'a ajouté
+    ou supprimé aucune photo.
+*/
+
+let ordrePhotosModifie =
+    false;
+
+
+/*
+    Photo actuellement déplacée
+    lors d'un drag & drop.
+*/
+
+let photoEnCoursDeDrag =
+    null;
+
+
+/*
+    Données utilisées pour
+    le déplacement tactile.
+*/
+
+let photoTactileEnCours =
+    null;
+
+
+let elementTactileEnCours =
+    null;
+
+
+/* =================================
+   OUTILS POUR L'ORDRE DES PHOTOS
+================================= */
+
+/*
+    Génère une clé unique pour
+    identifier une photo dans
+    ordrePhotos.
+*/
+
+function creerClePhoto(
+    type,
+    id
+) {
+
+    return (
+        `${type}:` +
+        `${String(id)}`
+    );
+}
+
+
+/* =================================
+   TROUVER UNE PHOTO DANS L'ORDRE
+================================= */
+
+function trouverIndexPhotoOrdre(
+    type,
+    id
+) {
+
+    const cle =
+        creerClePhoto(
+            type,
+            id
+        );
+
+
+    return ordrePhotos.findIndex(
+        function (
+            element
+        ) {
+
+            return (
+                creerClePhoto(
+                    element.type,
+                    element.id
+                ) ===
+                cle
+            );
+        }
+    );
+}
+
+
+/* =================================
+   AJOUTER UNE PHOTO À L'ORDRE
+================================= */
+
+function ajouterPhotoDansOrdre(
+    type,
+    id
+) {
+
+    if (
+        !type ||
+        id ===
+            null ||
+        id ===
+            undefined
+    ) {
+
+        return;
+    }
+
+
+    const dejaPresente =
+        trouverIndexPhotoOrdre(
+            type,
+            id
+        ) !==
+        -1;
+
+
+    if (
+        dejaPresente
+    ) {
+
+        return;
+    }
+
+
+    ordrePhotos.push(
+        {
+            type:
+                type,
+
+            id:
+                id
+        }
+    );
+}
+
+
+/* =================================
+   RETIRER UNE PHOTO DE L'ORDRE
+================================= */
+
+function retirerPhotoDeOrdre(
+    type,
+    id
+) {
+
+    const cle =
+        creerClePhoto(
+            type,
+            id
+        );
+
+
+    ordrePhotos =
+        ordrePhotos.filter(
+            function (
+                element
+            ) {
+
+                return (
+                    creerClePhoto(
+                        element.type,
+                        element.id
+                    ) !==
+                    cle
+                );
+            }
+        );
+
+
+    ordrePhotosModifie =
+        true;
+}
+
+
+/* =================================
+   NETTOYER L'ORDRE
+================================= */
+
+/*
+    Supprime de ordrePhotos les
+    références qui ne correspondent
+    plus à une vraie photo.
+
+    Cela sert notamment après
+    suppression d'une photo.
+*/
+
+function nettoyerOrdrePhotos() {
+
+    const clesValides =
+        new Set();
+
+
+    photosExistantes.forEach(
+        function (
+            photo
+        ) {
+
+            clesValides.add(
+                creerClePhoto(
+                    "existante",
+                    photo.id
+                )
+            );
+        }
+    );
+
+
+    nouvellesPhotos.forEach(
+        function (
+            photo
+        ) {
+
+            clesValides.add(
+                creerClePhoto(
+                    "nouvelle",
+                    photo.idLocal
+                )
+            );
+        }
+    );
+
+
+    ordrePhotos =
+        ordrePhotos.filter(
+            function (
+                element
+            ) {
+
+                return clesValides.has(
+                    creerClePhoto(
+                        element.type,
+                        element.id
+                    )
+                );
+            }
+        );
+
+
+    /*
+        Sécurité :
+        si une photo existe mais n'est
+        pas encore présente dans
+        ordrePhotos, on l'ajoute à la fin.
+    */
+
+    photosExistantes.forEach(
+        function (
+            photo
+        ) {
+
+            ajouterPhotoDansOrdre(
+                "existante",
+                photo.id
+            );
+        }
+    );
+
+
+    nouvellesPhotos.forEach(
+        function (
+            photo
+        ) {
+
+            ajouterPhotoDansOrdre(
+                "nouvelle",
+                photo.idLocal
+            );
+        }
+    );
+}
+
+
+/* =================================
+   RÉCUPÉRER UNE PHOTO PAR RÉFÉRENCE
+================================= */
+
+function obtenirPhotoDepuisOrdre(
+    reference
+) {
+
+    if (
+        !reference
+    ) {
+
+        return null;
+    }
+
+
+    if (
+        reference.type ===
+        "existante"
+    ) {
+
+        const photo =
+            photosExistantes.find(
+                function (
+                    element
+                ) {
+
+                    return (
+                        String(
+                            element.id
+                        ) ===
+                        String(
+                            reference.id
+                        )
+                    );
+                }
+            );
+
+
+        if (
+            !photo
+        ) {
+
+            return null;
+        }
+
+
+        return {
+
+            type:
+                "existante",
+
+            id:
+                photo.id,
+
+            url:
+                photo.url,
+
+            nom:
+                "Photo de la recette",
+
+            photo:
+                photo
+
+        };
+    }
+
+
+    if (
+        reference.type ===
+        "nouvelle"
+    ) {
+
+        const photo =
+            nouvellesPhotos.find(
+                function (
+                    element
+                ) {
+
+                    return (
+                        String(
+                            element.idLocal
+                        ) ===
+                        String(
+                            reference.id
+                        )
+                    );
+                }
+            );
+
+
+        if (
+            !photo
+        ) {
+
+            return null;
+        }
+
+
+        return {
+
+            type:
+                "nouvelle",
+
+            id:
+                photo.idLocal,
+
+            url:
+                photo.urlApercu,
+
+            nom:
+                photo.fichier?.name ||
+                "Nouvelle photo",
+
+            photo:
+                photo
+
+        };
+    }
+
+
+    return null;
+}
+
+
+/* =================================
+   LISTE DES PHOTOS DANS LE BON ORDRE
+================================= */
+
+function obtenirPhotosDansOrdre() {
+
+    nettoyerOrdrePhotos();
+
+
+    return ordrePhotos
+        .map(
+            function (
+                reference
+            ) {
+
+                return obtenirPhotoDepuisOrdre(
+                    reference
+                );
+            }
+        )
+        .filter(
+            Boolean
+        );
+}
+
+
+/* =================================
+   DÉPLACER UNE PHOTO
+================================= */
+
+function deplacerPhoto(
+    indexDepart,
+    indexArrivee
+) {
+
+    if (
+        indexDepart ===
+        indexArrivee
+    ) {
+
+        return;
+    }
+
+
+    if (
+        indexDepart <
+            0 ||
+        indexArrivee <
+            0 ||
+        indexDepart >=
+            ordrePhotos.length ||
+        indexArrivee >=
+            ordrePhotos.length
+    ) {
+
+        return;
+    }
+
+
+    const [
+        photoDeplacee
+    ] =
+        ordrePhotos.splice(
+            indexDepart,
+            1
+        );
+
+
+    ordrePhotos.splice(
+        indexArrivee,
+        0,
+        photoDeplacee
+    );
+
+
+    ordrePhotosModifie =
+        true;
+
+
+    afficherApercuPhotos();
+}
+
+
+/* =================================
+   DÉPLACER PHOTO GAUCHE / DROITE
+================================= */
+
+function deplacerPhotoDirection(
+    type,
+    id,
+    direction
+) {
+
+    const index =
+        trouverIndexPhotoOrdre(
+            type,
+            id
+        );
+
+
+    if (
+        index ===
+        -1
+    ) {
+
+        return;
+    }
+
+
+    const nouvelIndex =
+        direction ===
+        "gauche"
+            ? index - 1
+            : index + 1;
+
+
+    if (
+        nouvelIndex <
+            0 ||
+        nouvelIndex >=
+            ordrePhotos.length
+    ) {
+
+        return;
+    }
+
+
+    deplacerPhoto(
+        index,
+        nouvelIndex
+    );
+}
 
 
 /* =================================
@@ -175,15 +753,21 @@ async function recupererUtilisateurConnecte() {
             .getUser();
 
 
-    if (error) {
+    if (
+        error
+    ) {
+
         throw error;
     }
 
 
-    if (!data.user) {
+    if (
+        !data.user
+    ) {
 
         window.location.href =
             "compte.html";
+
 
         return null;
     }
@@ -199,7 +783,9 @@ async function recupererUtilisateurConnecte() {
 
 async function recupererFoyerUtilisateur() {
 
-    if (!utilisateurConnecte) {
+    if (
+        !utilisateurConnecte
+    ) {
 
         return null;
     }
@@ -210,25 +796,37 @@ async function recupererFoyerUtilisateur() {
         error
     } =
         await window.supabaseClient
-            .from("membres_foyer")
-            .select("foyer_id")
+            .from(
+                "membres_foyer"
+            )
+            .select(
+                "foyer_id"
+            )
             .eq(
                 "user_id",
                 utilisateurConnecte.id
             )
-            .limit(1)
+            .limit(
+                1
+            )
             .maybeSingle();
 
 
-    if (error) {
+    if (
+        error
+    ) {
+
         throw error;
     }
 
 
-    if (!data) {
+    if (
+        !data
+    ) {
 
         window.location.href =
             "foyer.html";
+
 
         return null;
     }
@@ -294,7 +892,8 @@ function creerLigneIngredient(
                 type="checkbox"
                 class="ingredient-proportionnel"
                 ${
-                    valeurs.proportionnel === false
+                    valeurs.proportionnel ===
+                    false
                         ? ""
                         : "checked"
                 }
@@ -339,28 +938,32 @@ function creerLigneIngredient(
             */
 
             if (
-                lignes.length === 1
+                lignes.length ===
+                1
             ) {
 
                 ligne
                     .querySelector(
                         ".ingredient-quantite"
                     )
-                    .value = "";
+                    .value =
+                        "";
 
 
                 ligne
                     .querySelector(
                         ".ingredient-unite"
                     )
-                    .value = "";
+                    .value =
+                        "";
 
 
                 ligne
                     .querySelector(
                         ".ingredient-nom"
                     )
-                    .value = "";
+                    .value =
+                        "";
 
 
                 ligne
@@ -396,7 +999,9 @@ function transformerEnListe(
 ) {
 
     return valeur
-        .split("\n")
+        .split(
+            "\n"
+        )
         .map(
             function (
                 ligne
@@ -411,7 +1016,8 @@ function transformerEnListe(
             ) {
 
                 return (
-                    ligne !== ""
+                    ligne !==
+                    ""
                 );
             }
         );
@@ -498,7 +1104,8 @@ function convertirQuantite(
 
 
     if (
-        texte === ""
+        texte ===
+        ""
     ) {
 
         return null;
@@ -515,7 +1122,8 @@ function convertirQuantite(
         !Number.isFinite(
             nombre
         ) ||
-        nombre < 0
+        nombre <
+            0
     ) {
 
         throw new Error(
@@ -585,9 +1193,12 @@ function recupererIngredients() {
 
 
             const ligneVide =
-                quantiteTexte.trim() === "" &&
-                unite === "" &&
-                nom === "";
+                quantiteTexte.trim() ===
+                    "" &&
+                unite ===
+                    "" &&
+                nom ===
+                    "";
 
 
             if (
@@ -599,7 +1210,8 @@ function recupererIngredients() {
 
 
             if (
-                nom === ""
+                nom ===
+                ""
             ) {
 
                 throw new Error(
@@ -608,23 +1220,25 @@ function recupererIngredients() {
             }
 
 
-            ingredients.push({
+            ingredients.push(
+                {
 
-                quantite:
-                    convertirQuantite(
-                        quantiteTexte
-                    ),
+                    quantite:
+                        convertirQuantite(
+                            quantiteTexte
+                        ),
 
-                unite:
-                    unite,
+                    unite:
+                        unite,
 
-                nom:
-                    nom,
+                    nom:
+                        nom,
 
-                proportionnel:
-                    proportionnel
+                    proportionnel:
+                        proportionnel
 
-            });
+                }
+            );
         }
     );
 
@@ -656,15 +1270,19 @@ function recupererVisibilite() {
         );
 
 
-    if (!champ) {
+    if (
+        !champ
+    ) {
 
         return "publique";
     }
 
 
     if (
-        champ.value !== "publique" &&
-        champ.value !== "foyer"
+        champ.value !==
+            "publique" &&
+        champ.value !==
+            "foyer"
     ) {
 
         return "publique";
@@ -692,7 +1310,8 @@ function construireRecette() {
 
 
     if (
-        etapes.length === 0
+        etapes.length ===
+        0
     ) {
 
         throw new Error(
@@ -718,7 +1337,9 @@ function construireRecette() {
             .trim();
 
 
-    if (!nom) {
+    if (
+        !nom
+    ) {
 
         throw new Error(
             "Renseigne le nom de la recette."
@@ -731,7 +1352,8 @@ function construireRecette() {
 
 
     if (
-        visibilite === "foyer" &&
+        visibilite ===
+            "foyer" &&
         !foyerId
     ) {
 
@@ -840,9 +1462,8 @@ function construireRecette() {
 ================================= */
 
 /*
-    Nombre total de photos qui resteront
-    sur la recette si on enregistrait
-    maintenant.
+    Nombre total de photos
+    actuellement conservées.
 */
 
 function obtenirNombrePhotosActuelles() {
@@ -854,10 +1475,9 @@ function obtenirNombrePhotosActuelles() {
 }
 
 
-/*
-    Met à jour le compteur 0 / 5,
-    1 / 5, etc.
-*/
+/* =================================
+   COMPTEUR PHOTOS
+================================= */
 
 function mettreAJourCompteurPhotos() {
 
@@ -876,11 +1496,6 @@ function mettreAJourCompteurPhotos() {
     compteurPhotosRecette.textContent =
         `${nombre} / ${NOMBRE_MAX_PHOTOS}`;
 
-
-    /*
-        Une fois 5 photos atteintes,
-        on empêche d'en ajouter davantage.
-    */
 
     if (
         boutonAjouterPhotos
@@ -950,11 +1565,17 @@ function creerIdentifiantPhotoLocal() {
 
 
     return (
-        Date.now().toString(36) +
+        Date.now().toString(
+            36
+        ) +
         "-" +
         Math.random()
-            .toString(36)
-            .slice(2)
+            .toString(
+                36
+            )
+            .slice(
+                2
+            )
     );
 }
 
@@ -975,11 +1596,6 @@ function verifierFichierPhoto(
     }
 
 
-    /*
-        On accepte uniquement
-        les fichiers image.
-    */
-
     if (
         !fichier.type ||
         !fichier.type.startsWith(
@@ -994,13 +1610,8 @@ function verifierFichierPhoto(
 
 
     /*
-        Limite de sécurité avant compression.
-
-        Les photos de téléphone peuvent
-        être lourdes.
-
-        On accepte jusqu'à 25 Mo en entrée,
-        puis on les compressera avant Supabase.
+        On accepte jusqu'à 25 Mo
+        avant compression.
     */
 
     const tailleMaximum =
@@ -1023,7 +1634,6 @@ function verifierFichierPhoto(
     return true;
 }
 
-
 /* =================================
    AJOUTER LES FICHIERS SÉLECTIONNÉS
 ================================= */
@@ -1045,7 +1655,8 @@ function ajouterFichiersPhotos(
 
 
     if (
-        liste.length === 0
+        liste.length ===
+        0
     ) {
 
         return;
@@ -1058,7 +1669,8 @@ function ajouterFichiersPhotos(
 
 
     if (
-        placesDisponibles <= 0
+        placesDisponibles <=
+        0
     ) {
 
         afficherMessagePhotos(
@@ -1108,6 +1720,18 @@ function ajouterFichiersPhotos(
                 nouvellesPhotos.push(
                     photo
                 );
+
+
+                /*
+                    La nouvelle photo est
+                    ajoutée à la fin de l'ordre
+                    actuel.
+                */
+
+                ajouterPhotoDansOrdre(
+                    "nouvelle",
+                    photo.idLocal
+                );
             }
         );
 
@@ -1140,13 +1764,17 @@ function ajouterFichiersPhotos(
 
 
     /*
-        Très important :
-        permet de sélectionner à nouveau
-        exactement le même fichier ensuite.
+        Permet de sélectionner
+        de nouveau le même fichier.
     */
 
-    inputPhotosRecette.value =
-        "";
+    if (
+        inputPhotosRecette
+    ) {
+
+        inputPhotosRecette.value =
+            "";
+    }
 }
 
 
@@ -1165,8 +1793,12 @@ function supprimerNouvellePhoto(
             ) {
 
                 return (
-                    element.idLocal ===
-                    idLocal
+                    String(
+                        element.idLocal
+                    ) ===
+                    String(
+                        idLocal
+                    )
                 );
             }
         );
@@ -1190,11 +1822,21 @@ function supprimerNouvellePhoto(
             ) {
 
                 return (
-                    element.idLocal !==
-                    idLocal
+                    String(
+                        element.idLocal
+                    ) !==
+                    String(
+                        idLocal
+                    )
                 );
             }
         );
+
+
+    retirerPhotoDeOrdre(
+        "nouvelle",
+        idLocal
+    );
 
 
     afficherApercuPhotos();
@@ -1235,9 +1877,38 @@ function retirerPhotoExistante(
     }
 
 
-    photosASupprimer.push(
-        photo
-    );
+    /*
+        On évite d'ajouter deux fois
+        la même photo à la liste
+        des suppressions.
+    */
+
+    const dejaPresente =
+        photosASupprimer.some(
+            function (
+                element
+            ) {
+
+                return (
+                    String(
+                        element.id
+                    ) ===
+                    String(
+                        photo.id
+                    )
+                );
+            }
+        );
+
+
+    if (
+        !dejaPresente
+    ) {
+
+        photosASupprimer.push(
+            photo
+        );
+    }
 
 
     photosExistantes =
@@ -1256,6 +1927,12 @@ function retirerPhotoExistante(
                 );
             }
         );
+
+
+    retirerPhotoDeOrdre(
+        "existante",
+        photoId
+    );
 
 
     afficherApercuPhotos();
@@ -1277,55 +1954,7 @@ function afficherApercuPhotos() {
 
 
     const toutesLesPhotos =
-        [
-
-            ...photosExistantes.map(
-                function (
-                    photo
-                ) {
-
-                    return {
-
-                        type:
-                            "existante",
-
-                        id:
-                            photo.id,
-
-                        url:
-                            photo.url,
-
-                        nom:
-                            "Photo de la recette"
-
-                    };
-                }
-            ),
-
-            ...nouvellesPhotos.map(
-                function (
-                    photo
-                ) {
-
-                    return {
-
-                        type:
-                            "nouvelle",
-
-                        id:
-                            photo.idLocal,
-
-                        url:
-                            photo.urlApercu,
-
-                        nom:
-                            photo.fichier.name
-
-                    };
-                }
-            )
-
-        ];
+        obtenirPhotosDansOrdre();
 
 
     if (
@@ -1336,10 +1965,13 @@ function afficherApercuPhotos() {
         apercuPhotosRecette.innerHTML =
             "";
 
+
         apercuPhotosRecette.hidden =
             true;
 
+
         mettreAJourCompteurPhotos();
+
 
         return;
     }
@@ -1357,22 +1989,70 @@ function afficherApercuPhotos() {
                     index
                 ) {
 
+                    const estPremiere =
+                        index ===
+                        0;
+
+
+                    const boutonGaucheDesactive =
+                        index ===
+                        0;
+
+
+                    const boutonDroiteDesactive =
+                        index ===
+                        toutesLesPhotos.length -
+                        1;
+
+
                     return `
 
                         <div
-                            class="apercu-photo-recette"
+                            class="apercu-photo-recette ${
+                                estPremiere
+                                    ? "photo-principale"
+                                    : ""
+                            }"
+                            data-type-photo="${photo.type}"
+                            data-photo-id="${photo.id}"
+                            data-index-photo="${index}"
+                            draggable="true"
                         >
+
+                            <div
+                                class="poignee-photo-recette"
+                                aria-hidden="true"
+                            >
+                                ⋮⋮
+                            </div>
+
 
                             <img
                                 src="${photo.url}"
                                 alt="Photo ${index + 1} de la recette"
+                                draggable="false"
                             >
+
+
+                            ${
+                                estPremiere
+                                    ? `
+                                        <span
+                                            class="badge-photo-principale"
+                                        >
+                                            Photo principale
+                                        </span>
+                                    `
+                                    : ""
+                            }
+
 
                             <span
                                 class="numero-photo-recette"
                             >
                                 ${index + 1}
                             </span>
+
 
                             <button
                                 type="button"
@@ -1384,6 +2064,46 @@ function afficherApercuPhotos() {
                             >
                                 ×
                             </button>
+
+
+                            <div
+                                class="actions-ordre-photo"
+                            >
+
+                                <button
+                                    type="button"
+                                    class="deplacer-photo-recette deplacer-photo-gauche"
+                                    data-type-photo="${photo.type}"
+                                    data-photo-id="${photo.id}"
+                                    aria-label="Déplacer cette photo vers la gauche"
+                                    title="Déplacer vers la gauche"
+                                    ${
+                                        boutonGaucheDesactive
+                                            ? "disabled"
+                                            : ""
+                                    }
+                                >
+                                    ←
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="deplacer-photo-recette deplacer-photo-droite"
+                                    data-type-photo="${photo.type}"
+                                    data-photo-id="${photo.id}"
+                                    aria-label="Déplacer cette photo vers la droite"
+                                    title="Déplacer vers la droite"
+                                    ${
+                                        boutonDroiteDesactive
+                                            ? "disabled"
+                                            : ""
+                                    }
+                                >
+                                    →
+                                </button>
+
+                            </div>
 
                         </div>
 
@@ -1420,6 +2140,7 @@ if (
                     "erreur"
                 );
 
+
                 return;
             }
 
@@ -1442,7 +2163,7 @@ if (
 
 
 /* =================================
-   CLIC SUPPRIMER PHOTO
+   CLICS DANS LES APERÇUS
 ================================= */
 
 if (
@@ -1455,53 +2176,668 @@ if (
             evenement
         ) {
 
-            const bouton =
+            /* =========================
+               SUPPRESSION
+            ========================= */
+
+            const boutonSuppression =
                 evenement.target.closest(
                     ".supprimer-photo-recette"
                 );
 
 
             if (
-                !bouton
+                boutonSuppression
             ) {
 
-                return;
+                const type =
+                    boutonSuppression
+                        .dataset
+                        .typePhoto;
+
+
+                const id =
+                    boutonSuppression
+                        .dataset
+                        .photoId;
+
+
+                if (
+                    type ===
+                    "nouvelle"
+                ) {
+
+                    supprimerNouvellePhoto(
+                        id
+                    );
+
+
+                    return;
+                }
+
+
+                if (
+                    type ===
+                    "existante"
+                ) {
+
+                    retirerPhotoExistante(
+                        id
+                    );
+
+
+                    return;
+                }
             }
 
 
-            const type =
-                bouton.dataset.typePhoto;
+            /* =========================
+               DÉPLACEMENT GAUCHE
+            ========================= */
 
-
-            const id =
-                bouton.dataset.photoId;
-
-
-            if (
-                type ===
-                "nouvelle"
-            ) {
-
-                supprimerNouvellePhoto(
-                    id
+            const boutonGauche =
+                evenement.target.closest(
+                    ".deplacer-photo-gauche"
                 );
 
+
+            if (
+                boutonGauche &&
+                !boutonGauche.disabled
+            ) {
+
+                deplacerPhotoDirection(
+                    boutonGauche
+                        .dataset
+                        .typePhoto,
+
+                    boutonGauche
+                        .dataset
+                        .photoId,
+
+                    "gauche"
+                );
+
+
                 return;
             }
 
 
+            /* =========================
+               DÉPLACEMENT DROITE
+            ========================= */
+
+            const boutonDroite =
+                evenement.target.closest(
+                    ".deplacer-photo-droite"
+                );
+
+
             if (
-                type ===
-                "existante"
+                boutonDroite &&
+                !boutonDroite.disabled
             ) {
 
-                retirerPhotoExistante(
-                    id
+                deplacerPhotoDirection(
+                    boutonDroite
+                        .dataset
+                        .typePhoto,
+
+                    boutonDroite
+                        .dataset
+                        .photoId,
+
+                    "droite"
                 );
             }
         }
     );
 }
+
+
+/* =================================
+   DRAG & DROP DESKTOP
+================================= */
+
+if (
+    apercuPhotosRecette
+) {
+
+    /* =========================
+       DÉBUT DU DRAG
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "dragstart",
+        function (
+            evenement
+        ) {
+
+            const element =
+                evenement.target.closest(
+                    ".apercu-photo-recette"
+                );
+
+
+            if (
+                !element
+            ) {
+
+                return;
+            }
+
+
+            photoEnCoursDeDrag = {
+
+                type:
+                    element
+                        .dataset
+                        .typePhoto,
+
+                id:
+                    element
+                        .dataset
+                        .photoId
+
+            };
+
+
+            element.classList.add(
+                "photo-en-deplacement"
+            );
+
+
+            if (
+                evenement.dataTransfer
+            ) {
+
+                evenement.dataTransfer.effectAllowed =
+                    "move";
+
+
+                /*
+                    Safari préfère souvent
+                    avoir une donnée explicite.
+                */
+
+                evenement.dataTransfer.setData(
+                    "text/plain",
+                    creerClePhoto(
+                        photoEnCoursDeDrag.type,
+                        photoEnCoursDeDrag.id
+                    )
+                );
+            }
+        }
+    );
+
+
+    /* =========================
+       DRAG AU-DESSUS
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "dragover",
+        function (
+            evenement
+        ) {
+
+            const cible =
+                evenement.target.closest(
+                    ".apercu-photo-recette"
+                );
+
+
+            if (
+                !cible ||
+                !photoEnCoursDeDrag
+            ) {
+
+                return;
+            }
+
+
+            evenement.preventDefault();
+
+
+            if (
+                evenement.dataTransfer
+            ) {
+
+                evenement.dataTransfer.dropEffect =
+                    "move";
+            }
+
+
+            const elements =
+                apercuPhotosRecette
+                    .querySelectorAll(
+                        ".apercu-photo-recette"
+                    );
+
+
+            elements.forEach(
+                function (
+                    element
+                ) {
+
+                    element.classList.remove(
+                        "photo-cible-deplacement"
+                    );
+                }
+            );
+
+
+            cible.classList.add(
+                "photo-cible-deplacement"
+            );
+        }
+    );
+
+
+    /* =========================
+       DROP
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "drop",
+        function (
+            evenement
+        ) {
+
+            evenement.preventDefault();
+
+
+            const cible =
+                evenement.target.closest(
+                    ".apercu-photo-recette"
+                );
+
+
+            if (
+                !cible ||
+                !photoEnCoursDeDrag
+            ) {
+
+                return;
+            }
+
+
+            const indexDepart =
+                trouverIndexPhotoOrdre(
+                    photoEnCoursDeDrag.type,
+                    photoEnCoursDeDrag.id
+                );
+
+
+            const indexArrivee =
+                Number(
+                    cible
+                        .dataset
+                        .indexPhoto
+                );
+
+
+            if (
+                Number.isInteger(
+                    indexArrivee
+                )
+            ) {
+
+                deplacerPhoto(
+                    indexDepart,
+                    indexArrivee
+                );
+            }
+
+
+            photoEnCoursDeDrag =
+                null;
+        }
+    );
+
+
+    /* =========================
+       FIN DU DRAG
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "dragend",
+        function () {
+
+            photoEnCoursDeDrag =
+                null;
+
+
+            const elements =
+                apercuPhotosRecette
+                    .querySelectorAll(
+                        ".apercu-photo-recette"
+                    );
+
+
+            elements.forEach(
+                function (
+                    element
+                ) {
+
+                    element.classList.remove(
+                        "photo-en-deplacement",
+                        "photo-cible-deplacement"
+                    );
+                }
+            );
+        }
+    );
+}
+
+
+/* =================================
+   DÉPLACEMENT TACTILE MOBILE
+================================= */
+
+if (
+    apercuPhotosRecette
+) {
+
+    /* =========================
+       DÉBUT TOUCH
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "touchstart",
+        function (
+            evenement
+        ) {
+
+            /*
+                On ne lance pas le drag
+                si on appuie sur un bouton.
+            */
+
+            if (
+                evenement.target.closest(
+                    "button"
+                )
+            ) {
+
+                return;
+            }
+
+
+            const element =
+                evenement.target.closest(
+                    ".apercu-photo-recette"
+                );
+
+
+            if (
+                !element
+            ) {
+
+                return;
+            }
+
+
+            photoTactileEnCours = {
+
+                type:
+                    element
+                        .dataset
+                        .typePhoto,
+
+                id:
+                    element
+                        .dataset
+                        .photoId
+
+            };
+
+
+            elementTactileEnCours =
+                element;
+
+
+            element.classList.add(
+                "photo-en-deplacement-tactile"
+            );
+
+        },
+        {
+            passive:
+                true
+        }
+    );
+
+
+    /* =========================
+       DÉPLACEMENT TOUCH
+    ========================= */
+
+    apercuPhotosRecette.addEventListener(
+        "touchmove",
+        function (
+            evenement
+        ) {
+
+            if (
+                !photoTactileEnCours
+            ) {
+
+                return;
+            }
+
+
+            const touche =
+                evenement.touches[
+                    0
+                ];
+
+
+            if (
+                !touche
+            ) {
+
+                return;
+            }
+
+
+            const elementSousDoigt =
+                document.elementFromPoint(
+                    touche.clientX,
+                    touche.clientY
+                );
+
+
+            const cible =
+                elementSousDoigt
+                    ?.closest(
+                        ".apercu-photo-recette"
+                    );
+
+
+            if (
+                !cible ||
+                !apercuPhotosRecette.contains(
+                    cible
+                )
+            ) {
+
+                return;
+            }
+
+
+            const elements =
+                apercuPhotosRecette
+                    .querySelectorAll(
+                        ".apercu-photo-recette"
+                    );
+
+
+            elements.forEach(
+                function (
+                    element
+                ) {
+
+                    element.classList.remove(
+                        "photo-cible-deplacement"
+                    );
+                }
+            );
+
+
+            cible.classList.add(
+                "photo-cible-deplacement"
+            );
+
+
+            const indexDepart =
+                trouverIndexPhotoOrdre(
+                    photoTactileEnCours.type,
+                    photoTactileEnCours.id
+                );
+
+
+            const indexArrivee =
+                Number(
+                    cible
+                        .dataset
+                        .indexPhoto
+                );
+
+
+            if (
+                indexDepart ===
+                    -1 ||
+                !Number.isInteger(
+                    indexArrivee
+                ) ||
+                indexDepart ===
+                    indexArrivee
+            ) {
+
+                return;
+            }
+
+
+            /*
+                Réorganisation instantanée
+                pendant le déplacement.
+            */
+
+            const [
+                photoDeplacee
+            ] =
+                ordrePhotos.splice(
+                    indexDepart,
+                    1
+                );
+
+
+            ordrePhotos.splice(
+                indexArrivee,
+                0,
+                photoDeplacee
+            );
+
+
+            ordrePhotosModifie =
+                true;
+
+
+            /*
+                On réaffiche pour que la position
+                visuelle suive le doigt.
+            */
+
+            afficherApercuPhotos();
+
+        },
+        {
+            passive:
+                true
+        }
+    );
+
+
+    /* =========================
+       FIN TOUCH
+    ========================= */
+
+    function terminerDeplacementTactile() {
+
+        photoTactileEnCours =
+            null;
+
+
+        elementTactileEnCours =
+            null;
+
+
+        if (
+            !apercuPhotosRecette
+        ) {
+
+            return;
+        }
+
+
+        const elements =
+            apercuPhotosRecette
+                .querySelectorAll(
+                    ".apercu-photo-recette"
+                );
+
+
+        elements.forEach(
+            function (
+                element
+            ) {
+
+                element.classList.remove(
+                    "photo-en-deplacement-tactile",
+                    "photo-cible-deplacement"
+                );
+            }
+        );
+    }
+
+
+    apercuPhotosRecette.addEventListener(
+        "touchend",
+        terminerDeplacementTactile
+    );
+
+
+    apercuPhotosRecette.addEventListener(
+        "touchcancel",
+        terminerDeplacementTactile
+    );
+}
+
+/* =================================
+   CORRESPONDANCE DES NOUVELLES PHOTOS
+   APRÈS INSERTION SUPABASE
+================================= */
+
+/*
+    Lorsqu'une nouvelle photo est
+    sélectionnée, elle possède seulement
+    un idLocal.
+
+    Après son insertion dans
+    recette_photos, Supabase lui donne
+    un vrai id.
+
+    Cette Map permettra ensuite
+    d'enregistrer l'ordre final.
+
+    idLocal -> id Supabase
+*/
+
+const idsNouvellesPhotosEnregistrees =
+    new Map();
+
 
 /* =================================
    CHARGER UNE IMAGE
@@ -1596,11 +2932,13 @@ function calculerDimensionsPhoto(
 
     const ratio =
         Math.min(
+
             tailleMaximale /
                 largeurOriginale,
 
             tailleMaximale /
                 hauteurOriginale
+
         );
 
 
@@ -1653,6 +2991,7 @@ function convertirCanvasEnBlob(
                             )
                         );
 
+
                         return;
                     }
 
@@ -1661,7 +3000,9 @@ function convertirCanvasEnBlob(
                         blob
                     );
                 },
+
                 type,
+
                 qualite
             );
         }
@@ -1678,7 +3019,8 @@ async function compresserPhoto(
 ) {
 
     /*
-        Charge l'image dans le navigateur.
+        Chargement de la photo
+        dans le navigateur.
     */
 
     const image =
@@ -1688,18 +3030,19 @@ async function compresserPhoto(
 
 
     /*
-        On limite le plus grand côté
-        à 1600 px.
-
-        C'est largement suffisant pour
-        une fiche recette.
+        Le plus grand côté sera
+        limité à 1600 px.
     */
 
     const dimensions =
         calculerDimensionsPhoto(
+
             image.naturalWidth,
+
             image.naturalHeight,
+
             1600
+
         );
 
 
@@ -1736,8 +3079,9 @@ async function compresserPhoto(
     /*
         Fond blanc.
 
-        Utile notamment si un PNG
-        transparent est converti en JPEG.
+        Utile si une image PNG
+        contient de la transparence
+        avant conversion en JPEG.
     */
 
     contexte.fillStyle =
@@ -1762,14 +3106,9 @@ async function compresserPhoto(
 
 
     /*
-        On privilégie WebP quand
-        le navigateur sait l'encoder.
-
-        Sinon JPEG.
-
-        Ici on part sur JPEG pour
-        maximiser la compatibilité
-        entre Safari / iPhone / Android.
+        JPEG pour conserver une très
+        bonne compatibilité mobile,
+        notamment Safari / iPhone.
     */
 
     const typeSortie =
@@ -1789,12 +3128,11 @@ async function compresserPhoto(
 
 
     /*
-        Si l'image reste encore lourde,
-        on réduit progressivement
-        la qualité.
-
-        Objectif :
+        Taille cible :
         environ 1,5 Mo maximum.
+
+        Si nécessaire, on diminue
+        progressivement la qualité.
     */
 
     const tailleCible =
@@ -1824,8 +3162,8 @@ async function compresserPhoto(
 
 
     /*
-        On crée un vrai File pour
-        Supabase Storage.
+        On transforme ensuite le Blob
+        en véritable File.
     */
 
     const fichierCompresse =
@@ -1947,8 +3285,7 @@ function construireCheminPhotoStorage(
 
 
     /*
-        Correspond exactement
-        à la structure prévue :
+        Structure :
 
         foyer_id/
         recette_id/
@@ -1959,6 +3296,46 @@ function construireCheminPhotoStorage(
         `${foyerId}/` +
         `${recetteId}/` +
         `${nomFichier}`
+    );
+}
+
+
+/* =================================
+   CALCULER UN ORDRE TEMPORAIRE
+================================= */
+
+/*
+    Lorsqu'on ajoute une nouvelle photo,
+    on ne lui donne volontairement PAS
+    directement son ordre final.
+
+    Pourquoi ?
+
+    Exemple :
+
+    Photo A existante
+    Nouvelle photo
+    Photo B existante
+
+    A possède peut-être déjà ordre = 1
+    et B ordre = 2.
+
+    Si on insérait immédiatement
+    la nouvelle avec ordre = 2,
+    on pourrait créer une collision.
+
+    On utilise donc 1000, 1001...
+    puis la partie 4 remettra
+    tous les ordres à 1, 2, 3...
+*/
+
+function obtenirOrdreTemporairePhoto(
+    index
+) {
+
+    return (
+        1000 +
+        index
     );
 }
 
@@ -1994,7 +3371,8 @@ async function uploaderUnePhoto(
 
 
     const {
-        error
+        error:
+            erreurUpload
     } =
         await window.supabaseClient
             .storage
@@ -2020,10 +3398,10 @@ async function uploaderUnePhoto(
 
 
     if (
-        error
+        erreurUpload
     ) {
 
-        throw error;
+        throw erreurUpload;
     }
 
 
@@ -2033,14 +3411,16 @@ async function uploaderUnePhoto(
             chemin,
 
         ordre:
-            index + 1
+            obtenirOrdreTemporairePhoto(
+                index
+            )
 
     };
 }
 
 
 /* =================================
-   INSÉRER PHOTO EN BASE
+   INSÉRER UNE PHOTO EN BASE
 ================================= */
 
 async function enregistrerPhotoEnBase(
@@ -2049,27 +3429,34 @@ async function enregistrerPhotoEnBase(
 ) {
 
     const {
+        data,
         error
     } =
         await window.supabaseClient
             .from(
                 "recette_photos"
             )
-            .insert({
+            .insert(
+                {
 
-                recette_id:
-                    recetteId,
+                    recette_id:
+                        recetteId,
 
-                chemin:
-                    photo.chemin,
+                    chemin:
+                        photo.chemin,
 
-                ordre:
-                    photo.ordre,
+                    ordre:
+                        photo.ordre,
 
-                created_by:
-                    utilisateurConnecte.id
+                    created_by:
+                        utilisateurConnecte.id
 
-            });
+                }
+            )
+            .select(
+                "id, recette_id, chemin, ordre, created_by"
+            )
+            .single();
 
 
     if (
@@ -2077,6 +3464,52 @@ async function enregistrerPhotoEnBase(
     ) {
 
         throw error;
+    }
+
+
+    return data;
+}
+
+
+/* =================================
+   NETTOYER UN FICHIER APRÈS
+   UNE ERREUR SQL
+================================= */
+
+async function nettoyerPhotoStorageApresErreur(
+    chemin
+) {
+
+    if (
+        !chemin
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        await window.supabaseClient
+            .storage
+            .from(
+                "recettes"
+            )
+            .remove(
+                [
+                    chemin
+                ]
+            );
+
+
+    } catch (
+        erreurNettoyage
+    ) {
+
+        console.error(
+            "Impossible de nettoyer la photo après erreur SQL :",
+            erreurNettoyage
+        );
     }
 }
 
@@ -2099,12 +3532,11 @@ async function uploaderNouvellesPhotos(
 
 
     /*
-        Les nouvelles photos arrivent
-        après celles déjà conservées.
+        On repart d'une correspondance
+        propre à chaque enregistrement.
     */
 
-    const ordreDepart =
-        photosExistantes.length;
+    idsNouvellesPhotosEnregistrees.clear();
 
 
     for (
@@ -2125,138 +3557,93 @@ async function uploaderNouvellesPhotos(
         );
 
 
-        const fichierCompresse =
-            await compresserPhoto(
-                photo.fichier
-            );
+        let photoUploadee =
+            null;
 
 
-        const nomFichier =
-            genererNomPhotoStorage(
-                photo.fichier,
-                index
-            );
+        try {
 
+            /* =========================
+               STORAGE
+            ========================= */
 
-        const chemin =
-            construireCheminPhotoStorage(
-                recetteId,
-                nomFichier
-            );
-
-
-        const {
-            error:
-                erreurUpload
-        } =
-            await window.supabaseClient
-                .storage
-                .from(
-                    "recettes"
-                )
-                .upload(
-                    chemin,
-                    fichierCompresse,
-                    {
-
-                        cacheControl:
-                            "3600",
-
-                        upsert:
-                            false,
-
-                        contentType:
-                            "image/jpeg"
-
-                    }
+            photoUploadee =
+                await uploaderUnePhoto(
+                    photo,
+                    recetteId,
+                    index
                 );
 
 
-        if (
-            erreurUpload
-        ) {
+            /* =========================
+               BASE
+            ========================= */
 
-            throw erreurUpload;
-        }
-
-
-        /*
-            Une fois le fichier
-            bien arrivé dans Storage,
-            on crée la ligne SQL.
-        */
-
-        const {
-            error:
-                erreurBase
-        } =
-            await window.supabaseClient
-                .from(
-                    "recette_photos"
-                )
-                .insert({
-
-                    recette_id:
-                        recetteId,
-
-                    chemin:
-                        chemin,
-
-                    ordre:
-                        ordreDepart +
-                        index +
-                        1,
-
-                    created_by:
-                        utilisateurConnecte.id
-
-                });
+            const photoEnregistree =
+                await enregistrerPhotoEnBase(
+                    recetteId,
+                    photoUploadee
+                );
 
 
-        if (
-            erreurBase
-        ) {
-
-            /*
-                Si l'insertion SQL échoue,
-                on essaie de nettoyer
-                le fichier déjà uploadé.
-
-                Ça évite les fichiers
-                orphelins dans Storage.
-            */
-
-            try {
-
-                await window.supabaseClient
-                    .storage
-                    .from(
-                        "recettes"
-                    )
-                    .remove(
-                        [
-                            chemin
-                        ]
-                    );
-
-            } catch (
-                erreurNettoyage
+            if (
+                !photoEnregistree?.id
             ) {
 
-                console.error(
-                    "Impossible de nettoyer la photo après erreur SQL :",
-                    erreurNettoyage
+                throw new Error(
+                    "La photo a été enregistrée mais son identifiant est introuvable."
                 );
             }
 
 
-            throw erreurBase;
+            /*
+                On mémorise le lien :
+
+                idLocal
+                    ↓
+                id Supabase
+
+                Il sera utilisé pour
+                enregistrer l'ordre final.
+            */
+
+            idsNouvellesPhotosEnregistrees.set(
+                String(
+                    photo.idLocal
+                ),
+                photoEnregistree.id
+            );
+
+
+        } catch (
+            erreur
+        ) {
+
+            /*
+                Si Storage a fonctionné
+                mais pas l'insertion SQL,
+                on supprime le fichier
+                devenu inutile.
+            */
+
+            if (
+                photoUploadee?.chemin
+            ) {
+
+                await nettoyerPhotoStorageApresErreur(
+                    photoUploadee.chemin
+                );
+            }
+
+
+            throw erreur;
         }
     }
 
 
     afficherMessagePhotos(
-        nouvellesPhotos.length === 1
+        nouvellesPhotos.length ===
+            1
             ? "Photo enregistrée ✓"
             : "Photos enregistrées ✓",
         "succes"
@@ -2283,11 +3670,9 @@ async function creerUrlPhotoPrivee(
     /*
         Le bucket est privé.
 
-        On utilise donc une signed URL
-        temporaire uniquement pour
-        afficher l'aperçu dans le formulaire.
-
-        Durée : 1 heure.
+        URL temporaire d'une heure
+        uniquement pour l'aperçu
+        du formulaire.
     */
 
     const {
@@ -2325,7 +3710,6 @@ async function creerUrlPhotoPrivee(
     );
 }
 
-
 /* =================================
    CHARGER LES PHOTOS EXISTANTES
 ================================= */
@@ -2340,6 +3724,14 @@ async function chargerPhotosRecette(
 
     photosASupprimer =
         [];
+
+
+    ordrePhotos =
+        [];
+
+
+    ordrePhotosModifie =
+        false;
 
 
     if (
@@ -2393,7 +3785,8 @@ async function chargerPhotosRecette(
 
 
     /*
-        Signed URLs en parallèle.
+        Génération des URLs signées
+        en parallèle.
     */
 
     photosExistantes =
@@ -2419,6 +3812,31 @@ async function chargerPhotosRecette(
                     };
                 }
             )
+        );
+
+
+    /*
+        Initialisation de l'ordre global
+        avec l'ordre actuellement stocké
+        dans Supabase.
+    */
+
+    ordrePhotos =
+        photosExistantes.map(
+            function (
+                photo
+            ) {
+
+                return {
+
+                    type:
+                        "existante",
+
+                    id:
+                        photo.id
+
+                };
+            }
         );
 
 
@@ -2527,7 +3945,7 @@ async function supprimerPhotosRetirees() {
 
         /*
             On supprime d'abord
-            la ligne en base.
+            la ligne SQL.
 
             Puis le fichier Storage.
         */
@@ -2549,19 +3967,117 @@ async function supprimerPhotosRetirees() {
 
 
 /* =================================
-   RÉORDONNER LES PHOTOS
+   CONVERTIR L'ORDRE LOCAL
+   EN IDS SUPABASE
 ================================= */
 
-async function enregistrerOrdrePhotos(
+/*
+    Avant enregistrement :
+
+    existante
+        -> possède déjà un id Supabase
+
+    nouvelle
+        -> possède un idLocal
+
+    Après uploaderNouvellesPhotos(),
+    idsNouvellesPhotosEnregistrees
+    permet de retrouver son nouvel
+    id Supabase.
+*/
+
+function construireOrdreFinalSupabase() {
+
+    const ordreFinal =
+        [];
+
+
+    ordrePhotos.forEach(
+        function (
+            reference
+        ) {
+
+            if (
+                reference.type ===
+                "existante"
+            ) {
+
+                /*
+                    Une photo qui a été retirée
+                    ne doit évidemment plus
+                    faire partie de l'ordre.
+                */
+
+                const existeEncore =
+                    photosExistantes.some(
+                        function (
+                            photo
+                        ) {
+
+                            return (
+                                String(
+                                    photo.id
+                                ) ===
+                                String(
+                                    reference.id
+                                )
+                            );
+                        }
+                    );
+
+
+                if (
+                    existeEncore
+                ) {
+
+                    ordreFinal.push(
+                        reference.id
+                    );
+                }
+
+
+                return;
+            }
+
+
+            if (
+                reference.type ===
+                "nouvelle"
+            ) {
+
+                const idSupabase =
+                    idsNouvellesPhotosEnregistrees.get(
+                        String(
+                            reference.id
+                        )
+                    );
+
+
+                if (
+                    idSupabase
+                ) {
+
+                    ordreFinal.push(
+                        idSupabase
+                    );
+                }
+            }
+        }
+    );
+
+
+    return ordreFinal;
+}
+
+
+/* =================================
+   RÉCUPÉRER L'ORDRE ACTUEL
+   DEPUIS SUPABASE
+================================= */
+
+async function recupererPhotosSupabase(
     recetteId
 ) {
-
-    /*
-        Après suppression + upload,
-        on recharge les photos et
-        remet un ordre propre :
-        1, 2, 3, 4, 5.
-    */
 
     const {
         data,
@@ -2595,61 +4111,341 @@ async function enregistrerOrdrePhotos(
     }
 
 
-    const photos =
-        Array.isArray(
-            data
-        )
-            ? data
-            : [];
+    return Array.isArray(
+        data
+    )
+        ? data
+        : [];
+}
 
+
+/* =================================
+   ENREGISTRER UN ORDRE TEMPORAIRE
+================================= */
+
+/*
+    On commence par déplacer toutes
+    les photos vers une plage
+    temporaire très élevée.
+
+    Exemple :
+
+    10001
+    10002
+    10003
+
+    Ensuite seulement on remet :
+
+    1
+    2
+    3
+
+    Cela évite les collisions si
+    une contrainte unique existe
+    éventuellement sur l'ordre.
+*/
+
+async function appliquerOrdresTemporaires(
+    idsPhotos
+) {
 
     for (
         let index = 0;
         index <
-            photos.length;
+            idsPhotos.length;
         index++
     ) {
 
-        const nouvelOrdre =
-            index + 1;
-
-
-        if (
-            photos[index].ordre ===
-            nouvelOrdre
-        ) {
-
-            continue;
-        }
-
-
         const {
-            error:
-                erreurOrdre
+            error
         } =
             await window.supabaseClient
                 .from(
                     "recette_photos"
                 )
-                .update({
-
-                    ordre:
-                        nouvelOrdre
-
-                })
+                .update(
+                    {
+                        ordre:
+                            10000 +
+                            index +
+                            1
+                    }
+                )
                 .eq(
                     "id",
-                    photos[index].id
+                    idsPhotos[
+                        index
+                    ]
                 );
 
 
         if (
-            erreurOrdre
+            error
         ) {
 
-            throw erreurOrdre;
+            throw error;
         }
     }
+}
+
+
+/* =================================
+   APPLIQUER L'ORDRE FINAL
+================================= */
+
+async function appliquerOrdreFinal(
+    idsPhotos
+) {
+
+    for (
+        let index = 0;
+        index <
+            idsPhotos.length;
+        index++
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_photos"
+                )
+                .update(
+                    {
+                        ordre:
+                            index +
+                            1
+                    }
+                )
+                .eq(
+                    "id",
+                    idsPhotos[
+                        index
+                    ]
+                );
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+    }
+}
+
+
+/* =================================
+   ENREGISTRER L'ORDRE DES PHOTOS
+================================= */
+
+async function enregistrerOrdrePhotos(
+    recetteId
+) {
+
+    /*
+        Ordre souhaité par l'utilisateur.
+    */
+
+    let idsPhotos =
+        construireOrdreFinalSupabase();
+
+
+    /*
+        En mode création, ou dans certains
+        cas de sécurité, ordrePhotos peut
+        ne pas encore contenir toutes les
+        photos réellement présentes.
+
+        On récupère donc les lignes SQL.
+    */
+
+    const photosSupabase =
+        await recupererPhotosSupabase(
+            recetteId
+        );
+
+
+    /*
+        Si l'ordre global ne contient
+        aucune entrée exploitable,
+        on retombe simplement sur
+        l'ordre actuellement présent
+        en base.
+    */
+
+    if (
+        idsPhotos.length ===
+        0 &&
+        photosSupabase.length >
+        0
+    ) {
+
+        idsPhotos =
+            photosSupabase.map(
+                function (
+                    photo
+                ) {
+
+                    return photo.id;
+                }
+            );
+    }
+
+
+    /*
+        Sécurité :
+        toute photo réellement présente
+        en base mais absente de la liste
+        finale est ajoutée à la fin.
+
+        Cela évite qu'une photo soit
+        "perdue" à cause d'un état local
+        incomplet.
+    */
+
+    const idsDejaPresents =
+        new Set(
+            idsPhotos.map(
+                function (
+                    id
+                ) {
+
+                    return String(
+                        id
+                    );
+                }
+            )
+        );
+
+
+    photosSupabase.forEach(
+        function (
+            photo
+        ) {
+
+            if (
+                !idsDejaPresents.has(
+                    String(
+                        photo.id
+                    )
+                )
+            ) {
+
+                idsPhotos.push(
+                    photo.id
+                );
+
+
+                idsDejaPresents.add(
+                    String(
+                        photo.id
+                    )
+                );
+            }
+        }
+    );
+
+
+    if (
+        idsPhotos.length ===
+        0
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Étape 1 :
+        ordres temporaires.
+    */
+
+    await appliquerOrdresTemporaires(
+        idsPhotos
+    );
+
+
+    /*
+        Étape 2 :
+        ordre réel 1, 2, 3...
+    */
+
+    await appliquerOrdreFinal(
+        idsPhotos
+    );
+}
+
+
+/* =================================
+   RECHARGER L'ÉTAT PHOTO
+   APRÈS ENREGISTREMENT
+================================= */
+
+async function rechargerEtatPhotos(
+    recetteId
+) {
+
+    /*
+        Les anciennes URLs blob
+        des nouvelles photos locales
+        ne sont plus nécessaires.
+    */
+
+    nouvellesPhotos.forEach(
+        function (
+            photo
+        ) {
+
+            if (
+                photo.urlApercu
+            ) {
+
+                try {
+
+                    URL.revokeObjectURL(
+                        photo.urlApercu
+                    );
+
+                } catch (
+                    erreur
+                ) {
+
+                    console.warn(
+                        "Impossible de libérer l'aperçu local :",
+                        erreur
+                    );
+                }
+            }
+        }
+    );
+
+
+    nouvellesPhotos =
+        [];
+
+
+    photosASupprimer =
+        [];
+
+
+    idsNouvellesPhotosEnregistrees.clear();
+
+
+    /*
+        On recharge ensuite les vraies
+        lignes depuis Supabase avec
+        le nouvel ordre.
+    */
+
+    await chargerPhotosRecette(
+        recetteId
+    );
+
+
+    ordrePhotosModifie =
+        false;
 }
 
 
@@ -2662,17 +4458,39 @@ async function enregistrerPhotosRecette(
 ) {
 
     /*
-        Étape 1 :
-        supprimer celles retirées.
+        Important :
+
+        on conserve une copie de
+        ordrePhotos AVANT de vider
+        les états locaux.
+
+        Elle contient encore les
+        références aux nouvelles photos.
     */
+
+    const ordreAvantEnregistrement =
+        ordrePhotos.map(
+            function (
+                reference
+            ) {
+
+                return {
+                    ...reference
+                };
+            }
+        );
+
+
+    /* =========================
+       1. SUPPRESSIONS
+    ========================= */
 
     await supprimerPhotosRetirees();
 
 
-    /*
-        Étape 2 :
-        envoyer les nouvelles.
-    */
+    /* =========================
+       2. UPLOAD DES NOUVELLES
+    ========================= */
 
     await uploaderNouvellesPhotos(
         recetteId
@@ -2680,40 +4498,51 @@ async function enregistrerPhotosRecette(
 
 
     /*
-        Étape 3 :
-        remettre les ordres au propre.
+        uploaderNouvellesPhotos()
+        a maintenant rempli :
+
+        idsNouvellesPhotosEnregistrees
+
+        On remet l'ordre local choisi
+        avant l'enregistrement.
     */
+
+    ordrePhotos =
+        ordreAvantEnregistrement;
+
+
+    /* =========================
+       3. ORDRE FINAL
+    ========================= */
 
     await enregistrerOrdrePhotos(
         recetteId
     );
 
 
-    /*
-        Important :
-        après réussite, on vide
-        les nouvelles photos locales.
-    */
+    /* =========================
+       4. RECHARGEMENT
+    ========================= */
 
-    nouvellesPhotos.forEach(
-        function (
-            photo
-        ) {
-
-            if (
-                photo.urlApercu
-            ) {
-
-                URL.revokeObjectURL(
-                    photo.urlApercu
-                );
-            }
-        }
+    await rechargerEtatPhotos(
+        recetteId
     );
+}
 
 
-    nouvellesPhotos =
-        [];
+/* =================================
+   SAVOIR SI LES PHOTOS ONT CHANGÉ
+================================= */
+
+function photosOntEteModifiees() {
+
+    return (
+        nouvellesPhotos.length >
+            0 ||
+        photosASupprimer.length >
+            0 ||
+        ordrePhotosModifie
+    );
 }
 
 /* =================================
@@ -2757,7 +4586,8 @@ function cocherVisibilite(
 ) {
 
     const valeur =
-        visibilite === "foyer"
+        visibilite ===
+        "foyer"
             ? "foyer"
             : "publique";
 
@@ -2873,14 +4703,6 @@ function remplirFormulaire(
             "";
 
 
-    /*
-        Visibilité.
-
-        Les anciennes recettes
-        qui n'ont pas encore ce champ
-        restent publiques.
-    */
-
     cocherVisibilite(
         recette.visibilite ||
         "publique"
@@ -2943,29 +4765,32 @@ async function chargerRecetteAModifier() {
 
         /*
             Nouvelle recette :
-            quelques lignes d'ingrédients
-            prêtes à remplir.
+            quelques lignes déjà prêtes.
         */
 
         creerLigneIngredient();
-
+        creerLigneIngredient();
         creerLigneIngredient();
 
-        creerLigneIngredient();
-
-
-        /*
-            Pas de photos existantes.
-        */
 
         photosExistantes =
             [];
 
+
         photosASupprimer =
             [];
 
+
         nouvellesPhotos =
             [];
+
+
+        ordrePhotos =
+            [];
+
+
+        ordrePhotosModifie =
+            false;
 
 
         afficherApercuPhotos();
@@ -2979,30 +4804,42 @@ async function chargerRecetteAModifier() {
         "Modifier une recette | À notre table";
 
 
-    document
-        .querySelector(
+    const titreFormulaire =
+        document.querySelector(
             ".entete-formulaire h1"
-        )
-        .textContent =
+        );
+
+
+    if (
+        titreFormulaire
+    ) {
+
+        titreFormulaire.textContent =
             "Modifier la recette";
+    }
 
 
-    document
-        .querySelector(
+    const texteEntete =
+        document.querySelector(
             ".entete-formulaire p"
-        )
-        .textContent =
+        );
+
+
+    if (
+        texteEntete
+    ) {
+
+        texteEntete.textContent =
             "Modifie les informations puis enregistre les changements.";
+    }
 
 
-    boutonEnregistrer
-        .textContent =
-            "Enregistrer les modifications";
+    boutonEnregistrer.textContent =
+        "Enregistrer les modifications";
 
 
-    messageFormulaire
-        .textContent =
-            "Chargement de la recette…";
+    messageFormulaire.textContent =
+        "Chargement de la recette…";
 
 
     try {
@@ -3041,14 +4878,6 @@ async function chargerRecetteAModifier() {
         }
 
 
-        /*
-            Seul le créateur peut
-            modifier la recette.
-
-            La RLS Supabase reste
-            également la vraie sécurité.
-        */
-
         if (
             data.created_by &&
             data.created_by !==
@@ -3061,19 +4890,10 @@ async function chargerRecetteAModifier() {
         }
 
 
-        /*
-            Remplissage classique.
-        */
-
         remplirFormulaire(
             data
         );
 
-
-        /*
-            Puis récupération
-            des photos existantes.
-        */
 
         afficherMessagePhotos(
             "Chargement des photos…"
@@ -3090,9 +4910,8 @@ async function chargerRecetteAModifier() {
         );
 
 
-        messageFormulaire
-            .textContent =
-                "";
+        messageFormulaire.textContent =
+            "";
 
 
     } catch (
@@ -3105,15 +4924,13 @@ async function chargerRecetteAModifier() {
         );
 
 
-        messageFormulaire
-            .textContent =
-                erreur.message ||
-                "Impossible de charger la recette.";
+        messageFormulaire.textContent =
+            erreur.message ||
+            "Impossible de charger la recette.";
 
 
-        boutonEnregistrer
-            .disabled =
-                true;
+        boutonEnregistrer.disabled =
+            true;
 
 
         afficherMessagePhotos(
@@ -3132,11 +4949,6 @@ async function chargerRecetteAModifier() {
 async function ajouterRecette(
     recette
 ) {
-
-    /*
-        Le créateur est ajouté
-        uniquement lors de la création.
-    */
 
     const recetteAvecCreateur = {
 
@@ -3184,18 +4996,6 @@ async function ajouterRecette(
 async function modifierRecette(
     recette
 ) {
-
-    /*
-        created_by n'est volontairement
-        PAS modifié.
-
-        Le créateur original reste
-        propriétaire de la recette.
-
-        foyer_id et visibilite peuvent
-        en revanche être modifiés :
-        publique <-> foyer.
-    */
 
     const {
         data,
@@ -3250,7 +5050,6 @@ boutonAjouterIngredient
 
 /* =================================
    VÉRIFIER LES PHOTOS
-   AVANT ENREGISTREMENT
 ================================= */
 
 function verifierPhotosAvantEnregistrement() {
@@ -3269,11 +5068,6 @@ function verifierPhotosAvantEnregistrement() {
         );
     }
 
-
-    /*
-        Une recette peut parfaitement
-        ne contenir aucune photo.
-    */
 
     return true;
 }
@@ -3311,20 +5105,58 @@ function verrouillerPhotos(
         apercuPhotosRecette
     ) {
 
-        const boutonsSuppression =
+        const boutons =
             apercuPhotosRecette
                 .querySelectorAll(
-                    ".supprimer-photo-recette"
+                    `
+                    .supprimer-photo-recette,
+                    .deplacer-photo-recette
+                    `
                 );
 
 
-        boutonsSuppression.forEach(
+        boutons.forEach(
             function (
                 bouton
             ) {
 
                 bouton.disabled =
-                    verrouille;
+                    verrouille ||
+                    bouton.hasAttribute(
+                        "data-desactive-position"
+                    );
+            }
+        );
+
+
+        const photos =
+            apercuPhotosRecette
+                .querySelectorAll(
+                    ".apercu-photo-recette"
+                );
+
+
+        photos.forEach(
+            function (
+                photo
+            ) {
+
+                if (
+                    verrouille
+                ) {
+
+                    photo.setAttribute(
+                        "draggable",
+                        "false"
+                    );
+
+                } else {
+
+                    photo.setAttribute(
+                        "draggable",
+                        "true"
+                    );
+                }
             }
         );
     }
@@ -3393,10 +5225,6 @@ async function enregistrerRecetteComplete() {
     }
 
 
-    /*
-        Validation générale.
-    */
-
     verifierPhotosAvantEnregistrement();
 
 
@@ -3404,10 +5232,9 @@ async function enregistrerRecetteComplete() {
         construireRecette();
 
 
-    /*
-        1. Enregistrer les données
-           principales de la recette.
-    */
+    /* =========================
+       1. RECETTE
+    ========================= */
 
     messageFormulaire.textContent =
         modeModification
@@ -3436,25 +5263,22 @@ async function enregistrerRecetteComplete() {
     }
 
 
-    /*
-        2. Photos.
-
-        À partir d'ici la recette existe
-        forcément dans Supabase.
-    */
-
-    const nombreModificationsPhotos =
-        nouvellesPhotos.length +
-        photosASupprimer.length;
-
+    /* =========================
+       2. PHOTOS
+    ========================= */
 
     if (
-        nombreModificationsPhotos >
-        0
+        photosOntEteModifiees()
     ) {
 
         messageFormulaire.textContent =
-            "Enregistrement des photos…";
+            ordrePhotosModifie &&
+            nouvellesPhotos.length ===
+                0 &&
+            photosASupprimer.length ===
+                0
+                ? "Enregistrement de l’ordre des photos…"
+                : "Enregistrement des photos…";
 
 
         await enregistrerPhotosRecette(
@@ -3463,9 +5287,9 @@ async function enregistrerRecetteComplete() {
     }
 
 
-    /*
-        3. Succès.
-    */
+    /* =========================
+       3. SUCCÈS
+    ========================= */
 
     messageFormulaire.textContent =
         modeModification
@@ -3481,6 +5305,7 @@ async function enregistrerRecetteComplete() {
     return recetteEnregistree;
 }
 
+
 /* =================================
    SOUMISSION DU FORMULAIRE
 ================================= */
@@ -3493,11 +5318,6 @@ formulaire.addEventListener(
 
         evenement.preventDefault();
 
-
-        /*
-            Évite un double clic pendant
-            un enregistrement déjà en cours.
-        */
 
         if (
             boutonEnregistrer.disabled
@@ -3523,27 +5343,9 @@ formulaire.addEventListener(
 
         try {
 
-            /*
-                Cette fonction s'occupe maintenant
-                de TOUT :
-
-                1. construire la recette
-                2. créer / modifier la recette
-                3. supprimer les anciennes photos retirées
-                4. compresser les nouvelles photos
-                5. envoyer les nouvelles photos
-                6. enregistrer recette_photos
-            */
-
             const recetteEnregistree =
                 await enregistrerRecetteComplete();
 
-
-            /*
-                On attend volontairement un petit
-                instant pour que l'utilisateur
-                puisse voir la confirmation.
-            */
 
             await new Promise(
                 function (
@@ -3557,12 +5359,6 @@ formulaire.addEventListener(
                 }
             );
 
-
-            /*
-                La redirection arrive UNIQUEMENT
-                lorsque recette + photos ont été
-                correctement enregistrées.
-            */
 
             window.location.href =
                 `recette.html?id=${encodeURIComponent(
@@ -3585,17 +5381,8 @@ formulaire.addEventListener(
                 "Une erreur est survenue pendant l'enregistrement.";
 
 
-            /*
-                Si l'erreur concerne probablement
-                Storage / recette_photos, on affiche
-                également le message près des photos.
-            */
-
             if (
-                nouvellesPhotos.length >
-                    0 ||
-                photosASupprimer.length >
-                    0
+                photosOntEteModifiees()
             ) {
 
                 afficherMessagePhotos(
@@ -3685,14 +5472,6 @@ function initialiserInterfacePhotos() {
     }
 
 
-    /*
-        Au chargement :
-        0 / 5 pour une nouvelle recette.
-
-        En modification, chargerRecetteAModifier()
-        remplacera ensuite cette valeur.
-    */
-
     mettreAJourCompteurPhotos();
 
 
@@ -3712,12 +5491,6 @@ function initialiserInterfacePhotos() {
 
 async function initialiserPageAjout() {
 
-    /*
-        Pendant l'initialisation,
-        on évite que l'utilisateur
-        enregistre trop tôt.
-    */
-
     boutonEnregistrer.disabled =
         true;
 
@@ -3727,9 +5500,9 @@ async function initialiserPageAjout() {
 
     try {
 
-        /*
-            1. Utilisateur connecté
-        */
+        /* =========================
+           UTILISATEUR
+        ========================= */
 
         utilisateurConnecte =
             await recupererUtilisateurConnecte();
@@ -3743,9 +5516,9 @@ async function initialiserPageAjout() {
         }
 
 
-        /*
-            2. Foyer
-        */
+        /* =========================
+           FOYER
+        ========================= */
 
         const foyer =
             await recupererFoyerUtilisateur();
@@ -3759,21 +5532,12 @@ async function initialiserPageAjout() {
         }
 
 
-        /*
-            3. Nouvelle recette
-               OU recette à modifier.
-
-            En modification,
-            chargerRecetteAModifier()
-            récupère également les photos.
-        */
+        /* =========================
+           RECETTE
+        ========================= */
 
         await chargerRecetteAModifier();
 
-
-        /*
-            Tout est prêt.
-        */
 
         boutonEnregistrer.disabled =
             false;
@@ -3796,7 +5560,10 @@ async function initialiserPageAjout() {
                     foyerId,
 
                 photosExistantes:
-                    photosExistantes.length
+                    photosExistantes.length,
+
+                ordrePhotos:
+                    ordrePhotos
 
             }
         );
