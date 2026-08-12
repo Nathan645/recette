@@ -29,6 +29,11 @@
 
 <body>
 
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
     <header class="navigation-recette">
 
         <nav class="navigation">
@@ -45,7 +50,17 @@
     </header>
 
 
+
+    <!-- =========================
+         PAGE
+    ========================== -->
+
     <main class="page-formulaire">
+
+
+        <!-- =========================
+             ENTÊTE
+        ========================== -->
 
         <section class="entete-formulaire">
 
@@ -62,6 +77,11 @@
         </section>
 
 
+
+        <!-- =========================
+             FORMULAIRE
+        ========================== -->
+
         <form
             class="formulaire-recette"
             id="formulaire-recette"
@@ -73,6 +93,9 @@
             ========================== -->
 
             <div class="groupe-champs">
+
+
+                <!-- NOM -->
 
                 <div class="champ">
 
@@ -89,6 +112,8 @@
 
                 </div>
 
+
+                <!-- CATÉGORIE -->
 
                 <div class="champ">
 
@@ -136,6 +161,11 @@
             </div>
 
 
+
+            <!-- =========================
+                 DESCRIPTION
+            ========================== -->
+
             <div class="champ">
 
                 <label for="description">
@@ -151,11 +181,15 @@
             </div>
 
 
+
             <!-- =========================
                  TEMPS / PORTIONS
             ========================== -->
 
             <div class="groupe-champs">
+
+
+                <!-- PRÉPARATION -->
 
                 <div class="champ">
 
@@ -174,6 +208,8 @@
                 </div>
 
 
+                <!-- CUISSON -->
+
                 <div class="champ">
 
                     <label for="cuisson">
@@ -190,6 +226,8 @@
 
                 </div>
 
+
+                <!-- PERSONNES -->
 
                 <div class="champ">
 
@@ -212,6 +250,8 @@
 
                 </div>
 
+
+                <!-- DIFFICULTÉ -->
 
                 <div class="champ">
 
@@ -249,6 +289,7 @@
                 </div>
 
             </div>
+
 
 
             <!-- =========================
@@ -315,6 +356,7 @@
             </div>
 
 
+
             <!-- =========================
                  FILTRES
             ========================== -->
@@ -322,7 +364,9 @@
             <div class="bloc-filtres-recette">
 
 
-                <!-- ÉTIQUETTES -->
+                <!-- =========================
+                     ÉTIQUETTES
+                ========================== -->
 
                 <div class="champ">
 
@@ -415,7 +459,10 @@
                 </div>
 
 
-                <!-- OCCASIONS -->
+
+                <!-- =========================
+                     OCCASIONS
+                ========================== -->
 
                 <div class="champ">
 
@@ -508,7 +555,10 @@
                 </div>
 
 
-                <!-- SAISONS -->
+
+                <!-- =========================
+                     SAISONS
+                ========================== -->
 
                 <div class="champ">
 
@@ -590,6 +640,121 @@
             </div>
 
 
+
+            <!-- ==================================================
+                 PHOTOS
+            =================================================== -->
+
+            <div class="bloc-photos-recette">
+
+
+                <!-- ENTÊTE -->
+
+                <div class="entete-photos-recette">
+
+                    <div>
+
+                        <span class="titre-champ">
+                            Photos
+                        </span>
+
+                        <p class="aide">
+                            Ajoute jusqu'à 5 photos de la recette.
+                            Sur téléphone, tu pourras choisir une photo
+                            dans ta galerie ou en prendre une directement.
+                        </p>
+
+                    </div>
+
+
+                    <span
+                        class="compteur-photos-recette"
+                        id="compteur-photos-recette"
+                    >
+                        0 / 5
+                    </span>
+
+                </div>
+
+
+
+                <!--
+                    Input réellement utilisé pour
+                    sélectionner les images.
+
+                    Il sera caché visuellement par le CSS.
+
+                    IMPORTANT :
+                    on ne met PAS "capture",
+                    car cela forcerait certains téléphones
+                    à ouvrir directement l'appareil photo
+                    au lieu de proposer galerie + caméra.
+                -->
+
+                <input
+                    type="file"
+                    id="input-photos-recette"
+                    class="input-photos-recette"
+                    accept="image/*"
+                    multiple
+                >
+
+
+
+                <!-- ZONE D'AJOUT -->
+
+                <button
+                    type="button"
+                    class="zone-ajout-photos"
+                    id="bouton-ajouter-photos"
+                >
+
+                    <span class="icone-ajout-photo">
+                        📷
+                    </span>
+
+                    <span class="texte-ajout-photo">
+
+                        <strong>
+                            Ajouter des photos
+                        </strong>
+
+                        <small>
+                            Galerie ou appareil photo
+                        </small>
+
+                    </span>
+
+                </button>
+
+
+
+                <!--
+                    Les aperçus seront générés
+                    automatiquement par ajouter.js.
+                -->
+
+                <div
+                    class="apercu-photos-recette"
+                    id="apercu-photos-recette"
+                    hidden
+                >
+                </div>
+
+
+
+                <!-- MESSAGE -->
+
+                <p
+                    class="message-photos-recette"
+                    id="message-photos-recette"
+                    aria-live="polite"
+                ></p>
+
+            </div>
+
+
+
             <!-- =========================
                  ÉTAPES
             ========================== -->
@@ -615,6 +780,7 @@
             </div>
 
 
+
             <!-- =========================
                  ASTUCE
             ========================== -->
@@ -631,6 +797,63 @@
                 ></textarea>
 
             </div>
+
+
+
+            <!-- =========================
+                 VISIBILITÉ
+            ========================== -->
+
+            <div class="champ">
+
+                <span class="titre-champ">
+                    Visibilité
+                </span>
+
+
+                <div class="choix-visibilite">
+
+
+                    <label class="option-visibilite">
+
+                        <input
+                            type="radio"
+                            name="visibilite"
+                            value="publique"
+                            checked
+                        >
+
+                        <span>
+                            Tout le monde
+                        </span>
+
+                    </label>
+
+
+                    <label class="option-visibilite">
+
+                        <input
+                            type="radio"
+                            name="visibilite"
+                            value="foyer"
+                        >
+
+                        <span>
+                            Mon foyer uniquement
+                        </span>
+
+                    </label>
+
+                </div>
+
+
+                <small>
+                    Les recettes du foyer ne seront visibles
+                    que par les membres de votre foyer.
+                </small>
+
+            </div>
+
 
 
             <!-- =========================
@@ -652,57 +875,16 @@
                 aria-live="polite"
             ></p>
 
-        <div class="champ">
-
-    <span class="titre-champ">
-        Visibilité
-    </span>
-
-    <div class="choix-visibilite">
-
-        <label class="option-visibilite">
-
-            <input
-                type="radio"
-                name="visibilite"
-                value="publique"
-                checked
-            >
-
-            <span>
-                Tout le monde
-            </span>
-
-        </label>
-
-
-        <label class="option-visibilite">
-
-            <input
-                type="radio"
-                name="visibilite"
-                value="foyer"
-            >
-
-            <span>
-                Mon foyer uniquement
-            </span>
-
-        </label>
-
-    </div>
-
-    <small>
-        Les recettes du foyer ne seront visibles
-        que par les membres de votre foyer.
-    </small>
-
-</div>
 
         </form>
 
     </main>
 
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
 
     <footer>
 
@@ -713,10 +895,19 @@
     </footer>
 
 
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <script src="js/config.js"></script>
+
     <script src="js/supabase.js"></script>
-    <script src="js/ajouter.js"></script>
+
+    <script src="js/ajouter.js?v=2"></script>
+
 
 </body>
 
