@@ -387,7 +387,438 @@
 
     </div>
 
+<!-- =================================
+     MODE CUISINE
+================================= -->
 
+<div
+    class="mode-cuisine"
+    id="mode-cuisine"
+    hidden
+>
+
+    <div class="mode-cuisine-conteneur">
+
+
+        <!-- =========================
+             BARRE SUPÉRIEURE
+        ========================== -->
+
+        <header class="mode-cuisine-entete">
+
+            <div class="mode-cuisine-entete-texte">
+
+                <span class="mode-cuisine-sur-titre">
+                    Mode cuisine
+                </span>
+
+                <h2 id="mode-cuisine-nom-recette">
+                    Recette
+                </h2>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="mode-cuisine-fermer"
+                id="fermer-mode-cuisine"
+                aria-label="Quitter le mode cuisine"
+            >
+                ×
+            </button>
+
+        </header>
+
+
+
+        <!-- =========================
+             MINUTEURS ACTIFS
+        ========================== -->
+
+        <section
+            class="mode-cuisine-minuteurs"
+            id="zone-minuteurs-cuisine"
+            hidden
+        >
+
+            <div class="mode-cuisine-minuteurs-entete">
+
+                <h3>
+                    Minuteurs
+                </h3>
+
+                <button
+                    type="button"
+                    class="bouton-nouveau-minuteur"
+                    id="ajouter-minuteur-cuisine"
+                >
+                    Nouveau minuteur
+                </button>
+
+            </div>
+
+
+            <div
+                class="liste-minuteurs-cuisine"
+                id="liste-minuteurs-cuisine"
+            >
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             CONTENU PRINCIPAL
+        ========================== -->
+
+        <div class="mode-cuisine-grille">
+
+
+            <!-- =========================
+                 INGRÉDIENTS
+            ========================== -->
+
+            <aside
+                class="mode-cuisine-ingredients"
+                id="mode-cuisine-ingredients"
+            >
+
+                <div class="mode-cuisine-titre-section">
+
+                    <h3>
+                        Ingrédients
+                    </h3>
+
+                    <button
+                        type="button"
+                        class="bouton-replier-cuisine"
+                        id="replier-ingredients-cuisine"
+                        aria-label="Afficher ou masquer les ingrédients"
+                    >
+                        Masquer
+                    </button>
+
+                </div>
+
+
+                <div
+                    class="contenu-ingredients-cuisine"
+                    id="contenu-ingredients-cuisine"
+                >
+                </div>
+
+            </aside>
+
+
+
+            <!-- =========================
+                 ÉTAPE EN COURS
+            ========================== -->
+
+            <main class="mode-cuisine-etape">
+
+
+                <!-- =========================
+                     PROGRESSION
+                ========================== -->
+
+                <div class="progression-cuisine">
+
+                    <span id="numero-etape-cuisine">
+                        Étape 1
+                    </span>
+
+                    <span id="total-etapes-cuisine">
+                    </span>
+
+                </div>
+
+
+                <div class="barre-progression-cuisine">
+
+                    <div
+                        class="barre-progression-cuisine-remplie"
+                        id="barre-progression-cuisine"
+                    >
+                    </div>
+
+                </div>
+
+
+
+                <!-- =========================
+                     TEXTE DE L'ÉTAPE
+                ========================== -->
+
+                <div class="contenu-etape-cuisine">
+
+                    <p
+                        class="texte-etape-cuisine"
+                        id="texte-etape-cuisine"
+                    >
+                    </p>
+
+                </div>
+
+
+
+                <!-- =========================
+                     MINUTEUR POUR CETTE ÉTAPE
+                ========================== -->
+
+                <div class="actions-etape-cuisine">
+
+                    <button
+                        type="button"
+                        class="bouton-minuteur-etape"
+                        id="minuteur-etape-cuisine"
+                    >
+                        Lancer un minuteur
+                    </button>
+
+                </div>
+
+
+
+                <!-- =========================
+                     NAVIGATION
+                ========================== -->
+
+                <div class="navigation-etapes-cuisine">
+
+                    <button
+                        type="button"
+                        class="bouton-navigation-cuisine"
+                        id="etape-cuisine-precedente"
+                    >
+                        Précédent
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="bouton-navigation-cuisine bouton-navigation-cuisine-principal"
+                        id="etape-cuisine-suivante"
+                    >
+                        Suivant
+                    </button>
+
+                </div>
+
+
+            </main>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =================================
+     POPUP NOUVEAU MINUTEUR
+================================= -->
+
+<div
+    class="fond-popup-minuteur-cuisine"
+    id="popup-minuteur-cuisine"
+    hidden
+>
+
+    <div
+        class="popup-minuteur-cuisine"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titre-popup-minuteur"
+    >
+
+
+        <button
+            type="button"
+            class="fermer-popup-minuteur"
+            id="fermer-popup-minuteur"
+            aria-label="Fermer"
+        >
+            ×
+        </button>
+
+
+        <h2 id="titre-popup-minuteur">
+            Nouveau minuteur
+        </h2>
+
+
+        <!-- =========================
+             NOM
+        ========================== -->
+
+        <div class="champ-minuteur-cuisine">
+
+            <label for="nom-minuteur-cuisine">
+                Nom
+            </label>
+
+            <input
+                type="text"
+                id="nom-minuteur-cuisine"
+                maxlength="50"
+                placeholder="Ex. Cuisson des pommes de terre"
+            >
+
+        </div>
+
+
+
+        <!-- =========================
+             DURÉE
+        ========================== -->
+
+        <div class="champ-minuteur-cuisine">
+
+            <span class="label-minuteur-cuisine">
+                Durée
+            </span>
+
+
+            <div class="duree-minuteur-cuisine">
+
+                <div>
+
+                    <label for="minutes-minuteur-cuisine">
+                        Minutes
+                    </label>
+
+                    <input
+                        type="number"
+                        id="minutes-minuteur-cuisine"
+                        min="0"
+                        max="999"
+                        value="10"
+                    >
+
+                </div>
+
+
+                <div>
+
+                    <label for="secondes-minuteur-cuisine">
+                        Secondes
+                    </label>
+
+                    <input
+                        type="number"
+                        id="secondes-minuteur-cuisine"
+                        min="0"
+                        max="59"
+                        value="0"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             DURÉES RAPIDES
+        ========================== -->
+
+        <div class="durees-rapides-cuisine">
+
+            <button
+                type="button"
+                data-duree-minuteur="5"
+            >
+                5 min
+            </button>
+
+            <button
+                type="button"
+                data-duree-minuteur="10"
+            >
+                10 min
+            </button>
+
+            <button
+                type="button"
+                data-duree-minuteur="15"
+            >
+                15 min
+            </button>
+
+            <button
+                type="button"
+                data-duree-minuteur="20"
+            >
+                20 min
+            </button>
+
+            <button
+                type="button"
+                data-duree-minuteur="30"
+            >
+                30 min
+            </button>
+
+            <button
+                type="button"
+                data-duree-minuteur="45"
+            >
+                45 min
+            </button>
+
+        </div>
+
+
+
+        <!-- =========================
+             MESSAGE
+        ========================== -->
+
+        <div
+            class="message-minuteur-cuisine"
+            id="message-minuteur-cuisine"
+            hidden
+        >
+        </div>
+
+
+
+        <!-- =========================
+             ACTIONS
+        ========================== -->
+
+        <div class="actions-popup-minuteur">
+
+            <button
+                type="button"
+                class="bouton-annuler-minuteur"
+                id="annuler-minuteur-cuisine"
+            >
+                Annuler
+            </button>
+
+
+            <button
+                type="button"
+                class="bouton-lancer-minuteur"
+                id="lancer-minuteur-cuisine"
+            >
+                Lancer le minuteur
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
 
     <!-- =========================
          FOOTER
