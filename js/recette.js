@@ -3837,7 +3837,7 @@ async function creerRepasPlanningAvecRecette(
                 )
                 .insert(
                     {
-                        {
+                        
     repas_planning_id:
         nouveauRepas.id,
 
@@ -4004,7 +4004,7 @@ async function ajouterRecetteAuRepasExistant() {
                 )
                 .insert(
                     {
-                        {
+                        
     repas_planning_id:
         repasExistantPlanning.id,
 
