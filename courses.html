@@ -21,7 +21,7 @@
 
     <link
         rel="stylesheet"
-        href="css/courses.css"
+        href="css/courses.css?v=2"
     >
 
 </head>
@@ -106,11 +106,17 @@
     </header>
 
 
+
     <!-- =========================
          PAGE COURSES
     ========================== -->
 
     <main class="page-courses">
+
+
+        <!-- =========================
+             ENTÊTE
+        ========================== -->
 
         <section class="entete-courses">
 
@@ -123,80 +129,117 @@
             </h2>
 
             <p>
-                Les ingrédients sont calculés automatiquement
-                à partir des repas prévus dans votre planning.
+                Préparez votre liste à partir des repas prévus
+                dans votre planning et complétez-la librement.
             </p>
 
         </section>
 
 
-        <!-- =========================
-             NAVIGATION SEMAINE
-        ========================== -->
 
-        <section class="navigation-semaine-courses">
+        <!-- ==================================================
+             PÉRIODE
+        =================================================== -->
 
-            <button
-                type="button"
-                class="bouton-navigation-semaine"
-                id="semaine-precedente-courses"
-                aria-label="Semaine précédente"
-            >
-                ←
-            </button>
+        <section class="carte-periode-courses">
 
+            <div class="entete-carte-courses">
 
-            <div class="semaine-courses-actuelle">
+                <div>
 
-                <span
-                    class="numero-semaine-courses"
-                    id="numero-semaine-courses"
-                >
-                    Semaine
-                </span>
+                    <span class="petit-titre-courses">
+                        Période
+                    </span>
 
-                <h3 id="titre-semaine-courses">
-                    Chargement…
-                </h3>
+                    <h3>
+                        Pour quand faites-vous les courses ?
+                    </h3>
+
+                    <p class="description-carte-courses">
+                        Les ingrédients des recettes prévues entre ces deux dates
+                        seront automatiquement ajoutés à la liste.
+                    </p>
+
+                </div>
 
             </div>
 
 
-            <button
-                type="button"
-                class="bouton-navigation-semaine"
-                id="semaine-suivante-courses"
-                aria-label="Semaine suivante"
-            >
-                →
-            </button>
+            <div class="selection-periode-courses">
+
+                <!-- DATE DÉBUT -->
+
+                <div class="champ-course champ-date-course">
+
+                    <label for="date-debut-courses">
+                        Du
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date-debut-courses"
+                    >
+
+                </div>
+
+
+                <span
+                    class="separateur-dates-courses"
+                    aria-hidden="true"
+                >
+                    →
+                </span>
+
+
+                <!-- DATE FIN -->
+
+                <div class="champ-course champ-date-course">
+
+                    <label for="date-fin-courses">
+                        Au
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date-fin-courses"
+                    >
+
+                </div>
+
+
+                <!-- ACTUALISER -->
+
+                <button
+                    type="button"
+                    class="bouton-actualiser-courses"
+                    id="actualiser-courses"
+                >
+                    Actualiser la liste
+                </button>
+
+            </div>
+
+
+            <p
+                class="message-periode-courses"
+                id="message-periode-courses"
+                aria-live="polite"
+            ></p>
 
         </section>
 
 
-        <div class="actions-semaine-courses">
 
-            <button
-                type="button"
-                class="bouton-aujourdhui"
-                id="aller-aujourdhui-courses"
-            >
-                Aujourd'hui
-            </button>
-
-        </div>
-
-
-        <!-- =========================
+        <!-- ==================================================
              RÉSUMÉ
-        ========================== -->
+        =================================================== -->
 
         <section class="resume-courses">
 
             <div class="resume-course-item">
 
                 <span class="resume-course-label">
-                    Repas planifiés
+                    Repas prévus
                 </span>
 
                 <strong id="nombre-repas-courses">
@@ -209,10 +252,23 @@
             <div class="resume-course-item">
 
                 <span class="resume-course-label">
-                    Recettes utilisées
+                    Recettes
                 </span>
 
                 <strong id="nombre-recettes-courses">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="resume-course-item">
+
+                <span class="resume-course-label">
+                    Plats libres
+                </span>
+
+                <strong id="nombre-plats-libres-courses">
                     0
                 </strong>
 
@@ -234,23 +290,213 @@
         </section>
 
 
-        <!-- =========================
-             AJOUT MANUEL
-        ========================== -->
 
-        <section class="carte-ajout-course">
+        <!-- ==================================================
+             AVERTISSEMENT PLATS LIBRES
+        =================================================== -->
+
+        <section
+            class="alerte-plats-libres"
+            id="alerte-plats-libres"
+            hidden
+        >
+
+            <div class="icone-alerte-plats-libres">
+                ⚠️
+            </div>
+
+
+            <div class="contenu-alerte-plats-libres">
+
+                <h3>
+                    Certains plats doivent être complétés
+                </h3>
+
+                <p id="texte-alerte-plats-libres">
+                    Certains repas de votre planning ne correspondent
+                    pas à une recette enregistrée.
+                </p>
+
+
+                <div
+                    class="liste-plats-libres-courses"
+                    id="liste-plats-libres-courses"
+                >
+                </div>
+
+
+                <button
+                    type="button"
+                    class="bouton-completer-manuellement"
+                    id="aller-ajout-manuel"
+                >
+                    + Ajouter leurs ingrédients
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             PROGRESSION
+        =================================================== -->
+
+        <section
+            class="carte-progression-courses"
+            id="carte-progression-courses"
+        >
+
+            <div class="entete-progression-courses">
+
+                <div>
+
+                    <span class="petit-titre-courses">
+                        Avancement
+                    </span>
+
+                    <h3>
+                        Mes courses
+                    </h3>
+
+                </div>
+
+
+                <strong
+                    class="compteur-progression-courses"
+                    id="compteur-progression-courses"
+                >
+                    0 / 0
+                </strong>
+
+            </div>
+
+
+            <div
+                class="barre-progression-courses"
+                aria-hidden="true"
+            >
+
+                <div
+                    class="remplissage-progression-courses"
+                    id="remplissage-progression-courses"
+                    style="width: 0%;"
+                >
+                </div>
+
+            </div>
+
+
+            <p
+                class="texte-progression-courses"
+                id="texte-progression-courses"
+            >
+                Votre liste est prête.
+            </p>
+
+
+            <div class="actions-liste-courses">
+
+                <button
+                    type="button"
+                    class="bouton-action-liste bouton-tout-cocher"
+                    id="tout-cocher-courses"
+                >
+                    Tout cocher
+                </button>
+
+
+                <button
+                    type="button"
+                    class="bouton-action-liste bouton-tout-decocher"
+                    id="tout-decocher-courses"
+                >
+                    Tout décocher
+                </button>
+
+
+                <button
+                    type="button"
+                    class="bouton-action-liste bouton-masquer-coches"
+                    id="masquer-coches-courses"
+                    aria-pressed="false"
+                >
+                    Masquer les cochés
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             LISTE DE COURSES
+        =================================================== -->
+
+        <section
+            class="carte-courses"
+            id="carte-liste-courses"
+        >
 
             <div class="entete-carte-courses">
 
                 <div>
 
                     <span class="petit-titre-courses">
-                        Ajouter
+                        À acheter
                     </span>
 
                     <h3>
-                        Article manuel
+                        Ma liste
                     </h3>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="liste-courses"
+                id="liste-courses"
+            >
+
+                <p class="message-chargement-courses">
+                    Chargement de la liste de courses…
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ==================================================
+             AJOUT MANUEL
+        =================================================== -->
+
+        <section
+            class="carte-ajout-course"
+            id="ajout-manuel-courses"
+        >
+
+            <div class="entete-carte-courses">
+
+                <div>
+
+                    <span class="petit-titre-courses">
+                        Compléter
+                    </span>
+
+                    <h3>
+                        Ajouter un article
+                    </h3>
+
+                    <p class="description-carte-courses">
+                        Ajoutez ce qui ne provient pas directement
+                        d'une recette du planning.
+                    </p>
 
                 </div>
 
@@ -262,6 +508,9 @@
                 class="formulaire-article-manuel"
             >
 
+
+                <!-- ARTICLE -->
+
                 <div class="champ-course">
 
                     <label for="nom-article-manuel">
@@ -271,10 +520,15 @@
                     <input
                         type="text"
                         id="nom-article-manuel"
+                        placeholder="Ex. Papier toilette"
+                        autocomplete="off"
+                        required
                     >
 
                 </div>
 
+
+                <!-- QUANTITÉ -->
 
                 <div class="champ-course">
 
@@ -283,12 +537,35 @@
                     </label>
 
                     <input
-                        type="text"
+                        type="number"
                         id="quantite-article-manuel"
+                        min="0"
+                        step="any"
+                        placeholder="Ex. 2"
                     >
 
                 </div>
 
+
+                <!-- UNITÉ -->
+
+                <div class="champ-course">
+
+                    <label for="unite-article-manuel">
+                        Unité
+                    </label>
+
+                    <input
+                        type="text"
+                        id="unite-article-manuel"
+                        placeholder="Ex. paquets"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <!-- CATÉGORIE -->
 
                 <div class="champ-course">
 
@@ -341,6 +618,8 @@
                 </div>
 
 
+                <!-- AJOUTER -->
+
                 <div class="actions-article-manuel">
 
                     <button
@@ -365,55 +644,49 @@
         </section>
 
 
-        <!-- =========================
-             LISTE DE COURSES
-        ========================== -->
 
-        <section class="carte-courses">
+        <!-- ==================================================
+             TERMINER LES COURSES
+        =================================================== -->
 
-            <div class="entete-carte-courses">
+        <section
+            class="carte-terminer-courses"
+            id="carte-terminer-courses"
+        >
 
-                <div>
+            <div>
 
-                    <span class="petit-titre-courses">
-                        Cette semaine
-                    </span>
+                <span class="petit-titre-courses">
+                    Liste active
+                </span>
 
-                    <h3>
-                        À acheter
-                    </h3>
+                <h3>
+                    Courses terminées ?
+                </h3>
 
-                </div>
-
-
-                <button
-                    type="button"
-                    class="bouton-tout-decocher"
-                    id="tout-decocher-courses"
-                >
-                    Tout décocher
-                </button>
-
-            </div>
-
-
-            <div
-                class="liste-courses"
-                id="liste-courses"
-            >
-
-                <p class="message-chargement-courses">
-                    Chargement de la liste de courses…
+                <p>
+                    Une fois cette liste terminée, une nouvelle liste pourra
+                    être créée à partir de votre planning.
                 </p>
 
             </div>
 
+
+            <button
+                type="button"
+                class="bouton-terminer-courses"
+                id="terminer-courses"
+            >
+                Terminer les courses
+            </button>
+
         </section>
 
 
-        <!-- =========================
+
+        <!-- ==================================================
              AUCUN ARTICLE
-        ========================== -->
+        =================================================== -->
 
         <section
             class="message-vide-courses"
@@ -426,12 +699,13 @@
             </div>
 
             <h3>
-                Aucun ingrédient à acheter
+                Votre liste est vide
             </h3>
 
             <p>
-                Ajoutez des recettes à votre planning
-                ou ajoutez un article manuellement.
+                Aucun ingrédient n'est nécessaire pour cette période.
+                Vous pouvez modifier les dates, ajouter des repas
+                au planning ou ajouter un article manuellement.
             </p>
 
             <a
@@ -444,9 +718,10 @@
         </section>
 
 
-        <!-- =========================
+
+        <!-- ==================================================
              ERREUR
-        ========================== -->
+        =================================================== -->
 
         <section
             class="message-erreur-courses"
@@ -467,6 +742,202 @@
     </main>
 
 
+
+    <!-- ==================================================
+         POPUP TOUT DÉCOCHER
+    =================================================== -->
+
+    <div
+        class="fond-popup-courses"
+        id="popup-tout-decocher"
+        hidden
+    >
+
+        <div
+            class="popup-courses popup-confirmation-courses"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="titre-popup-tout-decocher"
+        >
+
+            <div class="icone-popup-courses">
+                ↺
+            </div>
+
+            <h2 id="titre-popup-tout-decocher">
+                Tout décocher ?
+            </h2>
+
+            <p>
+                Tous les articles seront de nouveau marqués
+                comme restant à acheter.
+            </p>
+
+
+            <div class="actions-popup-courses">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-popup-courses"
+                    id="annuler-tout-decocher"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-confirmer-popup-courses"
+                    id="confirmer-tout-decocher"
+                >
+                    Tout décocher
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- ==================================================
+         POPUP TERMINER LES COURSES
+    =================================================== -->
+
+    <div
+        class="fond-popup-courses"
+        id="popup-terminer-courses"
+        hidden
+    >
+
+        <div
+            class="popup-courses popup-terminer-courses"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titre-popup-terminer-courses"
+        >
+
+            <button
+                type="button"
+                class="fermer-popup-courses"
+                id="fermer-popup-terminer-courses"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+
+            <div class="icone-popup-courses">
+                🛒
+            </div>
+
+
+            <h2 id="titre-popup-terminer-courses">
+                Terminer cette liste ?
+            </h2>
+
+
+            <p id="texte-popup-terminer-courses">
+                Cette liste sera considérée comme terminée.
+            </p>
+
+
+            <!--
+                Ce bloc apparaîtra uniquement
+                s'il reste des articles non cochés.
+            -->
+
+            <div
+                class="bloc-articles-restants"
+                id="bloc-articles-restants"
+                hidden
+            >
+
+                <strong id="titre-articles-restants">
+                    Il reste des articles.
+                </strong>
+
+                <p>
+                    Que souhaitez-vous faire des articles
+                    qui n'ont pas été cochés ?
+                </p>
+
+
+                <label class="option-report-courses">
+
+                    <input
+                        type="radio"
+                        name="action-articles-restants"
+                        value="reporter"
+                        checked
+                    >
+
+                    <span>
+
+                        <strong>
+                            Les reporter
+                        </strong>
+
+                        <small>
+                            Ils seront ajoutés à la prochaine liste.
+                        </small>
+
+                    </span>
+
+                </label>
+
+
+                <label class="option-report-courses">
+
+                    <input
+                        type="radio"
+                        name="action-articles-restants"
+                        value="supprimer"
+                    >
+
+                    <span>
+
+                        <strong>
+                            Ne pas les reporter
+                        </strong>
+
+                        <small>
+                            Ils ne seront pas conservés.
+                        </small>
+
+                    </span>
+
+                </label>
+
+            </div>
+
+
+            <div class="actions-popup-courses">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-popup-courses"
+                    id="annuler-terminer-courses"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-confirmer-terminer-courses"
+                    id="confirmer-terminer-courses"
+                >
+                    Terminer la liste
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
     <!-- =========================
          FOOTER
     ========================== -->
@@ -480,6 +951,7 @@
     </footer>
 
 
+
     <!-- =========================
          SCRIPTS
     ========================== -->
@@ -490,7 +962,14 @@
     <script src="js/supabase.js"></script>
     <script src="js/session.js"></script>
 
-    <script src="js/courses.js"></script>
+    <!--
+        Nouveau moteur de données :
+        doit être chargé AVANT courses.js
+    -->
+
+    <script src="js/courses-data.js?v=2"></script>
+
+    <script src="js/courses.js?v=2"></script>
 
 </body>
 
