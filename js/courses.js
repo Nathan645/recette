@@ -1,31 +1,57 @@
-/* =================================
+/* ==========================================
+   COURSES.JS
+   À notre table
+
+   Ce fichier gère l'interface :
+   - période début / fin
+   - affichage de la liste
+   - progression
+   - plats libres
+   - ajout manuel
+   - coches
+   - tout cocher / décocher
+   - masquer les cochés
+   - terminer les courses
+   - report des articles restants
+
+   Les données Supabase sont gérées
+   principalement dans courses-data.js.
+========================================== */
+
+
+/* ==========================================
    ÉLÉMENTS HTML
-================================= */
+========================================== */
 
-const boutonSemainePrecedenteCourses =
+
+/* =========================
+   PÉRIODE
+========================= */
+
+const champDateDebutCourses =
     document.getElementById(
-        "semaine-precedente-courses"
+        "date-debut-courses"
     );
 
-const boutonSemaineSuivanteCourses =
+const champDateFinCourses =
     document.getElementById(
-        "semaine-suivante-courses"
+        "date-fin-courses"
     );
 
-const boutonAujourdhuiCourses =
+const boutonActualiserCourses =
     document.getElementById(
-        "aller-aujourdhui-courses"
+        "actualiser-courses"
     );
 
-const numeroSemaineCourses =
+const messagePeriodeCourses =
     document.getElementById(
-        "numero-semaine-courses"
+        "message-periode-courses"
     );
 
-const titreSemaineCourses =
-    document.getElementById(
-        "titre-semaine-courses"
-    );
+
+/* =========================
+   RÉSUMÉ
+========================= */
 
 const nombreRepasCourses =
     document.getElementById(
@@ -37,9 +63,84 @@ const nombreRecettesCourses =
         "nombre-recettes-courses"
     );
 
+const nombrePlatsLibresCourses =
+    document.getElementById(
+        "nombre-plats-libres-courses"
+    );
+
 const nombreArticlesCourses =
     document.getElementById(
         "nombre-articles-courses"
+    );
+
+
+/* =========================
+   PLATS LIBRES
+========================= */
+
+const alertePlatsLibres =
+    document.getElementById(
+        "alerte-plats-libres"
+    );
+
+const texteAlertePlatsLibres =
+    document.getElementById(
+        "texte-alerte-plats-libres"
+    );
+
+const listePlatsLibresCourses =
+    document.getElementById(
+        "liste-plats-libres-courses"
+    );
+
+const boutonAllerAjoutManuel =
+    document.getElementById(
+        "aller-ajout-manuel"
+    );
+
+
+/* =========================
+   PROGRESSION
+========================= */
+
+const compteurProgressionCourses =
+    document.getElementById(
+        "compteur-progression-courses"
+    );
+
+const remplissageProgressionCourses =
+    document.getElementById(
+        "remplissage-progression-courses"
+    );
+
+const texteProgressionCourses =
+    document.getElementById(
+        "texte-progression-courses"
+    );
+
+const boutonToutCocher =
+    document.getElementById(
+        "tout-cocher-courses"
+    );
+
+const boutonToutDecocher =
+    document.getElementById(
+        "tout-decocher-courses"
+    );
+
+const boutonMasquerCoches =
+    document.getElementById(
+        "masquer-coches-courses"
+    );
+
+
+/* =========================
+   LISTE
+========================= */
+
+const carteListeCourses =
+    document.getElementById(
+        "carte-liste-courses"
     );
 
 const listeCourses =
@@ -52,20 +153,15 @@ const messageVideCourses =
         "message-vide-courses"
     );
 
-const messageErreurCourses =
-    document.getElementById(
-        "message-erreur-courses"
-    );
 
-const texteErreurCourses =
-    document.getElementById(
-        "texte-erreur-courses"
-    );
-
-
-/* =================================
+/* =========================
    AJOUT MANUEL
-================================= */
+========================= */
+
+const sectionAjoutManuel =
+    document.getElementById(
+        "ajout-manuel-courses"
+    );
 
 const formulaireArticleManuel =
     document.getElementById(
@@ -80,6 +176,11 @@ const champNomArticleManuel =
 const champQuantiteArticleManuel =
     document.getElementById(
         "quantite-article-manuel"
+    );
+
+const champUniteArticleManuel =
+    document.getElementById(
+        "unite-article-manuel"
     );
 
 const champCategorieArticleManuel =
@@ -97,316 +198,119 @@ const messageArticleManuel =
         "message-article-manuel"
     );
 
-const boutonToutDecocher =
+
+/* =========================
+   TERMINER
+========================= */
+
+const carteTerminerCourses =
     document.getElementById(
-        "tout-decocher-courses"
+        "carte-terminer-courses"
+    );
+
+const boutonTerminerCourses =
+    document.getElementById(
+        "terminer-courses"
     );
 
 
-/* =================================
-   VARIABLES
-================================= */
+/* =========================
+   ERREUR
+========================= */
 
-let utilisateurConnecte =
-    null;
-
-let foyerId =
-    null;
-
-let debutSemaine =
-    obtenirDebutSemaine(
-        new Date()
+const messageErreurCourses =
+    document.getElementById(
+        "message-erreur-courses"
     );
 
-let repasSemaine =
-    [];
-
-let recettesSemaine =
-    [];
-
-let articlesCourses =
-    [];
-
-let articlesManuels =
-    [];
-
-let articlesCoches =
-    [];
-
-
-/* =================================
-   CATÉGORIES
-================================= */
-
-const categoriesCourses = {
-
-    "fruits-legumes": {
-        nom:
-            "Fruits & légumes",
-
-        emoji:
-            "🥕",
-
-        ordre:
-            1
-    },
-
-    "frais": {
-        nom:
-            "Frais",
-
-        emoji:
-            "🧀",
-
-        ordre:
-            2
-    },
-
-    "viandes-poissons": {
-        nom:
-            "Viandes & poissons",
-
-        emoji:
-            "🥩",
-
-        ordre:
-            3
-    },
-
-    "epicerie": {
-        nom:
-            "Épicerie",
-
-        emoji:
-            "🥫",
-
-        ordre:
-            4
-    },
-
-    "boulangerie": {
-        nom:
-            "Boulangerie",
-
-        emoji:
-            "🥖",
-
-        ordre:
-            5
-    },
-
-    "surgeles": {
-        nom:
-            "Surgelés",
-
-        emoji:
-            "❄️",
-
-        ordre:
-            6
-    },
-
-    "boissons": {
-        nom:
-            "Boissons",
-
-        emoji:
-            "🥤",
-
-        ordre:
-            7
-    },
-
-    "maison": {
-        nom:
-            "Maison & entretien",
-
-        emoji:
-            "🏠",
-
-        ordre:
-            8
-    },
-
-    "divers": {
-        nom:
-            "Divers",
-
-        emoji:
-            "🛒",
-
-        ordre:
-            9
-    }
-
-};
-
-
-/* =================================
-   OUTILS DATES
-================================= */
-
-function obtenirDebutSemaine(
-    date
-) {
-
-    const copie =
-        new Date(
-            date
-        );
-
-    copie.setHours(
-        0,
-        0,
-        0,
-        0
+const texteErreurCourses =
+    document.getElementById(
+        "texte-erreur-courses"
     );
 
-    const jour =
-        copie.getDay();
 
-    const difference =
-        jour === 0
-            ? -6
-            : 1 - jour;
+/* =========================
+   POPUP TOUT DÉCOCHER
+========================= */
 
-    copie.setDate(
-        copie.getDate() +
-        difference
+const popupToutDecocher =
+    document.getElementById(
+        "popup-tout-decocher"
     );
 
-    return copie;
-}
-
-
-function ajouterJours(
-    date,
-    nombre
-) {
-
-    const copie =
-        new Date(
-            date
-        );
-
-    copie.setDate(
-        copie.getDate() +
-        nombre
+const boutonAnnulerToutDecocher =
+    document.getElementById(
+        "annuler-tout-decocher"
     );
 
-    return copie;
-}
-
-
-function formaterDateISO(
-    date
-) {
-
-    const annee =
-        date.getFullYear();
-
-    const mois =
-        String(
-            date.getMonth() + 1
-        )
-            .padStart(
-                2,
-                "0"
-            );
-
-    const jour =
-        String(
-            date.getDate()
-        )
-            .padStart(
-                2,
-                "0"
-            );
-
-    return `${annee}-${mois}-${jour}`;
-}
-
-
-function formaterDateCourte(
-    date
-) {
-
-    return date.toLocaleDateString(
-        "fr-FR",
-        {
-            day:
-                "numeric",
-
-            month:
-                "short"
-        }
-    );
-}
-
-
-function obtenirNumeroSemaine(
-    date
-) {
-
-    const copie =
-        new Date(
-            Date.UTC(
-                date.getFullYear(),
-                date.getMonth(),
-                date.getDate()
-            )
-        );
-
-    const jour =
-        copie.getUTCDay() || 7;
-
-    copie.setUTCDate(
-        copie.getUTCDate() +
-        4 -
-        jour
+const boutonConfirmerToutDecocher =
+    document.getElementById(
+        "confirmer-tout-decocher"
     );
 
-    const premierJanvier =
-        new Date(
-            Date.UTC(
-                copie.getUTCFullYear(),
-                0,
-                1
-            )
-        );
 
-    return Math.ceil(
-        (
-            (
-                copie -
-                premierJanvier
-            ) /
-            86400000 +
-            1
-        ) /
-        7
+/* =========================
+   POPUP TERMINER
+========================= */
+
+const popupTerminerCourses =
+    document.getElementById(
+        "popup-terminer-courses"
     );
-}
+
+const boutonFermerPopupTerminer =
+    document.getElementById(
+        "fermer-popup-terminer-courses"
+    );
+
+const boutonAnnulerTerminer =
+    document.getElementById(
+        "annuler-terminer-courses"
+    );
+
+const boutonConfirmerTerminer =
+    document.getElementById(
+        "confirmer-terminer-courses"
+    );
+
+const textePopupTerminerCourses =
+    document.getElementById(
+        "texte-popup-terminer-courses"
+    );
+
+const blocArticlesRestants =
+    document.getElementById(
+        "bloc-articles-restants"
+    );
+
+const titreArticlesRestants =
+    document.getElementById(
+        "titre-articles-restants"
+    );
 
 
-/* =================================
+/* ==========================================
+   ÉTAT DE L'INTERFACE
+========================================== */
+
+let masquerArticlesCoches =
+    false;
+
+let chargementCourses =
+    false;
+
+
+/* ==========================================
    OUTILS TEXTE
-================================= */
+========================================== */
 
-function echapperHtml(
+function echapperHtmlCourses(
     valeur
 ) {
 
-    if (
-        valeur === null ||
-        valeur === undefined
-    ) {
-
-        return "";
-    }
-
     return String(
-        valeur
+        valeur ??
+        ""
     )
         .replaceAll(
             "&",
@@ -431,32 +335,23 @@ function echapperHtml(
 }
 
 
-function normaliserTexte(
-    texte
-) {
+/* ==========================================
+   FORMATTER QUANTITÉ
+========================================== */
 
-    return String(
-        texte || ""
-    )
-        .trim()
-        .toLowerCase()
-        .normalize(
-            "NFD"
-        )
-        .replace(
-            /[\u0300-\u036f]/g,
-            ""
-        )
-        .replace(
-            /\s+/g,
-            " "
-        );
-}
-
-
-function formaterQuantite(
+function formaterNombreCourses(
     valeur
 ) {
+
+    if (
+        valeur === null ||
+        valeur === undefined ||
+        valeur === ""
+    ) {
+
+        return "";
+    }
+
 
     const nombre =
         Number(
@@ -470,7 +365,9 @@ function formaterQuantite(
         )
     ) {
 
-        return "";
+        return String(
+            valeur
+        );
     }
 
 
@@ -505,1681 +402,402 @@ function formaterQuantite(
 }
 
 
-/* =================================
-   NORMALISATION DES UNITÉS
-================================= */
-
-function normaliserUnite(
-    unite
-) {
-
-    const valeur =
-        normaliserTexte(
-            unite
-        );
-
-
-    /*
-        =========================
-        GRAMMES
-        =========================
-    */
-
-    if (
-        [
-            "g",
-            "gr",
-            "gramme",
-            "grammes"
-        ].includes(
-            valeur
-        )
-    ) {
-
-        return "g";
-    }
-
-
-    /*
-        =========================
-        KILOGRAMMES
-        =========================
-    */
-
-    if (
-        [
-            "kg",
-            "kgs",
-            "kilo",
-            "kilos",
-            "kilogramme",
-            "kilogrammes"
-        ].includes(
-            valeur
-        )
-    ) {
-
-        return "kg";
-    }
-
-
-    /*
-        =========================
-        MILLILITRES
-        =========================
-    */
-
-    if (
-        [
-            "ml",
-            "millilitre",
-            "millilitres"
-        ].includes(
-            valeur
-        )
-    ) {
-
-        return "ml";
-    }
-
-
-    /*
-        =========================
-        CENTILITRES
-        =========================
-    */
-
-    if (
-        [
-            "cl",
-            "centilitre",
-            "centilitres"
-        ].includes(
-            valeur
-        )
-    ) {
-
-        return "cl";
-    }
-
-
-    /*
-        =========================
-        LITRES
-        =========================
-    */
-
-    if (
-        [
-            "l",
-            "litre",
-            "litres"
-        ].includes(
-            valeur
-        )
-    ) {
-
-        return "l";
-    }
-
-
-    /*
-        Pour toutes les autres unités,
-        on conserve la valeur normalisée.
-
-        Exemples :
-        pièce
-        tranche
-        boîte
-        cuillère à soupe
-    */
-
-    return valeur;
-}
-
-
-/* =================================
-   FAMILLE D'UNITÉ
-================================= */
-
-function obtenirFamilleUnite(
-    unite
-) {
-
-    const uniteNormalisee =
-        normaliserUnite(
-            unite
-        );
-
-
-    if (
-        uniteNormalisee === "g" ||
-        uniteNormalisee === "kg"
-    ) {
-
-        return "masse";
-    }
-
-
-    if (
-        uniteNormalisee === "ml" ||
-        uniteNormalisee === "cl" ||
-        uniteNormalisee === "l"
-    ) {
-
-        return "volume";
-    }
-
-
-    /*
-        Les autres unités ne doivent
-        être regroupées qu'avec elles-mêmes.
-
-        Exemple :
-        2 pièces + 3 pièces = 5 pièces
-
-        Mais :
-        2 pièces + 100 g
-        ne doivent jamais être additionnés.
-    */
-
-    return (
-        "autre__" +
-        uniteNormalisee
-    );
-}
-
-
-/* =================================
-   CONVERSION VERS UNITÉ DE BASE
-================================= */
-
-function convertirVersUniteBase(
-    quantite,
-    unite
-) {
-
-    const nombre =
-        Number(
-            quantite
-        );
-
-
-    if (
-        !Number.isFinite(
-            nombre
-        )
-    ) {
-
-        return null;
-    }
-
-
-    const uniteNormalisee =
-        normaliserUnite(
-            unite
-        );
-
-
-    /*
-        MASSE
-
-        unité de base = gramme
-    */
-
-    if (
-        uniteNormalisee === "kg"
-    ) {
-
-        return nombre * 1000;
-    }
-
-
-    if (
-        uniteNormalisee === "g"
-    ) {
-
-        return nombre;
-    }
-
-
-    /*
-        VOLUME
-
-        unité de base = millilitre
-    */
-
-    if (
-        uniteNormalisee === "l"
-    ) {
-
-        return nombre * 1000;
-    }
-
-
-    if (
-        uniteNormalisee === "cl"
-    ) {
-
-        return nombre * 10;
-    }
-
-
-    if (
-        uniteNormalisee === "ml"
-    ) {
-
-        return nombre;
-    }
-
-
-    /*
-        Pour les unités sans conversion,
-        on conserve simplement la quantité.
-    */
-
-    return nombre;
-}
-
-
-/* =================================
-   UNITÉ D'AFFICHAGE
-================================= */
-
-function convertirPourAffichage(
-    quantiteBase,
-    famille,
-    unitesOrigine = []
+/* ==========================================
+   QUANTITÉ ARTICLE
+========================================== */
+
+function construireQuantiteAfficheeCourses(
+    article
 ) {
 
     const quantite =
-        Number(
-            quantiteBase
+        formaterNombreCourses(
+            article.quantite
         );
 
 
-    if (
-        !Number.isFinite(
-            quantite
-        )
-    ) {
-
-        return {
-            quantite:
-                null,
-
-            unite:
-                ""
-        };
-    }
-
-
-    /* =========================
-       MASSE
-    ========================= */
-
-    if (
-        famille ===
-        "masse"
-    ) {
-
-        /*
-            1000 g ou plus :
-            affichage en kg.
-        */
-
-        if (
-            quantite >=
-            1000
-        ) {
-
-            return {
-
-                quantite:
-                    quantite /
-                    1000,
-
-                unite:
-                    "kg"
-
-            };
-        }
-
-
-        return {
-
-            quantite:
-                quantite,
-
-            unite:
-                "g"
-
-        };
-    }
-
-
-    /* =========================
-       VOLUME
-    ========================= */
-
-    if (
-        famille ===
-        "volume"
-    ) {
-
-        /*
-            1000 ml ou plus :
-            affichage en litres.
-        */
-
-        if (
-            quantite >=
-            1000
-        ) {
-
-            return {
-
-                quantite:
-                    quantite /
-                    1000,
-
-                unite:
-                    "L"
-
-            };
-        }
-
-
-        /*
-            Si au moins une recette
-            utilisait des cl et que
-            le résultat tombe proprement
-            en centilitres, on conserve
-            cette unité.
-
-            Exemple :
-            20 cl + 100 ml
-            = 300 ml
-            = 30 cl.
-        */
-
-        const contientCentilitres =
-            unitesOrigine.includes(
-                "cl"
-            );
-
-
-        if (
-            contientCentilitres &&
-            quantite >= 100 &&
-            quantite % 10 === 0
-        ) {
-
-            return {
-
-                quantite:
-                    quantite /
-                    10,
-
-                unite:
-                    "cl"
-
-            };
-        }
-
-
-        return {
-
-            quantite:
-                quantite,
-
-            unite:
-                "ml"
-
-        };
-    }
-
-
-    /*
-        Unité non convertible :
-        on garde la quantité telle quelle.
-
-        Le nom exact de l'unité sera
-        défini dans l'article.
-    */
-
-    return {
-
-        quantite:
-            quantite,
-
-        unite:
+    const unite =
+        String(
+            article.unite ||
             ""
+        ).trim();
 
-    };
+
+    if (
+        quantite &&
+        unite
+    ) {
+
+        return `${quantite} ${unite}`;
+    }
+
+
+    if (
+        quantite
+    ) {
+
+        return quantite;
+    }
+
+
+    if (
+        unite
+    ) {
+
+        return unite;
+    }
+
+
+    return "";
 }
 
-/* =================================
-   CATÉGORIE AUTOMATIQUE
-================================= */
 
-function determinerCategorieIngredient(
-    nomIngredient
+/* ==========================================
+   DATE LISIBLE
+========================================== */
+
+function formaterDateLisibleCourses(
+    dateISO
 ) {
 
-    const nom =
-        normaliserTexte(
-            nomIngredient
+    if (
+        !dateISO
+    ) {
+
+        return "";
+    }
+
+
+    const date =
+        creerDateDepuisISOCourses(
+            dateISO
         );
 
 
-    /* =========================
-       FRUITS & LÉGUMES
-    ========================= */
-
-    const fruitsLegumes = [
-
-        "tomate",
-        "courgette",
-        "aubergine",
-        "carotte",
-        "oignon",
-        "echalote",
-        "ail",
-        "poireau",
-        "poivron",
-        "champignon",
-        "salade",
-        "laitue",
-        "epinard",
-        "brocoli",
-        "chou",
-        "haricot vert",
-        "concombre",
-        "avocat",
-        "pomme de terre",
-        "patate douce",
-        "citron",
-        "orange",
-        "pomme",
-        "poire",
-        "banane",
-        "fraise",
-        "framboise",
-        "myrtille",
-        "persil",
-        "coriandre",
-        "basilic",
-        "menthe"
-    ];
-
-
-    if (
-        fruitsLegumes.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "fruits-legumes";
-    }
-
-
-    /* =========================
-       FRAIS
-    ========================= */
-
-    const frais = [
-
-        "lait",
-        "creme",
-        "beurre",
-        "fromage",
-        "parmesan",
-        "mozzarella",
-        "emmental",
-        "gruyere",
-        "chevre",
-        "feta",
-        "yaourt",
-        "yogourt",
-        "oeuf",
-        "mascarpone",
-        "ricotta",
-        "burrata"
-    ];
-
-
-    if (
-        frais.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "frais";
-    }
-
-
-    /* =========================
-       VIANDES & POISSONS
-    ========================= */
-
-    const viandesPoissons = [
-
-        "poulet",
-        "boeuf",
-        "steak",
-        "porc",
-        "veau",
-        "agneau",
-        "dinde",
-        "jambon",
-        "lardon",
-        "saucisse",
-        "merguez",
-        "saumon",
-        "thon",
-        "cabillaud",
-        "crevette",
-        "poisson",
-        "viande",
-        "bacon"
-    ];
-
-
-    if (
-        viandesPoissons.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "viandes-poissons";
-    }
-
-
-    /* =========================
-       BOULANGERIE
-    ========================= */
-
-    const boulangerie = [
-
-        "pain",
-        "baguette",
-        "brioche",
-        "tortilla",
-        "wrap"
-    ];
-
-
-    if (
-        boulangerie.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "boulangerie";
-    }
-
-
-    /* =========================
-       SURGELÉS
-    ========================= */
-
-    const surgeles = [
-
-        "surgele",
-        "glace"
-    ];
-
-
-    if (
-        surgeles.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "surgeles";
-    }
-
-
-    /* =========================
-       BOISSONS
-    ========================= */
-
-    const boissons = [
-
-        "eau",
-        "jus",
-        "soda",
-        "limonade",
-        "coca",
-        "sirop"
-    ];
-
-
-    if (
-        boissons.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "boissons";
-    }
-
-
-    /* =========================
-       ÉPICERIE
-    ========================= */
-
-    const epicerie = [
-
-        "pate",
-        "spaghetti",
-        "tagliatelle",
-        "riz",
-        "farine",
-        "sucre",
-        "sel",
-        "poivre",
-        "huile",
-        "vinaigre",
-        "moutarde",
-        "mayonnaise",
-        "ketchup",
-        "miel",
-        "chocolat",
-        "levure",
-        "semoule",
-        "quinoa",
-        "lentille",
-        "pois chiche",
-        "haricot rouge",
-        "conserve",
-        "bouillon",
-        "epice",
-        "paprika",
-        "curry",
-        "cumin",
-        "cannelle",
-        "vanille",
-        "maizena",
-        "chapelure",
-        "noix",
-        "amande",
-        "noisette"
-    ];
-
-
-    if (
-        epicerie.some(
-            function (
-                mot
-            ) {
-
-                return nom.includes(
-                    mot
-                );
-            }
-        )
-    ) {
-
-        return "epicerie";
-    }
-
-
-    return "divers";
-}
-
-
-/* =================================
-   UTILISATEUR + FOYER
-================================= */
-
-async function recupererUtilisateurEtFoyer() {
-
-    const {
-        data: donneesUtilisateur,
-        error: erreurUtilisateur
-    } =
-        await window.supabaseClient
-            .auth
-            .getUser();
-
-
-    if (
-        erreurUtilisateur
-    ) {
-
-        throw erreurUtilisateur;
-    }
-
-
-    utilisateurConnecte =
-        donneesUtilisateur.user;
-
-
-    if (
-        !utilisateurConnecte
-    ) {
-
-        window.location.href =
-            "compte.html";
-
-        return false;
-    }
-
-
-    const {
-        data: membre,
-        error: erreurMembre
-    } =
-        await window.supabaseClient
-            .from(
-                "membres_foyer"
-            )
-            .select(
-                "foyer_id"
-            )
-            .eq(
-                "user_id",
-                utilisateurConnecte.id
-            )
-            .limit(
-                1
-            )
-            .maybeSingle();
-
-
-    if (
-        erreurMembre
-    ) {
-
-        throw erreurMembre;
-    }
-
-
-    if (
-        !membre
-    ) {
-
-        window.location.href =
-            "foyer.html";
-
-        return false;
-    }
-
-
-    foyerId =
-        membre.foyer_id;
-
-
-    return true;
-}
-
-
-/* =================================
-   CHARGER LE PLANNING
-================================= */
-
-async function chargerRepasSemaine() {
-
-    const finSemaine =
-        ajouterJours(
-            debutSemaine,
-            6
-        );
-
-
-    const dateDebut =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const dateFin =
-        formaterDateISO(
-            finSemaine
-        );
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "repas_planning"
-            )
-            .select(`
-                id,
-                foyer_id,
-                date,
-                moment,
-                nom,
-                recette_id,
-                personnes
-            `)
-            .eq(
-                "foyer_id",
-                foyerId
-            )
-            .gte(
-                "date",
-                dateDebut
-            )
-            .lte(
-                "date",
-                dateFin
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    repasSemaine =
-        Array.isArray(
-            data
-        )
-            ? data
-            : [];
-}
-
-
-/* =================================
-   CHARGER LES RECETTES UTILISÉES
-================================= */
-
-async function chargerRecettesSemaine() {
-
-    const idsRecettes =
-        [
-            ...new Set(
-                repasSemaine
-                    .filter(
-                        function (
-                            repas
-                        ) {
-
-                            return Boolean(
-                                repas.recette_id
-                            );
-                        }
-                    )
-                    .map(
-                        function (
-                            repas
-                        ) {
-
-                            return repas.recette_id;
-                        }
-                    )
-            )
-        ];
-
-
-    if (
-        idsRecettes.length ===
-        0
-    ) {
-
-        recettesSemaine =
-            [];
-
-        return;
-    }
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "recettes"
-            )
-            .select(`
-                id,
-                nom,
-                personnes,
-                ingredients
-            `)
-            .in(
-                "id",
-                idsRecettes
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    recettesSemaine =
-        Array.isArray(
-            data
-        )
-            ? data
-            : [];
-}
-
-
-/* =================================
-   CHARGER LES ARTICLES MANUELS
-================================= */
-
-async function chargerArticlesManuels() {
-
-    const dateSemaine =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "courses_manuelles"
-            )
-            .select(`
-                id,
-                foyer_id,
-                nom,
-                quantite,
-                categorie,
-                semaine,
-                created_by,
-                created_at
-            `)
-            .eq(
-                "foyer_id",
-                foyerId
-            )
-            .eq(
-                "semaine",
-                dateSemaine
-            )
-            .order(
-                "created_at",
-                {
-                    ascending:
-                        true
-                }
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    articlesManuels =
-        Array.isArray(
-            data
-        )
-            ? data
-            : [];
-}
-
-
-/* =================================
-   CHARGER LES CASES COCHÉES
-   DEPUIS SUPABASE
-================================= */
-
-async function chargerArticlesCoches() {
-
-    const dateSemaine =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "courses_cochees"
-            )
-            .select(
-                "article_cle"
-            )
-            .eq(
-                "foyer_id",
-                foyerId
-            )
-            .eq(
-                "semaine",
-                dateSemaine
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    articlesCoches =
-        Array.isArray(
-            data
-        )
-            ? data
-                .map(
-                    function (
-                        ligne
-                    ) {
-
-                        return ligne.article_cle;
-                    }
-                )
-                .filter(Boolean)
-            : [];
-}
-
-
-/* =================================
-   TROUVER UNE RECETTE
-================================= */
-
-function trouverRecette(
-    recetteId
-) {
-
-    return recettesSemaine.find(
-        function (
-            recette
-        ) {
-
-            return (
-                String(
-                    recette.id
-                ) ===
-                String(
-                    recetteId
-                )
-            );
+    return date.toLocaleDateString(
+        "fr-FR",
+        {
+            weekday:
+                "long",
+
+            day:
+                "numeric",
+
+            month:
+                "long"
         }
     );
 }
 
 
-/* =================================
-   AJOUTER / REGROUPER UN ARTICLE
-   AVEC CONVERSION D'UNITÉS
-================================= */
+/* ==========================================
+   MOMENT LISIBLE
+========================================== */
 
-function ajouterArticle(
-    collection,
-    ingredient,
-    quantiteCalculee
+function obtenirMomentLisibleCourses(
+    moment
 ) {
 
-    if (
-        !ingredient ||
-        typeof ingredient !==
-            "object"
-    ) {
-
-        return;
-    }
-
-
-    const nom =
-        String(
-            ingredient.nom || ""
-        )
-            .trim();
-
-
-    if (
-        !nom
-    ) {
-
-        return;
-    }
-
-
-    const uniteOriginale =
-        String(
-            ingredient.unite || ""
-        )
-            .trim();
-
-
-    const uniteNormalisee =
-        normaliserUnite(
-            uniteOriginale
-        );
-
-
-    const famille =
-        obtenirFamilleUnite(
-            uniteNormalisee
-        );
-
-
-    const categorie =
-        determinerCategorieIngredient(
-            nom
-        );
-
-
-    /*
-        IMPORTANT :
-
-        La clé n'utilise plus directement
-        l'unité.
-
-        On utilise désormais :
-        nom + famille d'unité.
-
-        Ainsi :
-
-        poulet + kg
-        et
-        poulet + g
-
-        utilisent la même clé :
-        poulet__masse
-    */
-
-    const cle =
-        `${normaliserTexte(
-            nom
-        )}__${famille}`;
-
-
-    let article =
-        collection.get(
-            cle
-        );
-
-
-    if (
-        !article
-    ) {
-
-        article = {
-
-            cle:
-                cle,
-
-            nom:
-                nom,
-
-            /*
-                L'unité définitive sera
-                déterminée plus tard
-                au moment de l'affichage.
-            */
-
-            unite:
-                uniteNormalisee,
-
-            familleUnite:
-                famille,
-
-            quantite:
-                null,
-
-            quantiteNumerique:
-                true,
-
-            /*
-                Quantité stockée dans
-                l'unité de base :
-
-                masse  -> g
-                volume -> ml
-            */
-
-            quantiteBase:
-                0,
-
-            unitesOrigine:
-                [],
-
-            categorie:
-                categorie,
-
-            manuel:
-                false,
-
-            idManuel:
-                null
-
-        };
-
-
-        collection.set(
-            cle,
-            article
-        );
-    }
-
-
-    /*
-        On mémorise les unités utilisées
-        dans les recettes.
-
-        Ça servira notamment à choisir
-        entre ml et cl à l'affichage.
-    */
-
-    if (
-        uniteNormalisee &&
-        !article.unitesOrigine.includes(
-            uniteNormalisee
-        )
-    ) {
-
-        article.unitesOrigine.push(
-            uniteNormalisee
-        );
-    }
-
-
-    /*
-        Pas de quantité exploitable :
-
-        exemple :
-        sel "selon goût"
-
-        On conserve quand même l'article,
-        mais il n'est pas additionnable.
-    */
-
-    if (
-        quantiteCalculee === null ||
-        quantiteCalculee === undefined ||
-        quantiteCalculee === "" ||
-        !Number.isFinite(
-            Number(
-                quantiteCalculee
-            )
-        )
-    ) {
-
-        article.quantiteNumerique =
-            false;
-
-        return;
-    }
-
-
-    const quantiteBase =
-        convertirVersUniteBase(
-            quantiteCalculee,
-            uniteNormalisee
-        );
-
-
-    if (
-        quantiteBase === null
-    ) {
-
-        article.quantiteNumerique =
-            false;
-
-        return;
-    }
-
-
-    /*
-        Addition dans une unité commune.
-    */
-
-    article.quantiteBase +=
-        quantiteBase;
-
-
-    article.quantite =
-        article.quantiteBase;
+    return moment ===
+        "midi"
+            ? "midi"
+            : "soir";
 }
 
-/* =================================
-   CALCUL DES INGRÉDIENTS
-   DES RECETTES
-================================= */
 
-function calculerArticlesRecettes() {
+/* ==========================================
+   MESSAGES
+========================================== */
 
-    const collection =
-        new Map();
+function afficherMessagePeriode(
+    texte,
+    type = ""
+) {
 
-
-    repasSemaine.forEach(
-        function (
-            repas
-        ) {
-
-            /*
-                Les repas libres
-                ne génèrent pas
-                d'ingrédients.
-            */
-
-            if (
-                !repas.recette_id
-            ) {
-
-                return;
-            }
+    messagePeriodeCourses.textContent =
+        texte;
 
 
-            const recette =
-                trouverRecette(
-                    repas.recette_id
-                );
+    messagePeriodeCourses.classList.remove(
+        "erreur",
+        "succes"
+    );
 
 
-            if (
-                !recette
-            ) {
+    if (
+        type
+    ) {
 
-                return;
-            }
-
-
-            /*
-                Nombre de personnes prévu
-                par la recette.
-            */
-
-            const personnesRecette =
-                Number(
-                    recette.personnes
-                ) || 1;
+        messagePeriodeCourses.classList.add(
+            type
+        );
+    }
+}
 
 
-            /*
-                Nombre de personnes prévu
-                dans le planning.
-            */
+function afficherMessageArticleManuel(
+    texte,
+    type = ""
+) {
 
-            const personnesRepas =
-                Number(
-                    repas.personnes
-                ) ||
-                personnesRecette;
+    messageArticleManuel.textContent =
+        texte;
 
 
-            /*
-                Exemple :
-
-                recette prévue pour 4
-                planning prévu pour 6
-
-                coefficient = 1,5
-            */
-
-            const coefficient =
-                personnesRepas /
-                personnesRecette;
+    messageArticleManuel.classList.remove(
+        "erreur",
+        "succes"
+    );
 
 
-            const ingredients =
-                Array.isArray(
-                    recette.ingredients
-                )
-                    ? recette.ingredients
-                    : [];
+    if (
+        type
+    ) {
+
+        messageArticleManuel.classList.add(
+            type
+        );
+    }
+}
 
 
-            ingredients.forEach(
+/* ==========================================
+   ERREUR GÉNÉRALE
+========================================== */
+
+function afficherErreurCourses(
+    erreur
+) {
+
+    console.error(
+        "Erreur Courses :",
+        erreur
+    );
+
+
+    texteErreurCourses.textContent =
+        erreur?.message ||
+        "Une erreur est survenue.";
+
+
+    messageErreurCourses.hidden =
+        false;
+}
+
+
+function masquerErreurCourses() {
+
+    messageErreurCourses.hidden =
+        true;
+}
+
+
+/* ==========================================
+   SYNCHRONISER LES LIMITES
+   DES DATES
+========================================== */
+
+function synchroniserLimitesDatesCourses() {
+
+    const dateDebut =
+        champDateDebutCourses.value;
+
+
+    if (
+        !dateDebut
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Le navigateur empêche
+        de sélectionner une date
+        antérieure.
+    */
+
+    champDateFinCourses.min =
+        dateDebut;
+
+
+    /*
+        Si la date de fin actuelle
+        devient incohérente,
+        on la ramène automatiquement
+        à la date de début.
+    */
+
+    if (
+        !champDateFinCourses.value ||
+        champDateFinCourses.value <
+            dateDebut
+    ) {
+
+        champDateFinCourses.value =
+            dateDebut;
+    }
+}
+
+
+/* ==========================================
+   CHARGER LES DATES
+   DE LA LISTE ACTIVE
+========================================== */
+
+function afficherPeriodeListeActive() {
+
+    if (
+        !listeCoursesActive
+    ) {
+
+        return;
+    }
+
+
+    champDateDebutCourses.value =
+        listeCoursesActive.date_debut;
+
+
+    champDateFinCourses.value =
+        listeCoursesActive.date_fin;
+
+
+    synchroniserLimitesDatesCourses();
+}
+
+
+/* ==========================================
+   RÉSUMÉ
+========================================== */
+
+function afficherResumeCourses() {
+
+    const statistiques =
+        obtenirStatistiquesCourses();
+
+
+    nombreRepasCourses.textContent =
+        statistiques.nombreRepas;
+
+
+    nombreRecettesCourses.textContent =
+        statistiques.nombreRecettes;
+
+
+    nombrePlatsLibresCourses.textContent =
+        statistiques.nombrePlatsLibres;
+
+
+    nombreArticlesCourses.textContent =
+        statistiques.totalArticles;
+}
+
+
+/* ==========================================
+   PLATS LIBRES
+========================================== */
+
+function afficherPlatsLibresCourses() {
+
+    if (
+        !Array.isArray(
+            platsLibresCourses
+        ) ||
+        platsLibresCourses.length ===
+            0
+    ) {
+
+        alertePlatsLibres.hidden =
+            true;
+
+
+        listePlatsLibresCourses.innerHTML =
+            "";
+
+
+        return;
+    }
+
+
+    alertePlatsLibres.hidden =
+        false;
+
+
+    const nombre =
+        platsLibresCourses.length;
+
+
+    texteAlertePlatsLibres.textContent =
+        nombre === 1
+            ? "1 plat prévu dans votre planning n'est pas une recette enregistrée. Pensez à ajouter ses ingrédients manuellement."
+            : `${nombre} plats prévus dans votre planning ne sont pas des recettes enregistrées. Pensez à ajouter leurs ingrédients manuellement.`;
+
+
+    listePlatsLibresCourses.innerHTML =
+        platsLibresCourses
+            .map(
                 function (
-                    ingredient
+                    plat
                 ) {
 
-                    /*
-                        Compatibilité avec
-                        les anciennes recettes
-                        qui auraient un ingrédient
-                        sous forme de simple texte.
-                    */
-
-                    if (
-                        typeof ingredient ===
-                        "string"
-                    ) {
-
-                        ajouterArticle(
-                            collection,
-                            {
-                                nom:
-                                    ingredient,
-
-                                unite:
-                                    ""
-                            },
-                            null
+                    const date =
+                        formaterDateLisibleCourses(
+                            plat.date
                         );
 
 
-                        return;
-                    }
+                    const moment =
+                        obtenirMomentLisibleCourses(
+                            plat.moment
+                        );
 
 
-                    const quantite =
-                        ingredient.quantite;
+                    return `
 
+                        <div
+                            class="plat-libre-course"
+                        >
 
-                    let quantiteCalculee =
-                        quantite;
+                            <strong>
+                                ${echapperHtmlCourses(
+                                    plat.nom ||
+                                    "Plat libre"
+                                )}
+                            </strong>
 
+                            <span>
+                                ${echapperHtmlCourses(
+                                    date
+                                )}
+                                •
+                                ${echapperHtmlCourses(
+                                    moment
+                                )}
+                            </span>
 
-                    /*
-                        Si l'ingrédient est
-                        proportionnel au nombre
-                        de personnes, on applique
-                        le coefficient.
-                    */
+                        </div>
 
-                    if (
-                        ingredient.proportionnel !==
-                            false &&
-                        quantite !== null &&
-                        quantite !== undefined &&
-                        quantite !== "" &&
-                        Number.isFinite(
-                            Number(
-                                quantite
-                            )
-                        )
-                    ) {
-
-                        quantiteCalculee =
-                            Number(
-                                quantite
-                            ) *
-                            coefficient;
-                    }
-
-
-                    ajouterArticle(
-                        collection,
-                        ingredient,
-                        quantiteCalculee
-                    );
+                    `;
                 }
-            );
-        }
-    );
-
-
-    return Array.from(
-        collection.values()
-    );
+            )
+            .join("");
 }
 
 
-/* =================================
-   ARTICLES MANUELS
-================================= */
+/* ==========================================
+   TRIER LES ARTICLES
+========================================== */
 
-function convertirArticlesManuels() {
+function obtenirArticlesTriesCourses() {
 
-    return articlesManuels.map(
-        function (
-            article
-        ) {
-
-            const categorieExiste =
-                Boolean(
-                    categoriesCourses[
-                        article.categorie
-                    ]
-                );
+    const copie =
+        [
+            ...articlesListeCourses
+        ];
 
 
-            return {
-
-                /*
-                    Les articles manuels
-                    restent indépendants
-                    des ingrédients calculés.
-
-                    Leur quantité est un texte
-                    libre :
-                    "2 paquets"
-                    "1 bouteille"
-                    etc.
-                */
-
-                cle:
-                    `manuel__${article.id}`,
-
-                nom:
-                    article.nom,
-
-                unite:
-                    "",
-
-                familleUnite:
-                    "manuel",
-
-                quantite:
-                    null,
-
-                quantiteBase:
-                    null,
-
-                quantiteNumerique:
-                    false,
-
-                quantiteTexte:
-                    article.quantite ||
-                    "",
-
-                unitesOrigine:
-                    [],
-
-                categorie:
-                    categorieExiste
-                        ? article.categorie
-                        : "divers",
-
-                manuel:
-                    true,
-
-                idManuel:
-                    article.id
-
-            };
-        }
-    );
-}
-
-
-/* =================================
-   CONSTRUIRE LA LISTE COMPLÈTE
-================================= */
-
-function calculerListeCourses() {
-
-    const articlesRecettes =
-        calculerArticlesRecettes();
-
-
-    const articlesManuelsFormates =
-        convertirArticlesManuels();
-
-
-    articlesCourses = [
-
-        ...articlesRecettes,
-
-        ...articlesManuelsFormates
-
-    ];
-
-
-    /*
-        Tri :
-        1. catégorie
-        2. ordre alphabétique
-    */
-
-    articlesCourses.sort(
+    copie.sort(
         function (
             articleA,
             articleB
@@ -2211,410 +829,71 @@ function calculerListeCourses() {
             }
 
 
-            return articleA.nom
-                .localeCompare(
-                    articleB.nom,
-                    "fr"
-                );
-        }
-    );
-}
+            /*
+                Articles non cochés
+                avant les cochés.
+            */
 
-
-/* =================================
-   TEXTE QUANTITÉ
-================================= */
-
-function construireQuantiteArticle(
-    article
-) {
-
-    /*
-        =========================
-        ARTICLE MANUEL
-        =========================
-    */
-
-    if (
-        article.manuel
-    ) {
-
-        return article.quantiteTexte ||
-            "";
-    }
-
-
-    /*
-        =========================
-        PAS DE QUANTITÉ NUMÉRIQUE
-        =========================
-
-        Exemple :
-        "sel selon goût"
-
-        On affiche éventuellement
-        seulement l'unité si elle existe.
-    */
-
-    if (
-        article.quantiteBase === null ||
-        !article.quantiteNumerique
-    ) {
-
-        return article.unite
-            ? article.unite
-            : "";
-    }
-
-
-    /*
-        =========================
-        MASSE / VOLUME
-        =========================
-
-        Ici on transforme par exemple :
-
-        1400 g -> 1,4 kg
-        300 ml -> 30 cl
-        1250 ml -> 1,25 L
-    */
-
-    if (
-        article.familleUnite ===
-            "masse" ||
-        article.familleUnite ===
-            "volume"
-    ) {
-
-        const affichage =
-            convertirPourAffichage(
-                article.quantiteBase,
-                article.familleUnite,
-                article.unitesOrigine
-            );
-
-
-        const quantite =
-            formaterQuantite(
-                affichage.quantite
-            );
-
-
-        if (
-            !affichage.unite
-        ) {
-
-            return quantite;
-        }
-
-
-        return (
-            quantite +
-            " " +
-            affichage.unite
-        );
-    }
-
-
-    /*
-        =========================
-        AUTRES UNITÉS
-        =========================
-
-        Exemple :
-        2 pièces + 3 pièces
-        = 5 pièces
-
-        2 tranches + 4 tranches
-        = 6 tranches
-    */
-
-    const quantite =
-        formaterQuantite(
-            article.quantiteBase
-        );
-
-
-    if (
-        !article.unite
-    ) {
-
-        return quantite;
-    }
-
-
-    return (
-        quantite +
-        " " +
-        article.unite
-    );
-}
-
-
-/* =================================
-   COCHER UN ARTICLE DANS SUPABASE
-================================= */
-
-async function cocherArticleSupabase(
-    cleArticle
-) {
-
-    const dateSemaine =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const {
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "courses_cochees"
-            )
-            .upsert(
-                {
-
-                    foyer_id:
-                        foyerId,
-
-                    semaine:
-                        dateSemaine,
-
-                    article_cle:
-                        cleArticle,
-
-                    coche_par:
-                        utilisateurConnecte.id
-
-                },
-                {
-                    onConflict:
-                        "foyer_id,semaine,article_cle"
-                }
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    if (
-        !articlesCoches.includes(
-            cleArticle
-        )
-    ) {
-
-        articlesCoches.push(
-            cleArticle
-        );
-    }
-}
-
-
-/* =================================
-   DÉCOCHER UN ARTICLE DANS SUPABASE
-================================= */
-
-async function decocherArticleSupabase(
-    cleArticle
-) {
-
-    const dateSemaine =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const {
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "courses_cochees"
-            )
-            .delete()
-            .eq(
-                "foyer_id",
-                foyerId
-            )
-            .eq(
-                "semaine",
-                dateSemaine
-            )
-            .eq(
-                "article_cle",
-                cleArticle
-            );
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    articlesCoches =
-        articlesCoches.filter(
-            function (
-                cle
+            if (
+                Boolean(
+                    articleA.coche
+                ) !==
+                Boolean(
+                    articleB.coche
+                )
             ) {
 
-                return (
-                    cle !==
-                    cleArticle
-                );
+                return articleA.coche
+                    ? 1
+                    : -1;
             }
-        );
-}
 
 
-/* =================================
-   TOUT DÉCOCHER DANS SUPABASE
-================================= */
-
-async function toutDecocherSupabase() {
-
-    const dateSemaine =
-        formaterDateISO(
-            debutSemaine
-        );
-
-
-    const {
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "courses_cochees"
-            )
-            .delete()
-            .eq(
-                "foyer_id",
-                foyerId
-            )
-            .eq(
-                "semaine",
-                dateSemaine
+            return String(
+                articleA.nom ||
+                ""
+            ).localeCompare(
+                String(
+                    articleB.nom ||
+                    ""
+                ),
+                "fr"
             );
+        }
+    );
 
 
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    articlesCoches =
-        [];
+    return copie;
 }
 
 
-/* =================================
-   AFFICHER LA SEMAINE
-================================= */
+/* ==========================================
+   GROUPER PAR CATÉGORIE
+========================================== */
 
-function afficherEnteteSemaine() {
-
-    const finSemaine =
-        ajouterJours(
-            debutSemaine,
-            6
-        );
-
-
-    numeroSemaineCourses.textContent =
-        `Semaine ${obtenirNumeroSemaine(
-            debutSemaine
-        )}`;
-
-
-    titreSemaineCourses.textContent =
-        `${formaterDateCourte(
-            debutSemaine
-        )} – ${finSemaine.toLocaleDateString(
-            "fr-FR",
-            {
-                day:
-                    "numeric",
-
-                month:
-                    "short",
-
-                year:
-                    "numeric"
-            }
-        )}`;
-}
-
-
-/* =================================
-   RÉSUMÉ
-================================= */
-
-function afficherResume() {
-
-    nombreRepasCourses.textContent =
-        repasSemaine.length;
-
-
-    const recettesUniques =
-        new Set(
-            repasSemaine
-                .filter(
-                    function (
-                        repas
-                    ) {
-
-                        return Boolean(
-                            repas.recette_id
-                        );
-                    }
-                )
-                .map(
-                    function (
-                        repas
-                    ) {
-
-                        return String(
-                            repas.recette_id
-                        );
-                    }
-                )
-        );
-
-
-    nombreRecettesCourses.textContent =
-        recettesUniques.size;
-
-
-    nombreArticlesCourses.textContent =
-        articlesCourses.length;
-}
-
-
-/* =================================
-   GROUPER LES ARTICLES
-================================= */
-
-function grouperArticlesParCategorie() {
+function grouperArticlesCourses() {
 
     const groupes =
         new Map();
 
 
-    articlesCourses.forEach(
+    const articles =
+        obtenirArticlesTriesCourses();
+
+
+    articles.forEach(
         function (
             article
         ) {
+
+            if (
+                masquerArticlesCoches &&
+                article.coche
+            ) {
+
+                return;
+            }
+
 
             const categorie =
                 categoriesCourses[
@@ -2650,78 +929,124 @@ function grouperArticlesParCategorie() {
 
     return Array.from(
         groupes.entries()
-    )
-        .sort(
-            function (
-                groupeA,
-                groupeB
-            ) {
+    ).sort(
+        function (
+            groupeA,
+            groupeB
+        ) {
 
-                const infosA =
-                    categoriesCourses[
-                        groupeA[0]
-                    ];
-
-
-                const infosB =
-                    categoriesCourses[
-                        groupeB[0]
-                    ];
+            const categorieA =
+                categoriesCourses[
+                    groupeA[0]
+                ];
 
 
-                return (
-                    infosA.ordre -
-                    infosB.ordre
-                );
-            }
-        );
+            const categorieB =
+                categoriesCourses[
+                    groupeB[0]
+                ];
+
+
+            return (
+                categorieA.ordre -
+                categorieB.ordre
+            );
+        }
+    );
 }
 
 
-/* =================================
-   CRÉER UNE LIGNE D'ARTICLE
-================================= */
+/* ==========================================
+   HTML D'UN ARTICLE
+========================================== */
 
-function creerHtmlArticle(
+function creerHtmlArticleCourses(
     article,
     index
 ) {
 
-    const estCoche =
-        articlesCoches.includes(
-            article.cle
-        );
-
-
     const quantite =
-        construireQuantiteArticle(
+        construireQuantiteAfficheeCourses(
             article
         );
+
+
+    let badge =
+        "";
+
+
+    if (
+        article.source ===
+        "manuel"
+    ) {
+
+        badge = `
+
+            <span class="badge-article-manuel">
+                Manuel
+            </span>
+
+        `;
+    }
+
+
+    if (
+        article.source ===
+        "report"
+    ) {
+
+        badge = `
+
+            <span class="badge-article-report">
+                Reporté
+            </span>
+
+        `;
+    }
+
+
+    const boutonSupprimer =
+        article.source ===
+        "manuel" ||
+        article.source ===
+        "report"
+            ? `
+
+                <button
+                    type="button"
+                    class="bouton-supprimer-article-manuel"
+                    data-supprimer-article-id="${article.id}"
+                    data-source-article="${article.source}"
+                    aria-label="Supprimer ${echapperHtmlCourses(
+                        article.nom
+                    )}"
+                    title="Supprimer cet article"
+                >
+                    ×
+                </button>
+
+            `
+            : "";
 
 
     return `
 
         <div
             class="article-course ${
-                estCoche
+                article.coche
                     ? "coche"
                     : ""
-            } ${
-                article.manuel
-                    ? "article-course-manuel"
-                    : ""
             }"
-            data-article-cle="${echapperHtml(
-                article.cle
-            )}"
+            data-article-id="${article.id}"
         >
 
             <input
                 type="checkbox"
-                id="article-course-${index}"
                 class="case-article-course"
+                id="article-course-${index}"
+                data-article-id="${article.id}"
                 ${
-                    estCoche
+                    article.coche
                         ? "checked"
                         : ""
                 }
@@ -2730,23 +1055,16 @@ function creerHtmlArticle(
 
             <label
                 for="article-course-${index}"
+                class="contenu-article-course"
             >
 
                 <span class="nom-article-course">
 
-                    ${echapperHtml(
+                    ${echapperHtmlCourses(
                         article.nom
                     )}
 
-                    ${
-                        article.manuel
-                            ? `
-                                <span class="badge-article-manuel">
-                                    Manuel
-                                </span>
-                            `
-                            : ""
-                    }
+                    ${badge}
 
                 </span>
 
@@ -2754,11 +1072,13 @@ function creerHtmlArticle(
                 ${
                     quantite
                         ? `
+
                             <span class="quantite-article-course">
-                                ${echapperHtml(
+                                ${echapperHtmlCourses(
                                     quantite
                                 )}
                             </span>
+
                         `
                         : ""
                 }
@@ -2766,35 +1086,22 @@ function creerHtmlArticle(
             </label>
 
 
-            ${
-                article.manuel
-                    ? `
-                        <button
-                            type="button"
-                            class="bouton-supprimer-article-manuel"
-                            data-supprimer-article-id="${article.idManuel}"
-                            aria-label="Supprimer cet article"
-                            title="Supprimer cet article"
-                        >
-                            🗑️
-                        </button>
-                    `
-                    : ""
-            }
+            ${boutonSupprimer}
 
         </div>
 
     `;
 }
 
-/* =================================
+
+/* ==========================================
    AFFICHER LA LISTE
-================================= */
+========================================== */
 
 function afficherListeCourses() {
 
     if (
-        articlesCourses.length ===
+        articlesListeCourses.length ===
         0
     ) {
 
@@ -2802,12 +1109,8 @@ function afficherListeCourses() {
             "";
 
 
-        document
-            .querySelector(
-                ".carte-courses"
-            )
-            .hidden =
-                true;
+        carteListeCourses.hidden =
+            true;
 
 
         messageVideCourses.hidden =
@@ -2818,12 +1121,8 @@ function afficherListeCourses() {
     }
 
 
-    document
-        .querySelector(
-            ".carte-courses"
-        )
-        .hidden =
-            false;
+    carteListeCourses.hidden =
+        false;
 
 
     messageVideCourses.hidden =
@@ -2831,7 +1130,74 @@ function afficherListeCourses() {
 
 
     const groupes =
-        grouperArticlesParCategorie();
+        grouperArticlesCourses();
+
+
+    /*
+        Cas particulier :
+        tous les articles sont cochés
+        et l'utilisateur les masque.
+    */
+
+    if (
+        groupes.length ===
+        0
+    ) {
+
+        listeCourses.innerHTML = `
+
+            <div class="message-tous-masques">
+
+                <span>
+                    ✓
+                </span>
+
+                <strong>
+                    Tous les articles cochés sont masqués.
+                </strong>
+
+                <button
+                    type="button"
+                    id="afficher-coches-depuis-liste"
+                >
+                    Les afficher
+                </button>
+
+            </div>
+
+        `;
+
+
+        const boutonAfficher =
+            document.getElementById(
+                "afficher-coches-depuis-liste"
+            );
+
+
+        if (
+            boutonAfficher
+        ) {
+
+            boutonAfficher.addEventListener(
+                "click",
+                function () {
+
+                    masquerArticlesCoches =
+                        false;
+
+
+                    mettreAJourBoutonMasquer();
+
+
+                    afficherListeCourses();
+
+                }
+            );
+        }
+
+
+        return;
+    }
 
 
     let indexGlobal =
@@ -2853,7 +1219,7 @@ function afficherListeCourses() {
                         groupe[1];
 
 
-                    const informations =
+                    const infos =
                         categoriesCourses[
                             categorie
                         ] ||
@@ -2868,14 +1234,13 @@ function afficherListeCourses() {
                                 ) {
 
                                     const html =
-                                        creerHtmlArticle(
+                                        creerHtmlArticleCourses(
                                             article,
                                             indexGlobal
                                         );
 
 
-                                    indexGlobal +=
-                                        1;
+                                    indexGlobal++;
 
 
                                     return html;
@@ -2890,12 +1255,14 @@ function afficherListeCourses() {
 
                             <div class="entete-groupe-courses">
 
-                                <span>
-                                    ${informations.emoji}
+                                <span class="emoji-groupe-courses">
+                                    ${infos.emoji}
                                 </span>
 
                                 <span>
-                                    ${informations.nom}
+                                    ${echapperHtmlCourses(
+                                        infos.nom
+                                    )}
                                 </span>
 
                             </div>
@@ -2916,10 +1283,377 @@ function afficherListeCourses() {
 }
 
 
-/* =================================
-   COCHER / DÉCOCHER
-   SYNCHRONISÉ SUPABASE
-================================= */
+/* ==========================================
+   PROGRESSION
+========================================== */
+
+function afficherProgressionCourses() {
+
+    const statistiques =
+        obtenirStatistiquesCourses();
+
+
+    const total =
+        statistiques.totalArticles;
+
+
+    const coches =
+        statistiques.articlesCoches;
+
+
+    compteurProgressionCourses.textContent =
+        `${coches} / ${total}`;
+
+
+    let pourcentage =
+        0;
+
+
+    if (
+        total > 0
+    ) {
+
+        pourcentage =
+            Math.round(
+                (
+                    coches /
+                    total
+                ) *
+                100
+            );
+    }
+
+
+    remplissageProgressionCourses.style.width =
+        `${pourcentage}%`;
+
+
+    if (
+        total === 0
+    ) {
+
+        texteProgressionCourses.textContent =
+            "Ajoutez des repas ou des articles pour commencer votre liste.";
+
+
+    } else if (
+        coches === 0
+    ) {
+
+        texteProgressionCourses.textContent =
+            `${total} article${
+                total > 1
+                    ? "s"
+                    : ""
+            } à acheter.`;
+
+
+    } else if (
+        coches === total
+    ) {
+
+        texteProgressionCourses.textContent =
+            "Tout est dans le panier 🎉";
+
+
+    } else {
+
+        const restants =
+            total -
+            coches;
+
+
+        texteProgressionCourses.textContent =
+            `${restants} article${
+                restants > 1
+                    ? "s"
+                    : ""
+            } restant${
+                restants > 1
+                    ? "s"
+                    : ""
+            } à acheter.`;
+    }
+
+
+    boutonToutCocher.disabled =
+        total === 0 ||
+        coches === total;
+
+
+    boutonToutDecocher.disabled =
+        total === 0 ||
+        coches === 0;
+}
+
+
+/* ==========================================
+   BOUTON MASQUER
+========================================== */
+
+function mettreAJourBoutonMasquer() {
+
+    boutonMasquerCoches.setAttribute(
+        "aria-pressed",
+        masquerArticlesCoches
+            ? "true"
+            : "false"
+    );
+
+
+    boutonMasquerCoches.textContent =
+        masquerArticlesCoches
+            ? "Afficher les cochés"
+            : "Masquer les cochés";
+}
+
+
+/* ==========================================
+   RAFRAÎCHIR TOUT L'AFFICHAGE
+========================================== */
+
+function afficherInterfaceCourses() {
+
+    afficherPeriodeListeActive();
+
+    afficherResumeCourses();
+
+    afficherPlatsLibresCourses();
+
+    afficherProgressionCourses();
+
+    afficherListeCourses();
+
+    mettreAJourBoutonMasquer();
+}
+
+
+/* ==========================================
+   ÉTAT DE CHARGEMENT
+========================================== */
+
+function definirChargementCourses(
+    actif
+) {
+
+    chargementCourses =
+        actif;
+
+
+    boutonActualiserCourses.disabled =
+        actif;
+
+
+    if (
+        actif
+    ) {
+
+        boutonActualiserCourses.textContent =
+            "Actualisation…";
+
+    } else {
+
+        boutonActualiserCourses.textContent =
+            "Actualiser la liste";
+    }
+}
+
+
+/* ==========================================
+   ACTUALISER DEPUIS SUPABASE
+========================================== */
+
+async function rafraichirCourses() {
+
+    masquerErreurCourses();
+
+
+    listeCourses.innerHTML = `
+
+        <p class="message-chargement-courses">
+            Mise à jour de la liste…
+        </p>
+
+    `;
+
+
+    try {
+
+        await synchroniserListeCourses();
+
+
+        afficherInterfaceCourses();
+
+
+    } catch (
+        erreur
+    ) {
+
+        afficherErreurCourses(
+            erreur
+        );
+    }
+}
+
+
+/* ==========================================
+   CHANGEMENT DATE DÉBUT
+========================================== */
+
+champDateDebutCourses.addEventListener(
+    "change",
+    function () {
+
+        synchroniserLimitesDatesCourses();
+
+
+        afficherMessagePeriode(
+            ""
+        );
+    }
+);
+
+
+/* ==========================================
+   CHANGEMENT DATE FIN
+========================================== */
+
+champDateFinCourses.addEventListener(
+    "change",
+    function () {
+
+        if (
+            champDateFinCourses.value <
+            champDateDebutCourses.value
+        ) {
+
+            champDateFinCourses.value =
+                champDateDebutCourses.value;
+        }
+
+
+        afficherMessagePeriode(
+            ""
+        );
+    }
+);
+
+
+/* ==========================================
+   ACTUALISER LA PÉRIODE
+========================================== */
+
+boutonActualiserCourses.addEventListener(
+    "click",
+    async function () {
+
+        if (
+            chargementCourses
+        ) {
+
+            return;
+        }
+
+
+        const dateDebut =
+            champDateDebutCourses.value;
+
+
+        const dateFin =
+            champDateFinCourses.value;
+
+
+        try {
+
+            verifierPeriodeCourses(
+                dateDebut,
+                dateFin
+            );
+
+
+            definirChargementCourses(
+                true
+            );
+
+
+            afficherMessagePeriode(
+                "Mise à jour de la liste…"
+            );
+
+
+            /*
+                On enregistre les dates
+                dans la liste active.
+            */
+
+            await modifierPeriodeListeCourses(
+                dateDebut,
+                dateFin
+            );
+
+
+            /*
+                Puis on recalcule uniquement
+                les articles provenant du planning.
+
+                Les articles manuels restent.
+                Les coches existantes restent.
+            */
+
+            await synchroniserListeCourses();
+
+
+            afficherInterfaceCourses();
+
+
+            afficherMessagePeriode(
+                "Liste actualisée ✓",
+                "succes"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    afficherMessagePeriode(
+                        ""
+                    );
+
+                },
+                1800
+            );
+
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur période :",
+                erreur
+            );
+
+
+            afficherMessagePeriode(
+                erreur.message ||
+                "Impossible de modifier la période.",
+                "erreur"
+            );
+
+
+        } finally {
+
+            definirChargementCourses(
+                false
+            );
+        }
+    }
+);
+
+
+/* ==========================================
+   COCHER / DÉCOCHER UN ARTICLE
+========================================== */
 
 listeCourses.addEventListener(
     "change",
@@ -2941,37 +1675,21 @@ listeCourses.addEventListener(
         }
 
 
-        const ligne =
-            caseArticle.closest(
-                ".article-course"
-            );
+        const articleId =
+            caseArticle.dataset.articleId;
 
 
         if (
-            !ligne
+            !articleId
         ) {
 
             return;
         }
 
 
-        const cle =
-            ligne.dataset.articleCle;
+        const nouvelEtat =
+            caseArticle.checked;
 
-
-        if (
-            !cle
-        ) {
-
-            return;
-        }
-
-
-        /*
-            On bloque temporairement
-            la case pendant l'écriture
-            dans Supabase.
-        */
 
         caseArticle.disabled =
             true;
@@ -2979,26 +1697,47 @@ listeCourses.addEventListener(
 
         try {
 
-            if (
-                caseArticle.checked
-            ) {
+            await modifierEtatArticleCourses(
+                articleId,
+                nouvelEtat
+            );
 
-                await cocherArticleSupabase(
-                    cle
+
+            const ligne =
+                caseArticle.closest(
+                    ".article-course"
                 );
 
-            } else {
 
-                await decocherArticleSupabase(
-                    cle
+            if (
+                ligne
+            ) {
+
+                ligne.classList.toggle(
+                    "coche",
+                    nouvelEtat
                 );
             }
 
 
-            ligne.classList.toggle(
-                "coche",
-                caseArticle.checked
-            );
+            afficherResumeCourses();
+
+            afficherProgressionCourses();
+
+
+            /*
+                Si les cochés sont masqués,
+                on reconstruit immédiatement
+                la liste pour faire disparaître
+                l'article.
+            */
+
+            if (
+                masquerArticlesCoches
+            ) {
+
+                afficherListeCourses();
+            }
 
 
         } catch (
@@ -3006,24 +1745,17 @@ listeCourses.addEventListener(
         ) {
 
             console.error(
-                "Erreur synchronisation article :",
+                "Erreur coche article :",
                 erreur
             );
 
 
             /*
-                On restaure l'état précédent
-                si Supabase refuse.
+                Retour à l'état précédent.
             */
 
             caseArticle.checked =
-                !caseArticle.checked;
-
-
-            ligne.classList.toggle(
-                "coche",
-                caseArticle.checked
-            );
+                !nouvelEtat;
 
 
         } finally {
@@ -3035,30 +1767,34 @@ listeCourses.addEventListener(
 );
 
 
-/* =================================
-   TOUT DÉCOCHER
-================================= */
+/* ==========================================
+   TOUT COCHER
+========================================== */
 
-boutonToutDecocher.addEventListener(
+boutonToutCocher.addEventListener(
     "click",
     async function () {
 
-        boutonToutDecocher.disabled =
+        boutonToutCocher.disabled =
             true;
 
 
         const texteInitial =
-            boutonToutDecocher.textContent;
+            boutonToutCocher.textContent;
 
 
-        boutonToutDecocher.textContent =
-            "Décochage…";
+        boutonToutCocher.textContent =
+            "Cochage…";
 
 
         try {
 
-            await toutDecocherSupabase();
+            await modifierTousArticlesCourses(
+                true
+            );
 
+
+            afficherProgressionCourses();
 
             afficherListeCourses();
 
@@ -3067,28 +1803,203 @@ boutonToutDecocher.addEventListener(
             erreur
         ) {
 
-            console.error(
-                "Erreur Tout décocher :",
+            afficherErreurCourses(
                 erreur
             );
 
 
         } finally {
 
-            boutonToutDecocher.disabled =
-                false;
-
-
-            boutonToutDecocher.textContent =
+            boutonToutCocher.textContent =
                 texteInitial;
+
+
+            afficherProgressionCourses();
         }
     }
 );
 
 
-/* =================================
+/* ==========================================
+   OUVRIR TOUT DÉCOCHER
+========================================== */
+
+boutonToutDecocher.addEventListener(
+    "click",
+    function () {
+
+        const statistiques =
+            obtenirStatistiquesCourses();
+
+
+        if (
+            statistiques.articlesCoches ===
+            0
+        ) {
+
+            return;
+        }
+
+
+        popupToutDecocher.hidden =
+            false;
+
+
+        document.body.style.overflow =
+            "hidden";
+    }
+);
+
+
+/* ==========================================
+   FERMER TOUT DÉCOCHER
+========================================== */
+
+function fermerPopupToutDecocher() {
+
+    popupToutDecocher.hidden =
+        true;
+
+
+    document.body.style.overflow =
+        "";
+}
+
+
+boutonAnnulerToutDecocher.addEventListener(
+    "click",
+    fermerPopupToutDecocher
+);
+
+
+/* ==========================================
+   CONFIRMER TOUT DÉCOCHER
+========================================== */
+
+boutonConfirmerToutDecocher.addEventListener(
+    "click",
+    async function () {
+
+        boutonConfirmerToutDecocher.disabled =
+            true;
+
+
+        boutonConfirmerToutDecocher.textContent =
+            "Décochage…";
+
+
+        try {
+
+            await modifierTousArticlesCourses(
+                false
+            );
+
+
+            fermerPopupToutDecocher();
+
+
+            afficherProgressionCourses();
+
+            afficherListeCourses();
+
+
+        } catch (
+            erreur
+        ) {
+
+            afficherErreurCourses(
+                erreur
+            );
+
+
+        } finally {
+
+            boutonConfirmerToutDecocher.disabled =
+                false;
+
+
+            boutonConfirmerToutDecocher.textContent =
+                "Tout décocher";
+        }
+    }
+);
+
+
+/* ==========================================
+   CLIC SUR FOND TOUT DÉCOCHER
+========================================== */
+
+popupToutDecocher.addEventListener(
+    "click",
+    function (
+        evenement
+    ) {
+
+        if (
+            evenement.target ===
+            popupToutDecocher
+        ) {
+
+            fermerPopupToutDecocher();
+        }
+    }
+);
+
+
+/* ==========================================
+   MASQUER LES COCHÉS
+========================================== */
+
+boutonMasquerCoches.addEventListener(
+    "click",
+    function () {
+
+        masquerArticlesCoches =
+            !masquerArticlesCoches;
+
+
+        mettreAJourBoutonMasquer();
+
+
+        afficherListeCourses();
+    }
+);
+
+
+/* ==========================================
+   ALLER À L'AJOUT MANUEL
+========================================== */
+
+boutonAllerAjoutManuel.addEventListener(
+    "click",
+    function () {
+
+        sectionAjoutManuel.scrollIntoView(
+            {
+                behavior:
+                    "smooth",
+
+                block:
+                    "center"
+            }
+        );
+
+
+        setTimeout(
+            function () {
+
+                champNomArticleManuel.focus();
+
+            },
+            500
+        );
+    }
+);
+
+
+/* ==========================================
    AJOUT MANUEL
-================================= */
+========================================== */
 
 formulaireArticleManuel.addEventListener(
     "submit",
@@ -3099,8 +2010,9 @@ formulaireArticleManuel.addEventListener(
         evenement.preventDefault();
 
 
-        messageArticleManuel.textContent =
-            "";
+        afficherMessageArticleManuel(
+            ""
+        );
 
 
         const nom =
@@ -3115,30 +2027,57 @@ formulaireArticleManuel.addEventListener(
                 .trim();
 
 
+        const unite =
+            champUniteArticleManuel
+                .value
+                .trim();
+
+
         const categorie =
             champCategorieArticleManuel
                 .value ||
-                "divers";
+            "divers";
 
 
         if (
             !nom
         ) {
 
-            messageArticleManuel.textContent =
-                "Renseigne le nom de l'article.";
+            afficherMessageArticleManuel(
+                "Renseignez le nom de l'article.",
+                "erreur"
+            );
+
 
             return;
         }
 
 
+        /*
+            Quantité facultative,
+            mais si elle existe elle doit
+            être valide.
+        */
+
         if (
-            !foyerId ||
-            !utilisateurConnecte
+            quantite !== "" &&
+            (
+                !Number.isFinite(
+                    Number(
+                        quantite
+                    )
+                ) ||
+                Number(
+                    quantite
+                ) < 0
+            )
         ) {
 
-            messageArticleManuel.textContent =
-                "Impossible de déterminer votre foyer.";
+            afficherMessageArticleManuel(
+                "La quantité n'est pas valide.",
+                "erreur"
+            );
+
 
             return;
         }
@@ -3154,75 +2093,40 @@ formulaireArticleManuel.addEventListener(
 
         try {
 
-            const {
-                error
-            } =
-                await window.supabaseClient
-                    .from(
-                        "courses_manuelles"
-                    )
-                    .insert({
-
-                        foyer_id:
-                            foyerId,
-
-                        nom:
-                            nom,
-
-                        quantite:
-                            quantite ||
-                            null,
-
-                        categorie:
-                            categoriesCourses[
-                                categorie
-                            ]
-                                ? categorie
-                                : "divers",
-
-                        semaine:
-                            formaterDateISO(
-                                debutSemaine
-                            ),
-
-                        created_by:
-                            utilisateurConnecte.id
-
-                    });
+            await ajouterArticleManuelCourses(
+                nom,
+                quantite,
+                unite,
+                categorie
+            );
 
 
-            if (
-                error
-            ) {
-
-                throw error;
-            }
-
-
-            champNomArticleManuel.value =
-                "";
-
-
-            champQuantiteArticleManuel.value =
-                "";
+            formulaireArticleManuel.reset();
 
 
             champCategorieArticleManuel.value =
                 "divers";
 
 
-            await rafraichirCourses();
+            afficherResumeCourses();
+
+            afficherProgressionCourses();
+
+            afficherListeCourses();
 
 
-            messageArticleManuel.textContent =
-                "Article ajouté ✓";
+            afficherMessageArticleManuel(
+                "Article ajouté ✓",
+                "succes"
+            );
 
 
             setTimeout(
                 function () {
 
-                    messageArticleManuel.textContent =
-                        "";
+                    afficherMessageArticleManuel(
+                        ""
+                    );
 
                 },
                 1800
@@ -3234,14 +2138,16 @@ formulaireArticleManuel.addEventListener(
         ) {
 
             console.error(
-                "Erreur ajout article manuel :",
+                "Erreur ajout manuel :",
                 erreur
             );
 
 
-            messageArticleManuel.textContent =
+            afficherMessageArticleManuel(
                 erreur.message ||
-                "Impossible d'ajouter l'article.";
+                "Impossible d'ajouter cet article.",
+                "erreur"
+            );
 
 
         } finally {
@@ -3257,9 +2163,9 @@ formulaireArticleManuel.addEventListener(
 );
 
 
-/* =================================
-   SUPPRIMER ARTICLE MANUEL
-================================= */
+/* ==========================================
+   SUPPRIMER ARTICLE MANUEL / REPORTÉ
+========================================== */
 
 listeCourses.addEventListener(
     "click",
@@ -3267,14 +2173,14 @@ listeCourses.addEventListener(
         evenement
     ) {
 
-        const boutonSupprimer =
+        const bouton =
             evenement.target.closest(
                 "[data-supprimer-article-id]"
             );
 
 
         if (
-            !boutonSupprimer
+            !bouton
         ) {
 
             return;
@@ -3282,8 +2188,11 @@ listeCourses.addEventListener(
 
 
         const articleId =
-            boutonSupprimer.dataset
-                .supprimerArticleId;
+            bouton.dataset.supprimerArticleId;
+
+
+        const source =
+            bouton.dataset.sourceArticle;
 
 
         if (
@@ -3294,74 +2203,88 @@ listeCourses.addEventListener(
         }
 
 
-        boutonSupprimer.disabled =
+        bouton.disabled =
             true;
 
 
         try {
 
-            const {
-                error
-            } =
-                await window.supabaseClient
-                    .from(
-                        "courses_manuelles"
-                    )
-                    .delete()
-                    .eq(
-                        "id",
-                        articleId
-                    )
-                    .eq(
-                        "foyer_id",
-                        foyerId
-                    );
-
-
             if (
-                error
+                source ===
+                "manuel"
             ) {
 
-                throw error;
-            }
-
-
-            /*
-                Un article manuel supprimé
-                peut aussi être présent dans
-                courses_cochees.
-
-                On nettoie donc sa case cochée.
-            */
-
-            const cleArticle =
-                `manuel__${articleId}`;
-
-
-            try {
-
-                await decocherArticleSupabase(
-                    cleArticle
+                await supprimerArticleManuelCourses(
+                    articleId
                 );
 
-            } catch (
-                erreurDecochage
-            ) {
+
+            } else {
 
                 /*
-                    Ce n'est pas bloquant :
-                    l'article n'était peut-être
-                    simplement pas coché.
+                    Un article reporté peut aussi
+                    être supprimé, mais notre
+                    fonction data limite volontairement
+                    la suppression aux manuels.
+
+                    On le supprime donc directement,
+                    toujours en vérifiant liste_id.
                 */
 
-                console.warn(
-                    "Nettoyage de la case cochée non effectué :",
-                    erreurDecochage
-                );
+                const {
+                    error
+                } =
+                    await window.supabaseClient
+                        .from(
+                            "liste_courses_articles"
+                        )
+                        .delete()
+                        .eq(
+                            "id",
+                            articleId
+                        )
+                        .eq(
+                            "liste_id",
+                            listeCoursesActive.id
+                        )
+                        .eq(
+                            "source",
+                            "report"
+                        );
+
+
+                if (
+                    error
+                ) {
+
+                    throw error;
+                }
+
+
+                articlesListeCourses =
+                    articlesListeCourses.filter(
+                        function (
+                            article
+                        ) {
+
+                            return (
+                                String(
+                                    article.id
+                                ) !==
+                                String(
+                                    articleId
+                                )
+                            );
+                        }
+                    );
             }
 
 
-            await rafraichirCourses();
+            afficherResumeCourses();
+
+            afficherProgressionCourses();
+
+            afficherListeCourses();
 
 
         } catch (
@@ -3369,245 +2292,556 @@ listeCourses.addEventListener(
         ) {
 
             console.error(
-                "Erreur suppression article manuel :",
+                "Erreur suppression article :",
                 erreur
             );
 
 
-            boutonSupprimer.disabled =
+            afficherErreurCourses(
+                erreur
+            );
+
+
+            bouton.disabled =
                 false;
         }
     }
 );
 
 
-/* =================================
-   CHARGEMENT COMPLET
-================================= */
+/* ==========================================
+   OUVRIR POPUP TERMINER
+========================================== */
 
-async function rafraichirCourses() {
+function ouvrirPopupTerminerCourses() {
 
-    listeCourses.innerHTML = `
-
-        <p class="message-chargement-courses">
-            Calcul de la liste de courses…
-        </p>
-
-    `;
+    const statistiques =
+        obtenirStatistiquesCourses();
 
 
-    messageErreurCourses.hidden =
-        true;
+    const restants =
+        statistiques.articlesRestants;
 
 
-    messageVideCourses.hidden =
-        true;
-
-
-    afficherEnteteSemaine();
-
-
-    try {
-
-        /*
-            1. Repas planifiés
-        */
-
-        await chargerRepasSemaine();
-
-
-        /*
-            2. Recettes utilisées
-        */
-
-        await chargerRecettesSemaine();
-
-
-        /*
-            3. Articles manuels
-        */
-
-        await chargerArticlesManuels();
-
-
-        /*
-            4. Cases cochées
-            synchronisées Supabase
-        */
-
-        await chargerArticlesCoches();
-
-
-        /*
-            5. Calcul de la liste
-
-            C'est ici que les conversions
-            d'unités sont désormais prises
-            en compte.
-        */
-
-        calculerListeCourses();
-
-
-        /*
-            6. Résumé
-        */
-
-        afficherResume();
-
-
-        /*
-            7. Affichage
-        */
-
-        afficherListeCourses();
-
-
-    } catch (
-        erreur
+    if (
+        restants >
+        0
     ) {
 
-        console.error(
-            "Erreur chargement courses :",
-            erreur
-        );
-
-
-        document
-            .querySelector(
-                ".carte-courses"
-            )
-            .hidden =
-                true;
-
-
-        messageVideCourses.hidden =
-            true;
-
-
-        messageErreurCourses.hidden =
+        blocArticlesRestants.hidden =
             false;
 
 
-        texteErreurCourses.textContent =
-            erreur.message ||
-            "Une erreur est survenue.";
+        titreArticlesRestants.textContent =
+            `${restants} article${
+                restants > 1
+                    ? "s ne sont"
+                    : " n'est"
+            } pas encore coché${
+                restants > 1
+                    ? "s"
+                    : ""
+            }.`;
+
+
+        textePopupTerminerCourses.textContent =
+            "Vous pouvez terminer cette liste et choisir ce qu'il faut faire des articles encore manquants.";
+
+
+    } else {
+
+        blocArticlesRestants.hidden =
+            true;
+
+
+        textePopupTerminerCourses.textContent =
+            "Tous les articles sont cochés. Cette liste peut maintenant être terminée.";
+    }
+
+
+    popupTerminerCourses.hidden =
+        false;
+
+
+    document.body.style.overflow =
+        "hidden";
+}
+
+
+/* ==========================================
+   FERMER POPUP TERMINER
+========================================== */
+
+function fermerPopupTerminerCourses() {
+
+    popupTerminerCourses.hidden =
+        true;
+
+
+    document.body.style.overflow =
+        "";
+
+
+    boutonConfirmerTerminer.disabled =
+        false;
+
+
+    boutonConfirmerTerminer.textContent =
+        "Terminer la liste";
+}
+
+
+boutonTerminerCourses.addEventListener(
+    "click",
+    ouvrirPopupTerminerCourses
+);
+
+
+boutonFermerPopupTerminer.addEventListener(
+    "click",
+    fermerPopupTerminerCourses
+);
+
+
+boutonAnnulerTerminer.addEventListener(
+    "click",
+    fermerPopupTerminerCourses
+);
+
+
+/* ==========================================
+   CLIC FOND POPUP TERMINER
+========================================== */
+
+popupTerminerCourses.addEventListener(
+    "click",
+    function (
+        evenement
+    ) {
+
+        if (
+            evenement.target ===
+            popupTerminerCourses
+        ) {
+
+            fermerPopupTerminerCourses();
+        }
+    }
+);
+
+
+/* ==========================================
+   PRÉPARER LES ARTICLES À REPORTER
+========================================== */
+
+function obtenirArticlesAReporter() {
+
+    return articlesListeCourses
+        .filter(
+            function (
+                article
+            ) {
+
+                return (
+                    !article.coche
+                );
+            }
+        )
+        .map(
+            function (
+                article
+            ) {
+
+                return {
+
+                    nom:
+                        article.nom,
+
+                    quantite:
+                        article.quantite,
+
+                    unite:
+                        article.unite,
+
+                    categorie:
+                        article.categorie
+
+                };
+            }
+        );
+}
+
+
+/* ==========================================
+   CRÉER LES ARTICLES REPORTÉS
+========================================== */
+
+async function creerArticlesReportesCourses(
+    articles
+) {
+
+    if (
+        !Array.isArray(
+            articles
+        ) ||
+        articles.length ===
+            0
+    ) {
+
+        return;
+    }
+
+
+    const lignes =
+        articles.map(
+            function (
+                article
+            ) {
+
+                return {
+
+                    liste_id:
+                        listeCoursesActive.id,
+
+                    nom:
+                        article.nom,
+
+                    quantite:
+                        article.quantite,
+
+                    unite:
+                        article.unite,
+
+                    categorie:
+                        categoriesCourses[
+                            article.categorie
+                        ]
+                            ? article.categorie
+                            : "divers",
+
+                    coche:
+                        false,
+
+                    source:
+                        "report",
+
+                    recette_id:
+                        null,
+
+                    cle_article:
+                        `report__${crypto.randomUUID()}`
+
+                };
+            }
+        );
+
+
+    const {
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "liste_courses_articles"
+            )
+            .insert(
+                lignes
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
     }
 }
 
 
-/* =================================
-   NAVIGATION SEMAINE
-================================= */
+/* ==========================================
+   TERMINER LA LISTE
+========================================== */
 
-boutonSemainePrecedenteCourses
-    .addEventListener(
-        "click",
-        async function () {
+boutonConfirmerTerminer.addEventListener(
+    "click",
+    async function () {
 
-            debutSemaine =
-                ajouterJours(
-                    debutSemaine,
-                    -7
+        boutonConfirmerTerminer.disabled =
+            true;
+
+
+        boutonConfirmerTerminer.textContent =
+            "Finalisation…";
+
+
+        try {
+
+            const statistiques =
+                obtenirStatistiquesCourses();
+
+
+            let reporter =
+                false;
+
+
+            if (
+                statistiques.articlesRestants >
+                0
+            ) {
+
+                const choix =
+                    document.querySelector(
+                        'input[name="action-articles-restants"]:checked'
+                    );
+
+
+                reporter =
+                    choix &&
+                    choix.value ===
+                    "reporter";
+            }
+
+
+            /*
+                On mémorise les articles
+                AVANT de clôturer la liste.
+            */
+
+            const articlesAReporter =
+                reporter
+                    ? obtenirArticlesAReporter()
+                    : [];
+
+
+            /*
+                1. Fermer la liste actuelle.
+            */
+
+            await terminerListeCoursesActive();
+
+
+            /*
+                2. Créer immédiatement
+                une nouvelle liste active.
+
+                Elle utilisera :
+                aujourd'hui → prochain dimanche.
+            */
+
+            await creerListeCoursesActive();
+
+
+            /*
+                3. Ajouter les éventuels reports.
+            */
+
+            if (
+                articlesAReporter.length >
+                0
+            ) {
+
+                await creerArticlesReportesCourses(
+                    articlesAReporter
                 );
+            }
 
 
-            messageArticleManuel.textContent =
-                "";
+            /*
+                4. Synchroniser avec le planning.
+
+                Les reports restent car
+                synchroniserArticlesPlanningCourses()
+                ne supprime que source="planning".
+            */
+
+            await synchroniserListeCourses();
 
 
-            await rafraichirCourses();
+            masquerArticlesCoches =
+                false;
+
+
+            fermerPopupTerminerCourses();
+
+
+            afficherInterfaceCourses();
+
+
+            afficherMessagePeriode(
+                articlesAReporter.length >
+                    0
+                    ? `Nouvelle liste créée. ${articlesAReporter.length} article${
+                        articlesAReporter.length > 1
+                            ? "s ont"
+                            : " a"
+                    } été reporté${
+                        articlesAReporter.length > 1
+                            ? "s"
+                            : ""
+                    }.`
+                    : "Nouvelle liste créée ✓",
+                "succes"
+            );
+
+
+            window.scrollTo(
+                {
+                    top:
+                        0,
+
+                    behavior:
+                        "smooth"
+                }
+            );
+
+
+        } catch (
+            erreur
+        ) {
+
+            console.error(
+                "Erreur fin des courses :",
+                erreur
+            );
+
+
+            boutonConfirmerTerminer.disabled =
+                false;
+
+
+            boutonConfirmerTerminer.textContent =
+                "Terminer la liste";
+
+
+            afficherErreurCourses(
+                erreur
+            );
         }
-    );
+    }
+);
 
 
-boutonSemaineSuivanteCourses
-    .addEventListener(
-        "click",
-        async function () {
+/* ==========================================
+   TOUCHE ÉCHAP
+========================================== */
 
-            debutSemaine =
-                ajouterJours(
-                    debutSemaine,
-                    7
-                );
-
-
-            messageArticleManuel.textContent =
-                "";
-
-
-            await rafraichirCourses();
-        }
-    );
-
-
-boutonAujourdhuiCourses
-    .addEventListener(
-        "click",
-        async function () {
-
-            debutSemaine =
-                obtenirDebutSemaine(
-                    new Date()
-                );
-
-
-            messageArticleManuel.textContent =
-                "";
-
-
-            await rafraichirCourses();
-        }
-    );
-
-
-/* =================================
-   INITIALISATION
-================================= */
-
-async function initialiserCourses() {
-
-    try {
-
-        const utilisateurPret =
-            await recupererUtilisateurEtFoyer();
-
+document.addEventListener(
+    "keydown",
+    function (
+        evenement
+    ) {
 
         if (
-            !utilisateurPret
+            evenement.key !==
+            "Escape"
         ) {
 
             return;
         }
 
 
-        await rafraichirCourses();
+        if (
+            popupToutDecocher &&
+            !popupToutDecocher.hidden
+        ) {
+
+            fermerPopupToutDecocher();
+
+
+            return;
+        }
+
+
+        if (
+            popupTerminerCourses &&
+            !popupTerminerCourses.hidden
+        ) {
+
+            fermerPopupTerminerCourses();
+        }
+    }
+);
+
+
+/* ==========================================
+   INITIALISATION
+========================================== */
+
+async function initialiserCourses() {
+
+    masquerErreurCourses();
+
+
+    listeCourses.innerHTML = `
+
+        <p class="message-chargement-courses">
+            Préparation de votre liste…
+        </p>
+
+    `;
+
+
+    try {
+
+        /*
+            courses-data.js :
+            - utilisateur
+            - foyer
+            - liste active
+            - planning
+            - recettes
+            - synchronisation
+        */
+
+        const succes =
+            await initialiserDonneesCourses();
+
+
+        if (
+            !succes
+        ) {
+
+            return;
+        }
+
+
+        afficherInterfaceCourses();
+
+
+        console.log(
+            "Courses initialisées :",
+            {
+                liste:
+                    listeCoursesActive,
+
+                repas:
+                    repasPeriodeCourses,
+
+                platsLibres:
+                    platsLibresCourses,
+
+                articles:
+                    articlesListeCourses
+            }
+        );
 
 
     } catch (
         erreur
     ) {
 
-        console.error(
-            "Erreur initialisation courses :",
+        afficherErreurCourses(
             erreur
         );
 
 
-        messageErreurCourses.hidden =
-            false;
-
-
-        texteErreurCourses.textContent =
-            erreur.message ||
-            "Impossible de charger votre liste.";
+        carteListeCourses.hidden =
+            true;
     }
 }
 
 
-/* =================================
+/* ==========================================
    DÉMARRAGE
-================================= */
+========================================== */
 
 initialiserCourses();
