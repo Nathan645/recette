@@ -1,42 +1,199 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    
+
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Recette | À notre table</title>
+    <title>
+        Recette | À notre table
+    </title>
 
-    <link rel="stylesheet" href="css/style.css">
+    <link
+        rel="stylesheet"
+        href="css/style.css?v=4"
+    >
+
 </head>
+
 
 <body>
 
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
     <header class="navigation-recette">
+
         <nav class="navigation">
-            <a href="index.html" class="retour">
+
+            <a
+                href="index.html"
+                class="retour"
+            >
                 ← Retour aux recettes
             </a>
+
         </nav>
+
     </header>
 
+
+
+    <!-- =========================
+         CONTENU DE LA RECETTE
+    ========================== -->
+
     <main id="contenu-recette">
-        <div class="message">
-            Chargement de la recette…
+
+
+        <!-- =========================
+             PHOTOS DE LA RECETTE
+
+             Le contenu sera généré
+             automatiquement par
+             recette.js.
+
+             0 photo :
+             ce bloc restera caché.
+
+             1 photo :
+             grande photo simple.
+
+             Plusieurs photos :
+             carousel.
+        ========================== -->
+
+        <section
+            class="galerie-recette"
+            id="galerie-recette"
+            hidden
+            aria-label="Photos de la recette"
+        >
+
+            <!-- =========================
+                 IMAGE PRINCIPALE
+            ========================== -->
+
+            <div
+                class="carousel-recette"
+                id="carousel-recette"
+            >
+
+                <div
+                    class="carousel-images-recette"
+                    id="carousel-images-recette"
+                >
+                </div>
+
+
+
+                <!-- =========================
+                     FLÈCHE PRÉCÉDENTE
+                ========================== -->
+
+                <button
+                    type="button"
+                    class="bouton-carousel-recette bouton-carousel-precedent"
+                    id="photo-precedente"
+                    aria-label="Photo précédente"
+                    hidden
+                >
+                    ‹
+                </button>
+
+
+
+                <!-- =========================
+                     FLÈCHE SUIVANTE
+                ========================== -->
+
+                <button
+                    type="button"
+                    class="bouton-carousel-recette bouton-carousel-suivant"
+                    id="photo-suivante"
+                    aria-label="Photo suivante"
+                    hidden
+                >
+                    ›
+                </button>
+
+            </div>
+
+
+
+            <!-- =========================
+                 INDICATEURS
+            ========================== -->
+
+            <div
+                class="indicateurs-carousel-recette"
+                id="indicateurs-carousel-recette"
+                hidden
+                aria-label="Navigation entre les photos"
+            >
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             FICHE RECETTE
+
+             Le contenu actuel généré
+             par recette.js viendra ici.
+        ========================== -->
+
+        <div
+            id="fiche-recette-contenu"
+        >
+
+            <div class="message">
+                Chargement de la recette…
+            </div>
+
         </div>
+
+
     </main>
 
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
     <footer>
-        <p>À notre table ❤️</p>
+
+        <p>
+            À notre table ❤️
+        </p>
+
     </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/config.js"></script>
-<script src="js/supabase.js"></script>
-<script src="js/recette.js"></script>
+
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="js/config.js"></script>
+
+    <script src="js/supabase.js"></script>
+
+    <script src="js/recette.js?v=2"></script>
+
 
 </body>
+
 </html>
