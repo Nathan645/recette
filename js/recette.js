@@ -7,30 +7,36 @@ const contenuRecette =
         "fiche-recette-contenu"
     );
 
+
 const galerieRecette =
     document.getElementById(
         "galerie-recette"
     );
+
 
 const carouselRecette =
     document.getElementById(
         "carousel-recette"
     );
 
+
 const carouselImagesRecette =
     document.getElementById(
         "carousel-images-recette"
     );
+
 
 const boutonPhotoPrecedente =
     document.getElementById(
         "photo-precedente"
     );
 
+
 const boutonPhotoSuivante =
     document.getElementById(
         "photo-suivante"
     );
+
 
 const indicateursCarouselRecette =
     document.getElementById(
@@ -47,55 +53,66 @@ const popupAjoutPlanning =
         "popup-ajout-planning"
     );
 
+
 const fermerPopupPlanning =
     document.getElementById(
         "fermer-popup-planning"
     );
+
 
 const annulerAjoutPlanning =
     document.getElementById(
         "annuler-ajout-planning"
     );
 
+
 const nomRecettePopupPlanning =
     document.getElementById(
         "nom-recette-popup-planning"
     );
+
 
 const dateAjoutPlanning =
     document.getElementById(
         "date-ajout-planning"
     );
 
+
 const boutonMomentMidi =
     document.getElementById(
         "moment-planning-midi"
     );
+
 
 const boutonMomentSoir =
     document.getElementById(
         "moment-planning-soir"
     );
 
+
 const diminuerPersonnesPlanning =
     document.getElementById(
         "diminuer-personnes-planning"
     );
+
 
 const augmenterPersonnesPlanning =
     document.getElementById(
         "augmenter-personnes-planning"
     );
 
+
 const nombrePersonnesPlanning =
     document.getElementById(
         "nombre-personnes-planning"
     );
 
+
 const messagePopupPlanning =
     document.getElementById(
         "message-popup-planning"
     );
+
 
 const confirmerAjoutPlanning =
     document.getElementById(
@@ -104,7 +121,7 @@ const confirmerAjoutPlanning =
 
 
 /* =================================
-   POPUP CONFIRMATION
+   POPUP CONFIRMATION PLANNING
 ================================= */
 
 const popupConfirmationPlanning =
@@ -112,19 +129,174 @@ const popupConfirmationPlanning =
         "popup-confirmation-planning"
     );
 
+
 const texteConfirmationPlanning =
     document.getElementById(
         "texte-confirmation-planning"
     );
+
 
 const annulerConfirmationPlanning =
     document.getElementById(
         "annuler-confirmation-planning"
     );
 
+
 const confirmerAjoutMalgreRepas =
     document.getElementById(
         "confirmer-ajout-malgre-repas"
+    );
+
+
+/* =================================
+   ÉLÉMENTS MODE CUISINE
+================================= */
+
+const modeCuisine =
+    document.getElementById(
+        "mode-cuisine"
+    );
+
+
+const fermerModeCuisine =
+    document.getElementById(
+        "fermer-mode-cuisine"
+    );
+
+
+const nomRecetteModeCuisine =
+    document.getElementById(
+        "mode-cuisine-nom-recette"
+    );
+
+
+const ingredientsModeCuisine =
+    document.getElementById(
+        "mode-cuisine-ingredients"
+    );
+
+
+const contenuIngredientsCuisine =
+    document.getElementById(
+        "contenu-ingredients-cuisine"
+    );
+
+
+const boutonReplierIngredientsCuisine =
+    document.getElementById(
+        "replier-ingredients-cuisine"
+    );
+
+
+const numeroEtapeCuisine =
+    document.getElementById(
+        "numero-etape-cuisine"
+    );
+
+
+const totalEtapesCuisine =
+    document.getElementById(
+        "total-etapes-cuisine"
+    );
+
+
+const barreProgressionCuisine =
+    document.getElementById(
+        "barre-progression-cuisine"
+    );
+
+
+const texteEtapeCuisine =
+    document.getElementById(
+        "texte-etape-cuisine"
+    );
+
+
+const boutonEtapeCuisinePrecedente =
+    document.getElementById(
+        "etape-cuisine-precedente"
+    );
+
+
+const boutonEtapeCuisineSuivante =
+    document.getElementById(
+        "etape-cuisine-suivante"
+    );
+
+
+const boutonMinuteurEtapeCuisine =
+    document.getElementById(
+        "minuteur-etape-cuisine"
+    );
+
+
+/* =================================
+   ÉLÉMENTS MINUTEURS CUISINE
+================================= */
+
+const zoneMinuteursCuisine =
+    document.getElementById(
+        "zone-minuteurs-cuisine"
+    );
+
+
+const listeMinuteursCuisine =
+    document.getElementById(
+        "liste-minuteurs-cuisine"
+    );
+
+
+const boutonAjouterMinuteurCuisine =
+    document.getElementById(
+        "ajouter-minuteur-cuisine"
+    );
+
+
+const popupMinuteurCuisine =
+    document.getElementById(
+        "popup-minuteur-cuisine"
+    );
+
+
+const fermerPopupMinuteurCuisine =
+    document.getElementById(
+        "fermer-popup-minuteur"
+    );
+
+
+const annulerMinuteurCuisine =
+    document.getElementById(
+        "annuler-minuteur-cuisine"
+    );
+
+
+const lancerMinuteurCuisine =
+    document.getElementById(
+        "lancer-minuteur-cuisine"
+    );
+
+
+const nomMinuteurCuisine =
+    document.getElementById(
+        "nom-minuteur-cuisine"
+    );
+
+
+const minutesMinuteurCuisine =
+    document.getElementById(
+        "minutes-minuteur-cuisine"
+    );
+
+
+const secondesMinuteurCuisine =
+    document.getElementById(
+        "secondes-minuteur-cuisine"
+    );
+
+
+const messageMinuteurCuisine =
+    document.getElementById(
+        "message-minuteur-cuisine"
     );
 
 
@@ -136,6 +308,7 @@ const parametres =
     new URLSearchParams(
         window.location.search
     );
+
 
 const identifiantRecette =
     parametres.get(
@@ -149,6 +322,7 @@ const identifiantRecette =
 
 let utilisateurConnecte =
     null;
+
 
 let recetteChargee =
     null;
@@ -189,6 +363,7 @@ let indexPhotoActive =
 let positionTouchDebut =
     null;
 
+
 let positionTouchFin =
     null;
 
@@ -197,43 +372,176 @@ let positionTouchFin =
    ÉTAT PLANNING
 ================================= */
 
-/*
-    Identifiant du foyer de
-    l'utilisateur connecté.
-*/
-
 let foyerIdPlanning =
     null;
 
-
-/*
-    Nombre de personnes configuré
-    par défaut dans le foyer.
-*/
 
 let personnesParDefautPlanning =
     1;
 
 
-/*
-    Sélection actuelle de la popup.
-*/
-
 let momentSelectionnePlanning =
     "midi";
+
 
 let personnesSelectionneesPlanning =
     1;
 
 
-/*
-    Si un repas existe déjà sur
-    le créneau sélectionné,
-    on le conserve temporairement ici.
-*/
-
 let repasExistantPlanning =
     null;
+
+
+/* =================================
+   ÉTAT MODE CUISINE
+================================= */
+
+/*
+    Numéro de l'étape actuellement
+    affichée.
+
+    Index interne :
+    0 = première étape.
+*/
+
+let indexEtapeCuisine =
+    0;
+
+
+/*
+    Indique si le panneau
+    ingrédients est actuellement
+    replié.
+*/
+
+let ingredientsCuisineReplies =
+    false;
+
+
+/*
+    Nombre de personnes utilisé
+    dans le mode cuisine.
+
+    Il reprendra par défaut le nombre
+    prévu dans la recette.
+*/
+
+let personnesModeCuisine =
+    1;
+
+
+/* =================================
+   ÉTAT DES MINUTEURS
+================================= */
+
+/*
+    Plusieurs minuteurs peuvent
+    fonctionner simultanément.
+
+    Exemple :
+
+    {
+        id: "...",
+        nom: "Cuisson du riz",
+        dureeInitiale: 900,
+        secondesRestantes: 720,
+        actif: true,
+        termine: false,
+        heureFin: 1234567890,
+        etapeIndex: 2
+    }
+*/
+
+let minuteursCuisine =
+    [];
+
+
+/*
+    Interval global.
+
+    On utilise UN SEUL setInterval
+    pour mettre à jour tous les
+    minuteurs en même temps.
+*/
+
+let intervalMinuteursCuisine =
+    null;
+
+
+/*
+    Étape qui a demandé l'ouverture
+    du minuteur.
+
+    null = minuteur libre.
+
+    nombre = minuteur associé
+    à une étape.
+*/
+
+let indexEtapeMinuteurEnCreation =
+    null;
+
+
+/* =================================
+   STOCKAGE LOCAL MODE CUISINE
+================================= */
+
+/*
+    On sauvegarde les minuteurs
+    localement pour qu'ils continuent
+    même si l'utilisateur quitte
+    momentanément le mode cuisine.
+
+    La clé dépend de la recette.
+*/
+
+function obtenirCleStockageMinuteursCuisine() {
+
+    if (
+        !identifiantRecette
+    ) {
+
+        return null;
+    }
+
+
+    return (
+        "a-notre-table-minuteurs-" +
+        identifiantRecette
+    );
+}
+
+
+/* =================================
+   IDENTIFIANT LOCAL
+================================= */
+
+function creerIdentifiantLocalCuisine() {
+
+    if (
+        window.crypto &&
+        typeof window.crypto.randomUUID ===
+            "function"
+    ) {
+
+        return window.crypto.randomUUID();
+    }
+
+
+    return (
+        Date.now().toString(
+            36
+        ) +
+        "-" +
+        Math.random()
+            .toString(
+                36
+            )
+            .slice(
+                2
+            )
+    );
+}
 
 
 /* =================================
@@ -245,8 +553,10 @@ function obtenirDateAujourdhuiPlanning() {
     const maintenant =
         new Date();
 
+
     const annee =
         maintenant.getFullYear();
+
 
     const mois =
         String(
@@ -256,6 +566,7 @@ function obtenirDateAujourdhuiPlanning() {
             "0"
         );
 
+
     const jour =
         String(
             maintenant.getDate()
@@ -263,6 +574,7 @@ function obtenirDateAujourdhuiPlanning() {
             2,
             "0"
         );
+
 
     return `${annee}-${mois}-${jour}`;
 }
@@ -283,10 +595,12 @@ function formaterDatePlanning(
         return "";
     }
 
+
     const morceaux =
         dateTexte.split(
             "-"
         );
+
 
     if (
         morceaux.length !==
@@ -295,6 +609,7 @@ function formaterDatePlanning(
 
         return dateTexte;
     }
+
 
     const date =
         new Date(
@@ -309,9 +624,11 @@ function formaterDatePlanning(
             )
         );
 
+
     return date.toLocaleDateString(
         "fr-FR",
         {
+
             weekday:
                 "long",
 
@@ -320,7 +637,142 @@ function formaterDatePlanning(
 
             month:
                 "long"
+
         }
+    );
+}
+
+
+/* =================================
+   OUTILS TEMPS CUISINE
+================================= */
+
+/*
+    Transforme un nombre de secondes
+    en :
+
+    04:32
+
+    ou
+
+    1:04:32
+*/
+
+function formaterTempsCuisine(
+    secondesTotales
+) {
+
+    const secondesPropres =
+        Math.max(
+            0,
+            Math.floor(
+                Number(
+                    secondesTotales
+                ) || 0
+            )
+        );
+
+
+    const heures =
+        Math.floor(
+            secondesPropres /
+            3600
+        );
+
+
+    const minutes =
+        Math.floor(
+            (
+                secondesPropres %
+                3600
+            ) /
+            60
+        );
+
+
+    const secondes =
+        secondesPropres %
+        60;
+
+
+    if (
+        heures >
+        0
+    ) {
+
+        return (
+            `${heures}:` +
+            `${String(
+                minutes
+            ).padStart(
+                2,
+                "0"
+            )}:` +
+            `${String(
+                secondes
+            ).padStart(
+                2,
+                "0"
+            )}`
+        );
+    }
+
+
+    return (
+        `${String(
+            minutes
+        ).padStart(
+            2,
+            "0"
+        )}:` +
+        `${String(
+            secondes
+        ).padStart(
+            2,
+            "0"
+        )}`
+    );
+}
+
+
+/* =================================
+   CONVERTIR DURÉE EN SECONDES
+================================= */
+
+function convertirDureeCuisineEnSecondes(
+    minutes,
+    secondes
+) {
+
+    const minutesNombre =
+        Math.max(
+            0,
+            Number(
+                minutes
+            ) || 0
+        );
+
+
+    const secondesNombre =
+        Math.max(
+            0,
+            Math.min(
+                59,
+                Number(
+                    secondes
+                ) || 0
+            )
+        );
+
+
+    return (
+        Math.floor(
+            minutesNombre
+        ) *
+        60 +
+        Math.floor(
+            secondesNombre
+        )
     );
 }
 
@@ -379,6 +831,7 @@ async function chargerRecette() {
             window.location.href =
                 "compte.html";
 
+
             return;
         }
 
@@ -432,6 +885,19 @@ async function chargerRecette() {
             data;
 
 
+        /*
+            Valeur initiale du mode cuisine.
+        */
+
+        personnesModeCuisine =
+            Math.max(
+                1,
+                Number(
+                    recetteChargee.personnes
+                ) || 1
+            );
+
+
         /* =========================
            PHOTOS
         ========================= */
@@ -447,9 +913,22 @@ async function chargerRecette() {
 
         afficherGalerieRecette();
 
+
         afficherRecette(
             recetteChargee
         );
+
+
+        /*
+            On récupère les éventuels
+            minuteurs déjà actifs pour
+            cette recette.
+
+            Leur gestion complète arrive
+            dans les prochaines parties.
+        */
+
+        chargerMinuteursCuisineDepuisStockage();
 
 
     } catch (
@@ -513,8 +992,10 @@ async function chargerFoyerPlanning() {
     foyerIdPlanning =
         null;
 
+
     personnesParDefautPlanning =
         1;
+
 
     personnesSelectionneesPlanning =
         1;
@@ -527,10 +1008,6 @@ async function chargerFoyerPlanning() {
         return;
     }
 
-
-    /* =========================
-       MEMBRE DU FOYER
-    ========================= */
 
     const {
         data:
@@ -566,15 +1043,6 @@ async function chargerFoyerPlanning() {
         !membreFoyer?.foyer_id
     ) {
 
-        /*
-            L'utilisateur peut toujours
-            consulter la recette.
-
-            Le bouton planning pourra
-            simplement signaler qu'aucun
-            foyer n'est disponible.
-        */
-
         return;
     }
 
@@ -582,10 +1050,6 @@ async function chargerFoyerPlanning() {
     foyerIdPlanning =
         membreFoyer.foyer_id;
 
-
-    /* =========================
-       PARAMÈTRES DU FOYER
-    ========================= */
 
     const {
         data:
@@ -711,16 +1175,10 @@ async function chargerPhotosRecette(
         photosRecette =
             [];
 
+
         return;
     }
 
-
-    /*
-        Le bucket est privé.
-
-        On crée donc une URL signée
-        temporaire pour chaque photo.
-    */
 
     photosRecette =
         await Promise.all(
@@ -1010,11 +1468,6 @@ function afficherGalerieRecette() {
     }
 
 
-    /*
-        Aucune photo :
-        galerie complètement masquée.
-    */
-
     if (
         !Array.isArray(
             photosRecette
@@ -1065,10 +1518,6 @@ function afficherGalerieRecette() {
     }
 
 
-    /*
-        Au moins une photo.
-    */
-
     galerieRecette.hidden =
         false;
 
@@ -1115,11 +1564,6 @@ function afficherGalerieRecette() {
             .join("");
 
 
-    /*
-        Une seule photo :
-        pas de navigation.
-    */
-
     if (
         photosRecette.length ===
         1
@@ -1159,11 +1603,6 @@ function afficherGalerieRecette() {
     }
 
 
-    /*
-        Plusieurs photos :
-        flèches + indicateurs.
-    */
-
     if (
         boutonPhotoPrecedente
     ) {
@@ -1187,7 +1626,7 @@ function afficherGalerieRecette() {
 
 
 /* =================================
-   INDICATEURS DU CAROUSEL
+   INDICATEURS CAROUSEL
 ================================= */
 
 function afficherIndicateursCarousel() {
@@ -1210,6 +1649,7 @@ function afficherIndicateursCarousel() {
 
         indicateursCarouselRecette.hidden =
             true;
+
 
         return;
     }
@@ -1271,10 +1711,6 @@ function afficherPhotoCarousel(
     }
 
 
-    /*
-        Carousel en boucle.
-    */
-
     if (
         nouvelIndex <
         0
@@ -1300,10 +1736,6 @@ function afficherPhotoCarousel(
         nouvelIndex;
 
 
-    /*
-        Slides.
-    */
-
     const slides =
         carouselImagesRecette
             .querySelectorAll(
@@ -1325,10 +1757,6 @@ function afficherPhotoCarousel(
         }
     );
 
-
-    /*
-        Indicateurs.
-    */
 
     if (
         indicateursCarouselRecette
@@ -1371,7 +1799,7 @@ function afficherPhotoCarousel(
 
 
 /* =================================
-   PHOTO PRÉCÉDENTE
+   PHOTO PRÉCÉDENTE / SUIVANTE
 ================================= */
 
 function afficherPhotoPrecedente() {
@@ -1382,10 +1810,6 @@ function afficherPhotoPrecedente() {
     );
 }
 
-
-/* =================================
-   PHOTO SUIVANTE
-================================= */
 
 function afficherPhotoSuivante() {
 
@@ -1406,10 +1830,7 @@ if (
 
     boutonPhotoPrecedente.addEventListener(
         "click",
-        function () {
-
-            afficherPhotoPrecedente();
-        }
+        afficherPhotoPrecedente
     );
 }
 
@@ -1420,16 +1841,13 @@ if (
 
     boutonPhotoSuivante.addEventListener(
         "click",
-        function () {
-
-            afficherPhotoSuivante();
-        }
+        afficherPhotoSuivante
     );
 }
 
 
 /* =================================
-   CLIC SUR LES INDICATEURS
+   INDICATEURS CAROUSEL
 ================================= */
 
 if (
@@ -1481,7 +1899,7 @@ if (
 
 
 /* =================================
-   SWIPE MOBILE
+   SWIPE MOBILE CAROUSEL
 ================================= */
 
 if (
@@ -1587,6 +2005,7 @@ if (
                 positionTouchFin =
                     null;
 
+
                 return;
             }
 
@@ -1596,15 +2015,11 @@ if (
                 positionTouchDebut;
 
 
-            const seuil =
-                45;
-
-
             if (
                 Math.abs(
                     difference
                 ) <
-                seuil
+                45
             ) {
 
                 positionTouchDebut =
@@ -1613,14 +2028,10 @@ if (
                 positionTouchFin =
                     null;
 
+
                 return;
             }
 
-
-            /*
-                Swipe gauche :
-                photo suivante.
-            */
 
             if (
                 difference <
@@ -1630,11 +2041,6 @@ if (
                 afficherPhotoSuivante();
 
             } else {
-
-                /*
-                    Swipe droite :
-                    photo précédente.
-                */
 
                 afficherPhotoPrecedente();
             }
@@ -1656,7 +2062,7 @@ if (
 
 
 /* =================================
-   NAVIGATION CLAVIER
+   CLAVIER CAROUSEL
 ================================= */
 
 document.addEventListener(
@@ -1664,6 +2070,25 @@ document.addEventListener(
     function (
         evenement
     ) {
+
+        /*
+            Si le mode cuisine est ouvert,
+            les flèches seront utilisées
+            pour les étapes et non
+            pour les photos.
+
+            La gestion arrivera
+            dans la partie 3.
+        */
+
+        if (
+            modeCuisine &&
+            !modeCuisine.hidden
+        ) {
+
+            return;
+        }
+
 
         if (
             !galerieRecette ||
@@ -1679,12 +2104,6 @@ document.addEventListener(
         const cible =
             evenement.target;
 
-
-        /*
-            Si l'utilisateur interagit
-            avec un champ de formulaire,
-            on ne touche pas au carousel.
-        */
 
         if (
             cible &&
@@ -1709,7 +2128,6 @@ document.addEventListener(
 
             afficherPhotoPrecedente();
 
-
         } else if (
             evenement.key ===
             "ArrowRight"
@@ -1719,6 +2137,7 @@ document.addEventListener(
         }
     }
 );
+
 
 /* =================================
    POP-UP DE SUPPRESSION
@@ -1789,10 +2208,9 @@ function demanderConfirmationSuppression() {
             `;
 
 
-            document.body
-                .appendChild(
-                    fond
-                );
+            document.body.appendChild(
+                fond
+            );
 
 
             const boutonAnnuler =
@@ -1813,34 +2231,33 @@ function demanderConfirmationSuppression() {
 
                 fond.remove();
 
+
                 resolve(
                     resultat
                 );
             }
 
 
-            boutonAnnuler
-                .addEventListener(
-                    "click",
-                    function () {
+            boutonAnnuler.addEventListener(
+                "click",
+                function () {
 
-                        fermerPopup(
-                            false
-                        );
-                    }
-                );
+                    fermerPopup(
+                        false
+                    );
+                }
+            );
 
 
-            boutonConfirmer
-                .addEventListener(
-                    "click",
-                    function () {
+            boutonConfirmer.addEventListener(
+                "click",
+                function () {
 
-                        fermerPopup(
-                            true
-                        );
-                    }
-                );
+                    fermerPopup(
+                        true
+                    );
+                }
+            );
 
 
             fond.addEventListener(
@@ -1866,7 +2283,7 @@ function demanderConfirmationSuppression() {
 
 
 /* =================================
-   SUPPRESSION DES PHOTOS STORAGE
+   SUPPRESSION PHOTOS STORAGE
 ================================= */
 
 async function supprimerPhotosRecetteStorage() {
@@ -1875,7 +2292,8 @@ async function supprimerPhotosRecetteStorage() {
         !Array.isArray(
             photosRecette
         ) ||
-        photosRecette.length === 0
+        photosRecette.length ===
+            0
     ) {
 
         return;
@@ -1929,7 +2347,7 @@ async function supprimerPhotosRecetteStorage() {
 
 
 /* =================================
-   SUPPRESSION DE LA RECETTE
+   SUPPRIMER LA RECETTE
 ================================= */
 
 async function supprimerRecette() {
@@ -1944,6 +2362,7 @@ async function supprimerRecette() {
         window.alert(
             "Vous ne pouvez pas supprimer cette recette."
         );
+
 
         return;
     }
@@ -1978,22 +2397,15 @@ async function supprimerRecette() {
     boutonSupprimer.disabled =
         true;
 
+
     boutonSupprimer.textContent =
         "Suppression…";
 
 
     try {
 
-        /* =========================
-           PHOTOS STORAGE
-        ========================= */
-
         await supprimerPhotosRecetteStorage();
 
-
-        /* =========================
-           RECETTE
-        ========================= */
 
         const {
             error
@@ -2038,6 +2450,7 @@ async function supprimerRecette() {
         boutonSupprimer.disabled =
             false;
 
+
         boutonSupprimer.textContent =
             "Supprimer la recette";
 
@@ -2076,18 +2489,8 @@ function afficherRecette(
 
 
     /* =========================
-       BOUTON PLANNING
+       ACTION PLANNING
     ========================= */
-
-    /*
-        Ce bouton est disponible
-        même si la recette a été créée
-        par un autre membre.
-
-        Il faut simplement appartenir
-        à un foyer pour pouvoir réellement
-        l'ajouter.
-    */
 
     const boutonPlanningHtml = `
 
@@ -2097,6 +2500,23 @@ function afficherRecette(
             id="ajouter-recette-planning"
         >
             Ajouter au planning
+        </button>
+
+    `;
+
+
+    /* =========================
+       MODE CUISINE
+    ========================= */
+
+    const boutonModeCuisineHtml = `
+
+        <button
+            type="button"
+            class="bouton-mode-cuisine"
+            id="ouvrir-mode-cuisine"
+        >
+            Mode cuisine
         </button>
 
     `;
@@ -2132,12 +2552,14 @@ function afficherRecette(
 
 
     /* =========================
-       TOUTES LES ACTIONS
+       ACTIONS
     ========================= */
 
     const actionsGestionHtml = `
 
         <div class="actions-gestion-recette">
+
+            ${boutonModeCuisineHtml}
 
             ${boutonPlanningHtml}
 
@@ -2254,12 +2676,6 @@ function afficherRecette(
                     ingredient,
                     index
                 ) {
-
-                    /*
-                        Anciennes recettes
-                        éventuellement stockées
-                        sous forme de texte.
-                    */
 
                     if (
                         typeof ingredient ===
@@ -2458,7 +2874,6 @@ function afficherRecette(
 
             <div class="contenu">
 
-
                 <div class="badges-principaux">
 
                     <span class="categorie">
@@ -2509,10 +2924,6 @@ function afficherRecette(
                 ${actionsGestionHtml}
 
 
-                <!-- =========================
-                     INFORMATIONS
-                ========================== -->
-
                 <div class="informations-recette">
 
 
@@ -2557,7 +2968,6 @@ function afficherRecette(
                                 type="button"
                                 class="bouton-portion"
                                 id="diminuer-portions"
-                                aria-label="Diminuer le nombre de personnes"
                             >
                                 −
                             </button>
@@ -2575,7 +2985,6 @@ function afficherRecette(
                                 type="button"
                                 class="bouton-portion"
                                 id="augmenter-portions"
-                                aria-label="Augmenter le nombre de personnes"
                             >
                                 +
                             </button>
@@ -2608,10 +3017,6 @@ function afficherRecette(
 
                 </div>
 
-
-                <!-- =========================
-                     INGRÉDIENTS / PRÉPARATION
-                ========================== -->
 
                 <div class="colonnes">
 
@@ -2662,7 +3067,7 @@ function afficherRecette(
 
 
     /* =================================
-       ÉLÉMENTS APRÈS AFFICHAGE
+       ÉLÉMENTS APRÈS RENDU
     ================================= */
 
     const listeIngredients =
@@ -2701,27 +3106,47 @@ function afficherRecette(
         );
 
 
+    const boutonOuvrirModeCuisine =
+        document.getElementById(
+            "ouvrir-mode-cuisine"
+        );
+
+
     /* =================================
-       AJOUT AU PLANNING
+       MODE CUISINE
+    ================================= */
+
+    if (
+        boutonOuvrirModeCuisine
+    ) {
+
+        boutonOuvrirModeCuisine.addEventListener(
+            "click",
+            function () {
+
+                /*
+                    La fonction complète
+                    arrive dans la partie 3.
+                */
+
+                ouvrirModeCuisine();
+            }
+        );
+    }
+
+
+    /* =================================
+       AJOUT PLANNING
     ================================= */
 
     if (
         boutonAjouterPlanning
     ) {
 
-        boutonAjouterPlanning
-            .addEventListener(
-                "click",
-                function () {
-
-                    /*
-                        Cette fonction sera
-                        définie dans la partie 4.
-                    */
-
-                    ouvrirPopupAjoutPlanning();
-                }
-            );
+        boutonAjouterPlanning.addEventListener(
+            "click",
+            ouvrirPopupAjoutPlanning
+        );
     }
 
 
@@ -2733,11 +3158,10 @@ function afficherRecette(
         boutonSupprimer
     ) {
 
-        boutonSupprimer
-            .addEventListener(
-                "click",
-                supprimerRecette
-            );
+        boutonSupprimer.addEventListener(
+            "click",
+            supprimerRecette
+        );
     }
 
 
@@ -2758,42 +3182,34 @@ function afficherRecette(
                 caseIngredient
             ) {
 
-                caseIngredient
-                    .addEventListener(
-                        "change",
-                        function () {
+                caseIngredient.addEventListener(
+                    "change",
+                    function () {
 
-                            const ligneIngredient =
-                                caseIngredient
-                                    .closest(
-                                        ".ingredient-item"
-                                    );
+                        const ligneIngredient =
+                            caseIngredient.closest(
+                                ".ingredient-item"
+                            );
 
 
-                            if (
-                                !ligneIngredient
-                            ) {
+                        if (
+                            !ligneIngredient
+                        ) {
 
-                                return;
-                            }
-
-
-                            ligneIngredient
-                                .classList
-                                .toggle(
-                                    "ingredient-coche",
-                                    caseIngredient.checked
-                                );
+                            return;
                         }
-                    );
+
+
+                        ligneIngredient.classList.toggle(
+                            "ingredient-coche",
+                            caseIngredient.checked
+                        );
+                    }
+                );
             }
         );
     }
 
-
-    /* =================================
-       METTRE À JOUR LES INGRÉDIENTS
-    ================================= */
 
     function mettreAJourIngredients() {
 
@@ -2806,12 +3222,18 @@ function afficherRecette(
 
 
         activerCasesIngredients();
+
+
+        /*
+            Si on ouvre ensuite le mode cuisine,
+            on récupérera également ce nombre
+            de portions actuellement sélectionné.
+        */
+
+        personnesModeCuisine =
+            personnesSelectionnees;
     }
 
-
-    /* =================================
-       PORTIONS -
-    ================================= */
 
     boutonDiminuer.addEventListener(
         "click",
@@ -2832,10 +3254,6 @@ function afficherRecette(
     );
 
 
-    /* =================================
-       PORTIONS +
-    ================================= */
-
     boutonAugmenter.addEventListener(
         "click",
         function () {
@@ -2848,10 +3266,6 @@ function afficherRecette(
         }
     );
 
-
-    /* =================================
-       INITIALISATION INGRÉDIENTS
-    ================================= */
 
     activerCasesIngredients();
 
@@ -2876,10 +3290,9 @@ function afficherRecette(
                 function () {
 
                     const ligneEtape =
-                        caseEtape
-                            .closest(
-                                ".etape-item"
-                            );
+                        caseEtape.closest(
+                            ".etape-item"
+                        );
 
 
                     if (
@@ -2890,12 +3303,10 @@ function afficherRecette(
                     }
 
 
-                    ligneEtape
-                        .classList
-                        .toggle(
-                            "etape-coche",
-                            caseEtape.checked
-                        );
+                    ligneEtape.classList.toggle(
+                        "etape-coche",
+                        caseEtape.checked
+                    );
                 }
             );
         }
@@ -2903,13 +3314,625 @@ function afficherRecette(
 }
 
 /* =================================
-   POPUP AJOUT AU PLANNING
+   MODE CUISINE
 ================================= */
 
-function ouvrirPopupAjoutPlanning() {
+function obtenirEtapesCuisine() {
 
     if (
-        !popupAjoutPlanning
+        !recetteChargee ||
+        !Array.isArray(
+            recetteChargee.etapes
+        )
+    ) {
+
+        return [];
+    }
+
+
+    return recetteChargee.etapes;
+}
+
+
+/* =================================
+   INGRÉDIENTS MODE CUISINE
+================================= */
+
+function creerIngredientsCuisineHtml() {
+
+    if (
+        !recetteChargee
+    ) {
+
+        return "";
+    }
+
+
+    const personnesInitiales =
+        Math.max(
+            1,
+            Number(
+                recetteChargee.personnes
+            ) || 1
+        );
+
+
+    const coefficient =
+        personnesModeCuisine /
+        personnesInitiales;
+
+
+    const ingredients =
+        Array.isArray(
+            recetteChargee.ingredients
+        )
+            ? recetteChargee.ingredients
+            : [];
+
+
+    if (
+        ingredients.length ===
+        0
+    ) {
+
+        return `
+
+            <p class="aucun-ingredient-cuisine">
+                Aucun ingrédient renseigné.
+            </p>
+
+        `;
+    }
+
+
+    return `
+
+        <div class="portions-mode-cuisine">
+
+            <span>
+                Portions
+            </span>
+
+            <div class="controle-portions-cuisine">
+
+                <button
+                    type="button"
+                    id="diminuer-portions-cuisine"
+                    aria-label="Diminuer le nombre de personnes"
+                >
+                    −
+                </button>
+
+                <strong
+                    id="nombre-portions-cuisine"
+                >
+                    ${personnesModeCuisine}
+                </strong>
+
+                <button
+                    type="button"
+                    id="augmenter-portions-cuisine"
+                    aria-label="Augmenter le nombre de personnes"
+                >
+                    +
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <ul class="liste-ingredients-cuisine">
+
+            ${
+                ingredients
+                    .map(
+                        function (
+                            ingredient,
+                            index
+                        ) {
+
+                            if (
+                                typeof ingredient ===
+                                "string"
+                            ) {
+
+                                return `
+
+                                    <li>
+
+                                        <input
+                                            type="checkbox"
+                                            id="ingredient-cuisine-${index}"
+                                            class="case-ingredient-cuisine"
+                                        >
+
+                                        <label
+                                            for="ingredient-cuisine-${index}"
+                                        >
+                                            ${echapperHtmlRecette(
+                                                ingredient
+                                            )}
+                                        </label>
+
+                                    </li>
+
+                                `;
+                            }
+
+
+                            const proportionnel =
+                                ingredient.proportionnel !==
+                                false;
+
+
+                            let quantite =
+                                ingredient.quantite;
+
+
+                            if (
+                                proportionnel &&
+                                quantite !==
+                                    null &&
+                                quantite !==
+                                    undefined &&
+                                quantite !==
+                                    ""
+                            ) {
+
+                                quantite =
+                                    Number(
+                                        quantite
+                                    ) *
+                                    coefficient;
+                            }
+
+
+                            let texte =
+                                ingredient.nom ||
+                                "";
+
+
+                            if (
+                                quantite !==
+                                    null &&
+                                quantite !==
+                                    undefined &&
+                                quantite !==
+                                    ""
+                            ) {
+
+                                const unite =
+                                    ingredient.unite
+                                        ? ` ${ingredient.unite}`
+                                        : "";
+
+
+                                texte =
+                                    `${formaterQuantite(
+                                        Number(
+                                            quantite
+                                        )
+                                    )}${unite} ${
+                                        ingredient.nom ||
+                                        ""
+                                    }`;
+                            }
+
+
+                            return `
+
+                                <li>
+
+                                    <input
+                                        type="checkbox"
+                                        id="ingredient-cuisine-${index}"
+                                        class="case-ingredient-cuisine"
+                                    >
+
+                                    <label
+                                        for="ingredient-cuisine-${index}"
+                                    >
+                                        ${echapperHtmlRecette(
+                                            texte
+                                        )}
+                                    </label>
+
+                                </li>
+
+                            `;
+                        }
+                    )
+                    .join("")
+            }
+
+        </ul>
+
+    `;
+}
+
+
+/* =================================
+   AFFICHER INGRÉDIENTS CUISINE
+================================= */
+
+function afficherIngredientsCuisine() {
+
+    if (
+        !contenuIngredientsCuisine
+    ) {
+
+        return;
+    }
+
+
+    contenuIngredientsCuisine.innerHTML =
+        creerIngredientsCuisineHtml();
+
+
+    /* =========================
+       PORTIONS -
+    ========================= */
+
+    const boutonDiminuer =
+        document.getElementById(
+            "diminuer-portions-cuisine"
+        );
+
+
+    if (
+        boutonDiminuer
+    ) {
+
+        boutonDiminuer.addEventListener(
+            "click",
+            function () {
+
+                if (
+                    personnesModeCuisine <=
+                    1
+                ) {
+
+                    return;
+                }
+
+
+                personnesModeCuisine -=
+                    1;
+
+
+                afficherIngredientsCuisine();
+            }
+        );
+    }
+
+
+    /* =========================
+       PORTIONS +
+    ========================= */
+
+    const boutonAugmenter =
+        document.getElementById(
+            "augmenter-portions-cuisine"
+        );
+
+
+    if (
+        boutonAugmenter
+    ) {
+
+        boutonAugmenter.addEventListener(
+            "click",
+            function () {
+
+                personnesModeCuisine +=
+                    1;
+
+
+                afficherIngredientsCuisine();
+            }
+        );
+    }
+
+
+    /* =========================
+       CASES INGRÉDIENTS
+    ========================= */
+
+    const cases =
+        contenuIngredientsCuisine
+            .querySelectorAll(
+                ".case-ingredient-cuisine"
+            );
+
+
+    cases.forEach(
+        function (
+            caseIngredient
+        ) {
+
+            caseIngredient.addEventListener(
+                "change",
+                function () {
+
+                    const ligne =
+                        caseIngredient.closest(
+                            "li"
+                        );
+
+
+                    if (
+                        !ligne
+                    ) {
+
+                        return;
+                    }
+
+
+                    ligne.classList.toggle(
+                        "ingredient-cuisine-coche",
+                        caseIngredient.checked
+                    );
+                }
+            );
+        }
+    );
+}
+
+
+/* =================================
+   AFFICHER UNE ÉTAPE CUISINE
+================================= */
+
+function afficherEtapeCuisine() {
+
+    const etapes =
+        obtenirEtapesCuisine();
+
+
+    if (
+        etapes.length ===
+        0
+    ) {
+
+        if (
+            numeroEtapeCuisine
+        ) {
+
+            numeroEtapeCuisine.textContent =
+                "";
+        }
+
+
+        if (
+            totalEtapesCuisine
+        ) {
+
+            totalEtapesCuisine.textContent =
+                "";
+        }
+
+
+        if (
+            texteEtapeCuisine
+        ) {
+
+            texteEtapeCuisine.textContent =
+                "Aucune étape n’a été renseignée pour cette recette.";
+        }
+
+
+        if (
+            barreProgressionCuisine
+        ) {
+
+            barreProgressionCuisine.style.width =
+                "0%";
+        }
+
+
+        if (
+            boutonEtapeCuisinePrecedente
+        ) {
+
+            boutonEtapeCuisinePrecedente.disabled =
+                true;
+        }
+
+
+        if (
+            boutonEtapeCuisineSuivante
+        ) {
+
+            boutonEtapeCuisineSuivante.disabled =
+                true;
+        }
+
+
+        if (
+            boutonMinuteurEtapeCuisine
+        ) {
+
+            boutonMinuteurEtapeCuisine.disabled =
+                true;
+        }
+
+
+        return;
+    }
+
+
+    /*
+        Sécurité sur l'index.
+    */
+
+    if (
+        indexEtapeCuisine <
+        0
+    ) {
+
+        indexEtapeCuisine =
+            0;
+    }
+
+
+    if (
+        indexEtapeCuisine >=
+        etapes.length
+    ) {
+
+        indexEtapeCuisine =
+            etapes.length -
+            1;
+    }
+
+
+    /* =========================
+       NUMÉRO
+    ========================= */
+
+    if (
+        numeroEtapeCuisine
+    ) {
+
+        numeroEtapeCuisine.textContent =
+            `Étape ${indexEtapeCuisine + 1}`;
+    }
+
+
+    if (
+        totalEtapesCuisine
+    ) {
+
+        totalEtapesCuisine.textContent =
+            `sur ${etapes.length}`;
+    }
+
+
+    /* =========================
+       TEXTE
+    ========================= */
+
+    if (
+        texteEtapeCuisine
+    ) {
+
+        texteEtapeCuisine.textContent =
+            etapes[
+                indexEtapeCuisine
+            ];
+    }
+
+
+    /* =========================
+       PROGRESSION
+    ========================= */
+
+    if (
+        barreProgressionCuisine
+    ) {
+
+        const progression =
+            (
+                (
+                    indexEtapeCuisine +
+                    1
+                ) /
+                etapes.length
+            ) *
+            100;
+
+
+        barreProgressionCuisine.style.width =
+            `${progression}%`;
+    }
+
+
+    /* =========================
+       BOUTON PRÉCÉDENT
+    ========================= */
+
+    if (
+        boutonEtapeCuisinePrecedente
+    ) {
+
+        boutonEtapeCuisinePrecedente.disabled =
+            indexEtapeCuisine ===
+            0;
+    }
+
+
+    /* =========================
+       BOUTON SUIVANT
+    ========================= */
+
+    if (
+        boutonEtapeCuisineSuivante
+    ) {
+
+        const derniereEtape =
+            indexEtapeCuisine ===
+            etapes.length -
+            1;
+
+
+        boutonEtapeCuisineSuivante.textContent =
+            derniereEtape
+                ? "Terminer"
+                : "Suivant";
+    }
+
+
+    /* =========================
+       MINUTEUR
+    ========================= */
+
+    if (
+        boutonMinuteurEtapeCuisine
+    ) {
+
+        boutonMinuteurEtapeCuisine.disabled =
+            false;
+    }
+}
+
+
+/* =================================
+   ÉTAPE PRÉCÉDENTE
+================================= */
+
+function allerEtapeCuisinePrecedente() {
+
+    if (
+        indexEtapeCuisine <=
+        0
+    ) {
+
+        return;
+    }
+
+
+    indexEtapeCuisine -=
+        1;
+
+
+    afficherEtapeCuisine();
+}
+
+
+/* =================================
+   ÉTAPE SUIVANTE
+================================= */
+
+function allerEtapeCuisineSuivante() {
+
+    const etapes =
+        obtenirEtapesCuisine();
+
+
+    if (
+        etapes.length ===
+        0
     ) {
 
         return;
@@ -2917,1020 +3940,805 @@ function ouvrirPopupAjoutPlanning() {
 
 
     /*
-        Vérification du foyer.
+        Dernière étape :
+        on ferme le mode cuisine.
+
+        Les minuteurs, eux,
+        continuent de tourner.
     */
 
     if (
-        !foyerIdPlanning
+        indexEtapeCuisine >=
+        etapes.length -
+        1
     ) {
 
-        window.alert(
-            "Vous devez appartenir à un foyer pour ajouter une recette au planning."
-        );
+        fermerModeCuisineInterface();
+
 
         return;
     }
 
 
-    /* =========================
-       RÉINITIALISATION
-    ========================= */
-
-    repasExistantPlanning =
-        null;
+    indexEtapeCuisine +=
+        1;
 
 
-    momentSelectionnePlanning =
-        "midi";
+    afficherEtapeCuisine();
+}
 
 
-    personnesSelectionneesPlanning =
-        personnesParDefautPlanning;
+/* =================================
+   OUVRIR MODE CUISINE
+================================= */
 
-
-    /* =========================
-       NOM DE LA RECETTE
-    ========================= */
+function ouvrirModeCuisine() {
 
     if (
-        nomRecettePopupPlanning
+        !modeCuisine ||
+        !recetteChargee
     ) {
 
-        nomRecettePopupPlanning.textContent =
-            recetteChargee?.nom ||
-            "";
+        return;
+    }
+
+
+    const etapes =
+        obtenirEtapesCuisine();
+
+
+    /*
+        À chaque nouvelle ouverture,
+        on repart de l'étape 1.
+
+        Les minuteurs existants
+        restent actifs.
+    */
+
+    indexEtapeCuisine =
+        0;
+
+
+    ingredientsCuisineReplies =
+        false;
+
+
+    if (
+        nomRecetteModeCuisine
+    ) {
+
+        nomRecetteModeCuisine.textContent =
+            recetteChargee.nom ||
+            "Recette";
     }
 
 
     /* =========================
-       DATE = AUJOURD'HUI
+       INGRÉDIENTS
     ========================= */
 
+    afficherIngredientsCuisine();
+
+
     if (
-        dateAjoutPlanning
+        ingredientsModeCuisine
     ) {
 
-        dateAjoutPlanning.value =
-            obtenirDateAujourdhuiPlanning();
+        ingredientsModeCuisine.classList.remove(
+            "replie"
+        );
+    }
+
+
+    if (
+        boutonReplierIngredientsCuisine
+    ) {
+
+        boutonReplierIngredientsCuisine.textContent =
+            "Masquer";
     }
 
 
     /* =========================
-       MIDI PAR DÉFAUT
+       ÉTAPE
     ========================= */
 
-    mettreAJourMomentPlanning();
+    afficherEtapeCuisine();
 
 
     /* =========================
-       PERSONNES
+       MINUTEURS
     ========================= */
 
-    mettreAJourNombrePersonnesPlanning();
+    afficherMinuteursCuisine();
 
 
-    /* =========================
-       MESSAGE
-    ========================= */
+    /*
+        Si des minuteurs ont été
+        restaurés du localStorage
+        mais que l'intervalle n'est
+        pas encore actif, on le lance.
+    */
 
-    masquerMessagePlanning();
-
-
-    /* =========================
-       BOUTON
-    ========================= */
-
-    if (
-        confirmerAjoutPlanning
-    ) {
-
-        confirmerAjoutPlanning.disabled =
-            false;
-
-
-        confirmerAjoutPlanning.textContent =
-            "Ajouter au planning";
-    }
+    demarrerBoucleMinuteursCuisine();
 
 
     /* =========================
        AFFICHAGE
     ========================= */
 
-    popupAjoutPlanning.hidden =
+    modeCuisine.hidden =
         false;
 
 
     document.body.classList.add(
-        "popup-ouverte"
+        "mode-cuisine-ouvert"
     );
+
+
+    /*
+        Sur mobile, on remonte
+        systématiquement en haut.
+    */
+
+    modeCuisine.scrollTop =
+        0;
 }
 
 
 /* =================================
-   FERMER POPUP AJOUT
+   FERMER MODE CUISINE
 ================================= */
 
-function fermerPopupAjoutPlanning() {
+function fermerModeCuisineInterface() {
 
     if (
-        !popupAjoutPlanning
+        !modeCuisine
     ) {
 
         return;
     }
 
 
-    popupAjoutPlanning.hidden =
+    modeCuisine.hidden =
         true;
-
-
-    repasExistantPlanning =
-        null;
 
 
     document.body.classList.remove(
-        "popup-ouverte"
-    );
-}
-
-
-/* =================================
-   MOMENT MIDI / SOIR
-================================= */
-
-function selectionnerMomentPlanning(
-    moment
-) {
-
-    if (
-        moment !== "midi" &&
-        moment !== "soir"
-    ) {
-
-        return;
-    }
-
-
-    momentSelectionnePlanning =
-        moment;
-
-
-    mettreAJourMomentPlanning();
-}
-
-
-/* =================================
-   AFFICHAGE MOMENT
-================================= */
-
-function mettreAJourMomentPlanning() {
-
-    if (
-        boutonMomentMidi
-    ) {
-
-        boutonMomentMidi.classList.toggle(
-            "actif",
-            momentSelectionnePlanning ===
-                "midi"
-        );
-
-
-        boutonMomentMidi.setAttribute(
-            "aria-pressed",
-            momentSelectionnePlanning ===
-                "midi"
-                ? "true"
-                : "false"
-        );
-    }
-
-
-    if (
-        boutonMomentSoir
-    ) {
-
-        boutonMomentSoir.classList.toggle(
-            "actif",
-            momentSelectionnePlanning ===
-                "soir"
-        );
-
-
-        boutonMomentSoir.setAttribute(
-            "aria-pressed",
-            momentSelectionnePlanning ===
-                "soir"
-                ? "true"
-                : "false"
-        );
-    }
-}
-
-
-/* =================================
-   NOMBRE DE PERSONNES
-================================= */
-
-function mettreAJourNombrePersonnesPlanning() {
-
-    if (
-        !nombrePersonnesPlanning
-    ) {
-
-        return;
-    }
-
-
-    nombrePersonnesPlanning.textContent =
-        personnesSelectionneesPlanning;
-}
-
-
-/* =================================
-   MESSAGE POPUP
-================================= */
-
-function afficherMessagePlanning(
-    texte,
-    type = "erreur"
-) {
-
-    if (
-        !messagePopupPlanning
-    ) {
-
-        return;
-    }
-
-
-    messagePopupPlanning.hidden =
-        false;
-
-
-    messagePopupPlanning.textContent =
-        texte;
-
-
-    messagePopupPlanning.classList.remove(
-        "succes",
-        "erreur"
-    );
-
-
-    messagePopupPlanning.classList.add(
-        type
-    );
-}
-
-
-function masquerMessagePlanning() {
-
-    if (
-        !messagePopupPlanning
-    ) {
-
-        return;
-    }
-
-
-    messagePopupPlanning.hidden =
-        true;
-
-
-    messagePopupPlanning.textContent =
-        "";
-
-
-    messagePopupPlanning.classList.remove(
-        "succes",
-        "erreur"
-    );
-}
-
-
-/* =================================
-   RECHERCHER LE REPAS DU CRÉNEAU
-================================= */
-
-async function rechercherRepasExistantPlanning(
-    date,
-    moment
-) {
-
-    const {
-        data,
-        error
-    } =
-        await window.supabaseClient
-            .from(
-                "repas_planning"
-            )
-            .select(
-                `
-                    id,
-                    foyer_id,
-                    date,
-                    moment,
-                    personnes,
-                    repas_planning_elements (
-                       id,
-                       repas_planning_id,
-                       recette_id,
-                       nom,
-                       ordre
-                    )
-                `
-            )
-            .eq(
-                "foyer_id",
-                foyerIdPlanning
-            )
-            .eq(
-                "date",
-                date
-            )
-            .eq(
-                "moment",
-                moment
-            )
-            .maybeSingle();
-
-
-    if (
-        error
-    ) {
-
-        throw error;
-    }
-
-
-    return (
-        data ||
-        null
-    );
-}
-
-
-/* =================================
-   NOM DES ÉLÉMENTS D'UN REPAS
-================================= */
-
-async function obtenirNomsRepasExistant(
-    repas
-) {
-
-    if (
-        !repas
-    ) {
-
-        return [];
-    }
-
-
-    const elements =
-        Array.isArray(
-            repas.repas_planning_elements
-        )
-            ? repas.repas_planning_elements
-            : [];
-
-
-    if (
-        elements.length ===
-        0
-    ) {
-
-        return [];
-    }
-
-
-    /*
-        Les repas libres ont déjà
-        leur nom dans nom_libre.
-    */
-
-    const nomsParIndex =
-        new Array(
-            elements.length
-        ).fill(
-            ""
-        );
-
-
-    const recettesACharger =
-        [];
-
-
-    elements.forEach(
-        function (
-            element,
-            index
-        ) {
-
-            if (
-               element.nom           
-            ) {
-
-                nomsParIndex[index] =
-                    element.nom;
-
-                return;
-            }
-
-
-            if (
-                element.recette_id
-            ) {
-
-                recettesACharger.push(
-                    {
-                        index:
-                            index,
-
-                        recetteId:
-                            element.recette_id
-                    }
-                );
-            }
-        }
+        "mode-cuisine-ouvert"
     );
 
 
     /*
-        On récupère les noms des recettes
-        présentes dans le repas.
+        Très important :
+        on ne stoppe PAS les minuteurs.
     */
+}
+
+
+/* =================================
+   REPLIER LES INGRÉDIENTS
+================================= */
+
+function basculerIngredientsCuisine() {
+
+    ingredientsCuisineReplies =
+        !ingredientsCuisineReplies;
+
 
     if (
-        recettesACharger.length >
-        0
+        ingredientsModeCuisine
     ) {
 
-        const idsRecettes =
-            [
-                ...new Set(
-                    recettesACharger.map(
-                        function (
-                            element
-                        ) {
-
-                            return element.recetteId;
-                        }
-                    )
-                )
-            ];
-
-
-        const {
-            data,
-            error
-        } =
-            await window.supabaseClient
-                .from(
-                    "recettes"
-                )
-                .select(
-                    "id, nom"
-                )
-                .in(
-                    "id",
-                    idsRecettes
-                );
-
-
-        if (
-            error
-        ) {
-
-            throw error;
-        }
-
-
-        const recettesParId =
-            new Map();
-
-
-        (
-            Array.isArray(
-                data
-            )
-                ? data
-                : []
-        ).forEach(
-            function (
-                recette
-            ) {
-
-                recettesParId.set(
-                    recette.id,
-                    recette.nom
-                );
-            }
-        );
-
-
-        recettesACharger.forEach(
-            function (
-                element
-            ) {
-
-                nomsParIndex[
-                    element.index
-                ] =
-                    recettesParId.get(
-                        element.recetteId
-                    ) ||
-                    "Une recette";
-            }
+        ingredientsModeCuisine.classList.toggle(
+            "replie",
+            ingredientsCuisineReplies
         );
     }
 
 
-    return nomsParIndex.filter(
-        Boolean
+    if (
+        boutonReplierIngredientsCuisine
+    ) {
+
+        boutonReplierIngredientsCuisine.textContent =
+            ingredientsCuisineReplies
+                ? "Afficher"
+                : "Masquer";
+    }
+}
+
+
+/* =================================
+   CLIC FERMER MODE CUISINE
+================================= */
+
+if (
+    fermerModeCuisine
+) {
+
+    fermerModeCuisine.addEventListener(
+        "click",
+        fermerModeCuisineInterface
     );
 }
 
 
 /* =================================
-   DEMANDE D'AJOUT
+   CLIC REPLIER INGRÉDIENTS
 ================================= */
 
-async function demanderAjoutPlanning() {
+if (
+    boutonReplierIngredientsCuisine
+) {
 
-    masquerMessagePlanning();
-
-
-    if (
-        !foyerIdPlanning
-    ) {
-
-        afficherMessagePlanning(
-            "Aucun foyer n’est associé à votre compte."
-        );
-
-        return;
-    }
+    boutonReplierIngredientsCuisine.addEventListener(
+        "click",
+        basculerIngredientsCuisine
+    );
+}
 
 
-    if (
-        !recetteChargee?.id
-    ) {
+/* =================================
+   CLIC ÉTAPE PRÉCÉDENTE
+================================= */
 
-        afficherMessagePlanning(
-            "La recette n’a pas pu être identifiée."
-        );
+if (
+    boutonEtapeCuisinePrecedente
+) {
 
-        return;
-    }
-
-
-    const date =
-        dateAjoutPlanning?.value;
-
-
-    if (
-        !date
-    ) {
-
-        afficherMessagePlanning(
-            "Choisissez une date."
-        );
-
-        return;
-    }
+    boutonEtapeCuisinePrecedente.addEventListener(
+        "click",
+        allerEtapeCuisinePrecedente
+    );
+}
 
 
-    if (
-        momentSelectionnePlanning !==
-            "midi" &&
-        momentSelectionnePlanning !==
-            "soir"
-    ) {
+/* =================================
+   CLIC ÉTAPE SUIVANTE
+================================= */
 
-        afficherMessagePlanning(
-            "Choisissez midi ou soir."
-        );
+if (
+    boutonEtapeCuisineSuivante
+) {
 
-        return;
-    }
-
-
-    if (
-        personnesSelectionneesPlanning <
-        1
-    ) {
-
-        afficherMessagePlanning(
-            "Le nombre de personnes doit être supérieur à 0."
-        );
-
-        return;
-    }
+    boutonEtapeCuisineSuivante.addEventListener(
+        "click",
+        allerEtapeCuisineSuivante
+    );
+}
 
 
-    if (
-        confirmerAjoutPlanning
-    ) {
+/* =================================
+   LANCER MINUTEUR DEPUIS UNE ÉTAPE
+================================= */
 
-        confirmerAjoutPlanning.disabled =
-            true;
+if (
+    boutonMinuteurEtapeCuisine
+) {
 
+    boutonMinuteurEtapeCuisine.addEventListener(
+        "click",
+        function () {
 
-        confirmerAjoutPlanning.textContent =
-            "Vérification…";
-    }
+            /*
+                Cette fonction sera
+                définie dans la partie 4.
+            */
 
-
-    try {
-
-        /* =========================
-           REPAS EXISTANT ?
-        ========================= */
-
-        const repas =
-            await rechercherRepasExistantPlanning(
-                date,
-                momentSelectionnePlanning
+            ouvrirPopupMinuteurCuisine(
+                indexEtapeCuisine
             );
+        }
+    );
+}
 
 
-        /*
-            Aucun repas :
-            création immédiate.
-        */
+/* =================================
+   NAVIGATION CLAVIER MODE CUISINE
+================================= */
+
+document.addEventListener(
+    "keydown",
+    function (
+        evenement
+    ) {
 
         if (
-            !repas
+            !modeCuisine ||
+            modeCuisine.hidden
         ) {
-
-            await creerRepasPlanningAvecRecette(
-                date,
-                momentSelectionnePlanning,
-                personnesSelectionneesPlanning
-            );
-
 
             return;
         }
 
 
         /*
-            Un repas existe déjà.
-
-            On le mémorise avant
-            d'ouvrir la confirmation.
+            Si une popup minuteur
+            est ouverte, on ne navigue
+            pas entre les étapes.
         */
 
-        repasExistantPlanning =
-            repas;
+        if (
+            popupMinuteurCuisine &&
+            !popupMinuteurCuisine.hidden
+        ) {
+
+            return;
+        }
 
 
-        const nomsRepas =
-            await obtenirNomsRepasExistant(
-                repas
-            );
-
-
-        afficherConfirmationRepasExistant(
-            repas,
-            nomsRepas
-        );
-
-
-    } catch (
-        erreur
-    ) {
-
-        console.error(
-            "Erreur pendant la vérification du planning :",
-            erreur
-        );
-
-
-        afficherMessagePlanning(
-            erreur.message ||
-            "Impossible de vérifier le planning."
-        );
+        const cible =
+            evenement.target;
 
 
         if (
-            confirmerAjoutPlanning
+            cible &&
+            (
+                cible.tagName ===
+                    "INPUT" ||
+                cible.tagName ===
+                    "TEXTAREA" ||
+                cible.tagName ===
+                    "SELECT"
+            )
         ) {
 
-            confirmerAjoutPlanning.disabled =
-                false;
+            return;
+        }
 
 
-            confirmerAjoutPlanning.textContent =
-                "Ajouter au planning";
+        if (
+            evenement.key ===
+            "ArrowLeft"
+        ) {
+
+            evenement.preventDefault();
+
+
+            allerEtapeCuisinePrecedente();
+
+
+            return;
+        }
+
+
+        if (
+            evenement.key ===
+            "ArrowRight"
+        ) {
+
+            evenement.preventDefault();
+
+
+            allerEtapeCuisineSuivante();
+
+
+            return;
+        }
+
+
+        if (
+            evenement.key ===
+            "Escape"
+        ) {
+
+            evenement.preventDefault();
+
+
+            fermerModeCuisineInterface();
         }
     }
-}
+);
+
+/* =================================
+   MINUTEURS CUISINE
+================================= */
 
 
 /* =================================
-   AFFICHER CONFIRMATION
+   SAUVEGARDER LES MINUTEURS
 ================================= */
 
-function afficherConfirmationRepasExistant(
-    repas,
-    nomsRepas
-) {
+function sauvegarderMinuteursCuisine() {
 
-    /*
-        On masque la première popup
-        pendant la confirmation.
-    */
-
-    if (
-        popupAjoutPlanning
-    ) {
-
-        popupAjoutPlanning.hidden =
-            true;
-    }
-
-
-    const date =
-        formaterDatePlanning(
-            repas.date
-        );
-
-
-    const moment =
-        repas.moment ===
-        "midi"
-            ? "midi"
-            : "soir";
-
-
-    let texteRepas =
-        "un repas";
+    const cle =
+        obtenirCleStockageMinuteursCuisine();
 
 
     if (
-        Array.isArray(
-            nomsRepas
-        ) &&
-        nomsRepas.length >
-            0
+        !cle
     ) {
 
-        texteRepas =
-            nomsRepas.join(
-                " + "
-            );
+        return;
     }
 
-
-    if (
-        texteConfirmationPlanning
-    ) {
-
-        texteConfirmationPlanning.textContent =
-            `Vous avez déjà prévu ${texteRepas} ${date} ${moment}. Êtes-vous sûr de vouloir ajouter ${recetteChargee.nom} à ce repas ?`;
-    }
-
-
-    if (
-        popupConfirmationPlanning
-    ) {
-
-        popupConfirmationPlanning.hidden =
-            false;
-    }
-
-
-    if (
-        confirmerAjoutPlanning
-    ) {
-
-        confirmerAjoutPlanning.disabled =
-            false;
-
-
-        confirmerAjoutPlanning.textContent =
-            "Ajouter au planning";
-    }
-}
-
-
-/* =================================
-   FERMER CONFIRMATION
-================================= */
-
-function fermerConfirmationPlanning(
-    rouvrirPopupPrincipale = true
-) {
-
-    if (
-        popupConfirmationPlanning
-    ) {
-
-        popupConfirmationPlanning.hidden =
-            true;
-    }
-
-
-    if (
-        rouvrirPopupPrincipale &&
-        popupAjoutPlanning
-    ) {
-
-        popupAjoutPlanning.hidden =
-            false;
-    }
-
-
-    if (
-        !rouvrirPopupPrincipale
-    ) {
-
-        document.body.classList.remove(
-            "popup-ouverte"
-        );
-    }
-}
-
-
-/* =================================
-   CRÉER UN NOUVEAU REPAS
-================================= */
-
-async function creerRepasPlanningAvecRecette(
-    date,
-    moment,
-    personnes
-) {
 
     try {
 
-        /* =========================
-           CRÉATION DU REPAS
-        ========================= */
+        localStorage.setItem(
+            cle,
+            JSON.stringify(
+                minuteursCuisine
+            )
+        );
 
-        const {
-            data:
-                nouveauRepas,
+    } catch (
+        erreur
+    ) {
 
-            error:
-                erreurRepas
-
-        } =
-            await window.supabaseClient
-                .from(
-                    "repas_planning"
-                )
-                .insert(
-                    {
-                        foyer_id:
-                            foyerIdPlanning,
-
-                        date:
-                            date,
-
-                        moment:
-                            moment,
-
-                        personnes:
-                            personnes
-                    }
-                )
-                .select(
-                    "id"
-                )
-                .single();
+        console.warn(
+            "Impossible de sauvegarder les minuteurs :",
+            erreur
+        );
+    }
+}
 
 
-        if (
-            erreurRepas
-        ) {
+/* =================================
+   CHARGER LES MINUTEURS
+================================= */
 
-            throw erreurRepas;
-        }
+function chargerMinuteursCuisineDepuisStockage() {
+
+    const cle =
+        obtenirCleStockageMinuteursCuisine();
 
 
-        if (
-            !nouveauRepas?.id
-        ) {
+    if (
+        !cle
+    ) {
 
-            throw new Error(
-                "Le repas n’a pas pu être créé."
+        return;
+    }
+
+
+    try {
+
+        const valeur =
+            localStorage.getItem(
+                cle
             );
+
+
+        if (
+            !valeur
+        ) {
+
+            minuteursCuisine =
+                [];
+
+
+            return;
         }
 
 
-        /* =========================
-           AJOUT DE LA RECETTE
-        ========================= */
+        const donnees =
+            JSON.parse(
+                valeur
+            );
 
-        const {
-            error:
-                erreurElement
-        } =
-            await window.supabaseClient
-                .from(
-                    "repas_planning_elements"
+
+        if (
+            !Array.isArray(
+                donnees
+            )
+        ) {
+
+            minuteursCuisine =
+                [];
+
+
+            return;
+        }
+
+
+        minuteursCuisine =
+            donnees
+                .filter(
+                    function (
+                        minuteur
+                    ) {
+
+                        return (
+                            minuteur &&
+                            minuteur.id
+                        );
+                    }
                 )
-                .insert(
-                    {
-                        
-    repas_planning_id:
-        nouveauRepas.id,
+                .map(
+                    function (
+                        minuteur
+                    ) {
 
-    recette_id:
-        recetteChargee.id,
+                        const copie = {
+                            ...minuteur
+                        };
 
-    nom:
-        recetteChargee.nom,
 
-    ordre:
-        1
+                        /*
+                            Si le minuteur était actif,
+                            on recalcule le temps restant
+                            à partir de son heure de fin.
+                        */
 
+                        if (
+                            copie.actif &&
+                            copie.heureFin
+                        ) {
+
+                            const restant =
+                                Math.ceil(
+                                    (
+                                        copie.heureFin -
+                                        Date.now()
+                                    ) /
+                                    1000
+                                );
+
+
+                            copie.secondesRestantes =
+                                Math.max(
+                                    0,
+                                    restant
+                                );
+
+
+                            if (
+                                copie.secondesRestantes <=
+                                0
+                            ) {
+
+                                copie.actif =
+                                    false;
+
+
+                                copie.termine =
+                                    true;
+                            }
+                        }
+
+
+                        return copie;
                     }
                 );
 
 
-        if (
-            erreurElement
-        ) {
+        /*
+            On retire les anciens minuteurs
+            terminés depuis longtemps si besoin.
 
-            /*
-                Si l'élément n'a pas pu être créé,
-                on retire le repas vide afin
-                de ne pas laisser de donnée
-                inutile dans le planning.
-            */
-
-            await window.supabaseClient
-                .from(
-                    "repas_planning"
-                )
-                .delete()
-                .eq(
-                    "id",
-                    nouveauRepas.id
-                );
+            Pour l'instant on les garde :
+            l'utilisateur peut les voir
+            et les supprimer lui-même.
+        */
 
 
-            throw erreurElement;
-        }
+        afficherMinuteursCuisine();
 
 
-        await terminerAjoutPlanning();
+        demarrerBoucleMinuteursCuisine();
 
 
     } catch (
         erreur
     ) {
 
-        console.error(
-            "Erreur pendant la création du repas :",
+        console.warn(
+            "Impossible de restaurer les minuteurs :",
             erreur
         );
 
 
-        afficherMessagePlanning(
-            erreur.message ||
-            "Impossible d’ajouter la recette au planning."
-        );
-
-
-        if (
-            confirmerAjoutPlanning
-        ) {
-
-            confirmerAjoutPlanning.disabled =
-                false;
-
-
-            confirmerAjoutPlanning.textContent =
-                "Ajouter au planning";
-        }
+        minuteursCuisine =
+            [];
     }
 }
 
 
 /* =================================
-   AJOUTER À UN REPAS EXISTANT
+   MESSAGE POPUP MINUTEUR
 ================================= */
 
-async function ajouterRecetteAuRepasExistant() {
+function afficherMessageMinuteurCuisine(
+    texte
+) {
 
     if (
-        !repasExistantPlanning?.id
+        !messageMinuteurCuisine
     ) {
 
-        fermerConfirmationPlanning(
-            true
+        return;
+    }
+
+
+    messageMinuteurCuisine.hidden =
+        false;
+
+
+    messageMinuteurCuisine.textContent =
+        texte;
+}
+
+
+function masquerMessageMinuteurCuisine() {
+
+    if (
+        !messageMinuteurCuisine
+    ) {
+
+        return;
+    }
+
+
+    messageMinuteurCuisine.hidden =
+        true;
+
+
+    messageMinuteurCuisine.textContent =
+        "";
+}
+
+
+/* =================================
+   OUVRIR POPUP MINUTEUR
+================================= */
+
+function ouvrirPopupMinuteurCuisine(
+    etapeIndex = null
+) {
+
+    if (
+        !popupMinuteurCuisine
+    ) {
+
+        return;
+    }
+
+
+    indexEtapeMinuteurEnCreation =
+        Number.isInteger(
+            etapeIndex
+        )
+            ? etapeIndex
+            : null;
+
+
+    masquerMessageMinuteurCuisine();
+
+
+    /* =========================
+       NOM PAR DÉFAUT
+    ========================= */
+
+    if (
+        nomMinuteurCuisine
+    ) {
+
+        if (
+            indexEtapeMinuteurEnCreation !==
+            null
+        ) {
+
+            nomMinuteurCuisine.value =
+                `Étape ${indexEtapeMinuteurEnCreation + 1}`;
+
+        } else {
+
+            nomMinuteurCuisine.value =
+                "";
+        }
+    }
+
+
+    /* =========================
+       DURÉE PAR DÉFAUT
+    ========================= */
+
+    if (
+        minutesMinuteurCuisine
+    ) {
+
+        minutesMinuteurCuisine.value =
+            "10";
+    }
+
+
+    if (
+        secondesMinuteurCuisine
+    ) {
+
+        secondesMinuteurCuisine.value =
+            "0";
+    }
+
+
+    popupMinuteurCuisine.hidden =
+        false;
+
+
+    document.body.classList.add(
+        "popup-minuteur-ouverte"
+    );
+
+
+    if (
+        nomMinuteurCuisine
+    ) {
+
+        window.setTimeout(
+            function () {
+
+                nomMinuteurCuisine.focus();
+
+            },
+            50
+        );
+    }
+}
+
+
+/* =================================
+   FERMER POPUP MINUTEUR
+================================= */
+
+function fermerPopupMinuteurCuisineInterface() {
+
+    if (
+        !popupMinuteurCuisine
+    ) {
+
+        return;
+    }
+
+
+    popupMinuteurCuisine.hidden =
+        true;
+
+
+    document.body.classList.remove(
+        "popup-minuteur-ouverte"
+    );
+
+
+    indexEtapeMinuteurEnCreation =
+        null;
+
+
+    masquerMessageMinuteurCuisine();
+}
+
+
+/* =================================
+   CRÉER UN MINUTEUR
+================================= */
+
+function creerMinuteurCuisine() {
+
+    const nom =
+        (
+            nomMinuteurCuisine?.value ||
+            ""
+        ).trim();
+
+
+    const dureeSecondes =
+        convertirDureeCuisineEnSecondes(
+
+            minutesMinuteurCuisine?.value,
+
+            secondesMinuteurCuisine?.value
+
         );
 
 
-        afficherMessagePlanning(
-            "Le repas existant n’a pas pu être identifié."
+    if (
+        dureeSecondes <=
+        0
+    ) {
+
+        afficherMessageMinuteurCuisine(
+            "Choisis une durée supérieure à 0 seconde."
         );
 
 
@@ -3938,237 +4746,1143 @@ async function ajouterRecetteAuRepasExistant() {
     }
 
 
+    const nomFinal =
+        nom ||
+        (
+            indexEtapeMinuteurEnCreation !==
+            null
+                ? `Étape ${indexEtapeMinuteurEnCreation + 1}`
+                : "Minuteur"
+        );
+
+
+    const maintenant =
+        Date.now();
+
+
+    const nouveauMinuteur = {
+
+        id:
+            creerIdentifiantLocalCuisine(),
+
+        nom:
+            nomFinal,
+
+        dureeInitiale:
+            dureeSecondes,
+
+        secondesRestantes:
+            dureeSecondes,
+
+        actif:
+            true,
+
+        termine:
+            false,
+
+        heureFin:
+            maintenant +
+            dureeSecondes *
+            1000,
+
+        etapeIndex:
+            indexEtapeMinuteurEnCreation
+
+    };
+
+
+    minuteursCuisine.push(
+        nouveauMinuteur
+    );
+
+
+    sauvegarderMinuteursCuisine();
+
+
+    afficherMinuteursCuisine();
+
+
+    demarrerBoucleMinuteursCuisine();
+
+
+    fermerPopupMinuteurCuisineInterface();
+}
+
+
+/* =================================
+   AFFICHER LES MINUTEURS
+================================= */
+
+function afficherMinuteursCuisine() {
+
     if (
-        confirmerAjoutMalgreRepas
+        !listeMinuteursCuisine ||
+        !zoneMinuteursCuisine
     ) {
 
-        confirmerAjoutMalgreRepas.disabled =
-            true;
-
-
-        confirmerAjoutMalgreRepas.textContent =
-            "Ajout…";
+        return;
     }
 
 
-    try {
+    if (
+        minuteursCuisine.length ===
+        0
+    ) {
 
-        const elements =
-            Array.isArray(
-                repasExistantPlanning
-                    .repas_planning_elements
-            )
-                ? repasExistantPlanning
-                    .repas_planning_elements
-                : [];
+        zoneMinuteursCuisine.hidden =
+            true;
 
 
-        /*
-            Ordre suivant.
+        listeMinuteursCuisine.innerHTML =
+            "";
 
-            On ne se contente pas du nombre
-            d'éléments au cas où les ordres
-            ne seraient pas parfaitement
-            consécutifs.
-        */
 
-        const ordres =
-            elements
-                .map(
-                    function (
-                        element
+        return;
+    }
+
+
+    zoneMinuteursCuisine.hidden =
+        false;
+
+
+    listeMinuteursCuisine.innerHTML =
+        minuteursCuisine
+            .map(
+                function (
+                    minuteur
+                ) {
+
+                    const classes = [
+                        "minuteur-cuisine"
+                    ];
+
+
+                    if (
+                        minuteur.termine
                     ) {
 
-                        return Number(
-                            element.ordre
-                        ) || 0;
+                        classes.push(
+                            "minuteur-termine"
+                        );
                     }
-                );
 
 
-        const ordreSuivant =
-            ordres.length >
-            0
-                ? Math.max(
-                    ...ordres
-                ) + 1
-                : 1;
+                    if (
+                        !minuteur.actif &&
+                        !minuteur.termine
+                    ) {
+
+                        classes.push(
+                            "minuteur-pause"
+                        );
+                    }
 
 
-        const {
-            error
-        } =
-            await window.supabaseClient
-                .from(
-                    "repas_planning_elements"
+                    const texteEtat =
+                        minuteur.termine
+                            ? "Terminé"
+                            : minuteur.actif
+                                ? "En cours"
+                                : "En pause";
+
+
+                    return `
+
+                        <div
+                            class="${classes.join(" ")}"
+                            data-minuteur-id="${echapperHtmlRecette(
+                                minuteur.id
+                            )}"
+                        >
+
+                            <div class="minuteur-cuisine-infos">
+
+                                <strong
+                                    class="minuteur-cuisine-nom"
+                                >
+                                    ${echapperHtmlRecette(
+                                        minuteur.nom
+                                    )}
+                                </strong>
+
+
+                                <span
+                                    class="minuteur-cuisine-etat"
+                                >
+                                    ${texteEtat}
+                                </span>
+
+                            </div>
+
+
+                            <div
+                                class="minuteur-cuisine-temps"
+                            >
+                                ${
+                                    minuteur.termine
+                                        ? "00:00"
+                                        : formaterTempsCuisine(
+                                            minuteur.secondesRestantes
+                                        )
+                                }
+                            </div>
+
+
+                            <div class="actions-minuteur-cuisine">
+
+                                ${
+                                    minuteur.termine
+                                        ? `
+                                            <button
+                                                type="button"
+                                                class="relancer-minuteur-cuisine"
+                                                data-minuteur-id="${echapperHtmlRecette(
+                                                    minuteur.id
+                                                )}"
+                                            >
+                                                Relancer
+                                            </button>
+                                        `
+                                        : `
+                                            <button
+                                                type="button"
+                                                class="pause-minuteur-cuisine"
+                                                data-minuteur-id="${echapperHtmlRecette(
+                                                    minuteur.id
+                                                )}"
+                                            >
+                                                ${
+                                                    minuteur.actif
+                                                        ? "Pause"
+                                                        : "Reprendre"
+                                                }
+                                            </button>
+                                        `
+                                }
+
+
+                                <button
+                                    type="button"
+                                    class="supprimer-minuteur-cuisine"
+                                    data-minuteur-id="${echapperHtmlRecette(
+                                        minuteur.id
+                                    )}"
+                                >
+                                    Supprimer
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    `;
+                }
+            )
+            .join("");
+}
+
+
+/* =================================
+   TROUVER UN MINUTEUR
+================================= */
+
+function trouverMinuteurCuisine(
+    id
+) {
+
+    return minuteursCuisine.find(
+        function (
+            minuteur
+        ) {
+
+            return (
+                String(
+                    minuteur.id
+                ) ===
+                String(
+                    id
                 )
-                .insert(
-                    {
-                        
-    repas_planning_id:
-        repasExistantPlanning.id,
+            );
+        }
+    );
+}
 
-    recette_id:
-        recetteChargee.id,
 
-    nom:
-        recetteChargee.nom,
+/* =================================
+   PAUSE / REPRISE
+================================= */
 
-    ordre:
-        ordreSuivant
+function basculerPauseMinuteurCuisine(
+    id
+) {
 
-                    }
+    const minuteur =
+        trouverMinuteurCuisine(
+            id
+        );
+
+
+    if (
+        !minuteur ||
+        minuteur.termine
+    ) {
+
+        return;
+    }
+
+
+    if (
+        minuteur.actif
+    ) {
+
+        /*
+            Pause :
+            on calcule précisément
+            ce qu'il reste.
+        */
+
+        const restant =
+            Math.ceil(
+                (
+                    minuteur.heureFin -
+                    Date.now()
+                ) /
+                1000
+            );
+
+
+        minuteur.secondesRestantes =
+            Math.max(
+                0,
+                restant
+            );
+
+
+        minuteur.actif =
+            false;
+
+
+        minuteur.heureFin =
+            null;
+
+
+    } else {
+
+        /*
+            Reprise :
+            nouvelle heure de fin.
+        */
+
+        minuteur.actif =
+            true;
+
+
+        minuteur.heureFin =
+            Date.now() +
+            minuteur.secondesRestantes *
+            1000;
+    }
+
+
+    sauvegarderMinuteursCuisine();
+
+
+    afficherMinuteursCuisine();
+
+
+    demarrerBoucleMinuteursCuisine();
+}
+
+
+/* =================================
+   RELANCER UN MINUTEUR
+================================= */
+
+function relancerMinuteurCuisine(
+    id
+) {
+
+    const minuteur =
+        trouverMinuteurCuisine(
+            id
+        );
+
+
+    if (
+        !minuteur
+    ) {
+
+        return;
+    }
+
+
+    minuteur.secondesRestantes =
+        minuteur.dureeInitiale;
+
+
+    minuteur.termine =
+        false;
+
+
+    minuteur.actif =
+        true;
+
+
+    minuteur.heureFin =
+        Date.now() +
+        minuteur.dureeInitiale *
+        1000;
+
+
+    sauvegarderMinuteursCuisine();
+
+
+    afficherMinuteursCuisine();
+
+
+    demarrerBoucleMinuteursCuisine();
+}
+
+
+/* =================================
+   SUPPRIMER UN MINUTEUR
+================================= */
+
+function supprimerMinuteurCuisine(
+    id
+) {
+
+    minuteursCuisine =
+        minuteursCuisine.filter(
+            function (
+                minuteur
+            ) {
+
+                return (
+                    String(
+                        minuteur.id
+                    ) !==
+                    String(
+                        id
+                    )
                 );
+            }
+        );
+
+
+    sauvegarderMinuteursCuisine();
+
+
+    afficherMinuteursCuisine();
+
+
+    gererEtatBoucleMinuteursCuisine();
+}
+
+
+/* =================================
+   BOUCLE DES MINUTEURS
+================================= */
+
+function mettreAJourMinuteursCuisine() {
+
+    let changement =
+        false;
+
+
+    const maintenant =
+        Date.now();
+
+
+    minuteursCuisine.forEach(
+        function (
+            minuteur
+        ) {
+
+            if (
+                !minuteur.actif ||
+                minuteur.termine ||
+                !minuteur.heureFin
+            ) {
+
+                return;
+            }
+
+
+            const restant =
+                Math.ceil(
+                    (
+                        minuteur.heureFin -
+                        maintenant
+                    ) /
+                    1000
+                );
+
+
+            const restantPropre =
+                Math.max(
+                    0,
+                    restant
+                );
+
+
+            if (
+                minuteur.secondesRestantes !==
+                restantPropre
+            ) {
+
+                minuteur.secondesRestantes =
+                    restantPropre;
+
+
+                changement =
+                    true;
+            }
+
+
+            if (
+                restantPropre <=
+                0
+            ) {
+
+                minuteur.actif =
+                    false;
+
+
+                minuteur.termine =
+                    true;
+
+
+                minuteur.heureFin =
+                    null;
+
+
+                changement =
+                    true;
+
+
+                signalerFinMinuteurCuisine(
+                    minuteur
+                );
+            }
+        }
+    );
+
+
+    if (
+        changement
+    ) {
+
+        sauvegarderMinuteursCuisine();
+
+
+        afficherMinuteursCuisine();
+    }
+
+
+    gererEtatBoucleMinuteursCuisine();
+}
+
+
+/* =================================
+   DÉMARRER LA BOUCLE
+================================= */
+
+function demarrerBoucleMinuteursCuisine() {
+
+    const minuteurActif =
+        minuteursCuisine.some(
+            function (
+                minuteur
+            ) {
+
+                return (
+                    minuteur.actif &&
+                    !minuteur.termine
+                );
+            }
+        );
+
+
+    if (
+        !minuteurActif
+    ) {
+
+        gererEtatBoucleMinuteursCuisine();
+
+
+        return;
+    }
+
+
+    if (
+        intervalMinuteursCuisine
+    ) {
+
+        return;
+    }
+
+
+    intervalMinuteursCuisine =
+        window.setInterval(
+            mettreAJourMinuteursCuisine,
+            1000
+        );
+}
+
+
+/* =================================
+   STOPPER BOUCLE SI INUTILE
+================================= */
+
+function gererEtatBoucleMinuteursCuisine() {
+
+    const resteUnActif =
+        minuteursCuisine.some(
+            function (
+                minuteur
+            ) {
+
+                return (
+                    minuteur.actif &&
+                    !minuteur.termine
+                );
+            }
+        );
+
+
+    if (
+        !resteUnActif &&
+        intervalMinuteursCuisine
+    ) {
+
+        window.clearInterval(
+            intervalMinuteursCuisine
+        );
+
+
+        intervalMinuteursCuisine =
+            null;
+    }
+}
+
+
+/* =================================
+   ALERTE FIN MINUTEUR
+================================= */
+
+function signalerFinMinuteurCuisine(
+    minuteur
+) {
+
+    /*
+        Vibration si le navigateur
+        la permet.
+    */
+
+    if (
+        navigator.vibrate
+    ) {
+
+        try {
+
+            navigator.vibrate(
+                [
+                    250,
+                    120,
+                    250,
+                    120,
+                    400
+                ]
+            );
+
+        } catch (
+            erreur
+        ) {
+
+            console.warn(
+                "Vibration non disponible :",
+                erreur
+            );
+        }
+    }
+
+
+    /*
+        Petite alerte sonore native
+        via Web Audio.
+
+        Aucun fichier audio externe
+        n'est nécessaire.
+    */
+
+    jouerSonMinuteurCuisine();
+
+
+    /*
+        Si le mode cuisine est ouvert,
+        la carte devient déjà visuellement
+        "Terminée".
+
+        On ajoute aussi une notification
+        navigateur si elle est autorisée.
+    */
+
+    envoyerNotificationMinuteurCuisine(
+        minuteur
+    );
+}
+
+
+/* =================================
+   SON DU MINUTEUR
+================================= */
+
+function jouerSonMinuteurCuisine() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
 
 
         if (
-            error
+            !AudioContext
         ) {
 
-            throw error;
+            return;
         }
 
 
-        /*
-            Important :
+        const contexte =
+            new AudioContext();
 
-            on ne modifie PAS le nombre
-            de personnes du repas existant.
-        */
 
-        await terminerAjoutPlanning();
+        const oscillateur =
+            contexte.createOscillator();
+
+
+        const gain =
+            contexte.createGain();
+
+
+        oscillateur.connect(
+            gain
+        );
+
+
+        gain.connect(
+            contexte.destination
+        );
+
+
+        oscillateur.type =
+            "sine";
+
+
+        oscillateur.frequency.value =
+            760;
+
+
+        gain.gain.setValueAtTime(
+            0.0001,
+            contexte.currentTime
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.22,
+            contexte.currentTime +
+            0.03
+        );
+
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            contexte.currentTime +
+            0.8
+        );
+
+
+        oscillateur.start();
+
+
+        oscillateur.stop(
+            contexte.currentTime +
+            0.85
+        );
 
 
     } catch (
         erreur
     ) {
 
-        console.error(
-            "Erreur pendant l'ajout au repas existant :",
+        console.warn(
+            "Son du minuteur indisponible :",
             erreur
         );
-
-
-        fermerConfirmationPlanning(
-            true
-        );
-
-
-        afficherMessagePlanning(
-            erreur.message ||
-            "Impossible d’ajouter la recette à ce repas."
-        );
-
-
-    } finally {
-
-        if (
-            confirmerAjoutMalgreRepas
-        ) {
-
-            confirmerAjoutMalgreRepas.disabled =
-                false;
-
-
-            confirmerAjoutMalgreRepas.textContent =
-                "Ajouter quand même";
-        }
     }
 }
 
 
 /* =================================
-   AJOUT TERMINÉ
+   NOTIFICATION NAVIGATEUR
 ================================= */
 
-async function terminerAjoutPlanning() {
-
-    /*
-        On ferme les deux popups.
-    */
+function envoyerNotificationMinuteurCuisine(
+    minuteur
+) {
 
     if (
-        popupConfirmationPlanning
+        !("Notification" in window)
     ) {
 
-        popupConfirmationPlanning.hidden =
-            true;
+        return;
     }
 
 
     if (
-        popupAjoutPlanning
+        Notification.permission !==
+        "granted"
     ) {
 
-        popupAjoutPlanning.hidden =
-            true;
+        return;
     }
 
 
-    document.body.classList.remove(
-        "popup-ouverte"
+    try {
+
+        new Notification(
+            "Minuteur terminé",
+            {
+                body:
+                    minuteur.nom
+            }
+        );
+
+    } catch (
+        erreur
+    ) {
+
+        console.warn(
+            "Notification indisponible :",
+            erreur
+        );
+    }
+}
+
+
+/* =================================
+   DEMANDER AUTORISATION NOTIFICATION
+================================= */
+
+async function demanderAutorisationNotificationCuisine() {
+
+    if (
+        !("Notification" in window)
+    ) {
+
+        return;
+    }
+
+
+    if (
+        Notification.permission !==
+        "default"
+    ) {
+
+        return;
+    }
+
+
+    try {
+
+        await Notification.requestPermission();
+
+    } catch (
+        erreur
+    ) {
+
+        console.warn(
+            "Impossible de demander l'autorisation de notification :",
+            erreur
+        );
+    }
+}
+
+
+/* =================================
+   CLIC NOUVEAU MINUTEUR
+================================= */
+
+if (
+    boutonAjouterMinuteurCuisine
+) {
+
+    boutonAjouterMinuteurCuisine.addEventListener(
+        "click",
+        function () {
+
+            ouvrirPopupMinuteurCuisine(
+                null
+            );
+        }
     );
+}
 
 
-    repasExistantPlanning =
-        null;
+/* =================================
+   FERMETURE POPUP
+================================= */
+
+if (
+    fermerPopupMinuteurCuisine
+) {
+
+    fermerPopupMinuteurCuisine.addEventListener(
+        "click",
+        fermerPopupMinuteurCuisineInterface
+    );
+}
 
 
-    /*
-        Petit retour visuel directement
-        sur le bouton de la fiche.
-    */
+if (
+    annulerMinuteurCuisine
+) {
 
-    const boutonAjouterPlanning =
-        document.getElementById(
-            "ajouter-recette-planning"
-        );
+    annulerMinuteurCuisine.addEventListener(
+        "click",
+        fermerPopupMinuteurCuisineInterface
+    );
+}
 
 
-    if (
-        boutonAjouterPlanning
+/* =================================
+   LANCER LE MINUTEUR
+================================= */
+
+if (
+    lancerMinuteurCuisine
+) {
+
+    lancerMinuteurCuisine.addEventListener(
+        "click",
+        function () {
+
+            creerMinuteurCuisine();
+
+
+            demanderAutorisationNotificationCuisine();
+        }
+    );
+}
+
+
+/* =================================
+   DURÉES RAPIDES
+================================= */
+
+document.addEventListener(
+    "click",
+    function (
+        evenement
     ) {
 
-        const ancienTexte =
-            boutonAjouterPlanning.textContent;
+        const bouton =
+            evenement.target.closest(
+                "[data-duree-minuteur]"
+            );
 
 
-        boutonAjouterPlanning.textContent =
-            "Ajouté au planning";
+        if (
+            !bouton
+        ) {
+
+            return;
+        }
 
 
-        boutonAjouterPlanning.classList.add(
-            "ajoute"
-        );
+        const minutes =
+            Number(
+                bouton.dataset.dureeMinuteur
+            );
 
 
-        /*
-            Retour à l'état normal
-            après un court délai.
-        */
+        if (
+            !Number.isFinite(
+                minutes
+            )
+        ) {
 
-        window.setTimeout(
-            function () {
-
-                if (
-                    document.body.contains(
-                        boutonAjouterPlanning
-                    )
-                ) {
-
-                    boutonAjouterPlanning.textContent =
-                        ancienTexte;
+            return;
+        }
 
 
-                    boutonAjouterPlanning.classList.remove(
-                        "ajoute"
-                    );
-                }
+        if (
+            minutesMinuteurCuisine
+        ) {
 
-            },
-            2200
-        );
+            minutesMinuteurCuisine.value =
+                String(
+                    minutes
+                );
+        }
+
+
+        if (
+            secondesMinuteurCuisine
+        ) {
+
+            secondesMinuteurCuisine.value =
+                "0";
+        }
     }
+);
+
+
+/* =================================
+   ACTIONS SUR LES MINUTEURS
+================================= */
+
+if (
+    listeMinuteursCuisine
+) {
+
+    listeMinuteursCuisine.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            const boutonPause =
+                evenement.target.closest(
+                    ".pause-minuteur-cuisine"
+                );
+
+
+            if (
+                boutonPause
+            ) {
+
+                basculerPauseMinuteurCuisine(
+                    boutonPause.dataset.minuteurId
+                );
+
+
+                return;
+            }
+
+
+            const boutonRelancer =
+                evenement.target.closest(
+                    ".relancer-minuteur-cuisine"
+                );
+
+
+            if (
+                boutonRelancer
+            ) {
+
+                relancerMinuteurCuisine(
+                    boutonRelancer.dataset.minuteurId
+                );
+
+
+                return;
+            }
+
+
+            const boutonSupprimer =
+                evenement.target.closest(
+                    ".supprimer-minuteur-cuisine"
+                );
+
+
+            if (
+                boutonSupprimer
+            ) {
+
+                supprimerMinuteurCuisine(
+                    boutonSupprimer.dataset.minuteurId
+                );
+            }
+        }
+    );
+}
+
+
+/* =================================
+   CLIC HORS POPUP MINUTEUR
+================================= */
+
+if (
+    popupMinuteurCuisine
+) {
+
+    popupMinuteurCuisine.addEventListener(
+        "click",
+        function (
+            evenement
+        ) {
+
+            if (
+                evenement.target ===
+                popupMinuteurCuisine
+            ) {
+
+                fermerPopupMinuteurCuisineInterface();
+            }
+        }
+    );
+}
+
+
+/* =================================
+   TOUCHE ENTRÉE DANS POPUP
+================================= */
+
+if (
+    popupMinuteurCuisine
+) {
+
+    popupMinuteurCuisine.addEventListener(
+        "keydown",
+        function (
+            evenement
+        ) {
+
+            if (
+                evenement.key !==
+                "Enter"
+            ) {
+
+                return;
+            }
+
+
+            const cible =
+                evenement.target;
+
+
+            if (
+                cible?.tagName ===
+                "BUTTON"
+            ) {
+
+                return;
+            }
+
+
+            evenement.preventDefault();
+
+
+            creerMinuteurCuisine();
+
+
+            demanderAutorisationNotificationCuisine();
+        }
+    );
 }
 
 /* =================================
@@ -4295,11 +6009,6 @@ if (
         "click",
         function () {
 
-            /*
-                Limite volontairement généreuse
-                pour éviter une valeur aberrante.
-            */
-
             if (
                 personnesSelectionneesPlanning >=
                 50
@@ -4339,7 +6048,6 @@ if (
 
 /* =================================
    ANNULER CONFIRMATION
-   REPAS EXISTANT
 ================================= */
 
 if (
@@ -4349,12 +6057,6 @@ if (
     annulerConfirmationPlanning.addEventListener(
         "click",
         function () {
-
-            /*
-                On retourne à la première
-                popup sans perdre la date,
-                le moment ou les personnes.
-            */
 
             fermerConfirmationPlanning(
                 true
@@ -4394,12 +6096,6 @@ if (
         "change",
         function () {
 
-            /*
-                Si l'utilisateur change la date,
-                une éventuelle détection précédente
-                de repas existant n'est plus valable.
-            */
-
             repasExistantPlanning =
                 null;
 
@@ -4411,7 +6107,7 @@ if (
 
 
 /* =================================
-   CLIC HORS POPUP PRINCIPALE
+   CLIC HORS POPUP PLANNING
 ================================= */
 
 if (
@@ -4423,13 +6119,6 @@ if (
         function (
             evenement
         ) {
-
-            /*
-                On ferme uniquement si le clic
-                est directement sur le fond.
-
-                Un clic dans la popup ne fait rien.
-            */
 
             if (
                 evenement.target ===
@@ -4462,12 +6151,6 @@ if (
                 popupConfirmationPlanning
             ) {
 
-                /*
-                    Même comportement que
-                    le bouton Annuler :
-                    retour à la première popup.
-                */
-
                 fermerConfirmationPlanning(
                     true
                 );
@@ -4478,7 +6161,7 @@ if (
 
 
 /* =================================
-   TOUCHE ÉCHAP
+   ÉCHAP GLOBAL
 ================================= */
 
 document.addEventListener(
@@ -4497,7 +6180,28 @@ document.addEventListener(
 
 
         /*
-            La confirmation est prioritaire.
+            1.
+            Popup minuteur prioritaire.
+        */
+
+        if (
+            popupMinuteurCuisine &&
+            !popupMinuteurCuisine.hidden
+        ) {
+
+            evenement.preventDefault();
+
+
+            fermerPopupMinuteurCuisineInterface();
+
+
+            return;
+        }
+
+
+        /*
+            2.
+            Confirmation planning.
         */
 
         if (
@@ -4505,16 +6209,21 @@ document.addEventListener(
             !popupConfirmationPlanning.hidden
         ) {
 
+            evenement.preventDefault();
+
+
             fermerConfirmationPlanning(
                 true
             );
+
 
             return;
         }
 
 
         /*
-            Sinon on ferme la popup principale.
+            3.
+            Popup planning.
         */
 
         if (
@@ -4522,10 +6231,216 @@ document.addEventListener(
             !popupAjoutPlanning.hidden
         ) {
 
+            evenement.preventDefault();
+
+
             fermerPopupAjoutPlanning();
+
+
+            return;
+        }
+
+
+        /*
+            4.
+            Mode cuisine.
+        */
+
+        if (
+            modeCuisine &&
+            !modeCuisine.hidden
+        ) {
+
+            evenement.preventDefault();
+
+
+            fermerModeCuisineInterface();
         }
     }
 );
+
+
+/* =================================
+   PRÉPARER MODE CUISINE
+================================= */
+
+function preparerModeCuisine() {
+
+    if (
+        modeCuisine
+    ) {
+
+        modeCuisine.hidden =
+            true;
+    }
+
+
+    if (
+        popupMinuteurCuisine
+    ) {
+
+        popupMinuteurCuisine.hidden =
+            true;
+    }
+
+
+    if (
+        zoneMinuteursCuisine
+    ) {
+
+        zoneMinuteursCuisine.hidden =
+            true;
+    }
+
+
+    indexEtapeCuisine =
+        0;
+
+
+    ingredientsCuisineReplies =
+        false;
+
+
+    indexEtapeMinuteurEnCreation =
+        null;
+
+
+    masquerMessageMinuteurCuisine();
+}
+
+
+/* =================================
+   PRÉPARER POPUP PLANNING
+================================= */
+
+function preparerPopupPlanning() {
+
+    if (
+        dateAjoutPlanning
+    ) {
+
+        const aujourdHui =
+            obtenirDateAujourdhuiPlanning();
+
+
+        dateAjoutPlanning.min =
+            aujourdHui;
+
+
+        dateAjoutPlanning.value =
+            aujourdHui;
+    }
+
+
+    momentSelectionnePlanning =
+        "midi";
+
+
+    mettreAJourMomentPlanning();
+
+
+    personnesSelectionneesPlanning =
+        personnesParDefautPlanning;
+
+
+    mettreAJourNombrePersonnesPlanning();
+
+
+    masquerMessagePlanning();
+
+
+    if (
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        popupConfirmationPlanning
+    ) {
+
+        popupConfirmationPlanning.hidden =
+            true;
+    }
+}
+
+
+/* =================================
+   VÉRIFIER LES ÉLÉMENTS HTML
+================================= */
+
+function verifierElementsRecette() {
+
+    if (
+        !contenuRecette
+    ) {
+
+        console.error(
+            "Le conteneur #fiche-recette-contenu est introuvable."
+        );
+
+
+        return false;
+    }
+
+
+    if (
+        !galerieRecette ||
+        !carouselRecette ||
+        !carouselImagesRecette
+    ) {
+
+        console.warn(
+            "La galerie photo n'est pas complètement présente dans recette.html."
+        );
+    }
+
+
+    if (
+        !popupAjoutPlanning
+    ) {
+
+        console.warn(
+            "La popup #popup-ajout-planning est introuvable."
+        );
+    }
+
+
+    if (
+        !popupConfirmationPlanning
+    ) {
+
+        console.warn(
+            "La popup #popup-confirmation-planning est introuvable."
+        );
+    }
+
+
+    if (
+        !modeCuisine
+    ) {
+
+        console.warn(
+            "Le bloc #mode-cuisine est introuvable."
+        );
+    }
+
+
+    if (
+        !popupMinuteurCuisine
+    ) {
+
+        console.warn(
+            "La popup #popup-minuteur-cuisine est introuvable."
+        );
+    }
+
+
+    return true;
+}
 
 
 /* =================================
@@ -4552,6 +6467,27 @@ function nettoyerGalerieRecette() {
 
 
 /* =================================
+   NETTOYAGE MINUTEURS
+================================= */
+
+function nettoyerBoucleMinuteursCuisine() {
+
+    if (
+        intervalMinuteursCuisine
+    ) {
+
+        window.clearInterval(
+            intervalMinuteursCuisine
+        );
+
+
+        intervalMinuteursCuisine =
+            null;
+    }
+}
+
+
+/* =================================
    QUITTER LA PAGE
 ================================= */
 
@@ -4559,146 +6495,57 @@ window.addEventListener(
     "pagehide",
     function () {
 
+        /*
+            On sauvegarde une dernière
+            fois les minuteurs avant
+            de quitter la page.
+        */
+
+        sauvegarderMinuteursCuisine();
+
+
+        nettoyerBoucleMinuteursCuisine();
+
+
         nettoyerGalerieRecette();
     }
 );
 
 
 /* =================================
-   VÉRIFICATION DU HTML
+   VISIBILITÉ DE L'ONGLET
 ================================= */
 
-function verifierElementsRecette() {
+/*
+    Les navigateurs ralentissent parfois
+    les setInterval lorsque l'onglet
+    est en arrière-plan.
 
-    if (
-        !contenuRecette
-    ) {
+    Comme chaque minuteur possède
+    heureFin, on peut recalculer
+    exactement le temps restant
+    quand l'utilisateur revient.
+*/
 
-        console.error(
-            "Le conteneur #fiche-recette-contenu est introuvable."
-        );
+document.addEventListener(
+    "visibilitychange",
+    function () {
 
-        return false;
+        if (
+            document.visibilityState !==
+            "visible"
+        ) {
+
+            return;
+        }
+
+
+        mettreAJourMinuteursCuisine();
+
+
+        demarrerBoucleMinuteursCuisine();
     }
-
-
-    if (
-        !galerieRecette ||
-        !carouselRecette ||
-        !carouselImagesRecette
-    ) {
-
-        console.warn(
-            "La galerie photo n'est pas complètement présente dans recette.html."
-        );
-    }
-
-
-    /*
-        On ne bloque pas toute la recette
-        si la popup planning est absente.
-
-        Cela permet quand même de consulter
-        la fiche en cas de problème HTML.
-    */
-
-    if (
-        !popupAjoutPlanning
-    ) {
-
-        console.warn(
-            "La popup #popup-ajout-planning est introuvable."
-        );
-    }
-
-
-    if (
-        !popupConfirmationPlanning
-    ) {
-
-        console.warn(
-            "La popup #popup-confirmation-planning est introuvable."
-        );
-    }
-
-
-    return true;
-}
-
-
-/* =================================
-   PRÉPARER LA POPUP PLANNING
-================================= */
-
-function preparerPopupPlanning() {
-
-    /*
-        Date minimum = aujourd'hui.
-
-        Cela évite d'ajouter accidentellement
-        une recette dans le passé.
-    */
-
-    if (
-        dateAjoutPlanning
-    ) {
-
-        const aujourdHui =
-            obtenirDateAujourdhuiPlanning();
-
-
-        dateAjoutPlanning.min =
-            aujourdHui;
-
-
-        dateAjoutPlanning.value =
-            aujourdHui;
-    }
-
-
-    /*
-        Valeur visuelle initiale.
-    */
-
-    momentSelectionnePlanning =
-        "midi";
-
-
-    mettreAJourMomentPlanning();
-
-
-    personnesSelectionneesPlanning =
-        personnesParDefautPlanning;
-
-
-    mettreAJourNombrePersonnesPlanning();
-
-
-    masquerMessagePlanning();
-
-
-    /*
-        Les popups doivent être
-        fermées au chargement.
-    */
-
-    if (
-        popupAjoutPlanning
-    ) {
-
-        popupAjoutPlanning.hidden =
-            true;
-    }
-
-
-    if (
-        popupConfirmationPlanning
-    ) {
-
-        popupConfirmationPlanning.hidden =
-            true;
-    }
-}
+);
 
 
 /* =================================
@@ -4741,30 +6588,28 @@ async function initialiserPageRecette() {
     }
 
 
-    /*
-        On prépare d'abord l'interface.
-
-        Le vrai nombre de personnes
-        du foyer sera ensuite récupéré
-        pendant chargerRecette().
-    */
+    /* =========================
+       INTERFACES FERMÉES
+    ========================= */
 
     preparerPopupPlanning();
 
 
+    preparerModeCuisine();
+
+
     try {
+
+        /* =========================
+           RECETTE
+        ========================= */
 
         await chargerRecette();
 
 
-        /*
-            chargerRecette() vient de
-            récupérer le foyer.
-
-            On synchronise donc maintenant
-            le nombre de personnes de la popup
-            avec la vraie valeur du foyer.
-        */
+        /* =========================
+           PLANNING
+        ========================= */
 
         personnesSelectionneesPlanning =
             personnesParDefautPlanning;
@@ -4772,6 +6617,40 @@ async function initialiserPageRecette() {
 
         mettreAJourNombrePersonnesPlanning();
 
+
+        /* =========================
+           MODE CUISINE
+        ========================= */
+
+        personnesModeCuisine =
+            Math.max(
+                1,
+                Number(
+                    recetteChargee?.personnes
+                ) || 1
+            );
+
+
+        /*
+            chargerRecette() recharge déjà
+            les minuteurs depuis localStorage.
+
+            On force juste un rafraîchissement
+            final de leur affichage.
+        */
+
+        mettreAJourMinuteursCuisine();
+
+
+        afficherMinuteursCuisine();
+
+
+        demarrerBoucleMinuteursCuisine();
+
+
+        /* =========================
+           DEBUG
+        ========================= */
 
         console.log(
             "Recette chargée :",
@@ -4787,7 +6666,17 @@ async function initialiserPageRecette() {
                     foyerIdPlanning,
 
                 personnesParDefaut:
-                    personnesParDefautPlanning
+                    personnesParDefautPlanning,
+
+                etapes:
+                    Array.isArray(
+                        recetteChargee?.etapes
+                    )
+                        ? recetteChargee.etapes.length
+                        : 0,
+
+                minuteurs:
+                    minuteursCuisine.length
 
             }
         );
@@ -4796,14 +6685,6 @@ async function initialiserPageRecette() {
     } catch (
         erreur
     ) {
-
-        /*
-            chargerRecette() gère déjà
-            son affichage d'erreur.
-
-            Ceci sert uniquement de
-            sécurité supplémentaire.
-        */
 
         console.error(
             "Erreur inattendue pendant l'initialisation :",
