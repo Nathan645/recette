@@ -6336,7 +6336,7 @@ function preparerPopupPlanning() {
         "midi";
 
 
-    mettreAJourMomentPlanning();
+    mettreAJourBoutonsMomentPlanning();
 
 
     personnesSelectionneesPlanning =
