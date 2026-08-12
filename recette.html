@@ -16,7 +16,7 @@
 
     <link
         rel="stylesheet"
-        href="css/style.css?v=5"
+        href="css/style.css?v=6"
     >
 
 </head>
@@ -55,19 +55,6 @@
 
         <!-- =========================
              PHOTOS DE LA RECETTE
-
-             Le contenu sera généré
-             automatiquement par
-             recette.js.
-
-             0 photo :
-             ce bloc restera caché.
-
-             1 photo :
-             grande photo simple.
-
-             Plusieurs photos :
-             carousel.
         ========================== -->
 
         <section
@@ -76,10 +63,6 @@
             hidden
             aria-label="Photos de la recette"
         >
-
-            <!-- =========================
-                 IMAGE PRINCIPALE
-            ========================== -->
 
             <div
                 class="carousel-recette"
@@ -93,11 +76,6 @@
                 </div>
 
 
-
-                <!-- =========================
-                     FLÈCHE PRÉCÉDENTE
-                ========================== -->
-
                 <button
                     type="button"
                     class="bouton-carousel-recette bouton-carousel-precedent"
@@ -108,11 +86,6 @@
                     ‹
                 </button>
 
-
-
-                <!-- =========================
-                     FLÈCHE SUIVANTE
-                ========================== -->
 
                 <button
                     type="button"
@@ -127,11 +100,6 @@
             </div>
 
 
-
-            <!-- =========================
-                 INDICATEURS
-            ========================== -->
-
             <div
                 class="indicateurs-carousel-recette"
                 id="indicateurs-carousel-recette"
@@ -140,21 +108,15 @@
             >
             </div>
 
-
         </section>
 
 
 
         <!-- =========================
              FICHE RECETTE
-
-             Le contenu actuel généré
-             par recette.js viendra ici.
         ========================== -->
 
-        <div
-            id="fiche-recette-contenu"
-        >
+        <div id="fiche-recette-contenu">
 
             <div class="message">
                 Chargement de la recette…
@@ -164,6 +126,273 @@
 
 
     </main>
+
+
+
+    <!-- =========================
+         POPUP AJOUT AU PLANNING
+    ========================== -->
+
+    <div
+        class="fond-popup-planning-recette"
+        id="popup-ajout-planning"
+        hidden
+    >
+
+        <div
+            class="popup-planning-recette"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titre-popup-planning"
+        >
+
+
+            <!-- =========================
+                 FERMER
+            ========================== -->
+
+            <button
+                type="button"
+                class="fermer-popup-planning-recette"
+                id="fermer-popup-planning"
+                aria-label="Fermer"
+            >
+                ×
+            </button>
+
+
+
+            <!-- =========================
+                 ENTÊTE
+            ========================== -->
+
+            <div class="entete-popup-planning-recette">
+
+                <div class="icone-popup-planning-recette">
+                    📅
+                </div>
+
+                <div>
+
+                    <h2 id="titre-popup-planning">
+                        Ajouter au planning
+                    </h2>
+
+                    <p
+                        class="nom-recette-popup-planning"
+                        id="nom-recette-popup-planning"
+                    >
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 DATE
+            ========================== -->
+
+            <div class="champ-popup-planning">
+
+                <label for="date-ajout-planning">
+                    Date
+                </label>
+
+                <input
+                    type="date"
+                    id="date-ajout-planning"
+                >
+
+            </div>
+
+
+
+            <!-- =========================
+                 MIDI / SOIR
+            ========================== -->
+
+            <div class="champ-popup-planning">
+
+                <span class="label-popup-planning">
+                    Quand ?
+                </span>
+
+                <div class="choix-moment-planning">
+
+                    <button
+                        type="button"
+                        class="bouton-moment-planning actif"
+                        id="moment-planning-midi"
+                        data-moment="midi"
+                    >
+                        ☀️
+                        Midi
+                    </button>
+
+                    <button
+                        type="button"
+                        class="bouton-moment-planning"
+                        id="moment-planning-soir"
+                        data-moment="soir"
+                    >
+                        🌙
+                        Soir
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 NOMBRE DE PERSONNES
+            ========================== -->
+
+            <div class="champ-popup-planning">
+
+                <span class="label-popup-planning">
+                    Pour combien de personnes ?
+                </span>
+
+                <div class="controle-personnes-planning">
+
+                    <button
+                        type="button"
+                        id="diminuer-personnes-planning"
+                        aria-label="Diminuer le nombre de personnes"
+                    >
+                        −
+                    </button>
+
+                    <strong
+                        id="nombre-personnes-planning"
+                    >
+                        2
+                    </strong>
+
+                    <button
+                        type="button"
+                        id="augmenter-personnes-planning"
+                        aria-label="Augmenter le nombre de personnes"
+                    >
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =========================
+                 MESSAGE
+            ========================== -->
+
+            <div
+                class="message-popup-planning"
+                id="message-popup-planning"
+                hidden
+            >
+            </div>
+
+
+
+            <!-- =========================
+                 ACTIONS
+            ========================== -->
+
+            <div class="actions-popup-planning">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-planning"
+                    id="annuler-ajout-planning"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-confirmer-planning"
+                    id="confirmer-ajout-planning"
+                >
+                    Ajouter au planning
+                </button>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         POPUP CONFIRMATION
+         CRÉNEAU DÉJÀ OCCUPÉ
+    ========================== -->
+
+    <div
+        class="fond-popup-planning-recette"
+        id="popup-confirmation-planning"
+        hidden
+    >
+
+        <div
+            class="popup-planning-recette popup-confirmation-planning"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="titre-confirmation-planning"
+        >
+
+            <div class="icone-confirmation-planning">
+                🍽️
+            </div>
+
+
+            <h2 id="titre-confirmation-planning">
+                Un repas est déjà prévu
+            </h2>
+
+
+            <p id="texte-confirmation-planning">
+
+                Il y a déjà un repas prévu
+                sur ce créneau.
+
+                Êtes-vous sûr de vouloir
+                ajouter cette recette ?
+
+            </p>
+
+
+            <div class="actions-popup-planning">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-planning"
+                    id="annuler-confirmation-planning"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="button"
+                    class="bouton-confirmer-planning"
+                    id="confirmer-ajout-malgre-repas"
+                >
+                    Ajouter quand même
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 
 
@@ -191,7 +420,7 @@
 
     <script src="js/supabase.js"></script>
 
-    <script src="js/recette.js?v=3"></script>
+    <script src="js/recette.js?v=4"></script>
 
 
 </body>
