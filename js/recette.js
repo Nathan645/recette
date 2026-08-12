@@ -3235,11 +3235,11 @@ async function rechercherRepasExistantPlanning(
                     moment,
                     personnes,
                     repas_planning_elements (
-                        id,
-                        repas_id,
-                        recette_id,
-                        nom_libre,
-                        ordre
+                       id,
+                       repas_planning_id,
+                       recette_id,
+                       nom,
+                       ordre
                     )
                 `
             )
@@ -3330,11 +3330,11 @@ async function obtenirNomsRepasExistant(
         ) {
 
             if (
-                element.nom_libre
+               element.nom           
             ) {
 
                 nomsParIndex[index] =
-                    element.nom_libre;
+                    element.nom;
 
                 return;
             }
@@ -3837,17 +3837,19 @@ async function creerRepasPlanningAvecRecette(
                 )
                 .insert(
                     {
-                        repas_id:
-                            nouveauRepas.id,
+                        {
+    repas_planning_id:
+        nouveauRepas.id,
 
-                        recette_id:
-                            recetteChargee.id,
+    recette_id:
+        recetteChargee.id,
 
-                        nom_libre:
-                            null,
+    nom:
+        recetteChargee.nom,
 
-                        ordre:
-                            1
+    ordre:
+        1
+}
                     }
                 );
 
@@ -4002,17 +4004,19 @@ async function ajouterRecetteAuRepasExistant() {
                 )
                 .insert(
                     {
-                        repas_id:
-                            repasExistantPlanning.id,
+                        {
+    repas_planning_id:
+        repasExistantPlanning.id,
 
-                        recette_id:
-                            recetteChargee.id,
+    recette_id:
+        recetteChargee.id,
 
-                        nom_libre:
-                            null,
+    nom:
+        recetteChargee.nom,
 
-                        ordre:
-                            ordreSuivant
+    ordre:
+        ordreSuivant
+}
                     }
                 );
 
