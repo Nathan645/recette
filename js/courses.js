@@ -2,7 +2,7 @@
    COURSES.JS
    À notre table
 
-   Ce fichier gère l'interface :
+   Gestion de l'interface :
    - période début / fin
    - affichage de la liste
    - progression
@@ -12,10 +12,9 @@
    - tout cocher / décocher
    - masquer les cochés
    - terminer les courses
-   - report des articles restants
 
    Les données Supabase sont gérées
-   principalement dans courses-data.js.
+   dans courses-data.js.
 ========================================== */
 
 
@@ -301,6 +300,459 @@ let chargementCourses =
 
 
 /* ==========================================
+   OUTILS DATES
+========================================== */
+
+/*
+    On évite new Date("2026-08-12")
+    pour ne pas dépendre de l'interprétation UTC.
+
+    On reconstruit la date localement.
+*/
+
+function creerDateDepuisISOInterfaceCourses(
+    dateISO
+) {
+
+    if (
+        !dateISO
+    ) {
+
+        return null;
+    }
+
+
+    const morceaux =
+        String(
+            dateISO
+        ).split("-");
+
+
+    if (
+        morceaux.length !== 3
+    ) {
+
+        return null;
+    }
+
+
+    const annee =
+        Number(
+            morceaux[0]
+        );
+
+    const mois =
+        Number(
+            morceaux[1]
+        );
+
+    const jour =
+        Number(
+            morceaux[2]
+        );
+
+
+    if (
+        !Number.isInteger(
+            annee
+        ) ||
+        !Number.isInteger(
+            mois
+        ) ||
+        !Number.isInteger(
+            jour
+        )
+    ) {
+
+        return null;
+    }
+
+
+    return new Date(
+        annee,
+        mois - 1,
+        jour,
+        12,
+        0,
+        0,
+        0
+    );
+}
+
+
+function formaterDateISOInterfaceCourses(
+    date
+) {
+
+    const annee =
+        date.getFullYear();
+
+    const mois =
+        String(
+            date.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+    const jour =
+        String(
+            date.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    return `${annee}-${mois}-${jour}`;
+}
+
+
+function obtenirAujourdhuiInterfaceCourses() {
+
+    const maintenant =
+        new Date();
+
+
+    return new Date(
+        maintenant.getFullYear(),
+        maintenant.getMonth(),
+        maintenant.getDate(),
+        12,
+        0,
+        0,
+        0
+    );
+}
+
+
+/*
+    Retourne le prochain dimanche.
+
+    Si la date est déjà un dimanche,
+    on prend le dimanche suivant.
+*/
+
+function obtenirProchainDimancheInterfaceCourses(
+    dateDepart
+) {
+
+    const date =
+        new Date(
+            dateDepart
+        );
+
+
+    const jour =
+        date.getDay();
+
+
+    const joursAJouter =
+        jour === 0
+            ? 7
+            : 7 - jour;
+
+
+    date.setDate(
+        date.getDate() +
+        joursAJouter
+    );
+
+
+    return date;
+}
+
+
+/* ==========================================
+   DATES PAR DÉFAUT
+========================================== */
+
+function initialiserDatesInterfaceCourses() {
+
+    if (
+        !champDateDebutCourses ||
+        !champDateFinCourses
+    ) {
+
+        return;
+    }
+
+
+    const aujourdHui =
+        obtenirAujourdhuiInterfaceCourses();
+
+
+    const prochainDimanche =
+        obtenirProchainDimancheInterfaceCourses(
+            aujourdHui
+        );
+
+
+    if (
+        !champDateDebutCourses.value
+    ) {
+
+        champDateDebutCourses.value =
+            formaterDateISOInterfaceCourses(
+                aujourdHui
+            );
+    }
+
+
+    if (
+        !champDateFinCourses.value
+    ) {
+
+        champDateFinCourses.value =
+            formaterDateISOInterfaceCourses(
+                prochainDimanche
+            );
+    }
+
+
+    champDateFinCourses.min =
+        champDateDebutCourses.value;
+}
+
+
+/* ==========================================
+   VALIDATION DE LA PÉRIODE
+========================================== */
+
+function validerPeriodeInterfaceCourses() {
+
+    if (
+        !champDateDebutCourses ||
+        !champDateFinCourses
+    ) {
+
+        return false;
+    }
+
+
+    const dateDebutISO =
+        champDateDebutCourses.value;
+
+
+    const dateFinISO =
+        champDateFinCourses.value;
+
+
+    if (
+        !dateDebutISO ||
+        !dateFinISO
+    ) {
+
+        afficherMessagePeriode(
+            "Choisissez une date de début et une date de fin.",
+            "erreur"
+        );
+
+
+        return false;
+    }
+
+
+    const dateDebut =
+        creerDateDepuisISOInterfaceCourses(
+            dateDebutISO
+        );
+
+
+    const dateFin =
+        creerDateDepuisISOInterfaceCourses(
+            dateFinISO
+        );
+
+
+    if (
+        !dateDebut ||
+        !dateFin
+    ) {
+
+        afficherMessagePeriode(
+            "La période sélectionnée est invalide.",
+            "erreur"
+        );
+
+
+        return false;
+    }
+
+
+    /*
+        Sécurité absolue :
+        date de fin >= date de début.
+    */
+
+    if (
+        dateFin <
+        dateDebut
+    ) {
+
+        champDateFinCourses.value =
+            dateDebutISO;
+
+
+        champDateFinCourses.min =
+            dateDebutISO;
+
+
+        afficherMessagePeriode(
+            "La date de fin ne peut pas être avant la date de début.",
+            "erreur"
+        );
+
+
+        return false;
+    }
+
+
+    champDateFinCourses.min =
+        dateDebutISO;
+
+
+    afficherMessagePeriode(
+        ""
+    );
+
+
+    return true;
+}
+
+
+/* ==========================================
+   CHANGEMENT DATE DE DÉBUT
+========================================== */
+
+function gererChangementDateDebutCourses() {
+
+    if (
+        !champDateDebutCourses ||
+        !champDateFinCourses
+    ) {
+
+        return;
+    }
+
+
+    const nouvelleDateDebut =
+        champDateDebutCourses.value;
+
+
+    if (
+        !nouvelleDateDebut
+    ) {
+
+        return;
+    }
+
+
+    /*
+        Safari / navigateur :
+        impossible de sélectionner
+        une date antérieure dans "Au".
+    */
+
+    champDateFinCourses.min =
+        nouvelleDateDebut;
+
+
+    /*
+        Si la date de fin actuelle
+        devient antérieure,
+        on calcule automatiquement
+        le prochain dimanche.
+
+        Exemple :
+        12 août → 16 août
+
+        début déplacé au 18 août
+
+        devient :
+        18 août → 23 août
+    */
+
+    if (
+        !champDateFinCourses.value ||
+        champDateFinCourses.value <
+            nouvelleDateDebut
+    ) {
+
+        const dateDebut =
+            creerDateDepuisISOInterfaceCourses(
+                nouvelleDateDebut
+            );
+
+
+        if (
+            dateDebut
+        ) {
+
+            const prochainDimanche =
+                obtenirProchainDimancheInterfaceCourses(
+                    dateDebut
+                );
+
+
+            champDateFinCourses.value =
+                formaterDateISOInterfaceCourses(
+                    prochainDimanche
+                );
+
+        } else {
+
+            champDateFinCourses.value =
+                nouvelleDateDebut;
+        }
+    }
+
+
+    validerPeriodeInterfaceCourses();
+}
+
+
+/* ==========================================
+   CHANGEMENT DATE DE FIN
+========================================== */
+
+function gererChangementDateFinCourses() {
+
+    if (
+        !champDateDebutCourses ||
+        !champDateFinCourses
+    ) {
+
+        return;
+    }
+
+
+    if (
+        champDateFinCourses.value &&
+        champDateDebutCourses.value &&
+        champDateFinCourses.value <
+            champDateDebutCourses.value
+    ) {
+
+        champDateFinCourses.value =
+            champDateDebutCourses.value;
+
+
+        afficherMessagePeriode(
+            "La date de fin ne peut pas être avant la date de début.",
+            "erreur"
+        );
+
+
+        return;
+    }
+
+
+    validerPeriodeInterfaceCourses();
+}
+
+
+/* ==========================================
    OUTILS TEXTE
 ========================================== */
 
@@ -468,10 +920,22 @@ function formaterDateLisibleCourses(
     }
 
 
+    /*
+        Cette fonction vient de courses-data.js.
+    */
+
     const date =
         creerDateDepuisISOCourses(
             dateISO
         );
+
+
+    if (
+        !date
+    ) {
+
+        return "";
+    }
 
 
     return date.toLocaleDateString(
@@ -514,6 +978,14 @@ function afficherMessagePeriode(
     type = ""
 ) {
 
+    if (
+        !messagePeriodeCourses
+    ) {
+
+        return;
+    }
+
+
     messagePeriodeCourses.textContent =
         texte;
 
@@ -539,6 +1011,14 @@ function afficherMessageArticleManuel(
     texte,
     type = ""
 ) {
+
+    if (
+        !messageArticleManuel
+    ) {
+
+        return;
+    }
+
 
     messageArticleManuel.textContent =
         texte;
@@ -575,74 +1055,49 @@ function afficherErreurCourses(
     );
 
 
-    texteErreurCourses.textContent =
-        erreur?.message ||
-        "Une erreur est survenue.";
+    if (
+        texteErreurCourses
+    ) {
+
+        texteErreurCourses.textContent =
+            erreur?.message ||
+            "Une erreur est survenue.";
+    }
 
 
-    messageErreurCourses.hidden =
-        false;
+    if (
+        messageErreurCourses
+    ) {
+
+        messageErreurCourses.hidden =
+            false;
+    }
 }
 
 
 function masquerErreurCourses() {
 
-    messageErreurCourses.hidden =
-        true;
-}
-
-
-/* ==========================================
-   SYNCHRONISER LES LIMITES
-   DES DATES
-========================================== */
-
-function synchroniserLimitesDatesCourses() {
-
-    const dateDebut =
-        champDateDebutCourses.value;
-
-
     if (
-        !dateDebut
+        messageErreurCourses
     ) {
 
-        return;
+        messageErreurCourses.hidden =
+            true;
     }
 
 
-    /*
-        Le navigateur empêche
-        de sélectionner une date
-        antérieure.
-    */
-
-    champDateFinCourses.min =
-        dateDebut;
-
-
-    /*
-        Si la date de fin actuelle
-        devient incohérente,
-        on la ramène automatiquement
-        à la date de début.
-    */
-
     if (
-        !champDateFinCourses.value ||
-        champDateFinCourses.value <
-            dateDebut
+        texteErreurCourses
     ) {
 
-        champDateFinCourses.value =
-            dateDebut;
+        texteErreurCourses.textContent =
+            "";
     }
 }
 
-
 /* ==========================================
-   CHARGER LES DATES
-   DE LA LISTE ACTIVE
+   INITIALISER LES DATES DEPUIS
+   LA LISTE ACTIVE
 ========================================== */
 
 function afficherPeriodeListeActive() {
@@ -651,24 +1106,54 @@ function afficherPeriodeListeActive() {
         !listeCoursesActive
     ) {
 
+        initialiserDatesCourses();
+
         return;
     }
 
 
     champDateDebutCourses.value =
-        listeCoursesActive.date_debut;
+        listeCoursesActive.date_debut ||
+        "";
 
 
     champDateFinCourses.value =
-        listeCoursesActive.date_fin;
+        listeCoursesActive.date_fin ||
+        "";
 
 
-    synchroniserLimitesDatesCourses();
+    /*
+        Sécurité visuelle :
+        la fin ne peut jamais être
+        antérieure au début.
+    */
+
+    if (
+        champDateDebutCourses.value
+    ) {
+
+        champDateFinCourses.min =
+            champDateDebutCourses.value;
+    }
+
+
+    if (
+        champDateDebutCourses.value &&
+        (
+            !champDateFinCourses.value ||
+            champDateFinCourses.value <
+                champDateDebutCourses.value
+        )
+    ) {
+
+        champDateFinCourses.value =
+            champDateDebutCourses.value;
+    }
 }
 
 
 /* ==========================================
-   RÉSUMÉ
+   RÉSUMÉ DE LA LISTE
 ========================================== */
 
 function afficherResumeCourses() {
@@ -695,7 +1180,7 @@ function afficherResumeCourses() {
 
 
 /* ==========================================
-   PLATS LIBRES
+   AFFICHER LES PLATS LIBRES
 ========================================== */
 
 function afficherPlatsLibresCourses() {
@@ -755,9 +1240,7 @@ function afficherPlatsLibresCourses() {
 
                     return `
 
-                        <div
-                            class="plat-libre-course"
-                        >
+                        <div class="plat-libre-course">
 
                             <strong>
                                 ${echapperHtmlCourses(
@@ -766,14 +1249,19 @@ function afficherPlatsLibresCourses() {
                                 )}
                             </strong>
 
+
                             <span>
+
                                 ${echapperHtmlCourses(
                                     date
                                 )}
+
                                 •
+
                                 ${echapperHtmlCourses(
                                     moment
                                 )}
+
                             </span>
 
                         </div>
@@ -817,6 +1305,10 @@ function obtenirArticlesTriesCourses() {
                 categoriesCourses.divers;
 
 
+            /*
+                1. Catégorie.
+            */
+
             if (
                 categorieA.ordre !==
                 categorieB.ordre
@@ -830,8 +1322,9 @@ function obtenirArticlesTriesCourses() {
 
 
             /*
-                Articles non cochés
-                avant les cochés.
+                2. Les articles restant
+                à acheter apparaissent avant
+                les articles cochés.
             */
 
             if (
@@ -848,6 +1341,10 @@ function obtenirArticlesTriesCourses() {
                     : -1;
             }
 
+
+            /*
+                3. Ordre alphabétique.
+            */
 
             return String(
                 articleA.nom ||
@@ -885,6 +1382,12 @@ function grouperArticlesCourses() {
         function (
             article
         ) {
+
+            /*
+                Quand "Masquer les cochés"
+                est actif, ils ne sont simplement
+                pas envoyés à l'affichage.
+            */
 
             if (
                 masquerArticlesCoches &&
@@ -929,30 +1432,33 @@ function grouperArticlesCourses() {
 
     return Array.from(
         groupes.entries()
-    ).sort(
-        function (
-            groupeA,
-            groupeB
-        ) {
+    )
+        .sort(
+            function (
+                groupeA,
+                groupeB
+            ) {
 
-            const categorieA =
-                categoriesCourses[
-                    groupeA[0]
-                ];
-
-
-            const categorieB =
-                categoriesCourses[
-                    groupeB[0]
-                ];
+                const categorieA =
+                    categoriesCourses[
+                        groupeA[0]
+                    ] ||
+                    categoriesCourses.divers;
 
 
-            return (
-                categorieA.ordre -
-                categorieB.ordre
-            );
-        }
-    );
+                const categorieB =
+                    categoriesCourses[
+                        groupeB[0]
+                    ] ||
+                    categoriesCourses.divers;
+
+
+                return (
+                    categorieA.ordre -
+                    categorieB.ordre
+                );
+            }
+        );
 }
 
 
@@ -971,6 +1477,10 @@ function creerHtmlArticleCourses(
         );
 
 
+    /* =========================
+       BADGE
+    ========================= */
+
     let badge =
         "";
 
@@ -982,7 +1492,9 @@ function creerHtmlArticleCourses(
 
         badge = `
 
-            <span class="badge-article-manuel">
+            <span
+                class="badge-article-manuel"
+            >
                 Manuel
             </span>
 
@@ -997,7 +1509,9 @@ function creerHtmlArticleCourses(
 
         badge = `
 
-            <span class="badge-article-report">
+            <span
+                class="badge-article-report"
+            >
                 Reporté
             </span>
 
@@ -1005,28 +1519,45 @@ function creerHtmlArticleCourses(
     }
 
 
-    const boutonSupprimer =
-        article.source ===
-        "manuel" ||
-        article.source ===
-        "report"
-            ? `
+    /* =========================
+       SUPPRESSION
 
-                <button
-                    type="button"
-                    class="bouton-supprimer-article-manuel"
-                    data-supprimer-article-id="${article.id}"
-                    data-source-article="${article.source}"
-                    aria-label="Supprimer ${echapperHtmlCourses(
-                        article.nom
-                    )}"
-                    title="Supprimer cet article"
-                >
-                    ×
-                </button>
+       Les ingrédients venant
+       automatiquement du planning
+       ne sont pas supprimables ici.
 
-            `
-            : "";
+       On les retire en modifiant
+       le planning ou la période.
+    ========================= */
+
+    let boutonSupprimer =
+        "";
+
+
+    if (
+        article.source ===
+            "manuel" ||
+        article.source ===
+            "report"
+    ) {
+
+        boutonSupprimer = `
+
+            <button
+                type="button"
+                class="bouton-supprimer-article-manuel"
+                data-supprimer-article-id="${article.id}"
+                data-source-article="${article.source}"
+                aria-label="Supprimer ${echapperHtmlCourses(
+                    article.nom
+                )}"
+                title="Supprimer cet article"
+            >
+                ×
+            </button>
+
+        `;
+    }
 
 
     return `
@@ -1058,7 +1589,9 @@ function creerHtmlArticleCourses(
                 class="contenu-article-course"
             >
 
-                <span class="nom-article-course">
+                <span
+                    class="nom-article-course"
+                >
 
                     ${echapperHtmlCourses(
                         article.nom
@@ -1073,7 +1606,9 @@ function creerHtmlArticleCourses(
                     quantite
                         ? `
 
-                            <span class="quantite-article-course">
+                            <span
+                                class="quantite-article-course"
+                            >
                                 ${echapperHtmlCourses(
                                     quantite
                                 )}
@@ -1100,9 +1635,16 @@ function creerHtmlArticleCourses(
 
 function afficherListeCourses() {
 
+    /*
+        Aucune donnée du tout.
+    */
+
     if (
+        !Array.isArray(
+            articlesListeCourses
+        ) ||
         articlesListeCourses.length ===
-        0
+            0
     ) {
 
         listeCourses.innerHTML =
@@ -1134,9 +1676,8 @@ function afficherListeCourses() {
 
 
     /*
-        Cas particulier :
-        tous les articles sont cochés
-        et l'utilisateur les masque.
+        Il existe des articles,
+        mais tous sont cochés et masqués.
     */
 
     if (
@@ -1146,7 +1687,9 @@ function afficherListeCourses() {
 
         listeCourses.innerHTML = `
 
-            <div class="message-tous-masques">
+            <div
+                class="message-tous-masques"
+            >
 
                 <span>
                     ✓
@@ -1190,7 +1733,6 @@ function afficherListeCourses() {
 
 
                     afficherListeCourses();
-
                 }
             );
         }
@@ -1219,7 +1761,7 @@ function afficherListeCourses() {
                         groupe[1];
 
 
-                    const infos =
+                    const informations =
                         categoriesCourses[
                             categorie
                         ] ||
@@ -1251,24 +1793,33 @@ function afficherListeCourses() {
 
                     return `
 
-                        <div class="groupe-courses">
+                        <div
+                            class="groupe-courses"
+                        >
 
-                            <div class="entete-groupe-courses">
+                            <div
+                                class="entete-groupe-courses"
+                            >
 
-                                <span class="emoji-groupe-courses">
-                                    ${infos.emoji}
+                                <span
+                                    class="emoji-groupe-courses"
+                                >
+                                    ${informations.emoji}
                                 </span>
+
 
                                 <span>
                                     ${echapperHtmlCourses(
-                                        infos.nom
+                                        informations.nom
                                     )}
                                 </span>
 
                             </div>
 
 
-                            <div class="liste-groupe-courses">
+                            <div
+                                class="liste-groupe-courses"
+                            >
 
                                 ${lignes}
 
@@ -1301,6 +1852,10 @@ function afficherProgressionCourses() {
         statistiques.articlesCoches;
 
 
+    const restants =
+        statistiques.articlesRestants;
+
+
     compteurProgressionCourses.textContent =
         `${coches} / ${total}`;
 
@@ -1310,7 +1865,8 @@ function afficherProgressionCourses() {
 
 
     if (
-        total > 0
+        total >
+        0
     ) {
 
         pourcentage =
@@ -1328,16 +1884,21 @@ function afficherProgressionCourses() {
         `${pourcentage}%`;
 
 
+    /*
+        Texte sous la barre.
+    */
+
     if (
-        total === 0
+        total ===
+        0
     ) {
 
         texteProgressionCourses.textContent =
             "Ajoutez des repas ou des articles pour commencer votre liste.";
 
-
     } else if (
-        coches === 0
+        coches ===
+        0
     ) {
 
         texteProgressionCourses.textContent =
@@ -1347,21 +1908,15 @@ function afficherProgressionCourses() {
                     : ""
             } à acheter.`;
 
-
     } else if (
-        coches === total
+        coches ===
+        total
     ) {
 
         texteProgressionCourses.textContent =
             "Tout est dans le panier 🎉";
 
-
     } else {
-
-        const restants =
-            total -
-            coches;
-
 
         texteProgressionCourses.textContent =
             `${restants} article${
@@ -1376,6 +1931,11 @@ function afficherProgressionCourses() {
     }
 
 
+    /*
+        Activation / désactivation
+        intelligente des boutons.
+    */
+
     boutonToutCocher.disabled =
         total === 0 ||
         coches === total;
@@ -1384,11 +1944,16 @@ function afficherProgressionCourses() {
     boutonToutDecocher.disabled =
         total === 0 ||
         coches === 0;
+
+
+    boutonMasquerCoches.disabled =
+        total === 0 ||
+        coches === 0;
 }
 
 
 /* ==========================================
-   BOUTON MASQUER
+   BOUTON MASQUER LES COCHÉS
 ========================================== */
 
 function mettreAJourBoutonMasquer() {
@@ -1409,7 +1974,7 @@ function mettreAJourBoutonMasquer() {
 
 
 /* ==========================================
-   RAFRAÎCHIR TOUT L'AFFICHAGE
+   AFFICHER TOUTE L'INTERFACE
 ========================================== */
 
 function afficherInterfaceCourses() {
@@ -1429,7 +1994,7 @@ function afficherInterfaceCourses() {
 
 
 /* ==========================================
-   ÉTAT DE CHARGEMENT
+   MODE CHARGEMENT
 ========================================== */
 
 function definirChargementCourses(
@@ -1437,15 +2002,17 @@ function definirChargementCourses(
 ) {
 
     chargementCourses =
-        actif;
+        Boolean(
+            actif
+        );
 
 
     boutonActualiserCourses.disabled =
-        actif;
+        chargementCourses;
 
 
     if (
-        actif
+        chargementCourses
     ) {
 
         boutonActualiserCourses.textContent =
@@ -1460,7 +2027,7 @@ function definirChargementCourses(
 
 
 /* ==========================================
-   ACTUALISER DEPUIS SUPABASE
+   RECHARGER LES DONNÉES
 ========================================== */
 
 async function rafraichirCourses() {
@@ -1470,7 +2037,9 @@ async function rafraichirCourses() {
 
     listeCourses.innerHTML = `
 
-        <p class="message-chargement-courses">
+        <p
+            class="message-chargement-courses"
+        >
             Mise à jour de la liste…
         </p>
 
@@ -1495,47 +2064,41 @@ async function rafraichirCourses() {
     }
 }
 
-
 /* ==========================================
-   CHANGEMENT DATE DÉBUT
+   ÉVÉNEMENTS DATES
 ========================================== */
 
+
+/*
+    On écoute à la fois "input"
+    et "change".
+
+    C'est volontaire :
+    Safari peut être un peu particulier
+    avec les champs type="date".
+*/
+
 champDateDebutCourses.addEventListener(
-    "change",
-    function () {
-
-        synchroniserLimitesDatesCourses();
-
-
-        afficherMessagePeriode(
-            ""
-        );
-    }
+    "input",
+    gererChangementDateDebutCourses
 );
 
 
-/* ==========================================
-   CHANGEMENT DATE FIN
-========================================== */
+champDateDebutCourses.addEventListener(
+    "change",
+    gererChangementDateDebutCourses
+);
+
+
+champDateFinCourses.addEventListener(
+    "input",
+    gererChangementDateFinCourses
+);
+
 
 champDateFinCourses.addEventListener(
     "change",
-    function () {
-
-        if (
-            champDateFinCourses.value <
-            champDateDebutCourses.value
-        ) {
-
-            champDateFinCourses.value =
-                champDateDebutCourses.value;
-        }
-
-
-        afficherMessagePeriode(
-            ""
-        );
-    }
+    gererChangementDateFinCourses
 );
 
 
@@ -1555,6 +2118,24 @@ boutonActualiserCourses.addEventListener(
         }
 
 
+        /*
+            Validation locale avant
+            d'envoyer quoi que ce soit
+            à Supabase.
+        */
+
+        const periodeValide =
+            validerPeriodeInterfaceCourses();
+
+
+        if (
+            !periodeValide
+        ) {
+
+            return;
+        }
+
+
         const dateDebut =
             champDateDebutCourses.value;
 
@@ -1563,27 +2144,21 @@ boutonActualiserCourses.addEventListener(
             champDateFinCourses.value;
 
 
+        definirChargementCourses(
+            true
+        );
+
+
+        afficherMessagePeriode(
+            "Mise à jour de la liste…"
+        );
+
+
         try {
 
-            verifierPeriodeCourses(
-                dateDebut,
-                dateFin
-            );
-
-
-            definirChargementCourses(
-                true
-            );
-
-
-            afficherMessagePeriode(
-                "Mise à jour de la liste…"
-            );
-
-
             /*
-                On enregistre les dates
-                dans la liste active.
+                Enregistrer les nouvelles dates
+                sur la liste active.
             */
 
             await modifierPeriodeListeCourses(
@@ -1593,15 +2168,23 @@ boutonActualiserCourses.addEventListener(
 
 
             /*
-                Puis on recalcule uniquement
-                les articles provenant du planning.
+                Recalcul des ingrédients
+                correspondant au planning.
 
-                Les articles manuels restent.
-                Les coches existantes restent.
+                Important :
+                - les articles manuels restent ;
+                - les coches existantes restent ;
+                - les ingrédients qui ne sont
+                  plus nécessaires sont supprimés.
             */
 
             await synchroniserListeCourses();
 
+
+            /*
+                On affiche tout avec
+                les nouvelles données.
+            */
 
             afficherInterfaceCourses();
 
@@ -1629,13 +2212,13 @@ boutonActualiserCourses.addEventListener(
         ) {
 
             console.error(
-                "Erreur période :",
+                "Erreur changement période :",
                 erreur
             );
 
 
             afficherMessagePeriode(
-                erreur.message ||
+                erreur?.message ||
                 "Impossible de modifier la période.",
                 "erreur"
             );
@@ -1726,10 +2309,9 @@ listeCourses.addEventListener(
 
 
             /*
-                Si les cochés sont masqués,
-                on reconstruit immédiatement
-                la liste pour faire disparaître
-                l'article.
+                Si on masque les cochés,
+                un article nouvellement coché
+                doit disparaître immédiatement.
             */
 
             if (
@@ -1745,17 +2327,23 @@ listeCourses.addEventListener(
         ) {
 
             console.error(
-                "Erreur coche article :",
+                "Erreur mise à jour article :",
                 erreur
             );
 
 
             /*
-                Retour à l'état précédent.
+                Retour visuel à l'ancien état
+                si Supabase échoue.
             */
 
             caseArticle.checked =
                 !nouvelEtat;
+
+
+            afficherErreurCourses(
+                erreur
+            );
 
 
         } finally {
@@ -1775,12 +2363,27 @@ boutonToutCocher.addEventListener(
     "click",
     async function () {
 
-        boutonToutCocher.disabled =
-            true;
+        const statistiques =
+            obtenirStatistiquesCourses();
+
+
+        if (
+            statistiques.totalArticles ===
+                0 ||
+            statistiques.articlesCoches ===
+                statistiques.totalArticles
+        ) {
+
+            return;
+        }
 
 
         const texteInitial =
             boutonToutCocher.textContent;
+
+
+        boutonToutCocher.disabled =
+            true;
 
 
         boutonToutCocher.textContent =
@@ -1803,6 +2406,12 @@ boutonToutCocher.addEventListener(
             erreur
         ) {
 
+            console.error(
+                "Erreur tout cocher :",
+                erreur
+            );
+
+
             afficherErreurCourses(
                 erreur
             );
@@ -1821,7 +2430,7 @@ boutonToutCocher.addEventListener(
 
 
 /* ==========================================
-   OUVRIR TOUT DÉCOCHER
+   OUVRIR POPUP TOUT DÉCOCHER
 ========================================== */
 
 boutonToutDecocher.addEventListener(
@@ -1852,7 +2461,7 @@ boutonToutDecocher.addEventListener(
 
 
 /* ==========================================
-   FERMER TOUT DÉCOCHER
+   FERMER POPUP TOUT DÉCOCHER
 ========================================== */
 
 function fermerPopupToutDecocher() {
@@ -1895,8 +2504,19 @@ boutonConfirmerToutDecocher.addEventListener(
             );
 
 
+            /*
+                On réaffiche aussi
+                les articles qui étaient masqués.
+            */
+
+            masquerArticlesCoches =
+                false;
+
+
             fermerPopupToutDecocher();
 
+
+            mettreAJourBoutonMasquer();
 
             afficherProgressionCourses();
 
@@ -1906,6 +2526,12 @@ boutonConfirmerToutDecocher.addEventListener(
         } catch (
             erreur
         ) {
+
+            console.error(
+                "Erreur tout décocher :",
+                erreur
+            );
+
 
             afficherErreurCourses(
                 erreur
@@ -1926,7 +2552,8 @@ boutonConfirmerToutDecocher.addEventListener(
 
 
 /* ==========================================
-   CLIC SUR FOND TOUT DÉCOCHER
+   CLIC SUR LE FOND
+   POPUP TOUT DÉCOCHER
 ========================================== */
 
 popupToutDecocher.addEventListener(
@@ -1947,12 +2574,25 @@ popupToutDecocher.addEventListener(
 
 
 /* ==========================================
-   MASQUER LES COCHÉS
+   MASQUER / AFFICHER LES COCHÉS
 ========================================== */
 
 boutonMasquerCoches.addEventListener(
     "click",
     function () {
+
+        const statistiques =
+            obtenirStatistiquesCourses();
+
+
+        if (
+            statistiques.articlesCoches ===
+            0
+        ) {
+
+            return;
+        }
+
 
         masquerArticlesCoches =
             !masquerArticlesCoches;
@@ -1991,7 +2631,7 @@ boutonAllerAjoutManuel.addEventListener(
                 champNomArticleManuel.focus();
 
             },
-            500
+            450
         );
     }
 );
@@ -2021,7 +2661,7 @@ formulaireArticleManuel.addEventListener(
                 .trim();
 
 
-        const quantite =
+        const quantiteTexte =
             champQuantiteArticleManuel
                 .value
                 .trim();
@@ -2049,37 +2689,53 @@ formulaireArticleManuel.addEventListener(
             );
 
 
+            champNomArticleManuel.focus();
+
+
             return;
         }
 
 
         /*
-            Quantité facultative,
-            mais si elle existe elle doit
-            être valide.
+            Quantité facultative.
+
+            Si elle est renseignée,
+            elle doit être numérique et >= 0.
         */
 
+        let quantite =
+            "";
+
+
         if (
-            quantite !== "" &&
-            (
-                !Number.isFinite(
-                    Number(
-                        quantite
-                    )
-                ) ||
-                Number(
-                    quantite
-                ) < 0
-            )
+            quantiteTexte !==
+            ""
         ) {
 
-            afficherMessageArticleManuel(
-                "La quantité n'est pas valide.",
-                "erreur"
-            );
+            quantite =
+                Number(
+                    quantiteTexte
+                );
 
 
-            return;
+            if (
+                !Number.isFinite(
+                    quantite
+                ) ||
+                quantite < 0
+            ) {
+
+                afficherMessageArticleManuel(
+                    "La quantité n'est pas valide.",
+                    "erreur"
+                );
+
+
+                champQuantiteArticleManuel.focus();
+
+
+                return;
+            }
         }
 
 
@@ -2100,6 +2756,10 @@ formulaireArticleManuel.addEventListener(
                 categorie
             );
 
+
+            /*
+                Réinitialisation propre.
+            */
 
             formulaireArticleManuel.reset();
 
@@ -2144,7 +2804,7 @@ formulaireArticleManuel.addEventListener(
 
 
             afficherMessageArticleManuel(
-                erreur.message ||
+                erreur?.message ||
                 "Impossible d'ajouter cet article.",
                 "erreur"
             );
@@ -2164,7 +2824,8 @@ formulaireArticleManuel.addEventListener(
 
 
 /* ==========================================
-   SUPPRIMER ARTICLE MANUEL / REPORTÉ
+   SUPPRIMER UN ARTICLE
+   MANUEL OU REPORTÉ
 ========================================== */
 
 listeCourses.addEventListener(
@@ -2209,6 +2870,10 @@ listeCourses.addEventListener(
 
         try {
 
+            /*
+                Article ajouté manuellement.
+            */
+
             if (
                 source ===
                 "manuel"
@@ -2219,16 +2884,17 @@ listeCourses.addEventListener(
                 );
 
 
-            } else {
+            } else if (
+                source ===
+                "report"
+            ) {
 
                 /*
-                    Un article reporté peut aussi
-                    être supprimé, mais notre
-                    fonction data limite volontairement
-                    la suppression aux manuels.
+                    Les reports sont également
+                    supprimables.
 
-                    On le supprime donc directement,
-                    toujours en vérifiant liste_id.
+                    Ils ne viennent plus du planning,
+                    donc on peut les enlever directement.
                 */
 
                 const {
@@ -2277,6 +2943,18 @@ listeCourses.addEventListener(
                             );
                         }
                     );
+
+
+            } else {
+
+                /*
+                    Sécurité :
+                    un article issu automatiquement
+                    du planning n'est pas supprimable
+                    ici.
+                */
+
+                return;
             }
 
 
@@ -2308,7 +2986,6 @@ listeCourses.addEventListener(
     }
 );
 
-
 /* ==========================================
    OUVRIR POPUP TERMINER
 ========================================== */
@@ -2324,8 +3001,7 @@ function ouvrirPopupTerminerCourses() {
 
 
     if (
-        restants >
-        0
+        restants > 0
     ) {
 
         blocArticlesRestants.hidden =
@@ -2346,7 +3022,6 @@ function ouvrirPopupTerminerCourses() {
 
         textePopupTerminerCourses.textContent =
             "Vous pouvez terminer cette liste et choisir ce qu'il faut faire des articles encore manquants.";
-
 
     } else {
 
@@ -2410,7 +3085,7 @@ boutonAnnulerTerminer.addEventListener(
 
 
 /* ==========================================
-   CLIC FOND POPUP TERMINER
+   CLIC SUR FOND POPUP TERMINER
 ========================================== */
 
 popupTerminerCourses.addEventListener(
@@ -2431,7 +3106,7 @@ popupTerminerCourses.addEventListener(
 
 
 /* ==========================================
-   PRÉPARER LES ARTICLES À REPORTER
+   ARTICLES À REPORTER
 ========================================== */
 
 function obtenirArticlesAReporter() {
@@ -2595,9 +3270,11 @@ boutonConfirmerTerminer.addEventListener(
 
 
                 reporter =
-                    choix &&
-                    choix.value ===
-                    "reporter";
+                    Boolean(
+                        choix &&
+                        choix.value ===
+                            "reporter"
+                    );
             }
 
 
@@ -2613,25 +3290,25 @@ boutonConfirmerTerminer.addEventListener(
 
 
             /*
-                1. Fermer la liste actuelle.
+                1. Terminer la liste actuelle.
             */
 
             await terminerListeCoursesActive();
 
 
             /*
-                2. Créer immédiatement
-                une nouvelle liste active.
+                2. Créer une nouvelle liste active.
 
-                Elle utilisera :
-                aujourd'hui → prochain dimanche.
+                courses-data.js utilise :
+                aujourd'hui -> prochain dimanche.
             */
 
             await creerListeCoursesActive();
 
 
             /*
-                3. Ajouter les éventuels reports.
+                3. Reporter éventuellement
+                les articles non achetés.
             */
 
             if (
@@ -2646,11 +3323,8 @@ boutonConfirmerTerminer.addEventListener(
 
 
             /*
-                4. Synchroniser avec le planning.
-
-                Les reports restent car
-                synchroniserArticlesPlanningCourses()
-                ne supprime que source="planning".
+                4. Synchroniser la nouvelle
+                liste avec le planning.
             */
 
             await synchroniserListeCourses();
@@ -2667,8 +3341,7 @@ boutonConfirmerTerminer.addEventListener(
 
 
             afficherMessagePeriode(
-                articlesAReporter.length >
-                    0
+                articlesAReporter.length > 0
                     ? `Nouvelle liste créée. ${articlesAReporter.length} article${
                         articlesAReporter.length > 1
                             ? "s ont"
@@ -2771,9 +3444,27 @@ async function initialiserCourses() {
     masquerErreurCourses();
 
 
+    /*
+        Valeurs locales immédiatement
+        disponibles, même avant Supabase.
+    */
+
+    initialiserDatesInterfaceCourses();
+
+
+    /*
+        Sécurité immédiate sur les dates.
+    */
+
+    champDateFinCourses.min =
+        champDateDebutCourses.value;
+
+
     listeCourses.innerHTML = `
 
-        <p class="message-chargement-courses">
+        <p
+            class="message-chargement-courses"
+        >
             Préparation de votre liste…
         </p>
 
@@ -2783,12 +3474,13 @@ async function initialiserCourses() {
     try {
 
         /*
-            courses-data.js :
+            courses-data.js gère :
             - utilisateur
             - foyer
             - liste active
             - planning
             - recettes
+            - articles Supabase
             - synchronisation
         */
 
@@ -2804,12 +3496,44 @@ async function initialiserCourses() {
         }
 
 
+        /*
+            La liste active Supabase
+            devient la référence pour les dates.
+        */
+
         afficherInterfaceCourses();
+
+
+        /*
+            Et on garantit une nouvelle fois
+            la contrainte date fin >= date début.
+        */
+
+        if (
+            champDateDebutCourses.value
+        ) {
+
+            champDateFinCourses.min =
+                champDateDebutCourses.value;
+        }
+
+
+        if (
+            champDateDebutCourses.value &&
+            champDateFinCourses.value &&
+            champDateFinCourses.value <
+                champDateDebutCourses.value
+        ) {
+
+            champDateFinCourses.value =
+                champDateDebutCourses.value;
+        }
 
 
         console.log(
             "Courses initialisées :",
             {
+
                 liste:
                     listeCoursesActive,
 
@@ -2821,6 +3545,7 @@ async function initialiserCourses() {
 
                 articles:
                     articlesListeCourses
+
             }
         );
 
