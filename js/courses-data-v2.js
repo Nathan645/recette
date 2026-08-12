@@ -2610,3 +2610,17 @@ async function initialiserDonneesCourses() {
 
     return true;
 }
+
+console.log(
+    "✅ COURSES-DATA-V2 CHARGÉ"
+);
+
+console.log(
+    "modifierPeriodeListeCourses :",
+    typeof modifierPeriodeListeCourses
+);
+
+console.log(
+    "initialiserDonneesCourses :",
+    typeof initialiserDonneesCourses
+);
