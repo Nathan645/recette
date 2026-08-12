@@ -4205,3 +4205,372 @@ body.popup-ouverte {
         width: 100%;
     }
 }
+
+
+/* =================================
+   RÉORGANISATION DES PHOTOS
+   DRAG & DROP / MOBILE
+================================= */
+
+.apercu-photo-recette {
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+
+    transition:
+        transform 0.18s ease,
+        opacity 0.18s ease,
+        border-color 0.18s ease,
+        box-shadow 0.18s ease;
+
+    touch-action: pan-y;
+}
+
+.apercu-photo-recette:active {
+    cursor: grabbing;
+}
+
+
+/* =================================
+   PHOTO PRINCIPALE
+================================= */
+
+.apercu-photo-recette.photo-principale {
+    border:
+        2px solid
+        var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            102,
+            112,
+            90,
+            0.10
+        );
+}
+
+.badge-photo-principale {
+    position: absolute;
+
+    left: 8px;
+    bottom: 8px;
+
+    z-index: 4;
+
+    max-width:
+        calc(100% - 16px);
+
+    padding:
+        6px
+        9px;
+
+    border-radius:
+        999px;
+
+    background-color:
+        rgba(
+            81,
+            90,
+            72,
+            0.94
+        );
+
+    color:
+        #ffffff;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    line-height: 1.1;
+
+    white-space: nowrap;
+
+    pointer-events: none;
+}
+
+
+/* =================================
+   POIGNÉE DRAG & DROP
+================================= */
+
+.poignee-photo-recette {
+    position: absolute;
+
+    top: 9px;
+    left: 9px;
+
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 30px;
+    height: 30px;
+
+    border-radius: 9px;
+
+    background-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.92
+        );
+
+    color:
+        var(--vert);
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            52,
+            59,
+            47,
+            0.14
+        );
+
+    font-size: 18px;
+    font-weight: 900;
+
+    letter-spacing: -4px;
+    line-height: 1;
+
+    cursor: grab;
+
+    pointer-events: none;
+}
+
+
+/* =================================
+   BOUTONS ORDRE GAUCHE / DROITE
+================================= */
+
+.actions-ordre-photo {
+    position: absolute;
+
+    left: 50%;
+    bottom: 8px;
+
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    transform:
+        translateX(-50%);
+}
+
+.photo-principale
+.actions-ordre-photo {
+    bottom: 43px;
+}
+
+.deplacer-photo-recette {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 34px;
+    height: 34px;
+
+    padding: 0;
+
+    border:
+        1px solid
+        rgba(
+            102,
+            112,
+            90,
+            0.30
+        );
+
+    border-radius: 10px;
+
+    background-color:
+        rgba(
+            255,
+            255,
+            255,
+            0.94
+        );
+
+    color:
+        var(--vert);
+
+    box-shadow:
+        0 2px 8px
+        rgba(
+            52,
+            59,
+            47,
+            0.12
+        );
+
+    font: inherit;
+    font-size: 17px;
+    font-weight: 800;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease,
+        transform 0.18s ease,
+        opacity 0.18s ease;
+}
+
+.deplacer-photo-recette:hover:not(:disabled) {
+    border-color:
+        var(--vert);
+
+    background-color:
+        var(--vert);
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-1px);
+}
+
+.deplacer-photo-recette:disabled {
+    opacity: 0.28;
+    cursor: default;
+}
+
+
+/* =================================
+   ÉTATS DRAG & DROP
+================================= */
+
+.apercu-photo-recette.photo-en-deplacement,
+.apercu-photo-recette.photo-en-deplacement-tactile {
+    opacity: 0.55;
+
+    transform:
+        scale(0.97);
+
+    cursor: grabbing;
+}
+
+.apercu-photo-recette.photo-cible-deplacement {
+    border-color:
+        var(--vert);
+
+    box-shadow:
+        0 0 0 4px
+        rgba(
+            102,
+            112,
+            90,
+            0.16
+        );
+
+    transform:
+        scale(1.025);
+}
+
+
+/* =================================
+   FOCUS CLAVIER
+================================= */
+
+.deplacer-photo-recette:focus-visible {
+    outline:
+        3px solid
+        rgba(
+            102,
+            112,
+            90,
+            0.22
+        );
+
+    outline-offset: 2px;
+}
+
+
+/* =================================
+   MOBILE - RÉORGANISATION PHOTOS
+================================= */
+
+@media (max-width: 760px) {
+
+    .apercu-photo-recette {
+        cursor: default;
+    }
+
+    .poignee-photo-recette {
+        top: 7px;
+        left: 7px;
+
+        width: 28px;
+        height: 28px;
+
+        border-radius: 8px;
+
+        font-size: 16px;
+    }
+
+    .badge-photo-principale {
+        left: 7px;
+        bottom: 7px;
+
+        padding:
+            5px
+            8px;
+
+        font-size: 10px;
+    }
+
+    .actions-ordre-photo {
+        bottom: 7px;
+        gap: 5px;
+    }
+
+    .photo-principale
+    .actions-ordre-photo {
+        bottom: 39px;
+    }
+
+    .deplacer-photo-recette {
+        width: 32px;
+        height: 32px;
+
+        border-radius: 9px;
+
+        font-size: 16px;
+    }
+}
+
+
+/* =================================
+   PETIT MOBILE
+================================= */
+
+@media (max-width: 420px) {
+
+    .poignee-photo-recette {
+        width: 26px;
+        height: 26px;
+
+        font-size: 15px;
+    }
+
+    .deplacer-photo-recette {
+        width: 30px;
+        height: 30px;
+
+        font-size: 15px;
+    }
+
+    .badge-photo-principale {
+        font-size: 9px;
+    }
+}
