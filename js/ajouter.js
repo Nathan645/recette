@@ -101,134 +101,60 @@ let foyerId =
 
 
 /* =================================
-   ÉTAT DES PHOTOS
+   RECETTES DISPONIBLES POUR LIAISON
 ================================= */
 
 /*
-    Maximum de photos autorisées
-    par recette.
-*/
-
-const NOMBRE_MAX_PHOTOS =
-    5;
-
-
-/*
-    Nouvelles photos choisies
-    depuis le téléphone ou
-    l'ordinateur.
-
-    Structure :
-
-    {
-        idLocal: "...",
-        fichier: File,
-        urlApercu: "blob:..."
-    }
-*/
-
-let nouvellesPhotos =
-    [];
-
-
-/*
-    Photos déjà présentes dans
-    Supabase en modification.
+    Liste des recettes que l'utilisateur
+    peut sélectionner comme recette liée
+    pour un ingrédient.
 
     Structure :
 
     {
         id: "...",
-        recette_id: "...",
-        chemin: "...",
-        ordre: 1,
-        created_by: "...",
-        url: "..."
+        nom: "...",
+        categorie: "...",
+        visibilite: "...",
+        foyer_id: "..."
     }
 */
+
+let recettesDisponiblesPourLiaison =
+    [];
+
+
+/* =================================
+   ÉTAT DES PHOTOS
+================================= */
+
+const NOMBRE_MAX_PHOTOS =
+    5;
+
+
+let nouvellesPhotos =
+    [];
+
 
 let photosExistantes =
     [];
 
 
-/*
-    Photos existantes que
-    l'utilisateur souhaite retirer.
-
-    La suppression réelle se fait
-    uniquement à l'enregistrement.
-*/
-
 let photosASupprimer =
     [];
 
-
-/*
-    =================================
-    ORDRE GLOBAL DES PHOTOS
-    =================================
-
-    C'est désormais CETTE liste
-    qui détermine l'ordre visuel
-    des photos.
-
-    Elle permet de mélanger
-    librement :
-
-    - photos déjà enregistrées ;
-    - nouvelles photos.
-
-    Exemple :
-
-    [
-        {
-            type: "existante",
-            id: "abc"
-        },
-        {
-            type: "nouvelle",
-            id: "local-123"
-        },
-        {
-            type: "existante",
-            id: "def"
-        }
-    ]
-
-    La première entrée correspond
-    à la photo principale.
-*/
 
 let ordrePhotos =
     [];
 
 
-/*
-    Indique si l'utilisateur
-    a réellement changé l'ordre.
-
-    Cela permet d'enregistrer
-    l'ordre même s'il n'a ajouté
-    ou supprimé aucune photo.
-*/
-
 let ordrePhotosModifie =
     false;
 
 
-/*
-    Photo actuellement déplacée
-    lors d'un drag & drop.
-*/
-
 let photoEnCoursDeDrag =
     null;
 
-
-/*
-    Données utilisées pour
-    le déplacement tactile.
-*/
 
 let photoTactileEnCours =
     null;
@@ -241,12 +167,6 @@ let elementTactileEnCours =
 /* =================================
    OUTILS POUR L'ORDRE DES PHOTOS
 ================================= */
-
-/*
-    Génère une clé unique pour
-    identifier une photo dans
-    ordrePhotos.
-*/
 
 function creerClePhoto(
     type,
@@ -384,15 +304,6 @@ function retirerPhotoDeOrdre(
    NETTOYER L'ORDRE
 ================================= */
 
-/*
-    Supprime de ordrePhotos les
-    références qui ne correspondent
-    plus à une vraie photo.
-
-    Cela sert notamment après
-    suppression d'une photo.
-*/
-
 function nettoyerOrdrePhotos() {
 
     const clesValides =
@@ -444,13 +355,6 @@ function nettoyerOrdrePhotos() {
             }
         );
 
-
-    /*
-        Sécurité :
-        si une photo existe mais n'est
-        pas encore présente dans
-        ordrePhotos, on l'ajoute à la fin.
-    */
 
     photosExistantes.forEach(
         function (
@@ -542,7 +446,6 @@ function obtenirPhotoDepuisOrdre(
 
             photo:
                 photo
-
         };
     }
 
@@ -595,7 +498,6 @@ function obtenirPhotoDepuisOrdre(
 
             photo:
                 photo
-
         };
     }
 
@@ -841,6 +743,208 @@ async function recupererFoyerUtilisateur() {
 
 
 /* =================================
+   CHARGER LES RECETTES LIABLES
+================================= */
+
+/*
+    On récupère les recettes visibles
+    par l'utilisateur.
+
+    Les règles RLS de Supabase
+    continuent de décider ce que
+    l'utilisateur a réellement le droit
+    de lire.
+
+    La recette actuellement modifiée
+    est exclue pour éviter qu'une recette
+    se lie elle-même.
+*/
+
+async function chargerRecettesDisponiblesPourLiaison() {
+
+    recettesDisponiblesPourLiaison =
+        [];
+
+
+    const {
+        data,
+        error
+    } =
+        await window.supabaseClient
+            .from(
+                "recettes"
+            )
+            .select(
+                "id, nom, categorie, categorie_affichee, visibilite, foyer_id"
+            )
+            .order(
+                "nom",
+                {
+                    ascending:
+                        true
+                }
+            );
+
+
+    if (
+        error
+    ) {
+
+        throw error;
+    }
+
+
+    const recettes =
+        Array.isArray(
+            data
+        )
+            ? data
+            : [];
+
+
+    recettesDisponiblesPourLiaison =
+        recettes.filter(
+            function (
+                recette
+            ) {
+
+                if (
+                    modeModification &&
+                    identifiantRecette &&
+                    String(
+                        recette.id
+                    ) ===
+                    String(
+                        identifiantRecette
+                    )
+                ) {
+
+                    return false;
+                }
+
+
+                return true;
+            }
+        );
+}
+
+
+/* =================================
+   ÉCHAPPER TEXTE POUR HTML
+================================= */
+
+function echapperHtmlAjout(
+    valeur
+) {
+
+    return String(
+        valeur ??
+        ""
+    )
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+/* =================================
+   OPTIONS RECETTES LIÉES
+================================= */
+
+function creerOptionsRecettesLiees(
+    recetteLieeId = ""
+) {
+
+    const valeurSelectionnee =
+        String(
+            recetteLieeId ||
+            ""
+        );
+
+
+    let html = `
+
+        <option value="">
+            Aucune recette liée
+        </option>
+
+    `;
+
+
+    recettesDisponiblesPourLiaison.forEach(
+        function (
+            recette
+        ) {
+
+            const id =
+                String(
+                    recette.id
+                );
+
+
+            const selectionnee =
+                id ===
+                valeurSelectionnee;
+
+
+            const categorie =
+                recette.categorie_affichee ||
+                recette.categorie ||
+                "";
+
+
+            const libelleCategorie =
+                categorie
+                    ? ` — ${categorie}`
+                    : "";
+
+
+            html += `
+
+                <option
+                    value="${echapperHtmlAjout(
+                        id
+                    )}"
+                    ${
+                        selectionnee
+                            ? "selected"
+                            : ""
+                    }
+                >
+                    ${echapperHtmlAjout(
+                        recette.nom
+                    )}${echapperHtmlAjout(
+                        libelleCategorie
+                    )}
+                </option>
+
+            `;
+        }
+    );
+
+
+    return html;
+}
+
+
+/* =================================
    INGRÉDIENTS
 ================================= */
 
@@ -866,7 +970,10 @@ function creerLigneIngredient(
             class="ingredient-quantite"
             aria-label="Quantité de l’ingrédient"
             placeholder="Ex. 400"
-            value="${valeurs.quantite ?? ""}"
+            value="${echapperHtmlAjout(
+                valeurs.quantite ??
+                ""
+            )}"
         >
 
         <input
@@ -874,7 +981,10 @@ function creerLigneIngredient(
             class="ingredient-unite"
             aria-label="Unité de l’ingrédient"
             placeholder="g, ml…"
-            value="${valeurs.unite ?? ""}"
+            value="${echapperHtmlAjout(
+                valeurs.unite ??
+                ""
+            )}"
         >
 
         <input
@@ -883,8 +993,39 @@ function creerLigneIngredient(
             aria-label="Nom de l’ingrédient"
             placeholder="Ex. farine"
             required
-            value="${valeurs.nom ?? ""}"
+            value="${echapperHtmlAjout(
+                valeurs.nom ??
+                ""
+            )}"
         >
+
+
+        <div class="ingredient-recette-liee-zone">
+
+            <label class="ingredient-recette-liee-label">
+
+                Recette liée
+                <span>
+                    facultatif
+                </span>
+
+            </label>
+
+
+            <select
+                class="ingredient-recette-liee"
+                aria-label="Recette liée à cet ingrédient"
+            >
+
+                ${creerOptionsRecettesLiees(
+                    valeurs.recette_liee_id ||
+                    ""
+                )}
+
+            </select>
+
+        </div>
+
 
         <label class="option-proportionnelle">
 
@@ -902,6 +1043,7 @@ function creerLigneIngredient(
             Proportionnel
 
         </label>
+
 
         <button
             type="button"
@@ -931,11 +1073,6 @@ function creerLigneIngredient(
                         ".ligne-ingredient"
                     );
 
-
-            /*
-                On conserve toujours
-                au moins une ligne.
-            */
 
             if (
                 lignes.length ===
@@ -974,6 +1111,21 @@ function creerLigneIngredient(
                         true;
 
 
+                const selectRecetteLiee =
+                    ligne.querySelector(
+                        ".ingredient-recette-liee"
+                    );
+
+
+                if (
+                    selectRecetteLiee
+                ) {
+
+                    selectRecetteLiee.value =
+                        "";
+                }
+
+
                 return;
             }
 
@@ -987,6 +1139,38 @@ function creerLigneIngredient(
         .appendChild(
             ligne
         );
+}
+
+
+/* =================================
+   RAFRAÎCHIR LES SELECTS
+   DE RECETTES LIÉES
+================================= */
+
+function rafraichirSelectsRecettesLiees() {
+
+    const selects =
+        conteneurIngredients
+            .querySelectorAll(
+                ".ingredient-recette-liee"
+            );
+
+
+    selects.forEach(
+        function (
+            select
+        ) {
+
+            const valeurActuelle =
+                select.value;
+
+
+            select.innerHTML =
+                creerOptionsRecettesLiees(
+                    valeurActuelle
+                );
+        }
+    );
 }
 
 
@@ -1192,6 +1376,20 @@ function recupererIngredients() {
                     .checked;
 
 
+            const selectRecetteLiee =
+                ligne.querySelector(
+                    ".ingredient-recette-liee"
+                );
+
+
+            const recetteLieeId =
+                selectRecetteLiee
+                    ? selectRecetteLiee
+                        .value
+                        .trim()
+                    : "";
+
+
             const ligneVide =
                 quantiteTexte.trim() ===
                     "" &&
@@ -1220,6 +1418,23 @@ function recupererIngredients() {
             }
 
 
+            if (
+                recetteLieeId &&
+                identifiantRecette &&
+                String(
+                    recetteLieeId
+                ) ===
+                String(
+                    identifiantRecette
+                )
+            ) {
+
+                throw new Error(
+                    `L’ingrédient « ${nom} » ne peut pas être lié à cette même recette.`
+                );
+            }
+
+
             ingredients.push(
                 {
 
@@ -1235,7 +1450,11 @@ function recupererIngredients() {
                         nom,
 
                     proportionnel:
-                        proportionnel
+                        proportionnel,
+
+                    recette_liee_id:
+                        recetteLieeId ||
+                        null
 
                 }
             );
@@ -1452,7 +1671,6 @@ function construireRecette() {
 
         foyer_id:
             foyerId
-
     };
 }
 
@@ -1460,11 +1678,6 @@ function construireRecette() {
 /* =================================
    OUTILS PHOTOS
 ================================= */
-
-/*
-    Nombre total de photos
-    actuellement conservées.
-*/
 
 function obtenirNombrePhotosActuelles() {
 
@@ -1506,7 +1719,6 @@ function mettreAJourCompteurPhotos() {
             NOMBRE_MAX_PHOTOS;
     }
 }
-
 
 /* =================================
    MESSAGE PHOTOS
@@ -1634,6 +1846,7 @@ function verifierFichierPhoto(
     return true;
 }
 
+
 /* =================================
    AJOUTER LES FICHIERS SÉLECTIONNÉS
 ================================= */
@@ -1722,12 +1935,6 @@ function ajouterFichiersPhotos(
                 );
 
 
-                /*
-                    La nouvelle photo est
-                    ajoutée à la fin de l'ordre
-                    actuel.
-                */
-
                 ajouterPhotoDansOrdre(
                     "nouvelle",
                     photo.idLocal
@@ -1762,11 +1969,6 @@ function ajouterFichiersPhotos(
         );
     }
 
-
-    /*
-        Permet de sélectionner
-        de nouveau le même fichier.
-    */
 
     if (
         inputPhotosRecette
@@ -1876,12 +2078,6 @@ function retirerPhotoExistante(
         return;
     }
 
-
-    /*
-        On évite d'ajouter deux fois
-        la même photo à la liste
-        des suppressions.
-    */
 
     const dejaPresente =
         photosASupprimer.some(
@@ -2176,10 +2372,6 @@ if (
             evenement
         ) {
 
-            /* =========================
-               SUPPRESSION
-            ========================= */
-
             const boutonSuppression =
                 evenement.target.closest(
                     ".supprimer-photo-recette"
@@ -2231,10 +2423,6 @@ if (
             }
 
 
-            /* =========================
-               DÉPLACEMENT GAUCHE
-            ========================= */
-
             const boutonGauche =
                 evenement.target.closest(
                     ".deplacer-photo-gauche"
@@ -2262,10 +2450,6 @@ if (
                 return;
             }
 
-
-            /* =========================
-               DÉPLACEMENT DROITE
-            ========================= */
 
             const boutonDroite =
                 evenement.target.closest(
@@ -2303,10 +2487,6 @@ if (
     apercuPhotosRecette
 ) {
 
-    /* =========================
-       DÉBUT DU DRAG
-    ========================= */
-
     apercuPhotosRecette.addEventListener(
         "dragstart",
         function (
@@ -2338,7 +2518,6 @@ if (
                     element
                         .dataset
                         .photoId
-
             };
 
 
@@ -2355,11 +2534,6 @@ if (
                     "move";
 
 
-                /*
-                    Safari préfère souvent
-                    avoir une donnée explicite.
-                */
-
                 evenement.dataTransfer.setData(
                     "text/plain",
                     creerClePhoto(
@@ -2371,10 +2545,6 @@ if (
         }
     );
 
-
-    /* =========================
-       DRAG AU-DESSUS
-    ========================= */
 
     apercuPhotosRecette.addEventListener(
         "dragover",
@@ -2435,10 +2605,6 @@ if (
     );
 
 
-    /* =========================
-       DROP
-    ========================= */
-
     apercuPhotosRecette.addEventListener(
         "drop",
         function (
@@ -2497,10 +2663,6 @@ if (
     );
 
 
-    /* =========================
-       FIN DU DRAG
-    ========================= */
-
     apercuPhotosRecette.addEventListener(
         "dragend",
         function () {
@@ -2540,20 +2702,11 @@ if (
     apercuPhotosRecette
 ) {
 
-    /* =========================
-       DÉBUT TOUCH
-    ========================= */
-
     apercuPhotosRecette.addEventListener(
         "touchstart",
         function (
             evenement
         ) {
-
-            /*
-                On ne lance pas le drag
-                si on appuie sur un bouton.
-            */
 
             if (
                 evenement.target.closest(
@@ -2590,7 +2743,6 @@ if (
                     element
                         .dataset
                         .photoId
-
             };
 
 
@@ -2609,10 +2761,6 @@ if (
         }
     );
 
-
-    /* =========================
-       DÉPLACEMENT TOUCH
-    ========================= */
 
     apercuPhotosRecette.addEventListener(
         "touchmove",
@@ -2720,11 +2868,6 @@ if (
             }
 
 
-            /*
-                Réorganisation instantanée
-                pendant le déplacement.
-            */
-
             const [
                 photoDeplacee
             ] =
@@ -2745,11 +2888,6 @@ if (
                 true;
 
 
-            /*
-                On réaffiche pour que la position
-                visuelle suive le doigt.
-            */
-
             afficherApercuPhotos();
 
         },
@@ -2759,10 +2897,6 @@ if (
         }
     );
 
-
-    /* =========================
-       FIN TOUCH
-    ========================= */
 
     function terminerDeplacementTactile() {
 
@@ -2819,21 +2953,6 @@ if (
    CORRESPONDANCE DES NOUVELLES PHOTOS
    APRÈS INSERTION SUPABASE
 ================================= */
-
-/*
-    Lorsqu'une nouvelle photo est
-    sélectionnée, elle possède seulement
-    un idLocal.
-
-    Après son insertion dans
-    recette_photos, Supabase lui donne
-    un vrai id.
-
-    Cette Map permettra ensuite
-    d'enregistrer l'ordre final.
-
-    idLocal -> id Supabase
-*/
 
 const idsNouvellesPhotosEnregistrees =
     new Map();
@@ -3018,21 +3137,11 @@ async function compresserPhoto(
     fichier
 ) {
 
-    /*
-        Chargement de la photo
-        dans le navigateur.
-    */
-
     const image =
         await chargerImageDepuisFichier(
             fichier
         );
 
-
-    /*
-        Le plus grand côté sera
-        limité à 1600 px.
-    */
 
     const dimensions =
         calculerDimensionsPhoto(
@@ -3076,14 +3185,6 @@ async function compresserPhoto(
     }
 
 
-    /*
-        Fond blanc.
-
-        Utile si une image PNG
-        contient de la transparence
-        avant conversion en JPEG.
-    */
-
     contexte.fillStyle =
         "#ffffff";
 
@@ -3105,12 +3206,6 @@ async function compresserPhoto(
     );
 
 
-    /*
-        JPEG pour conserver une très
-        bonne compatibilité mobile,
-        notamment Safari / iPhone.
-    */
-
     const typeSortie =
         "image/jpeg";
 
@@ -3126,14 +3221,6 @@ async function compresserPhoto(
             qualite
         );
 
-
-    /*
-        Taille cible :
-        environ 1,5 Mo maximum.
-
-        Si nécessaire, on diminue
-        progressivement la qualité.
-    */
 
     const tailleCible =
         1.5 *
@@ -3160,11 +3247,6 @@ async function compresserPhoto(
             );
     }
 
-
-    /*
-        On transforme ensuite le Blob
-        en véritable File.
-    */
 
     const fichierCompresse =
         new File(
@@ -3284,14 +3366,6 @@ function construireCheminPhotoStorage(
     }
 
 
-    /*
-        Structure :
-
-        foyer_id/
-        recette_id/
-        fichier.jpg
-    */
-
     return (
         `${foyerId}/` +
         `${recetteId}/` +
@@ -3303,31 +3377,6 @@ function construireCheminPhotoStorage(
 /* =================================
    CALCULER UN ORDRE TEMPORAIRE
 ================================= */
-
-/*
-    Lorsqu'on ajoute une nouvelle photo,
-    on ne lui donne volontairement PAS
-    directement son ordre final.
-
-    Pourquoi ?
-
-    Exemple :
-
-    Photo A existante
-    Nouvelle photo
-    Photo B existante
-
-    A possède peut-être déjà ordre = 1
-    et B ordre = 2.
-
-    Si on insérait immédiatement
-    la nouvelle avec ordre = 2,
-    on pourrait créer une collision.
-
-    On utilise donc 1000, 1001...
-    puis la partie 4 remettra
-    tous les ordres à 1, 2, 3...
-*/
 
 function obtenirOrdreTemporairePhoto(
     index
@@ -3531,11 +3580,6 @@ async function uploaderNouvellesPhotos(
     }
 
 
-    /*
-        On repart d'une correspondance
-        propre à chaque enregistrement.
-    */
-
     idsNouvellesPhotosEnregistrees.clear();
 
 
@@ -3563,10 +3607,6 @@ async function uploaderNouvellesPhotos(
 
         try {
 
-            /* =========================
-               STORAGE
-            ========================= */
-
             photoUploadee =
                 await uploaderUnePhoto(
                     photo,
@@ -3574,10 +3614,6 @@ async function uploaderNouvellesPhotos(
                     index
                 );
 
-
-            /* =========================
-               BASE
-            ========================= */
 
             const photoEnregistree =
                 await enregistrerPhotoEnBase(
@@ -3596,17 +3632,6 @@ async function uploaderNouvellesPhotos(
             }
 
 
-            /*
-                On mémorise le lien :
-
-                idLocal
-                    ↓
-                id Supabase
-
-                Il sera utilisé pour
-                enregistrer l'ordre final.
-            */
-
             idsNouvellesPhotosEnregistrees.set(
                 String(
                     photo.idLocal
@@ -3618,13 +3643,6 @@ async function uploaderNouvellesPhotos(
         } catch (
             erreur
         ) {
-
-            /*
-                Si Storage a fonctionné
-                mais pas l'insertion SQL,
-                on supprime le fichier
-                devenu inutile.
-            */
 
             if (
                 photoUploadee?.chemin
@@ -3667,14 +3685,6 @@ async function creerUrlPhotoPrivee(
     }
 
 
-    /*
-        Le bucket est privé.
-
-        URL temporaire d'une heure
-        uniquement pour l'aperçu
-        du formulaire.
-    */
-
     const {
         data,
         error
@@ -3709,6 +3719,7 @@ async function creerUrlPhotoPrivee(
         ""
     );
 }
+
 
 /* =================================
    CHARGER LES PHOTOS EXISTANTES
@@ -3784,11 +3795,6 @@ async function chargerPhotosRecette(
             : [];
 
 
-    /*
-        Génération des URLs signées
-        en parallèle.
-    */
-
     photosExistantes =
         await Promise.all(
             lignes.map(
@@ -3814,12 +3820,6 @@ async function chargerPhotosRecette(
             )
         );
 
-
-    /*
-        Initialisation de l'ordre global
-        avec l'ordre actuellement stocké
-        dans Supabase.
-    */
 
     ordrePhotos =
         photosExistantes.map(
@@ -3883,7 +3883,6 @@ async function supprimerPhotoStorage(
     }
 }
 
-
 /* =================================
    SUPPRIMER UNE PHOTO DE LA BASE
 ================================= */
@@ -3943,13 +3942,6 @@ async function supprimerPhotosRetirees() {
             photosASupprimer
     ) {
 
-        /*
-            On supprime d'abord
-            la ligne SQL.
-
-            Puis le fichier Storage.
-        */
-
         await supprimerPhotoBase(
             photo.id
         );
@@ -3971,21 +3963,6 @@ async function supprimerPhotosRetirees() {
    EN IDS SUPABASE
 ================================= */
 
-/*
-    Avant enregistrement :
-
-    existante
-        -> possède déjà un id Supabase
-
-    nouvelle
-        -> possède un idLocal
-
-    Après uploaderNouvellesPhotos(),
-    idsNouvellesPhotosEnregistrees
-    permet de retrouver son nouvel
-    id Supabase.
-*/
-
 function construireOrdreFinalSupabase() {
 
     const ordreFinal =
@@ -4001,12 +3978,6 @@ function construireOrdreFinalSupabase() {
                 reference.type ===
                 "existante"
             ) {
-
-                /*
-                    Une photo qui a été retirée
-                    ne doit évidemment plus
-                    faire partie de l'ordre.
-                */
 
                 const existeEncore =
                     photosExistantes.some(
@@ -4123,28 +4094,6 @@ async function recupererPhotosSupabase(
    ENREGISTRER UN ORDRE TEMPORAIRE
 ================================= */
 
-/*
-    On commence par déplacer toutes
-    les photos vers une plage
-    temporaire très élevée.
-
-    Exemple :
-
-    10001
-    10002
-    10003
-
-    Ensuite seulement on remet :
-
-    1
-    2
-    3
-
-    Cela évite les collisions si
-    une contrainte unique existe
-    éventuellement sur l'ordre.
-*/
-
 async function appliquerOrdresTemporaires(
     idsPhotos
 ) {
@@ -4244,22 +4193,9 @@ async function enregistrerOrdrePhotos(
     recetteId
 ) {
 
-    /*
-        Ordre souhaité par l'utilisateur.
-    */
-
     let idsPhotos =
         construireOrdreFinalSupabase();
 
-
-    /*
-        En mode création, ou dans certains
-        cas de sécurité, ordrePhotos peut
-        ne pas encore contenir toutes les
-        photos réellement présentes.
-
-        On récupère donc les lignes SQL.
-    */
 
     const photosSupabase =
         await recupererPhotosSupabase(
@@ -4267,19 +4203,11 @@ async function enregistrerOrdrePhotos(
         );
 
 
-    /*
-        Si l'ordre global ne contient
-        aucune entrée exploitable,
-        on retombe simplement sur
-        l'ordre actuellement présent
-        en base.
-    */
-
     if (
         idsPhotos.length ===
-        0 &&
+            0 &&
         photosSupabase.length >
-        0
+            0
     ) {
 
         idsPhotos =
@@ -4293,17 +4221,6 @@ async function enregistrerOrdrePhotos(
             );
     }
 
-
-    /*
-        Sécurité :
-        toute photo réellement présente
-        en base mais absente de la liste
-        finale est ajoutée à la fin.
-
-        Cela évite qu'une photo soit
-        "perdue" à cause d'un état local
-        incomplet.
-    */
 
     const idsDejaPresents =
         new Set(
@@ -4357,20 +4274,10 @@ async function enregistrerOrdrePhotos(
     }
 
 
-    /*
-        Étape 1 :
-        ordres temporaires.
-    */
-
     await appliquerOrdresTemporaires(
         idsPhotos
     );
 
-
-    /*
-        Étape 2 :
-        ordre réel 1, 2, 3...
-    */
 
     await appliquerOrdreFinal(
         idsPhotos
@@ -4386,12 +4293,6 @@ async function enregistrerOrdrePhotos(
 async function rechargerEtatPhotos(
     recetteId
 ) {
-
-    /*
-        Les anciennes URLs blob
-        des nouvelles photos locales
-        ne sont plus nécessaires.
-    */
 
     nouvellesPhotos.forEach(
         function (
@@ -4433,12 +4334,6 @@ async function rechargerEtatPhotos(
     idsNouvellesPhotosEnregistrees.clear();
 
 
-    /*
-        On recharge ensuite les vraies
-        lignes depuis Supabase avec
-        le nouvel ordre.
-    */
-
     await chargerPhotosRecette(
         recetteId
     );
@@ -4457,17 +4352,6 @@ async function enregistrerPhotosRecette(
     recetteId
 ) {
 
-    /*
-        Important :
-
-        on conserve une copie de
-        ordrePhotos AVANT de vider
-        les états locaux.
-
-        Elle contient encore les
-        références aux nouvelles photos.
-    */
-
     const ordreAvantEnregistrement =
         ordrePhotos.map(
             function (
@@ -4481,48 +4365,22 @@ async function enregistrerPhotosRecette(
         );
 
 
-    /* =========================
-       1. SUPPRESSIONS
-    ========================= */
-
     await supprimerPhotosRetirees();
 
-
-    /* =========================
-       2. UPLOAD DES NOUVELLES
-    ========================= */
 
     await uploaderNouvellesPhotos(
         recetteId
     );
 
 
-    /*
-        uploaderNouvellesPhotos()
-        a maintenant rempli :
-
-        idsNouvellesPhotosEnregistrees
-
-        On remet l'ordre local choisi
-        avant l'enregistrement.
-    */
-
     ordrePhotos =
         ordreAvantEnregistrement;
 
-
-    /* =========================
-       3. ORDRE FINAL
-    ========================= */
 
     await enregistrerOrdrePhotos(
         recetteId
     );
 
-
-    /* =========================
-       4. RECHARGEMENT
-    ========================= */
 
     await rechargerEtatPhotos(
         recetteId
@@ -4544,6 +4402,7 @@ function photosOntEteModifiees() {
         ordrePhotosModifie
     );
 }
+
 
 /* =================================
    COCHER LES FILTRES
@@ -4727,10 +4586,13 @@ function remplirFormulaire(
     );
 
 
-    conteneurIngredients
-        .innerHTML =
-            "";
+    conteneurIngredients.innerHTML =
+        "";
 
+
+    /* =========================
+       INGRÉDIENTS + RECETTES LIÉES
+    ========================= */
 
     if (
         Array.isArray(
@@ -4740,10 +4602,29 @@ function remplirFormulaire(
             0
     ) {
 
-        recette.ingredients
-            .forEach(
-                creerLigneIngredient
-            );
+        recette.ingredients.forEach(
+            function (
+                ingredient
+            ) {
+
+                /*
+                    creerLigneIngredient()
+                    reçoit l'objet complet.
+
+                    Si l'ingrédient contient :
+
+                    recette_liee_id: "..."
+
+                    le select sera
+                    automatiquement positionné
+                    sur la bonne recette.
+                */
+
+                creerLigneIngredient(
+                    ingredient
+                );
+            }
+        );
 
     } else {
 
@@ -4764,8 +4645,12 @@ async function chargerRecetteAModifier() {
     ) {
 
         /*
-            Nouvelle recette :
-            quelques lignes déjà prêtes.
+            Nouvelle recette.
+
+            Les recettes disponibles
+            pour liaison ont déjà été
+            chargées lors de
+            l'initialisation générale.
         */
 
         creerLigneIngredient();
@@ -4889,6 +4774,17 @@ async function chargerRecetteAModifier() {
             );
         }
 
+
+        /*
+            Important :
+            les recettes disponibles
+            pour liaison doivent déjà
+            être chargées AVANT ceci.
+
+            Ainsi les selects peuvent
+            directement afficher
+            la recette liée enregistrée.
+        */
 
         remplirFormulaire(
             data
@@ -5038,15 +4934,18 @@ async function modifierRecette(
    AJOUTER UNE LIGNE INGRÉDIENT
 ================================= */
 
-boutonAjouterIngredient
-    .addEventListener(
+if (
+    boutonAjouterIngredient
+) {
+
+    boutonAjouterIngredient.addEventListener(
         "click",
         function () {
 
             creerLigneIngredient();
         }
     );
-
+}
 
 /* =================================
    VÉRIFIER LES PHOTOS
@@ -5070,6 +4969,33 @@ function verifierPhotosAvantEnregistrement() {
 
 
     return true;
+}
+
+
+/* =================================
+   VERROUILLER LES RECETTES LIÉES
+================================= */
+
+function verrouillerRecettesLiees(
+    verrouille
+) {
+
+    const selects =
+        conteneurIngredients
+            .querySelectorAll(
+                ".ingredient-recette-liee"
+            );
+
+
+    selects.forEach(
+        function (
+            select
+        ) {
+
+            select.disabled =
+                verrouille;
+        }
+    );
 }
 
 
@@ -5180,6 +5106,20 @@ function mettreFormulaireEnEnregistrement(
     );
 
 
+    verrouillerRecettesLiees(
+        actif
+    );
+
+
+    if (
+        boutonAjouterIngredient
+    ) {
+
+        boutonAjouterIngredient.disabled =
+            actif;
+    }
+
+
     if (
         actif
     ) {
@@ -5227,6 +5167,15 @@ async function enregistrerRecetteComplete() {
 
     verifierPhotosAvantEnregistrement();
 
+
+    /*
+        construireRecette() récupère
+        maintenant aussi :
+
+        recette_liee_id
+
+        pour chaque ingrédient.
+    */
 
     const recette =
         construireRecette();
@@ -5501,7 +5450,7 @@ async function initialiserPageAjout() {
     try {
 
         /* =========================
-           UTILISATEUR
+           1. UTILISATEUR
         ========================= */
 
         utilisateurConnecte =
@@ -5517,7 +5466,7 @@ async function initialiserPageAjout() {
 
 
         /* =========================
-           FOYER
+           2. FOYER
         ========================= */
 
         const foyer =
@@ -5533,10 +5482,40 @@ async function initialiserPageAjout() {
 
 
         /* =========================
-           RECETTE
+           3. RECETTES LIÉES
+        ========================= */
+
+        /*
+            Important :
+
+            on charge cette liste AVANT
+            de créer les lignes ingrédients.
+
+            Comme ça, les <select>
+            sont remplis immédiatement
+            aussi bien en création
+            qu'en modification.
+        */
+
+        messageFormulaire.textContent =
+            "Chargement des recettes disponibles…";
+
+
+        await chargerRecettesDisponiblesPourLiaison();
+
+
+        /* =========================
+           4. RECETTE
         ========================= */
 
         await chargerRecetteAModifier();
+
+
+        /* =========================
+           5. SÉCURITÉ SELECTS
+        ========================= */
+
+        rafraichirSelectsRecettesLiees();
 
 
         boutonEnregistrer.disabled =
@@ -5544,6 +5523,10 @@ async function initialiserPageAjout() {
 
 
         mettreAJourCompteurPhotos();
+
+
+        messageFormulaire.textContent =
+            "";
 
 
         console.log(
@@ -5558,6 +5541,9 @@ async function initialiserPageAjout() {
 
                 foyerId:
                     foyerId,
+
+                recettesDisponiblesPourLiaison:
+                    recettesDisponiblesPourLiaison.length,
 
                 photosExistantes:
                     photosExistantes.length,
@@ -5595,3 +5581,4 @@ async function initialiserPageAjout() {
 ================================= */
 
 initialiserPageAjout();
+
