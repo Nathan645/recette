@@ -776,7 +776,6 @@ function convertirDureeCuisineEnSecondes(
     );
 }
 
-
 /* =================================
    CHARGEMENT DE LA RECETTE
 ================================= */
@@ -919,14 +918,9 @@ async function chargerRecette() {
         );
 
 
-        /*
-            On récupère les éventuels
-            minuteurs déjà actifs pour
-            cette recette.
-
-            Leur gestion complète arrive
-            dans les prochaines parties.
-        */
+        /* =========================
+           MINUTEURS
+        ========================= */
 
         chargerMinuteursCuisineDepuisStockage();
 
@@ -1453,6 +1447,92 @@ function formaterQuantite(
         );
 }
 
+
+/* =================================
+   RECETTE LIÉE
+================================= */
+
+/*
+    Génère le petit lien affiché
+    lorsqu'un ingrédient renvoie
+    vers une autre recette.
+
+    Exemple :
+
+    Sauce BBQ
+    Voir la recette →
+*/
+
+function creerLienRecetteLieeHtml(
+    ingredient,
+    modeCuisine = false
+) {
+
+    if (
+        !ingredient ||
+        typeof ingredient !==
+            "object" ||
+        !ingredient.recette_liee_id
+    ) {
+
+        return "";
+    }
+
+
+    const recetteLieeId =
+        String(
+            ingredient.recette_liee_id
+        );
+
+
+    /*
+        Sécurité supplémentaire :
+        une recette ne doit normalement
+        jamais pointer vers elle-même.
+    */
+
+    if (
+        identifiantRecette &&
+        recetteLieeId ===
+            String(
+                identifiantRecette
+            )
+    ) {
+
+        return "";
+    }
+
+
+    const classe =
+        modeCuisine
+            ? "lien-recette-liee lien-recette-liee-cuisine"
+            : "lien-recette-liee";
+
+
+    return `
+
+        <a
+            href="recette.html?id=${encodeURIComponent(
+                recetteLieeId
+            )}"
+            class="${classe}"
+        >
+            <span>
+                Voir la recette
+            </span>
+
+            <span
+                class="fleche-recette-liee"
+                aria-hidden="true"
+            >
+                →
+            </span>
+        </a>
+
+    `;
+}
+
+
 /* =================================
    AFFICHER LA GALERIE
 ================================= */
@@ -1490,6 +1570,7 @@ function afficherGalerieRecette() {
 
             indicateursCarouselRecette.innerHTML =
                 "";
+
 
             indicateursCarouselRecette.hidden =
                 true;
@@ -1594,6 +1675,7 @@ function afficherGalerieRecette() {
             indicateursCarouselRecette.innerHTML =
                 "";
 
+
             indicateursCarouselRecette.hidden =
                 true;
         }
@@ -1646,6 +1728,7 @@ function afficherIndicateursCarousel() {
 
         indicateursCarouselRecette.innerHTML =
             "";
+
 
         indicateursCarouselRecette.hidden =
             true;
@@ -2002,6 +2085,7 @@ if (
                 positionTouchDebut =
                     null;
 
+
                 positionTouchFin =
                     null;
 
@@ -2024,6 +2108,7 @@ if (
 
                 positionTouchDebut =
                     null;
+
 
                 positionTouchFin =
                     null;
@@ -2070,16 +2155,6 @@ document.addEventListener(
     function (
         evenement
     ) {
-
-        /*
-            Si le mode cuisine est ouvert,
-            les flèches seront utilisées
-            pour les étapes et non
-            pour les photos.
-
-            La gestion arrivera
-            dans la partie 3.
-        */
 
         if (
             modeCuisine &&
@@ -2462,7 +2537,6 @@ async function supprimerRecette() {
     }
 }
 
-
 /* =================================
    AFFICHAGE DE LA RECETTE
 ================================= */
@@ -2677,6 +2751,10 @@ function afficherRecette(
                     index
                 ) {
 
+                    /* =========================
+                       ANCIENS INGRÉDIENTS TEXTE
+                    ========================= */
+
                     if (
                         typeof ingredient ===
                         "string"
@@ -2692,19 +2770,27 @@ function afficherRecette(
                                     class="case-ingredient"
                                 >
 
-                                <label
-                                    for="ingredient-${index}"
-                                >
-                                    ${echapperHtmlRecette(
-                                        ingredient
-                                    )}
-                                </label>
+                                <div class="contenu-ingredient-recette">
+
+                                    <label
+                                        for="ingredient-${index}"
+                                    >
+                                        ${echapperHtmlRecette(
+                                            ingredient
+                                        )}
+                                    </label>
+
+                                </div>
 
                             </li>
 
                         `;
                     }
 
+
+                    /* =========================
+                       QUANTITÉ
+                    ========================= */
 
                     const ingredientProportionnel =
                         ingredient.proportionnel !==
@@ -2765,9 +2851,26 @@ function afficherRecette(
                     }
 
 
+                    /* =========================
+                       RECETTE LIÉE
+                    ========================= */
+
+                    const lienRecetteLiee =
+                        creerLienRecetteLieeHtml(
+                            ingredient,
+                            false
+                        );
+
+
                     return `
 
-                        <li class="ingredient-item">
+                        <li
+                            class="ingredient-item ${
+                                lienRecetteLiee
+                                    ? "ingredient-avec-recette-liee"
+                                    : ""
+                            }"
+                        >
 
                             <input
                                 type="checkbox"
@@ -2775,13 +2878,21 @@ function afficherRecette(
                                 class="case-ingredient"
                             >
 
-                            <label
-                                for="ingredient-${index}"
-                            >
-                                ${echapperHtmlRecette(
-                                    texteIngredient
-                                )}
-                            </label>
+
+                            <div class="contenu-ingredient-recette">
+
+                                <label
+                                    for="ingredient-${index}"
+                                >
+                                    ${echapperHtmlRecette(
+                                        texteIngredient
+                                    )}
+                                </label>
+
+
+                                ${lienRecetteLiee}
+
+                            </div>
 
                         </li>
 
@@ -3124,11 +3235,6 @@ function afficherRecette(
             "click",
             function () {
 
-                /*
-                    La fonction complète
-                    arrive dans la partie 3.
-                */
-
                 ouvrirModeCuisine();
             }
         );
@@ -3224,12 +3330,6 @@ function afficherRecette(
         activerCasesIngredients();
 
 
-        /*
-            Si on ouvre ensuite le mode cuisine,
-            on récupérera également ce nombre
-            de portions actuellement sélectionné.
-        */
-
         personnesModeCuisine =
             personnesSelectionnees;
     }
@@ -3312,6 +3412,7 @@ function afficherRecette(
         }
     );
 }
+
 
 /* =================================
    MODE CUISINE
@@ -3432,6 +3533,10 @@ function creerIngredientsCuisineHtml() {
                             index
                         ) {
 
+                            /* =========================
+                               ANCIEN FORMAT TEXTE
+                            ========================= */
+
                             if (
                                 typeof ingredient ===
                                 "string"
@@ -3447,19 +3552,28 @@ function creerIngredientsCuisineHtml() {
                                             class="case-ingredient-cuisine"
                                         >
 
-                                        <label
-                                            for="ingredient-cuisine-${index}"
-                                        >
-                                            ${echapperHtmlRecette(
-                                                ingredient
-                                            )}
-                                        </label>
+
+                                        <div class="contenu-ingredient-cuisine">
+
+                                            <label
+                                                for="ingredient-cuisine-${index}"
+                                            >
+                                                ${echapperHtmlRecette(
+                                                    ingredient
+                                                )}
+                                            </label>
+
+                                        </div>
 
                                     </li>
 
                                 `;
                             }
 
+
+                            /* =========================
+                               QUANTITÉ
+                            ========================= */
 
                             const proportionnel =
                                 ingredient.proportionnel !==
@@ -3520,9 +3634,26 @@ function creerIngredientsCuisineHtml() {
                             }
 
 
+                            /* =========================
+                               RECETTE LIÉE
+                            ========================= */
+
+                            const lienRecetteLiee =
+                                creerLienRecetteLieeHtml(
+                                    ingredient,
+                                    true
+                                );
+
+
                             return `
 
-                                <li>
+                                <li
+                                    class="${
+                                        lienRecetteLiee
+                                            ? "ingredient-cuisine-avec-recette-liee"
+                                            : ""
+                                    }"
+                                >
 
                                     <input
                                         type="checkbox"
@@ -3530,13 +3661,21 @@ function creerIngredientsCuisineHtml() {
                                         class="case-ingredient-cuisine"
                                     >
 
-                                    <label
-                                        for="ingredient-cuisine-${index}"
-                                    >
-                                        ${echapperHtmlRecette(
-                                            texte
-                                        )}
-                                    </label>
+
+                                    <div class="contenu-ingredient-cuisine">
+
+                                        <label
+                                            for="ingredient-cuisine-${index}"
+                                        >
+                                            ${echapperHtmlRecette(
+                                                texte
+                                            )}
+                                        </label>
+
+
+                                        ${lienRecetteLiee}
+
+                                    </div>
 
                                 </li>
 
@@ -3983,18 +4122,6 @@ function ouvrirModeCuisine() {
     }
 
 
-    const etapes =
-        obtenirEtapesCuisine();
-
-
-    /*
-        À chaque nouvelle ouverture,
-        on repart de l'étape 1.
-
-        Les minuteurs existants
-        restent actifs.
-    */
-
     indexEtapeCuisine =
         0;
 
@@ -4053,13 +4180,6 @@ function ouvrirModeCuisine() {
     afficherMinuteursCuisine();
 
 
-    /*
-        Si des minuteurs ont été
-        restaurés du localStorage
-        mais que l'intervalle n'est
-        pas encore actif, on le lance.
-    */
-
     demarrerBoucleMinuteursCuisine();
 
 
@@ -4075,11 +4195,6 @@ function ouvrirModeCuisine() {
         "mode-cuisine-ouvert"
     );
 
-
-    /*
-        Sur mobile, on remonte
-        systématiquement en haut.
-    */
 
     modeCuisine.scrollTop =
         0;
@@ -4110,8 +4225,8 @@ function fermerModeCuisineInterface() {
 
 
     /*
-        Très important :
-        on ne stoppe PAS les minuteurs.
+        On ne stoppe PAS
+        les minuteurs.
     */
 }
 
@@ -4221,11 +4336,6 @@ if (
         "click",
         function () {
 
-            /*
-                Cette fonction sera
-                définie dans la partie 4.
-            */
-
             ouvrirPopupMinuteurCuisine(
                 indexEtapeCuisine
             );
@@ -4252,12 +4362,6 @@ document.addEventListener(
             return;
         }
 
-
-        /*
-            Si une popup minuteur
-            est ouverte, on ne navigue
-            pas entre les étapes.
-        */
 
         if (
             popupMinuteurCuisine &&
@@ -4456,12 +4560,6 @@ function chargerMinuteursCuisineDepuisStockage() {
                         };
 
 
-                        /*
-                            Si le minuteur était actif,
-                            on recalcule le temps restant
-                            à partir de son heure de fin.
-                        */
-
                         if (
                             copie.actif &&
                             copie.heureFin
@@ -4502,16 +4600,6 @@ function chargerMinuteursCuisineDepuisStockage() {
                         return copie;
                     }
                 );
-
-
-        /*
-            On retire les anciens minuteurs
-            terminés depuis longtemps si besoin.
-
-            Pour l'instant on les garde :
-            l'utilisateur peut les voir
-            et les supprimer lui-même.
-        */
 
 
         afficherMinuteursCuisine();
@@ -5035,12 +5123,6 @@ function basculerPauseMinuteurCuisine(
         minuteur.actif
     ) {
 
-        /*
-            Pause :
-            on calcule précisément
-            ce qu'il reste.
-        */
-
         const restant =
             Math.ceil(
                 (
@@ -5067,11 +5149,6 @@ function basculerPauseMinuteurCuisine(
 
 
     } else {
-
-        /*
-            Reprise :
-            nouvelle heure de fin.
-        */
 
         minuteur.actif =
             true;
@@ -5330,7 +5407,6 @@ function demarrerBoucleMinuteursCuisine() {
         );
 }
 
-
 /* =================================
    STOPPER BOUCLE SI INUTILE
 ================================= */
@@ -5375,11 +5451,6 @@ function signalerFinMinuteurCuisine(
     minuteur
 ) {
 
-    /*
-        Vibration si le navigateur
-        la permet.
-    */
-
     if (
         navigator.vibrate
     ) {
@@ -5408,25 +5479,8 @@ function signalerFinMinuteurCuisine(
     }
 
 
-    /*
-        Petite alerte sonore native
-        via Web Audio.
-
-        Aucun fichier audio externe
-        n'est nécessaire.
-    */
-
     jouerSonMinuteurCuisine();
 
-
-    /*
-        Si le mode cuisine est ouvert,
-        la carte devient déjà visuellement
-        "Terminée".
-
-        On ajoute aussi une notification
-        navigateur si elle est autorisée.
-    */
 
     envoyerNotificationMinuteurCuisine(
         minuteur
@@ -5885,6 +5939,7 @@ if (
     );
 }
 
+
 /* =================================
    ÉVÉNEMENTS POPUP PLANNING
 ================================= */
@@ -6179,11 +6234,6 @@ document.addEventListener(
         }
 
 
-        /*
-            1.
-            Popup minuteur prioritaire.
-        */
-
         if (
             popupMinuteurCuisine &&
             !popupMinuteurCuisine.hidden
@@ -6198,11 +6248,6 @@ document.addEventListener(
             return;
         }
 
-
-        /*
-            2.
-            Confirmation planning.
-        */
 
         if (
             popupConfirmationPlanning &&
@@ -6221,11 +6266,6 @@ document.addEventListener(
         }
 
 
-        /*
-            3.
-            Popup planning.
-        */
-
         if (
             popupAjoutPlanning &&
             !popupAjoutPlanning.hidden
@@ -6240,11 +6280,6 @@ document.addEventListener(
             return;
         }
 
-
-        /*
-            4.
-            Mode cuisine.
-        */
 
         if (
             modeCuisine &&
@@ -6329,6 +6364,7 @@ function ouvrirPopupAjoutPlanning() {
         window.alert(
             "Vous devez appartenir à un foyer pour ajouter une recette au planning."
         );
+
 
         return;
     }
@@ -6579,6 +6615,7 @@ function masquerMessagePlanning() {
     );
 }
 
+
 /* =================================
    PRÉPARER POPUP PLANNING
 ================================= */
@@ -6765,12 +6802,6 @@ window.addEventListener(
     "pagehide",
     function () {
 
-        /*
-            On sauvegarde une dernière
-            fois les minuteurs avant
-            de quitter la page.
-        */
-
         sauvegarderMinuteursCuisine();
 
 
@@ -6785,17 +6816,6 @@ window.addEventListener(
 /* =================================
    VISIBILITÉ DE L'ONGLET
 ================================= */
-
-/*
-    Les navigateurs ralentissent parfois
-    les setInterval lorsque l'onglet
-    est en arrière-plan.
-
-    Comme chaque minuteur possède
-    heureFin, on peut recalculer
-    exactement le temps restant
-    quand l'utilisateur revient.
-*/
 
 document.addEventListener(
     "visibilitychange",
@@ -6901,14 +6921,6 @@ async function initialiserPageRecette() {
             );
 
 
-        /*
-            chargerRecette() recharge déjà
-            les minuteurs depuis localStorage.
-
-            On force juste un rafraîchissement
-            final de leur affichage.
-        */
-
         mettreAJourMinuteursCuisine();
 
 
@@ -6946,7 +6958,28 @@ async function initialiserPageRecette() {
                         : 0,
 
                 minuteurs:
-                    minuteursCuisine.length
+                    minuteursCuisine.length,
+
+                ingredientsLies:
+                    Array.isArray(
+                        recetteChargee?.ingredients
+                    )
+                        ? recetteChargee.ingredients.filter(
+                            function (
+                                ingredient
+                            ) {
+
+                                return (
+                                    ingredient &&
+                                    typeof ingredient ===
+                                        "object" &&
+                                    Boolean(
+                                        ingredient.recette_liee_id
+                                    )
+                                );
+                            }
+                        ).length
+                        : 0
 
             }
         );
