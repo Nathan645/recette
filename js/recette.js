@@ -2485,6 +2485,43 @@ return `
             .join(
                 ""
             );
+
+       listeIngredients
+    .querySelectorAll(
+        ".bouton-recette-liee"
+    )
+    .forEach(
+        function (
+            bouton
+        ) {
+
+            bouton.addEventListener(
+                "click",
+                function () {
+
+                    const recetteId =
+                        bouton.dataset
+                            .recetteLieeId;
+
+
+                    if (
+                        !recetteId
+                    ) {
+
+                        return;
+                    }
+
+
+                    window.open(
+                        `recette.html?id=${encodeURIComponent(
+                            recetteId
+                        )}`,
+                        "_blank"
+                    );
+                }
+            );
+        }
+    );
 }
 
 
@@ -2590,62 +2627,8 @@ return `
     }
 }
 
-function brancherBoutonsRecettesLieesFiche() {
-
-    if (
-        !listeIngredients
-    ) {
-
-        return;
-    }
 
 
-    const boutons =
-        listeIngredients
-            .querySelectorAll(
-                ".bouton-recette-liee"
-            );
-
-
-    boutons.forEach(
-        function (
-            bouton
-        ) {
-
-            bouton.addEventListener(
-                "click",
-                function () {
-
-                    const recetteId =
-                        bouton.dataset
-                            .recetteLieeId;
-
-
-                    if (
-                        !recetteId
-                    ) {
-
-                        return;
-                    }
-
-
-                    const url =
-                        `recette.html?id=${encodeURIComponent(
-                            recetteId
-                        )}`;
-
-
-                    window.open(
-                       url,
-                       "_blank"
-                    );
-                }
-            );
-        }
-    );
-}
-
-brancherBoutonsRecettesLieesFiche();
 /* =================================
    NORMALISER LES INGRÉDIENTS
 ================================= */
@@ -4697,8 +4680,7 @@ boutonsRecettesLiees.forEach(
 
                 window.open(
                     url,
-                    "_blank",
-                    "noopener,noreferrer"
+                    "_blank"
                 );
             }
         );
