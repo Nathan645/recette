@@ -2392,43 +2392,101 @@ const texte =
 
     function actualiserIngredientsFiche() {
 
-        if (
-            !listeIngredients
-        ) {
+    if (
+        !listeIngredients
+    ) {
 
-            return;
-        }
+        return;
+    }
 
-        listeIngredients.innerHTML =
-            ingredients
-                .map(
-                    function (
-                        ingredient
+
+    listeIngredients.innerHTML =
+        ingredients
+            .map(
+                function (
+                    ingredient
+                ) {
+
+                    const texte =
+                        formaterIngredientAffichage(
+                            ingredient,
+                            personnesModeCuisine
+                        );
+
+
+                    const recetteLieeId =
+                        ingredient.recette_liee_id
+                            ? String(
+                                ingredient.recette_liee_id
+                            )
+                            : null;
+
+
+                    /*
+                        Si l'ingrédient correspond
+                        à une autre recette,
+                        toute la ligne devient cliquable.
+                    */
+
+                    if (
+                        recetteLieeId &&
+                        recetteLieeId !==
+                            String(
+                                identifiantRecette
+                            )
                     ) {
 
-                        const texte =
-                            formaterIngredientAffichage(
-                                ingredient,
-                                personnesModeCuisine
-                            );
-
                         return `
-                            <li class="ingredient-item">
-                                <span>
-                                    ${
-                                        echapperHtml(
-                                            texte
-                                        )
-                                    }
-                                </span>
+                            <li
+                                class="ingredient-item ingredient-recette-liee"
+                            >
+                                <a
+                                    href="recette.html?id=${encodeURIComponent(
+                                        recetteLieeId
+                                    )}"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="lien-recette-liee-fiche"
+                                    title="Ouvrir cette recette dans un nouvel onglet"
+                                >
+                                    <span>
+                                        ${
+                                            echapperHtml(
+                                                texte
+                                            )
+                                        }
+                                    </span>
+
+                                    <span class="indicateur-recette-liee">
+                                        Recette ↗
+                                    </span>
+                                </a>
                             </li>
                         `;
                     }
-                )
-                .join(
-                    ""
-                );
-    }
+
+
+                    /*
+                        Ingrédient classique
+                    */
+
+                    return `
+                        <li class="ingredient-item">
+                            <span>
+                                ${
+                                    echapperHtml(
+                                        texte
+                                    )
+                                }
+                            </span>
+                        </li>
+                    `;
+                }
+            )
+            .join(
+                ""
+            );
+}
 
 
     function actualiserPortionsFiche() {
@@ -4434,38 +4492,40 @@ function afficherIngredientsCuisine() {
 
 
                     const recetteLieeId =
-                        ingredient.recette_liee_id
-                            ? String(
-                                ingredient.recette_liee_id
-                            )
-                            : null;
+    ingredient.recette_liee_id
+        ? String(
+            ingredient.recette_liee_id
+        )
+        : null;
 
 
-                    let lienRecette =
-                        "";
+let lienRecette =
+    "";
 
 
-                    if (
-                        recetteLieeId &&
-                        recetteLieeId !==
-                            String(
-                                identifiantRecette
-                            )
-                    ) {
+if (
+    recetteLieeId &&
+    recetteLieeId !==
+        String(
+            identifiantRecette
+        )
+) {
 
-                        lienRecette =
-                            `
-                                <a
-                                    href="recette.html?id=${encodeURIComponent(
-                                        recetteLieeId
-                                    )}"
-                                    class="lien-recette-liee-cuisine"
-                                >
-                                    Voir la recette →
-                                </a>
-                            `;
-                    }
-
+    lienRecette =
+        `
+            <a
+                href="recette.html?id=${encodeURIComponent(
+                    recetteLieeId
+                )}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="lien-recette-liee-cuisine"
+                title="Ouvrir cette recette dans un nouvel onglet"
+            >
+                Recette liée ↗
+            </a>
+        `;
+}
 
                     return `
                         <div
