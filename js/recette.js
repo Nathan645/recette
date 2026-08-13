@@ -2026,9 +2026,10 @@ document.addEventListener(
 );
 
 
-/* =================================
-   AFFICHER LA RECETTE
-================================= */
+/* =========================================================
+   REMPLACER EN ENTIER LA FONCTION afficherRecette(recette)
+   DANS js/recette.js PAR CE BLOC
+   ========================================================= */
 
 function afficherRecette(
     recette
@@ -2038,30 +2039,28 @@ function afficherRecette(
         recette.nom ||
         "Recette";
 
-
     const description =
         recette.description ||
         "";
 
-
     const categorie =
+        recette.categorie_affichee ||
         recette.categorie ||
         "";
 
-
     const tempsPreparation =
         Number(
+            recette.preparation ??
             recette.temps_preparation
         ) || 0;
 
-
     const tempsCuisson =
         Number(
+            recette.cuisson ??
             recette.temps_cuisson
         ) || 0;
 
-
-    const personnes =
+    const personnesInitiales =
         Math.max(
             1,
             Number(
@@ -2069,247 +2068,424 @@ function afficherRecette(
             ) || 1
         );
 
+    personnesModeCuisine =
+        personnesInitiales;
 
     const ingredients =
         normaliserIngredientsRecette(
             recette.ingredients
         );
 
-
     const etapes =
         normaliserEtapesRecette(
             recette.etapes
         );
 
+    const valeursBadges =
+        [];
 
-    personnesModeCuisine =
-        personnes;
+    [
+        recette.regimes,
+        recette.occasions,
+        recette.saisons
+    ].forEach(
+        function (
+            groupe
+        ) {
 
+            if (
+                Array.isArray(
+                    groupe
+                )
+            ) {
 
-    let html =
+                groupe.forEach(
+                    function (
+                        valeur
+                    ) {
+
+                        const texte =
+                            String(
+                                valeur ||
+                                ""
+                            ).trim();
+
+                        if (
+                            texte &&
+                            !valeursBadges.includes(
+                                texte
+                            )
+                        ) {
+
+                            valeursBadges.push(
+                                texte
+                            );
+                        }
+                    }
+                );
+            }
+        }
+    );
+
+    const badgesHtml =
+        valeursBadges
+            .map(
+                function (
+                    valeur
+                ) {
+
+                    return `
+                        <span class="badge-recette">
+                            ${
+                                echapperHtml(
+                                    valeur
+                                )
+                            }
+                        </span>
+                    `;
+                }
+            )
+            .join(
+                ""
+            );
+
+    contenuRecette.innerHTML =
         `
             <article class="fiche-recette">
 
-                <header class="entete-fiche-recette">
+                <div class="contenu">
 
-                    <div>
-
-                        ${
-                            categorie
-                                ? `
-                                    <span class="categorie-recette">
+                    ${
+                        categorie
+                            ? `
+                                <div class="badges-principaux">
+                                    <span class="categorie">
                                         ${
                                             echapperHtml(
                                                 categorie
                                             )
                                         }
                                     </span>
-                                `
-                                : ""
-                        }
+                                </div>
+                            `
+                            : ""
+                    }
 
-                        <h1>
-                            ${
-                                echapperHtml(
-                                    nom
-                                )
-                            }
-                        </h1>
-
+                    <h1>
                         ${
-                            description
-                                ? `
-                                    <p class="description-recette">
-                                        ${
-                                            echapperHtml(
-                                                description
-                                            )
-                                        }
-                                    </p>
-                                `
-                                : ""
+                            echapperHtml(
+                                nom
+                            )
                         }
+                    </h1>
+
+                    ${
+                        description
+                            ? `
+                                <p class="introduction">
+                                    ${
+                                        echapperHtml(
+                                            description
+                                        )
+                                    }
+                                </p>
+                            `
+                            : ""
+                    }
+
+                    ${
+                        badgesHtml
+                            ? `
+                                <div class="badges-recette">
+                                    ${badgesHtml}
+                                </div>
+                            `
+                            : ""
+                    }
+
+                    <div class="actions-gestion-recette">
+
+                        <button
+                            type="button"
+                            class="bouton-mode-cuisine"
+                            id="ouvrir-mode-cuisine"
+                        >
+                            Mode cuisine
+                        </button>
+
+                        <button
+                            type="button"
+                            class="bouton-ajouter-planning"
+                            id="ajouter-recette-planning"
+                        >
+                            Ajouter au planning
+                        </button>
 
                     </div>
 
-                </header>
+                    <div class="informations-recette">
 
+                        <div class="information">
+                            <strong>
+                                Préparation
+                            </strong>
 
+                            <span>
+                                ${tempsPreparation} min
+                            </span>
+                        </div>
 
-                <section class="infos-recette">
+                        <div class="information">
+                            <strong>
+                                Cuisson
+                            </strong>
 
-                    <div>
-                        <span>Préparation</span>
-                        <strong>
-                            ${tempsPreparation} min
-                        </strong>
+                            <span>
+                                ${tempsCuisson} min
+                            </span>
+                        </div>
+
+                        <div class="information information-portions">
+
+                            <strong>
+                                Portions
+                            </strong>
+
+                            <div class="controle-portions">
+
+                                <button
+                                    type="button"
+                                    class="bouton-portion"
+                                    id="diminuer-portions"
+                                    aria-label="Diminuer le nombre de personnes"
+                                >
+                                    −
+                                </button>
+
+                                <span
+                                    class="nombre-portions"
+                                    id="nombre-portions"
+                                >
+                                    ${personnesModeCuisine}
+                                </span>
+
+                                <button
+                                    type="button"
+                                    class="bouton-portion"
+                                    id="augmenter-portions"
+                                    aria-label="Augmenter le nombre de personnes"
+                                >
+                                    +
+                                </button>
+
+                            </div>
+
+                            <span class="texte-personnes">
+                                personnes
+                            </span>
+
+                        </div>
+
                     </div>
 
-                    <div>
-                        <span>Cuisson</span>
-                        <strong>
-                            ${tempsCuisson} min
-                        </strong>
+                    <div class="colonnes">
+
+                        <section>
+
+                            <h2>
+                                Ingrédients
+                            </h2>
+
+                            <ul
+                                class="liste-ingredients"
+                                id="liste-ingredients"
+                            >
+                            </ul>
+
+                        </section>
+
+                        <section>
+
+                            <h2>
+                                Préparation
+                            </h2>
+
+                            <ol class="liste-etapes">
+
+                                ${
+                                    etapes
+                                        .map(
+                                            function (
+                                                etape,
+                                                index
+                                            ) {
+
+                                                return `
+                                                    <li class="etape-item">
+                                                        <span>
+                                                            ${
+                                                                echapperHtml(
+                                                                    etape
+                                                                )
+                                                            }
+                                                        </span>
+                                                    </li>
+                                                `;
+                                            }
+                                        )
+                                        .join(
+                                            ""
+                                        )
+                                }
+
+                            </ol>
+
+                        </section>
+
                     </div>
-
-                    <div>
-                        <span>Personnes</span>
-                        <strong>
-                            ${personnes}
-                        </strong>
-                    </div>
-
-                </section>
-
-
-
-                <div class="actions-gestion-recette">
-
-                    <button
-                        type="button"
-                        class="bouton-mode-cuisine"
-                        id="ouvrir-mode-cuisine"
-                    >
-                        Mode cuisine
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="bouton-ajouter-planning"
-                        id="ajouter-recette-planning"
-                    >
-                        Ajouter au planning
-                    </button>
 
                 </div>
-        `;
 
-
-    /* =========================
-       INGRÉDIENTS
-    ========================= */
-
-    if (
-        ingredients.length >
-        0
-    ) {
-
-        html +=
-            `
-                <section class="section-recette">
-
-                    <h2>
-                        Ingrédients
-                    </h2>
-
-                    <ul class="liste-ingredients-recette">
-            `;
-
-
-        ingredients.forEach(
-            function (
-                ingredient
-            ) {
-
-                const texte =
-                    formaterIngredientAffichage(
-                        ingredient,
-                        personnes
-                    );
-
-
-                html +=
-                    `
-                        <li>
-                            ${
-                                echapperHtml(
-                                    texte
-                                )
-                            }
-                        </li>
-                    `;
-            }
-        );
-
-
-        html +=
-            `
-                    </ul>
-
-                </section>
-            `;
-    }
-
-
-    /* =========================
-       ÉTAPES
-    ========================= */
-
-    if (
-        etapes.length >
-        0
-    ) {
-
-        html +=
-            `
-                <section class="section-recette">
-
-                    <h2>
-                        Préparation
-                    </h2>
-
-                    <ol class="liste-etapes-recette">
-            `;
-
-
-        etapes.forEach(
-            function (
-                etape
-            ) {
-
-                html +=
-                    `
-                        <li>
-                            ${
-                                echapperHtml(
-                                    etape
-                                )
-                            }
-                        </li>
-                    `;
-            }
-        );
-
-
-        html +=
-            `
-                    </ol>
-
-                </section>
-            `;
-    }
-
-
-    html +=
-        `
             </article>
         `;
 
 
-    contenuRecette.innerHTML =
-        html;
+    const listeIngredients =
+        document.getElementById(
+            "liste-ingredients"
+        );
+
+    const nombrePortions =
+        document.getElementById(
+            "nombre-portions"
+        );
+
+    const boutonDiminuer =
+        document.getElementById(
+            "diminuer-portions"
+        );
+
+    const boutonAugmenter =
+        document.getElementById(
+            "augmenter-portions"
+        );
 
 
-    /* =========================
-       BOUTON MODE CUISINE
-    ========================= */
+    function actualiserIngredientsFiche() {
+
+        if (
+            !listeIngredients
+        ) {
+
+            return;
+        }
+
+        listeIngredients.innerHTML =
+            ingredients
+                .map(
+                    function (
+                        ingredient
+                    ) {
+
+                        const texte =
+                            formaterIngredientAffichage(
+                                ingredient,
+                                personnesModeCuisine
+                            );
+
+                        return `
+                            <li class="ingredient-item">
+                                <span>
+                                    ${
+                                        echapperHtml(
+                                            texte
+                                        )
+                                    }
+                                </span>
+                            </li>
+                        `;
+                    }
+                )
+                .join(
+                    ""
+                );
+    }
+
+
+    function actualiserPortionsFiche() {
+
+        personnesModeCuisine =
+            Math.max(
+                1,
+                Math.min(
+                    50,
+                    Number(
+                        personnesModeCuisine
+                    ) || 1
+                )
+            );
+
+        if (
+            nombrePortions
+        ) {
+
+            nombrePortions.textContent =
+                personnesModeCuisine;
+        }
+
+        actualiserIngredientsFiche();
+    }
+
+
+    actualiserPortionsFiche();
+
+
+    if (
+        boutonDiminuer
+    ) {
+
+        boutonDiminuer.addEventListener(
+            "click",
+            function () {
+
+                personnesModeCuisine =
+                    Math.max(
+                        1,
+                        personnesModeCuisine -
+                            1
+                    );
+
+                actualiserPortionsFiche();
+            }
+        );
+    }
+
+
+    if (
+        boutonAugmenter
+    ) {
+
+        boutonAugmenter.addEventListener(
+            "click",
+            function () {
+
+                personnesModeCuisine =
+                    Math.min(
+                        50,
+                        personnesModeCuisine +
+                            1
+                    );
+
+                actualiserPortionsFiche();
+            }
+        );
+    }
+
 
     const boutonModeCuisine =
         document.getElementById(
             "ouvrir-mode-cuisine"
         );
-
 
     if (
         boutonModeCuisine
@@ -2322,15 +2498,10 @@ function afficherRecette(
     }
 
 
-    /* =========================
-       BOUTON PLANNING
-    ========================= */
-
     const boutonAjouterPlanning =
         document.getElementById(
             "ajouter-recette-planning"
         );
-
 
     if (
         boutonAjouterPlanning
@@ -2342,6 +2513,7 @@ function afficherRecette(
         );
     }
 }
+
 
 /* =================================
    NORMALISER LES INGRÉDIENTS
