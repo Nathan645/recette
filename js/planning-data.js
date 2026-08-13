@@ -141,7 +141,7 @@ async function chargerRecettes() {
         await window.supabaseClient
             .from("recettes")
             .select(
-                "id, nom"
+                "id, nom, personnes, ingredients"
             )
             .order(
                 "nom",
