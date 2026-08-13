@@ -147,6 +147,33 @@ const confirmerAjoutMalgreRepas =
         "confirmer-ajout-malgre-repas"
     );
 
+/* =================================
+   POPUP RECETTES LIÉES PLANNING
+================================= */
+
+const popupRecettesLieesPlanning =
+    document.getElementById(
+        "popup-recettes-liees-planning"
+    );
+
+
+const listeRecettesLieesPlanning =
+    document.getElementById(
+        "liste-recettes-liees-planning"
+    );
+
+
+const boutonAnnulerRecettesLieesPlanning =
+    document.getElementById(
+        "annuler-recettes-liees-planning"
+    );
+
+
+const boutonConfirmerRecettesLieesPlanning =
+    document.getElementById(
+        "confirmer-recettes-liees-planning"
+    );
+
 
 /* =================================
    ÉLÉMENTS MODE CUISINE
@@ -389,6 +416,13 @@ let personnesSelectionneesPlanning =
 
 
 let repasExistantPlanning =
+    null;
+
+let choixRecettesLieesPlanning =
+    {};
+
+
+let ajoutPlanningEnAttente =
     null;
 
 
