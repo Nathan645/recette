@@ -1783,6 +1783,24 @@ function calculerArticlesPlanningCourses() {
                     ingredient
                 ) {
 
+                   /*
+    Si cet ingrédient est en réalité
+    une recette liée, on ne l'ajoute
+    pas à la liste de courses.
+
+    Ses propres ingrédients sont déjà
+    récupérés via le planning.
+*/
+
+if (
+    ingredient &&
+    typeof ingredient === "object" &&
+    ingredient.recette_liee_id
+) {
+
+    return;
+}
+
                     if (
                         typeof ingredient ===
                         "string"
