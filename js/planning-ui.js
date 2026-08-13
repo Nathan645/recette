@@ -311,9 +311,21 @@ function creerCreneauRepas(
         };
 
 
-    const elementsSecondaires =
-        elements.slice(
+   const elementsSecondaires =
+    elements
+        .slice(
             1
+        )
+        .filter(
+            function (
+                element
+            ) {
+
+                return (
+                    element.mode_approvisionnement !==
+                    "acheter"
+                );
+            }
         );
 
 
