@@ -5143,6 +5143,168 @@ if (
     );
 }
 
+/* =================================
+   POPUP RECETTES LIÉES
+================================= */
+
+if (
+    boutonAnnulerRecettesLieesPlanning
+) {
+
+    boutonAnnulerRecettesLieesPlanning
+        .addEventListener(
+            "click",
+            function () {
+
+                /*
+                    On annule le choix en cours
+                    et on revient à la popup
+                    date / moment / personnes.
+                */
+
+                choixRecettesLieesPlanning =
+                    {};
+
+
+                ajoutPlanningEnAttente =
+                    null;
+
+
+                fermerPopupRecettesLieesDepuisFiche(
+                    true
+                );
+
+
+                if (
+                    confirmerAjoutPlanning
+                ) {
+
+                    confirmerAjoutPlanning.disabled =
+                        false;
+
+
+                    confirmerAjoutPlanning.textContent =
+                        "Ajouter au planning";
+                }
+            }
+        );
+}
+
+
+if (
+    boutonConfirmerRecettesLieesPlanning
+) {
+
+    boutonConfirmerRecettesLieesPlanning
+        .addEventListener(
+            "click",
+            async function () {
+
+                if (
+                    !ajoutPlanningEnAttente
+                ) {
+
+                    fermerPopupRecettesLieesDepuisFiche(
+                        true
+                    );
+
+                    return;
+                }
+
+
+                /*
+                    On indique à demanderAjoutPlanning()
+                    que le choix Faire / Acheter
+                    a déjà été fait.
+
+                    Cela empêche la popup
+                    de se rouvrir en boucle.
+                */
+
+                ajoutPlanningEnAttente
+                    .choixEffectue =
+                        true;
+
+
+                /*
+                    On remet les valeurs choisies
+                    dans l'état planning.
+                */
+
+                momentSelectionnePlanning =
+                    ajoutPlanningEnAttente
+                        .moment;
+
+
+                personnesSelectionneesPlanning =
+                    ajoutPlanningEnAttente
+                        .personnes;
+
+
+                if (
+                    dateAjoutPlanning
+                ) {
+
+                    dateAjoutPlanning.value =
+                        ajoutPlanningEnAttente
+                            .date;
+                }
+
+
+                /*
+                    On ferme uniquement la popup
+                    Faire / Acheter.
+
+                    On ne rouvre pas la première
+                    popup puisque l'ajout va
+                    continuer automatiquement.
+                */
+
+                fermerPopupRecettesLieesDepuisFiche(
+                    false
+                );
+
+
+                try {
+
+                    await demanderAjoutPlanning();
+
+                } catch (
+                    erreur
+                ) {
+
+                    console.error(
+                        "Erreur reprise ajout planning :",
+                        erreur
+                    );
+
+
+                    ajoutPlanningEnAttente =
+                        null;
+
+
+                    if (
+                        popupAjoutPlanning
+                    ) {
+
+                        popupAjoutPlanning.hidden =
+                            false;
+
+
+                        document.body.classList.add(
+                            "popup-ouverte"
+                        );
+                    }
+
+
+                    afficherMessagePlanning(
+                        erreur?.message ||
+                        "Impossible d’ajouter la recette au planning."
+                    );
+                }
+            }
+        );
+}
 
 if (
     confirmerAjoutPlanning
