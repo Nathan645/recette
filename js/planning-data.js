@@ -299,14 +299,15 @@ async function chargerRepasSemaine() {
             .from(
                 "repas_planning_elements"
             )
-            .select(`
-                id,
-                repas_planning_id,
-                recette_id,
-                nom,
-                ordre,
-                created_at
-            `)
+           .select(`
+    id,
+    repas_planning_id,
+    recette_id,
+    nom,
+    ordre,
+    mode_approvisionnement,
+    created_at
+`)
             .in(
                 "repas_planning_id",
                 idsRepas
@@ -788,13 +789,14 @@ async function ajouterElementRepas(
 
             })
             .select(`
-                id,
-                repas_planning_id,
-                recette_id,
-                nom,
-                ordre,
-                created_at
-            `)
+    id,
+    repas_planning_id,
+    recette_id,
+    nom,
+    ordre,
+    mode_approvisionnement,
+    created_at
+`)
             .single();
 
 
