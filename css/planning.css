@@ -21,7 +21,7 @@
 
     padding:
         55px
-        clamp(24px, 4vw, 70px)
+        clamp(16px, 2vw, 32px)
         80px;
 
     background-color: #f8f4eb;
