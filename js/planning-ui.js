@@ -290,109 +290,124 @@ function creerCreneauRepas(
        REPAS EXISTANT
     ================================= */
 
+    if (repas) {
+
+    const elements =
+        Array.isArray(
+            repas.elements
+        )
+            ? repas.elements
+            : [];
+
+
+    const elementPrincipal =
+        elements[0] ||
+        {
+            nom:
+                repas.nom,
+
+            recette_id:
+                repas.recette_id
+        };
+
+
+    const elementsSecondaires =
+        elements.slice(
+            1
+        );
+
+
+    /* =========================
+       RECETTE / PLAT PRINCIPAL
+    ========================= */
+
+    let principalHtml =
+        "";
+
+
     if (
-        repas
+        elementPrincipal?.recette_id
     ) {
 
-        const nombrePersonnesBrut =
-            Number(
-                repas.personnes
-            );
-
-
-        const nombrePersonnes =
-            Number.isInteger(
-                nombrePersonnesBrut
-            ) &&
-            nombrePersonnesBrut > 0
-                ? nombrePersonnesBrut
-                : (
-                    nombrePersonnesParDefaut ||
-                    2
-                );
-
-
-        const textePersonnes =
-            `${nombrePersonnes} personne${
-                nombrePersonnes > 1
-                    ? "s"
-                    : ""
-            }`;
-
-
-        /*
-            Récupération de TOUS
-            les plats du repas.
-        */
-
-        const elements =
-            obtenirElementsRepas(
-                repas
-            );
-
-
-        /*
-            Création du HTML pour
-            chacun des plats.
-        */
-
-        const listePlatsHTML =
-            elements
-                .map(
-                    function (
-                        element
-                    ) {
-
-                        return creerHTMLPlatPlanning(
-                            element
-                        );
-                    }
-                )
-                .join("");
-
-
-        /*
-            Si, pour une raison quelconque,
-            le repas parent existe mais
-            ne possède aucun élément.
-        */
-
-        const contenuPlats =
-            listePlatsHTML ||
+        principalHtml =
             `
-
-                <span
-                    class="nom-repas-libre element-repas-planning"
+                <a
+                    href="recette.html?id=${encodeURIComponent(
+                        elementPrincipal.recette_id
+                    )}"
+                    class="lien-repas-recette nom-repas-principal"
                 >
-                    Repas
-                </span>
-
+                    ${elementPrincipal.nom}
+                </a>
             `;
 
+    } else {
 
-        contenu = `
-
-            <div
-                class="repas-planifie repas-planifie-multiple"
-            >
-
-                <div
-                    class="infos-repas-planifie"
-                >
-
-                    <div
-                        class="liste-plats-planifies"
-                    >
-
-                        ${contenuPlats}
-
-                    </div>
+        principalHtml =
+            `
+                <span class="nom-repas-libre nom-repas-principal">
+                    ${elementPrincipal?.nom || "Repas"}
+                </span>
+            `;
+    }
 
 
-                    <span
-                        class="personnes-repas-planifie"
-                    >
-                        ${textePersonnes}
+    /* =========================
+       RECETTES / PLATS LIÉS
+    ========================= */
+
+    const secondairesHtml =
+        elementsSecondaires.length > 0
+            ? `
+                <div class="elements-secondaires-repas">
+
+                    ${
+                        elementsSecondaires
+                            .map(
+                                function (
+                                    element
+                                ) {
+
+                                    return `
+                                        <span class="element-secondaire-repas">
+                                            + ${element.nom}
+                                        </span>
+                                    `;
+                                }
+                            )
+                            .join(
+                                ""
+                            )
+                    }
+
+                </div>
+            `
+            : "";
+
+
+    /* =========================
+       CARTE DU REPAS
+    ========================= */
+
+    contenu =
+        `
+            <div class="repas-planifie">
+
+                <div class="contenu-repas-planifie">
+
+                    ${principalHtml}
+
+                    ${secondairesHtml}
+
+                    <span class="personnes-repas-planifie">
+                        ${repas.personnes || 1}
+                        ${
+                            Number(
+                                repas.personnes
+                            ) > 1
+                                ? "personnes"
+                                : "personne"
+                        }
                     </span>
 
                 </div>
@@ -409,31 +424,24 @@ function creerCreneauRepas(
                 </button>
 
             </div>
-
         `;
 
+} else {
 
-    /* =================================
-       CRÉNEAU VIDE
-    ================================= */
-
-    } else {
-
-        contenu = `
-
+    contenu =
+        `
             <button
                 type="button"
                 class="bouton-ajouter-repas"
-                data-date="${dateISO}"
+                data-date="${formaterDateISO(
+                    date
+                )}"
                 data-moment="${moment}"
             >
                 + Ajouter
             </button>
-
         `;
-    }
-
-
+}
     /* =================================
        RETOUR DU CRÉNEAU
     ================================= */
