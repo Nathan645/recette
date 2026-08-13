@@ -113,6 +113,29 @@ const listeElementsRepas =
         "liste-elements-repas"
     );
 
+const popupRecettesLieesPlanning =
+    document.getElementById(
+        "popup-recettes-liees-planning"
+    );
+
+
+const listeRecettesLieesPlanning =
+    document.getElementById(
+        "liste-recettes-liees-planning"
+    );
+
+
+const boutonAnnulerRecettesLieesPlanning =
+    document.getElementById(
+        "annuler-recettes-liees-planning"
+    );
+
+
+const boutonConfirmerRecettesLieesPlanning =
+    document.getElementById(
+        "confirmer-recettes-liees-planning"
+    );
+
 
 /* =========================
    RECHERCHE RECETTE
