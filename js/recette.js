@@ -3579,6 +3579,398 @@ function obtenirNomsRepasExistant(
     return noms;
 }
 
+/* =================================
+   POPUP RECETTES LIÉES
+   FAIRE OU ACHETER
+================================= */
+
+async function ouvrirPopupRecettesLieesDepuisFiche() {
+
+    if (
+        !popupRecettesLieesPlanning ||
+        !listeRecettesLieesPlanning
+    ) {
+
+        return false;
+    }
+
+
+    const ingredients =
+        normaliserIngredientsRecette(
+            recetteChargee?.ingredients
+        );
+
+
+    const ingredientsLies =
+        ingredients.filter(
+            function (
+                ingredient
+            ) {
+
+                return Boolean(
+                    ingredient?.recette_liee_id
+                );
+            }
+        );
+
+
+    if (
+        ingredientsLies.length ===
+        0
+    ) {
+
+        return false;
+    }
+
+
+    const idsRecettesLiees =
+        [
+            ...new Set(
+                ingredientsLies.map(
+                    function (
+                        ingredient
+                    ) {
+
+                        return String(
+                            ingredient.recette_liee_id
+                        );
+                    }
+                )
+            )
+        ];
+
+
+    const {
+        data:
+            recettesLiees,
+
+        error:
+            erreurRecettesLiees
+    } =
+        await window.supabaseClient
+            .from(
+                "recettes"
+            )
+            .select(
+                "id, nom"
+            )
+            .in(
+                "id",
+                idsRecettesLiees
+            );
+
+
+    if (
+        erreurRecettesLiees
+    ) {
+
+        throw erreurRecettesLiees;
+    }
+
+
+    choixRecettesLieesPlanning =
+        {};
+
+
+    listeRecettesLieesPlanning.innerHTML =
+        ingredientsLies
+            .map(
+                function (
+                    ingredient
+                ) {
+
+                    const recetteLieeId =
+                        String(
+                            ingredient.recette_liee_id
+                        );
+
+
+                    const recetteLiee =
+                        recettesLiees
+                            ?.find(
+                                function (
+                                    recette
+                                ) {
+
+                                    return (
+                                        String(
+                                            recette.id
+                                        ) ===
+                                        recetteLieeId
+                                    );
+                                }
+                            );
+
+
+                    const nom =
+                        recetteLiee?.nom ||
+                        ingredient.nom ||
+                        "Recette liée";
+
+
+                    choixRecettesLieesPlanning[
+                        recetteLieeId
+                    ] =
+                        "faire";
+
+
+                    const quantite =
+                        ingredient.quantite ??
+                        "";
+
+
+                    const unite =
+                        ingredient.unite ||
+                        "";
+
+
+                    const quantiteTexte =
+                        [
+                            quantite,
+                            unite
+                        ]
+                            .filter(
+                                function (
+                                    valeur
+                                ) {
+
+                                    return (
+                                        valeur !==
+                                            "" &&
+                                        valeur !==
+                                            null &&
+                                        valeur !==
+                                            undefined
+                                    );
+                                }
+                            )
+                            .join(
+                                " "
+                            );
+
+
+                    return `
+                        <section
+                            class="carte-recette-liee-planning"
+                            data-recette-id="${echapperHtml(
+                                recetteLieeId
+                            )}"
+                        >
+
+                            <div class="entete-recette-liee-planning">
+
+                                <strong>
+                                    ${
+                                        echapperHtml(
+                                            nom
+                                        )
+                                    }
+                                </strong>
+
+                                ${
+                                    quantiteTexte
+                                        ? `
+                                            <span>
+                                                ${
+                                                    echapperHtml(
+                                                        quantiteTexte
+                                                    )
+                                                }
+                                            </span>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            <div class="choix-approvisionnement-recette">
+
+                                <button
+                                    type="button"
+                                    class="option-approvisionnement actif"
+                                    data-recette-id="${echapperHtml(
+                                        recetteLieeId
+                                    )}"
+                                    data-mode="faire"
+                                >
+                                    <span class="icone-option">
+                                        👩‍🍳
+                                    </span>
+
+                                    <span>
+                                        <strong>
+                                            Faire maison
+                                        </strong>
+
+                                        <small>
+                                            Ajouter ses ingrédients aux courses.
+                                        </small>
+                                    </span>
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="option-approvisionnement"
+                                    data-recette-id="${echapperHtml(
+                                        recetteLieeId
+                                    )}"
+                                    data-mode="acheter"
+                                >
+                                    <span class="icone-option">
+                                        🛒
+                                    </span>
+
+                                    <span>
+                                        <strong>
+                                            Acheter
+                                        </strong>
+
+                                        <small>
+                                            Ajouter cette préparation directement aux courses.
+                                        </small>
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </section>
+                    `;
+                }
+            )
+            .join(
+                ""
+            );
+
+
+    listeRecettesLieesPlanning
+        .querySelectorAll(
+            ".option-approvisionnement"
+        )
+        .forEach(
+            function (
+                bouton
+            ) {
+
+                bouton.addEventListener(
+                    "click",
+                    function () {
+
+                        const recetteId =
+                            bouton.dataset
+                                .recetteId;
+
+
+                        const mode =
+                            bouton.dataset
+                                .mode;
+
+
+                        if (
+                            !recetteId ||
+                            !mode
+                        ) {
+
+                            return;
+                        }
+
+
+                        choixRecettesLieesPlanning[
+                            recetteId
+                        ] =
+                            mode;
+
+
+                        const carte =
+                            bouton.closest(
+                                ".carte-recette-liee-planning"
+                            );
+
+
+                        if (
+                            !carte
+                        ) {
+
+                            return;
+                        }
+
+
+                        carte
+                            .querySelectorAll(
+                                ".option-approvisionnement"
+                            )
+                            .forEach(
+                                function (
+                                    option
+                                ) {
+
+                                    option.classList.toggle(
+                                        "actif",
+                                        option ===
+                                            bouton
+                                    );
+                                }
+                            );
+                    }
+                );
+            }
+        );
+
+
+    if (
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            true;
+    }
+
+
+    popupRecettesLieesPlanning.hidden =
+        false;
+
+
+    document.body.classList.add(
+        "popup-ouverte"
+    );
+
+
+    return true;
+}
+
+function fermerPopupRecettesLieesDepuisFiche(
+    rouvrirPopupPlanning = true
+) {
+
+    if (
+        popupRecettesLieesPlanning
+    ) {
+
+        popupRecettesLieesPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        rouvrirPopupPlanning &&
+        popupAjoutPlanning
+    ) {
+
+        popupAjoutPlanning.hidden =
+            false;
+    }
+
+
+    if (
+        !rouvrirPopupPlanning
+    ) {
+
+        document.body.classList.remove(
+            "popup-ouverte"
+        );
+    }
+}
 
 /* =================================
    DEMANDER AJOUT AU PLANNING
