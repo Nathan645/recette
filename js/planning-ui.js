@@ -326,20 +326,15 @@ function creerCreneauRepas(
 
 
     if (
-        elementPrincipal?.recette_id
-    ) {
+    elementPrincipal?.recette_id
+) {
 
-        principalHtml =
-            `
-                <a
-                    href="recette.html?id=${encodeURIComponent(
-                        elementPrincipal.recette_id
-                    )}"
-                    class="lien-repas-recette nom-repas-principal"
-                >
-                    ${elementPrincipal.nom}
-                </a>
-            `;
+    principalHtml =
+        `
+            <span class="nom-repas-principal">
+                ${elementPrincipal.nom}
+            </span>
+        `;
 
     } else {
 
