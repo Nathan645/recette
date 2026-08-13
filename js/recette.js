@@ -3830,6 +3830,75 @@ function fermerConfirmationPlanning(
     }
 }
 
+function obtenirRecettesLieesPlanning() {
+
+    if (
+        !recetteChargee ||
+        !Array.isArray(
+            recetteChargee.ingredients
+        )
+    ) {
+
+        return [];
+    }
+
+
+    const recettesLiees =
+        [];
+
+
+    recetteChargee.ingredients.forEach(
+        function (
+            ingredient
+        ) {
+
+            const recetteLieeId =
+                ingredient?.recette_liee_id;
+
+
+            if (
+                !recetteLieeId
+            ) {
+
+                return;
+            }
+
+
+            const id =
+                String(
+                    recetteLieeId
+                );
+
+
+            /*
+                Évite :
+                - d'ajouter la recette elle-même
+                - d'ajouter deux fois la même recette liée
+            */
+
+            if (
+                id ===
+                    String(
+                        recetteChargee.id
+                    ) ||
+                recettesLiees.includes(
+                    id
+                )
+            ) {
+
+                return;
+            }
+
+
+            recettesLiees.push(
+                id
+            );
+        }
+    );
+
+
+    return recettesLiees;
+}
 
 /* =================================
    CRÉER REPAS + RECETTE
@@ -3902,37 +3971,129 @@ async function creerRepasPlanningAvecRecette(
         }
 
 
-        const {
-            error:
-                erreurElement
-        } =
-            await window.supabaseClient
-                .from(
-                    "repas_planning_elements"
-                )
-                .insert(
-                    {
-                        repas_planning_id:
-                            nouveauRepas.id,
-
-                        recette_id:
-                            recetteChargee.id,
-
-                        nom:
-                            recetteChargee.nom,
-
-                        ordre:
-                            1
-                    }
-                );
+        const recettesLiees =
+    obtenirRecettesLieesPlanning();
 
 
-        if (
-            erreurElement
-        ) {
+const idsRecettesACharger =
+    [
+        recetteChargee.id,
+        ...recettesLiees
+    ];
 
-            throw erreurElement;
-        }
+
+/* =========================
+   RÉCUPÉRER LES NOMS
+========================= */
+
+const {
+    data:
+        recettesPlanning,
+
+    error:
+        erreurRecettesPlanning
+} =
+    await window.supabaseClient
+        .from(
+            "recettes"
+        )
+        .select(
+            "id, nom"
+        )
+        .in(
+            "id",
+            idsRecettesACharger
+        );
+
+
+if (
+    erreurRecettesPlanning
+) {
+
+    throw erreurRecettesPlanning;
+}
+
+
+/* =========================
+   PRÉPARER LES ÉLÉMENTS
+========================= */
+
+const elementsPlanning =
+    idsRecettesACharger
+        .map(
+            function (
+                recetteId,
+                index
+            ) {
+
+                const recette =
+                    recettesPlanning
+                        ?.find(
+                            function (
+                                item
+                            ) {
+
+                                return String(
+                                    item.id
+                                ) ===
+                                String(
+                                    recetteId
+                                );
+                            }
+                        );
+
+
+                return {
+                    repas_planning_id:
+                        nouveauRepas.id,
+
+                    recette_id:
+                        recetteId,
+
+                    nom:
+                        recette?.nom ||
+                        (
+                            String(
+                                recetteId
+                            ) ===
+                            String(
+                                recetteChargee.id
+                            )
+                                ? recetteChargee.nom
+                                : "Recette liée"
+                        ),
+
+                    ordre:
+                        index +
+                        1
+                };
+            }
+        );
+
+
+/* =========================
+   AJOUTER AU PLANNING
+========================= */
+
+const {
+    error:
+        erreurElement
+} =
+    await window.supabaseClient
+        .from(
+            "repas_planning_elements"
+        )
+        .insert(
+            elementsPlanning
+        );
+
+
+if (
+    erreurElement
+) {
+
+    throw erreurElement;
+}
 
 
         await terminerAjoutPlanning();
@@ -4074,36 +4235,177 @@ async function ajouterRecetteAuRepasExistant() {
                 : 1;
 
 
-        const {
-            error
-        } =
-            await window.supabaseClient
-                .from(
-                    "repas_planning_elements"
-                )
-                .insert(
-                    {
-                        repas_planning_id:
-                            repasExistantPlanning.id,
-
-                        recette_id:
-                            recetteChargee.id,
-
-                        nom:
-                            recetteChargee.nom,
-
-                        ordre:
-                            ordreSuivant
-                    }
-                );
+        const recettesLiees =
+    obtenirRecettesLieesPlanning();
 
 
-        if (
-            error
+const idsRecettesACharger =
+    [
+        recetteChargee.id,
+        ...recettesLiees
+    ];
+
+
+/* =========================
+   ÉVITER LES DOUBLONS
+========================= */
+
+const idsDejaPresents =
+    new Set(
+        elements
+            .map(
+                function (
+                    element
+                ) {
+
+                    return String(
+                        element?.recette_id ||
+                        ""
+                    );
+                }
+            )
+            .filter(
+                Boolean
+            )
+    );
+
+
+const idsAInserer =
+    idsRecettesACharger.filter(
+        function (
+            recetteId
         ) {
 
-            throw error;
+            return !idsDejaPresents.has(
+                String(
+                    recetteId
+                )
+            );
         }
+    );
+
+
+if (
+    idsAInserer.length ===
+    0
+) {
+
+    await terminerAjoutPlanning();
+
+    return;
+}
+
+
+/* =========================
+   RÉCUPÉRER LES NOMS
+========================= */
+
+const {
+    data:
+        recettesPlanning,
+
+    error:
+        erreurRecettesPlanning
+} =
+    await window.supabaseClient
+        .from(
+            "recettes"
+        )
+        .select(
+            "id, nom"
+        )
+        .in(
+            "id",
+            idsAInserer
+        );
+
+
+if (
+    erreurRecettesPlanning
+) {
+
+    throw erreurRecettesPlanning;
+}
+
+
+/* =========================
+   PRÉPARER LES ÉLÉMENTS
+========================= */
+
+const elementsAInserer =
+    idsAInserer.map(
+        function (
+            recetteId,
+            index
+        ) {
+
+            const recette =
+                recettesPlanning
+                    ?.find(
+                        function (
+                            item
+                        ) {
+
+                            return String(
+                                item.id
+                            ) ===
+                            String(
+                                recetteId
+                            );
+                        }
+                    );
+
+
+            return {
+                repas_planning_id:
+                    repasExistantPlanning.id,
+
+                recette_id:
+                    recetteId,
+
+                nom:
+                    recette?.nom ||
+                    (
+                        String(
+                            recetteId
+                        ) ===
+                        String(
+                            recetteChargee.id
+                        )
+                            ? recetteChargee.nom
+                            : "Recette liée"
+                    ),
+
+                ordre:
+                    ordreSuivant +
+                    index
+            };
+        }
+    );
+
+
+/* =========================
+   AJOUTER AU REPAS
+========================= */
+
+const {
+    error
+} =
+    await window.supabaseClient
+        .from(
+            "repas_planning_elements"
+        )
+        .insert(
+            elementsAInserer
+        );
+
+
+if (
+    error
+) {
+
+    throw error;
+}
 
 
         await terminerAjoutPlanning();
