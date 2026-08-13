@@ -2104,11 +2104,30 @@ function afficherRecette(
                         valeur
                     ) {
 
-                        const texte =
-                            String(
-                                valeur ||
-                                ""
-                            ).trim();
+                        const libellesBadges = {
+    "quotidien": "Quotidien",
+    "invites": "Invités",
+    "brunch": "Brunch",
+    "barbecue": "Barbecue",
+    "fetes": "Fêtes",
+    "aperitif-dinatoire": "Apéritif dînatoire",
+
+    "ete": "Été",
+    "automne": "Automne",
+    "hiver": "Hiver",
+    "printemps": "Printemps",
+    "toute-annee": "Toute l'année"
+};
+
+const code =
+    String(
+        valeur ||
+        ""
+    ).trim();
+
+const texte =
+    libellesBadges[code] ||
+    code;
 
                         if (
                             texte &&
