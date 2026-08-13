@@ -1276,11 +1276,12 @@ async function chargerPlanningPeriodeCourses() {
                 recette_id,
 
                 repas_planning_elements (
-                    id,
-                    recette_id,
-                    nom,
-                    ordre
-                )
+    id,
+    recette_id,
+    nom,
+    mode_approvisionnement,
+    ordre
+)
             `)
             .eq(
                 "foyer_id",
@@ -1369,6 +1370,9 @@ function obtenirElementsPlanningCourses() {
                         nom:
                             repas.nom,
 
+                       mode_approvisionnement:
+                       "faire",
+
                         ordre:
                             1
                     }
@@ -1384,28 +1388,28 @@ function obtenirElementsPlanningCourses() {
 
                     elements.push({
 
-                        repas_id:
-                            repas.id,
+    repas_id:
+        repas.id,
 
-                        date:
-                            repas.date,
+    date:
+        repas.date,
 
-                        moment:
-                            repas.moment,
+    moment:
+        repas.moment,
 
-                        personnes:
-                            repas.personnes,
+    personnes:
+        repas.personnes,
 
-                        element_id:
-                            element.id,
+    element_id:
+        element.id,
 
-                        recette_id:
-                            element.recette_id,
+    recette_id:
+        element.recette_id,
 
-                        nom:
-                            element.nom
+    nom:
+        element.nom
 
-                    });
+});
 
                 }
             );
