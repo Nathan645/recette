@@ -133,34 +133,37 @@ function ouvrirPopup(
     ) {
 
         elementsRepasEnCours =
-            repas.elements.map(
-                function (
-                    element
-                ) {
+    repas.elements.map(
+        function (
+            element
+        ) {
 
-                    return {
+            return {
 
-                        id:
-                            element.id ||
-                            null,
+                id:
+                    element.id ||
+                    null,
 
-                        type:
-                            element.recette_id
-                                ? "recette"
-                                : "libre",
+                type:
+                    element.recette_id
+                        ? "recette"
+                        : "libre",
 
-                        recette_id:
-                            element.recette_id ||
-                            null,
+                recette_id:
+                    element.recette_id ||
+                    null,
 
-                        nom:
-                            element.nom ||
-                            ""
+                nom:
+                    element.nom ||
+                    "",
 
-                    };
+                mode_approvisionnement:
+                    element.mode_approvisionnement ||
+                    "faire"
 
-                }
-            );
+            };
+        }
+    );
 
 
     /*
@@ -179,26 +182,29 @@ function ouvrirPopup(
 
         elementsRepasEnCours = [
 
-            {
+    {
 
-                id:
-                    null,
+        id:
+            null,
 
-                type:
-                    repas.recette_id
-                        ? "recette"
-                        : "libre",
+        type:
+            repas.recette_id
+                ? "recette"
+                : "libre",
 
-                recette_id:
-                    repas.recette_id ||
-                    null,
+        recette_id:
+            repas.recette_id ||
+            null,
 
-                nom:
-                    repas.nom
+        nom:
+            repas.nom,
 
-            }
+        mode_approvisionnement:
+            "faire"
 
-        ];
+    }
+
+];
 
     }
 
