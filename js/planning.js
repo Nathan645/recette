@@ -905,7 +905,11 @@ function ouvrirPopupRecettesLieesPlanning(
         obtenirIngredientsRecettesLiees(
             recette
         );
-
+   
+console.log(
+    "RECETTES LIÉES DÉTECTÉES :",
+    recettesLiees
+);
 
     if (
         recettesLiees.length ===
@@ -1483,6 +1487,16 @@ function ajouterRecetteDansPopup(
 
         return;
     }
+
+   console.log(
+    "RECETTE CLIQUÉE :",
+    recette
+);
+
+console.log(
+    "INGRÉDIENTS DE LA RECETTE :",
+    recette.ingredients
+);
 
 
     const existeDeja =
