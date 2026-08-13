@@ -113,38 +113,34 @@ main {
     color: var(--blanc);
 }
 
-.grille-recettes {
-    display: grid;
-    grid-template-columns: repeat(
-        auto-fill,
-        minmax(320px, 1fr)
-    );
-    gap: 28px;
+.grille-recettes{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:28px;
 }
 
-.carte-recette {
-    display: flex;
-    flex-direction: column;
-    min-height: 320px;
-    padding: 24px;
-    background: var(--blanc);
-    border-radius: 18px;
-    box-shadow: 0 8px 25px var(--ombre);
-    transition: .2s;
-    cursor: pointer;
+.carte-recette{
+    display:flex;
+    flex-direction:column;
+    min-height:320px;
+    padding:24px;
+    background:var(--blanc);
+    border-radius:18px;
+    box-shadow:0 8px 25px var(--ombre);
+    transition:.2s;
+    cursor:pointer;
 }
 
 .carte-recette:hover {
-    transform: translateY(-4px);
-    box-shadow:
-        0 12px 30px
-        rgba(0, 0, 0, .12);
+    transform:translateY(-4px);
+    box-shadow:0 12px 30px rgba(0,0,0,.12);
 }
 
-.contenu-carte {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+
+.contenu-carte{
+    display:flex;
+    flex-direction:column;
+    flex:1;
 }
 
 .categorie {
@@ -157,35 +153,35 @@ main {
     font-weight: bold;
 }
 
-.contenu-carte h3 {
-    margin: 0;
-    font-size: 34px;
-    line-height: 1.2;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    min-height: 2.4em;
+.contenu-carte h3{
+    margin:0;
+    font-size:34px;
+    line-height:1.2;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    min-height:2.4em;
 }
 
-.description {
-    margin: 18px 0;
-    color: var(--texte-secondaire);
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-    min-height: 3em;
+.description{
+    margin:18px 0;
+    color:var(--texte-secondaire);
+    line-height:1.5;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:2;
+    overflow:hidden;
+    min-height:3em;
 }
 
-.informations {
-    display: flex;
-    gap: 18px;
-    flex-wrap: wrap;
-    margin-top: auto;
-    margin-bottom: 22px;
-    font-size: 15px;
+.informations{
+    display:flex;
+    gap:18px;
+    flex-wrap:wrap;
+    margin-top:auto;
+    margin-bottom:22px;
+    font-size:15px;
 }
 
 .bouton-recette {
@@ -209,9 +205,7 @@ main {
     margin: auto;
     background-color: var(--blanc);
     border-radius: 22px;
-    box-shadow:
-        0 10px 35px
-        var(--ombre);
+    box-shadow: 0 10px 35px var(--ombre);
 }
 
 .contenu {
@@ -233,8 +227,7 @@ main {
 
 .informations-recette {
     display: grid;
-    grid-template-columns:
-        repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: 15px;
     margin-bottom: 45px;
 }
@@ -253,17 +246,14 @@ main {
 
 .colonnes {
     display: grid;
-    grid-template-columns:
-        0.8fr 1.4fr;
+    grid-template-columns: 0.8fr 1.4fr;
     gap: 55px;
 }
 
 .colonnes h2 {
     margin-top: 0;
     padding-bottom: 12px;
-    border-bottom:
-        2px solid
-        var(--beige);
+    border-bottom: 2px solid var(--beige);
     font-size: 27px;
 }
 
@@ -294,9 +284,7 @@ ol li {
 .conseil {
     margin-top: 40px;
     padding: 25px;
-    border-left:
-        5px solid
-        var(--terracotta);
+    border-left: 5px solid var(--terracotta);
     border-radius: 8px;
     background-color: var(--creme);
 }
@@ -340,7 +328,6 @@ footer {
     padding: 35px 20px;
     text-align: center;
 }
-
 .liste-ingredients {
     padding-left: 0;
     list-style: none;
@@ -365,7 +352,6 @@ footer {
 .ingredient-item label {
     line-height: 1.5;
     cursor: pointer;
-
     transition:
         color 0.2s ease,
         opacity 0.2s ease;
@@ -376,7 +362,6 @@ footer {
     text-decoration: line-through;
     opacity: 0.65;
 }
-
 .liste-etapes {
     padding-left: 0;
     list-style: none;
@@ -386,20 +371,27 @@ footer {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+
     margin-bottom: 18px;
 }
 
 .case-etape {
     width: 18px;
     height: 18px;
+
     margin-top: 3px;
+
     flex-shrink: 0;
+
     accent-color: var(--vert);
+
     cursor: pointer;
 }
 
 .etape-item label {
+
     line-height: 1.6;
+
     cursor: pointer;
 
     transition:
@@ -408,9 +400,13 @@ footer {
 }
 
 .etape-coche label {
+
     text-decoration: line-through;
+
     color: var(--texte-secondaire);
+
     opacity: .65;
+
 }
 
 .information-portions {
@@ -431,31 +427,18 @@ footer {
     width: 32px;
     height: 32px;
     padding: 0;
-
-    border:
-        1px solid
-        var(--vert);
-
+    border: 1px solid var(--vert);
     border-radius: 50%;
-
-    background-color:
-        var(--blanc);
-
-    color:
-        var(--vert);
-
+    background-color: var(--blanc);
+    color: var(--vert);
     font-size: 21px;
     line-height: 1;
-
     cursor: pointer;
 }
 
 .bouton-portion:hover {
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
+    background-color: var(--vert);
+    color: var(--blanc);
 }
 
 .nombre-portions {
@@ -467,16 +450,10 @@ footer {
 
 .texte-personnes {
     font-size: 13px;
-    color:
-        var(--texte-secondaire);
+    color: var(--texte-secondaire);
 }
 
-/* =================================
-   RESPONSIVE GÉNÉRAL
-================================= */
-
 @media (max-width: 750px) {
-
     .entete-accueil {
         padding: 50px 20px;
     }
@@ -516,8 +493,7 @@ footer {
     }
 
     .informations-recette {
-        grid-template-columns:
-            repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .colonnes {
@@ -527,7 +503,6 @@ footer {
 }
 
 @media (max-width: 420px) {
-
     .informations-recette {
         grid-template-columns: 1fr;
     }
@@ -537,11 +512,6 @@ footer {
     }
 }
 
-
-/* =================================
-   ACTIONS ACCUEIL
-================================= */
-
 .actions-accueil {
     margin-bottom: 40px;
     text-align: center;
@@ -549,52 +519,27 @@ footer {
 
 .bouton-ajouter {
     display: inline-block;
-
-    padding:
-        13px
-        22px;
-
-    border:
-        2px solid
-        var(--vert);
-
+    padding: 13px 22px;
+    border: 2px solid var(--vert);
     border-radius: 10px;
-
-    color:
-        var(--vert);
-
+    color: var(--vert);
     text-decoration: none;
-
     font-weight: bold;
-
     transition:
         background-color 0.2s ease,
         color 0.2s ease;
 }
 
 .bouton-ajouter:hover {
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
+    background-color: var(--vert);
+    color: var(--blanc);
 }
-
-
-/* =================================
-   ACTIONS GESTION RECETTE
-================================= */
 
 .actions-gestion-recette {
     display: flex;
     flex-wrap: wrap;
-
     gap: 12px;
-
-    margin:
-        25px
-        0
-        30px;
+    margin: 25px 0 30px;
 }
 
 .bouton-modifier,
@@ -606,11 +551,7 @@ footer {
 
     gap: 8px;
 
-    min-height: 48px;
-
-    padding:
-        12px
-        18px;
+    padding: 12px 18px;
 
     border-radius: 10px;
 
@@ -622,52 +563,35 @@ footer {
     text-decoration: none;
 
     cursor: pointer;
+}
 
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+.bouton-modifier,
+.bouton-supprimer {
+    min-height: 48px;
 }
 
 .bouton-modifier {
-    border:
-        2px solid
-        var(--vert);
-
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
+    border: 2px solid var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
 }
 
 .bouton-modifier:hover {
-    background-color:
-        var(--vert-fonce);
-
-    border-color:
-        var(--vert-fonce);
+    background-color: var(--vert-fonce);
+    border-color: var(--vert-fonce);
 }
 
 .bouton-supprimer {
-    border:
-        2px solid
-        #a54f3c;
-
-    background-color:
-        var(--blanc);
-
-    color:
-        #a54f3c;
+    border: 2px solid #a54f3c;
+    background-color: var(--blanc);
+    color: #a54f3c;
 }
 
 .bouton-supprimer:hover {
-    background-color:
-        #f8ece7;
+    background-color: #f8ece7;
 }
 
 @media (max-width: 550px) {
-
     .actions-gestion-recette {
         flex-direction: column;
     }
@@ -679,35 +603,21 @@ footer {
     }
 }
 
-
-/* =================================
-   POP-UP DE SUPPRESSION
-================================= */
+/* POP-UP DE SUPPRESSION */
 
 .fond-popup {
     position: fixed;
-
     inset: 0;
-
     z-index: 1000;
 
     display: flex;
-
     align-items: center;
     justify-content: center;
 
     padding: 20px;
 
-    background-color:
-        rgba(
-            30,
-            35,
-            28,
-            0.55
-        );
-
-    backdrop-filter:
-        blur(3px);
+    background-color: rgba(30, 35, 28, 0.55);
+    backdrop-filter: blur(3px);
 }
 
 .popup-suppression {
@@ -718,23 +628,18 @@ footer {
 
     text-align: center;
 
-    background-color:
-        var(--blanc);
+    background-color: var(--blanc);
 
     border-radius: 20px;
 
     box-shadow:
         0 20px 60px
-        rgba(
-            30,
-            35,
-            28,
-            0.25
-        );
+        rgba(30, 35, 28, 0.25);
 }
 
 .icone-suppression {
     margin-bottom: 15px;
+
     font-size: 38px;
 }
 
@@ -755,8 +660,7 @@ footer {
 
     max-width: 330px;
 
-    color:
-        var(--texte-secondaire);
+    color: var(--texte-secondaire);
 
     line-height: 1.6;
 }
@@ -769,9 +673,7 @@ footer {
 .actions-popup button {
     flex: 1;
 
-    padding:
-        13px
-        18px;
+    padding: 13px 18px;
 
     border-radius: 10px;
 
@@ -836,37 +738,24 @@ footer {
 
 .barre-filtres-avances {
     display: flex;
-
     justify-content: center;
     align-items: center;
-
     flex-wrap: wrap;
-
     gap: 10px;
 
-    margin:
-        0
-        auto
-        10px;
+    margin: 0 auto 10px;
 }
 
 .bouton-filtres-avances,
 .filtre-secondaire {
-    padding:
-        10px
-        16px;
+    padding: 10px 16px;
 
-    border:
-        1px solid
-        #d8d1c5;
-
+    border: 1px solid #d8d1c5;
     border-radius: 22px;
 
-    background-color:
-        var(--blanc);
+    background-color: var(--blanc);
 
-    color:
-        var(--texte);
+    color: var(--texte);
 
     font: inherit;
     font-size: 14px;
@@ -882,22 +771,14 @@ footer {
 
 .bouton-filtres-avances:hover,
 .filtre-secondaire:hover {
-    border-color:
-        var(--vert);
-
-    transform:
-        translateY(-1px);
+    border-color: var(--vert);
+    transform: translateY(-1px);
 }
 
 .filtre-secondaire.actif {
-    border-color:
-        var(--vert);
-
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
+    border-color: var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
 }
 
 #fleche-filtres {
@@ -907,7 +788,7 @@ footer {
 
 
 /* =================================
-   PANNEAU FILTRES AVANCÉS
+   PANNEAU DES FILTRES AVANCÉS
 ================================= */
 
 .panneau-filtres-avances {
@@ -916,31 +797,18 @@ footer {
 
     max-height: 0;
 
-    margin:
-        0
-        auto;
+    margin: 0 auto;
 
-    padding:
-        0
-        24px;
+    padding: 0 24px;
 
     overflow: hidden;
 
     opacity: 0;
 
-    border:
-        1px solid
-        transparent;
-
+    border: 1px solid transparent;
     border-radius: 18px;
 
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.45
-        );
+    background-color: rgba(255, 255, 255, 0.45);
 
     transition:
         max-height 0.35s ease,
@@ -956,19 +824,11 @@ footer {
     margin-top: 16px;
     margin-bottom: 18px;
 
-    padding:
-        22px
-        24px;
+    padding: 22px 24px;
 
     opacity: 1;
 
-    border-color:
-        rgba(
-            216,
-            209,
-            197,
-            0.75
-        );
+    border-color: rgba(216, 209, 197, 0.75);
 }
 
 .groupe-filtre {
@@ -985,43 +845,32 @@ footer {
 
     margin-bottom: 8px;
 
-    color:
-        var(--texte-secondaire);
+    color: var(--texte-secondaire);
 
     font-size: 12px;
     font-weight: bold;
 
     text-transform: uppercase;
-
     letter-spacing: 0.7px;
 }
 
 .liste-filtres-secondaires {
     display: flex;
-
     justify-content: center;
-
     flex-wrap: wrap;
 
     gap: 8px;
 }
 
 .filtre-multiple {
-    padding:
-        8px
-        14px;
+    padding: 8px 14px;
 
-    border:
-        1px solid
-        #d8d1c5;
-
+    border: 1px solid #d8d1c5;
     border-radius: 20px;
 
-    background-color:
-        var(--blanc);
+    background-color: var(--blanc);
 
-    color:
-        var(--texte);
+    color: var(--texte);
 
     font: inherit;
     font-size: 14px;
@@ -1036,26 +885,17 @@ footer {
 }
 
 .filtre-multiple:hover {
-    border-color:
-        var(--vert);
-
-    transform:
-        translateY(-1px);
+    border-color: var(--vert);
+    transform: translateY(-1px);
 }
 
 .filtre-multiple.actif {
-    border-color:
-        var(--vert);
-
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
+    border-color: var(--vert);
+    background-color: var(--vert);
+    color: var(--blanc);
 }
 
 @media (max-width: 600px) {
-
     .barre-filtres-avances {
         margin-top: 2px;
     }
@@ -1063,17 +903,12 @@ footer {
     .bouton-filtres-avances,
     .filtre-secondaire,
     .filtre-multiple {
-        padding:
-            8px
-            12px;
-
+        padding: 8px 12px;
         font-size: 13px;
     }
 
     .panneau-filtres-avances.ouvert {
-        padding:
-            18px
-            14px;
+        padding: 18px 14px;
     }
 
     .groupe-filtre {
@@ -1087,41 +922,30 @@ footer {
 
 .resume-filtres-actifs {
     display: flex;
-
     justify-content: center;
-
     flex-wrap: wrap;
 
     gap: 7px;
 
     min-height: 0;
 
-    margin:
-        10px
-        auto
-        0;
+    margin: 10px auto 0;
 }
 
 .badge-filtre-actif {
     display: flex;
-
     align-items: center;
 
     gap: 7px;
 
-    padding:
-        6px
-        10px;
+    padding: 6px 10px;
 
     border: none;
-
     border-radius: 18px;
 
-    background-color:
-        #e9ede3;
+    background-color: #e9ede3;
 
-    color:
-        var(--vert);
+    color: var(--vert);
 
     font-size: 12px;
     font-weight: bold;
@@ -1138,11 +962,8 @@ footer {
 }
 
 .badge-filtre-actif:hover {
-    background-color:
-        #dde4d4;
+    background-color: #dde4d4;
 }
-
-
 /* =================================
    FAVORI SUR LES CARTES
 ================================= */
@@ -1151,50 +972,43 @@ footer {
     position: relative;
 }
 
-.bouton-favori {
-    width: 42px;
-    height: 42px;
-
-    margin-left: auto;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background:
-        #f6f6f6;
-
-    font-size: 24px;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease;
-
-    z-index: 2;
+.bouton-favori{
+    width:42px;
+    height:42px;
+    margin-left:auto;
+    border:none;
+    border-radius:50%;
+    background:#f6f6f6;
+    font-size:24px;
+    cursor:pointer;
+    transition:.2s;
+    cursor:pointer;
+    z-index:2;
 }
 
 .bouton-favori:hover {
-    transform:
-        scale(1.08);
+    transform: scale(1.08);
 }
 
 .bouton-favori.favori-actif {
-    color:
-        #b55045;
+    color: #b55045;
 }
 
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    /* Les styles mobiles des filtres avancés
+       sont définis plus haut. */
+}
 
 /* =================================
    BADGES DE LA FICHE RECETTE
 ================================= */
 
 .details-filtres-recette {
-    margin:
-        25px
-        0
-        30px;
+    margin: 25px 0 30px;
 }
 
 .groupe-badges-recette {
@@ -1206,117 +1020,101 @@ footer {
 
     margin-bottom: 7px;
 
-    color:
-        var(--texte-secondaire);
+    color: var(--texte-secondaire);
 
     font-size: 12px;
     font-weight: bold;
 
     text-transform: uppercase;
-
     letter-spacing: 0.6px;
 }
 
 .liste-badges-recette {
     display: flex;
-
     flex-wrap: wrap;
-
     gap: 8px;
 }
 
 .badge-recette {
     display: inline-block;
 
-    padding:
-        7px
-        12px;
+    padding: 7px 12px;
 
     border-radius: 20px;
 
-    background-color:
-        var(--beige);
+    background-color: var(--beige);
 
-    color:
-        var(--vert);
+    color: var(--vert);
 
     font-size: 13px;
     font-weight: bold;
 }
 
 .badge-etiquette {
-    background-color:
-        #eef0e8;
+    background-color: #eef0e8;
 }
 
 .badge-occasion {
-    background-color:
-        #f4eadf;
+    background-color: #f4eadf;
 }
 
 .badge-saison {
-    background-color:
-        #edf1e8;
+    background-color: #edf1e8;
 }
 
-.entete-carte {
-    display: flex;
-
-    justify-content:
-        flex-end;
-
-    margin-bottom: 10px;
+.entete-carte{
+    display:flex;
+    justify-content:flex-end;
+    margin-bottom:10px;
 }
 
-.badges-recette {
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 12px;
-
-    margin:
-        32px
-        0;
+.badges-recette{
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+    margin:32px 0;
 }
-
-
-/* =================================
-   INFOS UTILISATEUR
-================================= */
 
 .infos-utilisateur {
     display: flex;
-
     justify-content: center;
     align-items: center;
-
     flex-wrap: wrap;
 
-    gap: 8px;
+    gap: 10px;
 
-    margin-top: 14px;
+    margin-top: 22px;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.9
-        );
+    font-size: 15px;
 
-    font-size: 14px;
+    color: rgba(255, 255, 255, 0.9);
 }
+
 
 .infos-utilisateur strong {
-    color:
-        var(--blanc);
+    color: var(--blanc);
 }
+
 
 .separateur-utilisateur {
-    opacity: 0.55;
+    opacity: 0.6;
 }
 
+
+@media (max-width: 600px) {
+
+    .infos-utilisateur {
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .separateur-utilisateur {
+        display: none;
+    }
+
+}
 
 /* =================================
    HEADER PRINCIPAL
@@ -1328,53 +1126,69 @@ footer {
         5%
         0;
 
-    background-color:
-        var(--vert);
+    background-color: var(--vert);
 
-    color:
-        var(--blanc);
+    color: var(--blanc);
 
     text-align: center;
 }
+
 
 .bloc-marque {
     padding-bottom: 30px;
 }
 
+
 .entete-principale h1 {
     margin: 0;
 
-    color:
-        var(--blanc);
+    color: var(--blanc);
 
     font-size: 56px;
 }
 
-.entete-principale p {
-    margin:
-        12px
-        0
-        0;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
+.entete-principale p {
+    margin: 12px 0 0;
+
+    color: rgba(255, 255, 255, 0.92);
 
     font-size: 19px;
 }
 
 
+.infos-utilisateur {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    color: rgba(255, 255, 255, 0.9);
+
+    font-size: 14px;
+}
+
+
+.infos-utilisateur strong {
+    color: var(--blanc);
+}
+
+
+.separateur-utilisateur {
+    opacity: 0.55;
+}
+
+
 /* =================================
-   NAVIGATION PRINCIPALE
+   NAVIGATION
 ================================= */
 
 .navigation-principale {
     display: flex;
-
     justify-content: center;
     align-items: center;
 
@@ -1382,9 +1196,7 @@ footer {
 
     max-width: 850px;
 
-    margin:
-        0
-        auto;
+    margin: 0 auto;
 
     padding: 7px;
 
@@ -1395,30 +1207,18 @@ footer {
         0;
 
     background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.12
-        );
+        rgba(255, 255, 255, 0.12);
 }
+
 
 .lien-navigation {
     flex: 1;
 
-    padding:
-        13px
-        18px;
+    padding: 13px 18px;
 
     border-radius: 11px;
 
-    color:
-        rgba(
-            255,
-            255,
-            255,
-            0.86
-        );
+    color: rgba(255, 255, 255, 0.86);
 
     font-weight: bold;
 
@@ -1429,27 +1229,20 @@ footer {
         color 0.2s ease;
 }
 
+
 .lien-navigation:hover {
     background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.12
-        );
+        rgba(255, 255, 255, 0.12);
 
-    color:
-        var(--blanc);
+    color: var(--blanc);
 }
+
 
 .lien-navigation.actif {
-    background-color:
-        var(--creme);
+    background-color: var(--creme);
 
-    color:
-        var(--vert);
+    color: var(--vert);
 }
-
 
 /* =================================
    VISIBILITÉ RECETTE
@@ -1457,16 +1250,12 @@ footer {
 
 .visibilite-recette {
     display: inline-flex;
-
     align-items: center;
-
     gap: 6px;
 
     margin-top: 24px;
 
-    padding:
-        8px
-        12px;
+    padding: 8px 12px;
 
     border-radius: 999px;
 
@@ -1475,25 +1264,14 @@ footer {
 }
 
 .visibilite-foyer {
-    background-color:
-        #eef2e9;
-
-    color:
-        var(--vert);
+    background-color: #eef2e9;
+    color: var(--vert);
 }
 
 .visibilite-publique {
-    background-color:
-        #f4f2ed;
-
-    color:
-        #6f6e68;
+    background-color: #f4f2ed;
+    color: #6f6e68;
 }
-
-
-/* =================================
-   RESPONSIVE HEADER PRINCIPAL
-================================= */
 
 @media (max-width: 700px) {
 
@@ -1530,8 +1308,7 @@ footer {
     .navigation-principale {
         overflow-x: auto;
 
-        justify-content:
-            flex-start;
+        justify-content: flex-start;
 
         border-radius:
             13px
@@ -1542,16 +1319,12 @@ footer {
 
 
     .lien-navigation {
-        flex:
-            0 0
-            auto;
+        flex: 0 0 auto;
 
-        padding:
-            11px
-            15px;
+        padding: 11px 15px;
     }
-}
 
+}
 
 /* =================================
    FORMULAIRE AJOUT RECETTE
@@ -1595,11 +1368,8 @@ footer {
 
     outline: none;
 
-    -webkit-appearance:
-        none !important;
-
-    appearance:
-        none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
     background-image:
         linear-gradient(
@@ -1631,6 +1401,7 @@ footer {
         box-shadow 0.2s ease;
 }
 
+
 .formulaire-recette select:focus {
     border-color:
         var(--vert);
@@ -1644,6 +1415,7 @@ footer {
             0.10
         );
 }
+
 
 /* =================================
    CASES ÉTIQUETTES /
@@ -1690,6 +1462,7 @@ footer {
         transform 0.2s ease;
 }
 
+
 .choix-multiples label:hover {
     border-color:
         var(--vert) !important;
@@ -1697,6 +1470,7 @@ footer {
     transform:
         translateY(-1px);
 }
+
 
 .choix-multiples
 input[type="checkbox"] {
@@ -1722,14 +1496,12 @@ input[type="checkbox"] {
     background-color:
         #ffffff !important;
 
-    -webkit-appearance:
-        none !important;
-
-    appearance:
-        none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
     cursor: pointer;
 }
+
 
 .choix-multiples
 input[type="checkbox"]:checked {
@@ -1739,6 +1511,7 @@ input[type="checkbox"]:checked {
     background-color:
         var(--vert) !important;
 }
+
 
 .choix-multiples
 input[type="checkbox"]:checked::after {
@@ -1755,14 +1528,14 @@ input[type="checkbox"]:checked::after {
             -53%
         );
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
     font-size: 11px;
     font-weight: 900;
 
     line-height: 1;
 }
+
 
 .choix-multiples label:has(
     input[type="checkbox"]:checked
@@ -1786,7 +1559,7 @@ input[type="checkbox"]:checked::after {
 
 /* =================================
    PROPORTIONNEL
-   STYLE DE BASE
+   VERSION COMPACTE
 ================================= */
 
 .ligne-ingredient
@@ -1804,11 +1577,11 @@ input[type="checkbox"]:checked::after {
     align-items: center !important;
     justify-content: center !important;
 
-    gap: 7px !important;
+    gap: 5px !important;
 
     padding:
-        6px
-        10px !important;
+        5px
+        7px !important;
 
     border:
         1px solid
@@ -1822,42 +1595,34 @@ input[type="checkbox"]:checked::after {
     color:
         var(--texte) !important;
 
-    font-family:
-        inherit !important;
+    font-family: inherit !important;
+    font-size: 11px !important;
+    font-weight: 700 !important;
 
-    font-size:
-        13px !important;
+    line-height: 1 !important;
 
-    font-weight:
-        700 !important;
-
-    line-height:
-        1 !important;
-
-    white-space:
-        nowrap !important;
+    white-space: nowrap !important;
 
     cursor: pointer;
 
-    overflow:
-        hidden !important;
+    overflow: hidden !important;
 
-    transform:
-        none !important;
+    transform: none !important;
 
     transition:
         background-color 0.2s ease,
         border-color 0.2s ease;
 }
 
+
 .ligne-ingredient
 .option-proportionnelle:hover {
     border-color:
         var(--vert) !important;
 
-    transform:
-        none !important;
+    transform: none !important;
 }
+
 
 .ligne-ingredient
 .option-proportionnelle:has(
@@ -1870,44 +1635,38 @@ input[type="checkbox"]:checked::after {
         #eef0e8 !important;
 }
 
+
 .ligne-ingredient
 .option-proportionnelle
 .ingredient-proportionnel {
-    width: 16px !important;
-    height: 16px !important;
+    width: 14px !important;
+    height: 14px !important;
 
-    min-width:
-        16px !important;
+    min-width: 14px !important;
 
     flex:
         0 0
-        16px !important;
+        14px !important;
 
-    margin:
-        0 !important;
+    margin: 0 !important;
 
-    position:
-        relative;
+    position: relative;
 
     border:
         1.5px solid
         #cfc8bc !important;
 
-    border-radius:
-        4px !important;
+    border-radius: 4px !important;
 
     background-color:
         #ffffff !important;
 
-    -webkit-appearance:
-        none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
-    appearance:
-        none !important;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 }
+
 
 .ligne-ingredient
 .option-proportionnelle
@@ -1918,6 +1677,7 @@ input[type="checkbox"]:checked::after {
     background-color:
         var(--vert) !important;
 }
+
 
 .ligne-ingredient
 .option-proportionnelle
@@ -1935,17 +1695,12 @@ input[type="checkbox"]:checked::after {
             -53%
         );
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-size:
-        10px !important;
+    font-size: 9px !important;
+    font-weight: 900;
 
-    font-weight:
-        900;
-
-    line-height:
-        1;
+    line-height: 1;
 }
 
 
@@ -1958,28 +1713,22 @@ input[type="checkbox"]:checked::after {
     display: flex;
 
     align-items: center;
-
     flex-wrap: wrap;
 
     gap: 10px;
 }
 
+
 .choix-visibilite
 .option-visibilite {
-    display:
-        inline-flex !important;
+    display: inline-flex !important;
 
-    align-items:
-        center !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
 
-    justify-content:
-        flex-start !important;
+    gap: 10px !important;
 
-    gap:
-        10px !important;
-
-    min-height:
-        58px !important;
+    min-height: 58px !important;
 
     padding:
         12px
@@ -1989,8 +1738,7 @@ input[type="checkbox"]:checked::after {
         1px solid
         #d8d1c5 !important;
 
-    border-radius:
-        15px !important;
+    border-radius: 15px !important;
 
     background-color:
         #ffffff !important;
@@ -1998,20 +1746,14 @@ input[type="checkbox"]:checked::after {
     color:
         var(--texte) !important;
 
-    font-size:
-        16px !important;
+    font-size: 16px !important;
+    font-weight: 700 !important;
 
-    font-weight:
-        700 !important;
+    line-height: 1.2 !important;
 
-    line-height:
-        1.2 !important;
+    cursor: pointer;
 
-    cursor:
-        pointer;
-
-    transform:
-        none !important;
+    transform: none !important;
 
     transition:
         background-color 0.2s ease,
@@ -2019,6 +1761,7 @@ input[type="checkbox"]:checked::after {
         box-shadow 0.2s ease,
         transform 0.2s ease;
 }
+
 
 .choix-visibilite
 .option-visibilite:hover {
@@ -2029,47 +1772,38 @@ input[type="checkbox"]:checked::after {
         translateY(-1px) !important;
 }
 
+
 .choix-visibilite
 .option-visibilite
 input[type="radio"] {
-    width:
-        18px !important;
+    width: 18px !important;
+    height: 18px !important;
 
-    height:
-        18px !important;
-
-    min-width:
-        18px !important;
+    min-width: 18px !important;
 
     flex:
         0 0
         18px !important;
 
-    margin:
-        0 !important;
+    margin: 0 !important;
 
-    position:
-        relative;
+    position: relative;
 
     border:
         1.5px solid
         #cfc8bc !important;
 
-    border-radius:
-        5px !important;
+    border-radius: 5px !important;
 
     background-color:
         #ffffff !important;
 
-    -webkit-appearance:
-        none !important;
+    -webkit-appearance: none !important;
+    appearance: none !important;
 
-    appearance:
-        none !important;
-
-    cursor:
-        pointer;
+    cursor: pointer;
 }
+
 
 .choix-visibilite
 .option-visibilite
@@ -2081,20 +1815,16 @@ input[type="radio"]:checked {
         var(--vert) !important;
 }
 
+
 .choix-visibilite
 .option-visibilite
 input[type="radio"]:checked::after {
-    content:
-        "✓";
+    content: "✓";
 
-    position:
-        absolute;
+    position: absolute;
 
-    top:
-        50%;
-
-    left:
-        50%;
+    top: 50%;
+    left: 50%;
 
     transform:
         translate(
@@ -2102,18 +1832,14 @@ input[type="radio"]:checked::after {
             -53%
         );
 
-    color:
-        #ffffff;
+    color: #ffffff;
 
-    font-size:
-        11px !important;
+    font-size: 11px !important;
+    font-weight: 900;
 
-    font-weight:
-        900;
-
-    line-height:
-        1;
+    line-height: 1;
 }
+
 
 .choix-visibilite
 .option-visibilite:has(
@@ -2157,8 +1883,7 @@ input[type="radio"]:focus-visible {
             0.20
         );
 
-    outline-offset:
-        2px;
+    outline-offset: 2px;
 }
 
 
@@ -2169,3770 +1894,31 @@ input[type="radio"]:focus-visible {
 @media (max-width: 700px) {
 
     .formulaire-recette select {
-        height:
-            48px !important;
-
-        min-height:
-            48px !important;
+        height: 48px !important;
+        min-height: 48px !important;
     }
 
 
     .choix-multiples label,
     .choix-visibilite
     .option-visibilite {
-        min-height:
-            54px !important;
+        min-height: 54px !important;
     }
 
 
     .choix-visibilite
     .option-visibilite {
-        width:
-            100%;
+        width: 100%;
     }
 
 
     .ligne-ingredient
     .option-proportionnelle {
-        height:
-            44px !important;
+        height: 44px !important;
+        min-height: 44px !important;
 
-        min-height:
-            44px !important;
-
-        font-size:
-            12px !important;
-    }
-}
-
-/* =================================
-   INGRÉDIENTS
-   FINITIONS DESKTOP
-================================= */
-
-.ligne-ingredient {
-    align-items: center;
-}
-
-
-/*
-   Bouton suppression plus propre.
-   Il reste compact sur ordinateur.
-*/
-
-.ligne-ingredient
-.supprimer-ingredient {
-    width: 44px !important;
-    height: 44px !important;
-
-    min-width: 44px !important;
-
-    display: inline-flex !important;
-
-    align-items: center !important;
-    justify-content: center !important;
-
-    padding: 0 !important;
-    margin: 0 !important;
-
-    border:
-        1px solid
-        rgba(183, 104, 66, 0.30) !important;
-
-    border-radius: 12px !important;
-
-    background-color:
-        #fff8f4 !important;
-
-    color:
-        var(--terracotta) !important;
-
-    font-family:
-        inherit !important;
-
-    font-size:
-        22px !important;
-
-    font-weight:
-        400 !important;
-
-    line-height:
-        1 !important;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.ligne-ingredient
-.supprimer-ingredient:hover {
-    border-color:
-        var(--terracotta) !important;
-
-    background-color:
-        #f9ece5 !important;
-
-    color:
-        #9d5334 !important;
-
-    transform:
-        translateY(-1px);
-}
-
-
-/* =================================
-   BLOC PHOTOS
-================================= */
-
-.bloc-photos-recette {
-    margin:
-        34px
-        0;
-
-    padding:
-        26px;
-
-    border:
-        1px solid
-        #ded7ca;
-
-    border-radius:
-        18px;
-
-    background:
-        linear-gradient(
-            145deg,
-            #ffffff,
-            #fbf8f2
-        );
-}
-
-
-/* =================================
-   ENTÊTE PHOTOS
-================================= */
-
-.entete-photos-recette {
-    display: flex;
-
-    align-items:
-        flex-start;
-
-    justify-content:
-        space-between;
-
-    gap:
-        20px;
-
-    margin-bottom:
-        18px;
-}
-
-
-.entete-photos-recette
-.titre-champ {
-    display: block;
-
-    margin-bottom:
-        6px;
-
-    color:
-        var(--texte);
-
-    font-size:
-        17px;
-
-    font-weight:
-        700;
-}
-
-
-.entete-photos-recette
-.aide {
-    max-width:
-        650px;
-
-    margin:
-        0;
-
-    color:
-        var(--texte-secondaire);
-
-    font-size:
-        14px;
-
-    line-height:
-        1.55;
-}
-
-
-/* =================================
-   COMPTEUR PHOTOS
-================================= */
-
-.compteur-photos-recette {
-    flex-shrink:
-        0;
-
-    display:
-        inline-flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    min-width:
-        58px;
-
-    padding:
-        7px
-        11px;
-
-    border-radius:
-        999px;
-
-    background-color:
-        #eef0e8;
-
-    color:
-        var(--vert);
-
-    font-size:
-        13px;
-
-    font-weight:
-        700;
-}
-
-
-/* =================================
-   CACHER LE VRAI INPUT FILE
-================================= */
-
-.input-photos-recette {
-    position:
-        absolute !important;
-
-    width:
-        1px !important;
-
-    height:
-        1px !important;
-
-    padding:
-        0 !important;
-
-    margin:
-        -1px !important;
-
-    overflow:
-        hidden !important;
-
-    clip:
-        rect(
-            0,
-            0,
-            0,
-            0
-        ) !important;
-
-    white-space:
-        nowrap !important;
-
-    border:
-        0 !important;
-
-    opacity:
-        0 !important;
-
-    pointer-events:
-        none !important;
-}
-
-
-/* =================================
-   BOUTON AJOUTER DES PHOTOS
-================================= */
-
-.zone-ajout-photos {
-    width:
-        100%;
-
-    min-height:
-        92px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    gap:
-        15px;
-
-    padding:
-        18px
-        22px;
-
-    border:
-        2px dashed
-        rgba(
-            102,
-            112,
-            90,
-            0.42
-        );
-
-    border-radius:
-        16px;
-
-    background-color:
-        rgba(
-            238,
-            240,
-            232,
-            0.45
-        );
-
-    color:
-        var(--texte);
-
-    font:
-        inherit;
-
-    text-align:
-        left;
-
-    cursor:
-        pointer;
-
-    transition:
-        border-color 0.2s ease,
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-
-.zone-ajout-photos:hover {
-    border-color:
-        var(--vert);
-
-    background-color:
-        #eef0e8;
-
-    transform:
-        translateY(-1px);
-
-    box-shadow:
-        0 6px 18px
-        rgba(
-            52,
-            59,
-            47,
-            0.08
-        );
-}
-
-
-/* =================================
-   ICÔNE PHOTO
-================================= */
-
-.icone-ajout-photo {
-    width:
-        48px;
-
-    height:
-        48px;
-
-    flex:
-        0 0
-        48px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        14px;
-
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
-
-    font-size:
-        22px;
-
-    box-shadow:
-        0 4px 12px
-        rgba(
-            52,
-            59,
-            47,
-            0.14
-        );
-}
-
-
-/* =================================
-   TEXTE BOUTON PHOTO
-================================= */
-
-.texte-ajout-photo {
-    display:
-        flex;
-
-    flex-direction:
-        column;
-
-    gap:
-        4px;
-}
-
-
-.texte-ajout-photo
-strong {
-    color:
-        var(--texte);
-
-    font-size:
-        16px;
-}
-
-
-.texte-ajout-photo
-small {
-    color:
-        var(--texte-secondaire);
-
-    font-size:
-        13px;
-
-    font-weight:
-        normal;
-}
-
-
-/* =================================
-   BOUTON PHOTO DÉSACTIVÉ
-================================= */
-
-.zone-ajout-photos:disabled {
-    border-color:
-        #ddd8cf;
-
-    background-color:
-        #f5f2ec;
-
-    color:
-        #999;
-
-    cursor:
-        default;
-
-    opacity:
-        0.65;
-
-    transform:
-        none;
-
-    box-shadow:
-        none;
-}
-
-
-.zone-ajout-photos:disabled
-.icone-ajout-photo {
-    background-color:
-        #aaa;
-}
-
-
-/* =================================
-   GALERIE DES APERÇUS
-================================= */
-
-.apercu-photos-recette {
-    display:
-        grid;
-
-    grid-template-columns:
-        repeat(
-            5,
-            minmax(
-                0,
-                1fr
-            )
-        );
-
-    gap:
-        12px;
-
-    margin-top:
-        18px;
-}
-
-
-/*
-   Important :
-   l'attribut hidden doit réellement
-   masquer la galerie vide.
-*/
-
-.apercu-photos-recette[hidden] {
-    display:
-        none !important;
-}
-
-
-/* =================================
-   UNE PHOTO
-================================= */
-
-.apercu-photo-recette {
-    position:
-        relative;
-
-    overflow:
-        hidden;
-
-    aspect-ratio:
-        1 / 1;
-
-    border:
-        1px solid
-        #ddd7cc;
-
-    border-radius:
-        14px;
-
-    background-color:
-        var(--beige);
-
-    box-shadow:
-        0 4px 12px
-        rgba(
-            52,
-            59,
-            47,
-            0.08
-        );
-}
-
-
-.apercu-photo-recette
-img {
-    display:
-        block;
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    object-fit:
-        cover;
-}
-
-
-/* =================================
-   NUMÉRO PHOTO
-================================= */
-
-.numero-photo-recette {
-    position:
-        absolute;
-
-    left:
-        8px;
-
-    bottom:
-        8px;
-
-    min-width:
-        25px;
-
-    height:
-        25px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0
-        7px;
-
-    border-radius:
-        999px;
-
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.90
-        );
-
-    color:
-        var(--texte);
-
-    font-size:
-        11px;
-
-    font-weight:
-        700;
-
-    box-shadow:
-        0 2px 8px
-        rgba(
-            0,
-            0,
-            0,
-            0.10
-        );
-}
-
-
-/* =================================
-   CROIX SUR UNE PHOTO
-================================= */
-
-.supprimer-photo-recette {
-    position:
-        absolute;
-
-    top:
-        7px;
-
-    right:
-        7px;
-
-    width:
-        30px;
-
-    height:
-        30px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    padding:
-        0;
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.75
-        );
-
-    border-radius:
-        50%;
-
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
-
-    color:
-        #9d5334;
-
-    font:
-        inherit;
-
-    font-size:
-        20px;
-
-    line-height:
-        1;
-
-    cursor:
-        pointer;
-
-    box-shadow:
-        0 2px 9px
-        rgba(
-            0,
-            0,
-            0,
-            0.15
-        );
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.supprimer-photo-recette:hover {
-    background-color:
-        var(--terracotta);
-
-    color:
-        var(--blanc);
-
-    transform:
-        scale(1.05);
-}
-
-
-/* =================================
-   MESSAGE PHOTOS
-================================= */
-
-.message-photos-recette {
-    min-height:
-        0;
-
-    margin:
-        12px
-        0
-        0;
-
-    color:
-        var(--texte-secondaire);
-
-    font-size:
-        13px;
-
-    line-height:
-        1.4;
-}
-
-
-.message-photos-recette:empty {
-    display:
-        none;
-}
-
-
-.message-photos-recette.erreur {
-    display:
-        block;
-
-    color:
-        #a54f3c;
-
-    font-weight:
-        700;
-}
-
-
-.message-photos-recette.succes {
-    display:
-        block;
-
-    color:
-        var(--vert);
-
-    font-weight:
-        700;
-}
-
-
-/* =================================
-   FOCUS ACCESSIBILITÉ PHOTOS
-================================= */
-
-.zone-ajout-photos:focus-visible,
-.supprimer-photo-recette:focus-visible,
-.supprimer-ingredient:focus-visible {
-    outline:
-        3px solid
-        rgba(
-            102,
-            112,
-            90,
-            0.22
-        );
-
-    outline-offset:
-        3px;
-}
-
-
-/* =================================
-   TABLETTE
-================================= */
-
-@media (max-width: 850px) {
-
-    .apercu-photos-recette {
-        grid-template-columns:
-            repeat(
-                3,
-                minmax(
-                    0,
-                    1fr
-                )
-            );
-    }
-}
-
-
-/* =================================
-   MOBILE
-================================= */
-
-@media (max-width: 700px) {
-
-    /*
-       Chaque ingrédient devient
-       une petite carte.
-    */
-
-    .ligne-ingredient {
-        display:
-            grid !important;
-
-        grid-template-columns:
-            minmax(0, 1fr)
-            minmax(0, 1fr) !important;
-
-        gap:
-            10px !important;
-
-        padding:
-            14px !important;
-
-        border:
-            1px solid
-            #e0d9cd;
-
-        border-radius:
-            16px;
-
-        background-color:
-            #ffffff;
-
-        box-shadow:
-            0 3px 12px
-            rgba(
-                52,
-                59,
-                47,
-                0.05
-            );
-    }
-
-
-    /*
-       Quantité et unité
-       côte à côte.
-    */
-
-    .ligne-ingredient
-    .ingredient-quantite {
-        grid-column:
-            1;
-    }
-
-
-    .ligne-ingredient
-    .ingredient-unite {
-        grid-column:
-            2;
-    }
-
-
-    /*
-       Nom sur toute la largeur.
-    */
-
-    .ligne-ingredient
-    .ingredient-nom {
-        grid-column:
-            1 / -1;
-    }
-
-
-    /*
-       Proportionnel à gauche
-       sur la dernière ligne.
-    */
-
-    .ligne-ingredient
-    .option-proportionnelle {
-        grid-column:
-            1 !important;
-
-        grid-row:
-            auto !important;
-
-        width:
-            auto !important;
-
-        min-width:
-            0 !important;
-
-        justify-self:
-            start;
-
-        justify-content:
-            flex-start !important;
-
-        height:
-            42px !important;
-
-        min-height:
-            42px !important;
-
-        padding:
-            7px
-            12px !important;
-
-        border-radius:
-            11px !important;
-
-        font-size:
-            12px !important;
-    }
-
-
-    /*
-       LA MODIFICATION DEMANDÉE :
-
-       la croix est désormais sur
-       exactement la même ligne que
-       Proportionnel, à droite.
-    */
-
-    .ligne-ingredient
-    .supprimer-ingredient {
-        grid-column:
-            2 !important;
-
-        grid-row:
-            auto !important;
-
-        justify-self:
-            end;
-
-        align-self:
-            center;
-
-        width:
-            42px !important;
-
-        height:
-            42px !important;
-
-        min-width:
-            42px !important;
-
-        margin:
-            0 !important;
-
-        border-radius:
-            11px !important;
-
-        font-size:
-            21px !important;
-    }
-
-
-    /* =================================
-       PHOTOS MOBILE
-    ================================= */
-
-    .bloc-photos-recette {
-        margin:
-            28px
-            0;
-
-        padding:
-            18px;
-
-        border-radius:
-            16px;
-    }
-
-
-    .entete-photos-recette {
-        gap:
-            12px;
-
-        margin-bottom:
-            15px;
-    }
-
-
-    .entete-photos-recette
-    .aide {
-        font-size:
-            13px;
-    }
-
-
-    .compteur-photos-recette {
-        min-width:
-            52px;
-
-        padding:
-            6px
-            9px;
-
-        font-size:
-            12px;
-    }
-
-
-    /*
-       Beau gros bouton tactile,
-       mais sans prendre énormément
-       de hauteur.
-    */
-
-    .zone-ajout-photos {
-        min-height:
-            78px;
-
-        justify-content:
-            flex-start;
-
-        gap:
-            12px;
-
-        padding:
-            14px;
-
-        border-radius:
-            14px;
-
-        text-align:
-            left;
-    }
-
-
-    .icone-ajout-photo {
-        width:
-            44px;
-
-        height:
-            44px;
-
-        flex-basis:
-            44px;
-
-        border-radius:
-            12px;
-
-        font-size:
-            20px;
-    }
-
-
-    .texte-ajout-photo
-    strong {
-        font-size:
-            15px;
-    }
-
-
-    .texte-ajout-photo
-    small {
-        font-size:
-            12px;
-    }
-
-
-    /*
-       Deux photos par ligne
-       sur téléphone.
-    */
-
-    .apercu-photos-recette {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(
-                    0,
-                    1fr
-                )
-            );
-
-        gap:
-            10px;
-
-        margin-top:
-            14px;
-    }
-
-
-    .apercu-photo-recette {
-        border-radius:
-            12px;
-    }
-
-
-    .supprimer-photo-recette {
-        top:
-            6px;
-
-        right:
-            6px;
-
-        width:
-            29px;
-
-        height:
-            29px;
-
-        font-size:
-            19px;
-    }
-}
-
-
-/* =================================
-   TRÈS PETITS ÉCRANS
-================================= */
-
-@media (max-width: 380px) {
-
-    .bloc-photos-recette {
-        padding:
-            15px;
-    }
-
-
-    .zone-ajout-photos {
-        padding:
-            12px;
-    }
-
-
-    .icone-ajout-photo {
-        width:
-            40px;
-
-        height:
-            40px;
-
-        flex-basis:
-            40px;
-    }
-
-
-    .ligne-ingredient {
-        padding:
-            12px !important;
-    }
-}
-
-/* =================================
-   GALERIE / CAROUSEL RECETTE
-================================= */
-
-.galerie-recette {
-    width: 100%;
-    max-width: 1000px;
-
-    margin:
-        0
-        auto
-        24px;
-
-    overflow: hidden;
-
-    border-radius: 22px;
-
-    background-color:
-        var(--blanc);
-
-    box-shadow:
-        0 10px 35px
-        var(--ombre);
-}
-
-
-/*
-    Respecte bien l'attribut hidden.
-*/
-
-.galerie-recette[hidden] {
-    display: none !important;
-}
-
-
-/* =================================
-   CAROUSEL
-================================= */
-
-.carousel-recette {
-    position: relative;
-
-    width: 100%;
-
-    overflow: hidden;
-
-    background-color:
-        #ece8df;
-
-    border-radius:
-        22px;
-}
-
-
-/* =================================
-   CONTENEUR DES IMAGES
-================================= */
-
-.carousel-images-recette {
-    position: relative;
-
-    width: 100%;
-
-    /*
-        Hauteur stable du carousel.
-
-        Sur ordinateur :
-        grand format horizontal,
-        mais sans prendre tout l'écran.
-    */
-
-    aspect-ratio:
-        16 / 9;
-
-    overflow: hidden;
-}
-
-
-/* =================================
-   SLIDES
-================================= */
-
-.slide-recette {
-    position: absolute;
-
-    inset: 0;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    width: 100%;
-    height: 100%;
-
-    background-color:
-        #ece8df;
-}
-
-
-.slide-recette.active {
-    display: flex;
-}
-
-
-/* =================================
-   IMAGE
-================================= */
-
-.slide-recette img {
-    display: block;
-
-    width: 100%;
-    height: 100%;
-
-    object-fit: cover;
-
-    object-position: center;
-}
-
-
-/* =================================
-   FLÈCHES CAROUSEL
-================================= */
-
-.bouton-carousel-recette {
-    position: absolute;
-
-    top: 50%;
-
-    z-index: 5;
-
-    width: 48px;
-    height: 48px;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    transform:
-        translateY(-50%);
-
-    border:
-        1px solid
-        rgba(
-            255,
-            255,
-            255,
-            0.7
-        );
-
-    border-radius: 50%;
-
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.9
-        );
-
-    color:
-        var(--texte);
-
-    font-family:
-        inherit;
-
-    font-size: 34px;
-
-    font-weight: 400;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    box-shadow:
-        0 4px 15px
-        rgba(
-            0,
-            0,
-            0,
-            0.14
-        );
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        color 0.2s ease;
-}
-
-
-.bouton-carousel-recette:hover {
-    background-color:
-        var(--vert);
-
-    color:
-        var(--blanc);
-
-    transform:
-        translateY(-50%)
-        scale(1.05);
-}
-
-
-.bouton-carousel-recette[hidden] {
-    display: none !important;
-}
-
-
-.bouton-carousel-precedent {
-    left: 18px;
-}
-
-
-.bouton-carousel-suivant {
-    right: 18px;
-}
-
-
-/* =================================
-   INDICATEURS
-================================= */
-
-.indicateurs-carousel-recette {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    padding:
-        14px
-        18px;
-
-    background-color:
-        var(--blanc);
-}
-
-
-.indicateurs-carousel-recette[hidden] {
-    display: none !important;
-}
-
-
-/* =================================
-   UN POINT
-================================= */
-
-.indicateur-carousel-recette {
-    width: 9px;
-    height: 9px;
-
-    padding: 0;
-
-    border: none;
-
-    border-radius: 50%;
-
-    background-color:
-        #cbc6bb;
-
-    cursor: pointer;
-
-    transition:
-        width 0.2s ease,
-        border-radius 0.2s ease,
-        background-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.indicateur-carousel-recette:hover {
-    transform:
-        scale(1.15);
-}
-
-
-.indicateur-carousel-recette.actif {
-    width: 24px;
-
-    border-radius: 999px;
-
-    background-color:
-        var(--vert);
-}
-
-
-/* =================================
-   FOCUS
-================================= */
-
-.bouton-carousel-recette:focus-visible,
-.indicateur-carousel-recette:focus-visible {
-    outline:
-        3px solid
-        rgba(
-            102,
-            112,
-            90,
-            0.22
-        );
-
-    outline-offset:
-        3px;
-}
-
-
-/* =================================
-   TABLETTE
-================================= */
-
-@media (max-width: 850px) {
-
-    .galerie-recette {
-        border-radius: 18px;
-    }
-
-
-    .carousel-recette {
-        border-radius: 18px;
-    }
-
-
-    .carousel-images-recette {
-        aspect-ratio:
-            4 / 3;
-    }
-
-
-    .bouton-carousel-recette {
-        width: 44px;
-        height: 44px;
-
-        font-size: 30px;
-    }
-
-
-    .bouton-carousel-precedent {
-        left: 12px;
-    }
-
-
-    .bouton-carousel-suivant {
-        right: 12px;
-    }
-}
-
-
-/* =================================
-   MOBILE
-================================= */
-
-@media (max-width: 600px) {
-
-    .galerie-recette {
-        width: 100%;
-
-        margin-bottom: 18px;
-
-        border-radius: 16px;
-
-        box-shadow:
-            0 6px 20px
-            rgba(
-                52,
-                59,
-                47,
-                0.10
-            );
-    }
-
-
-    .carousel-recette {
-        border-radius: 16px;
-    }
-
-
-    /*
-        Photo légèrement plus carrée
-        sur téléphone.
-    */
-
-    .carousel-images-recette {
-        aspect-ratio:
-            4 / 3;
-    }
-
-
-    /*
-        Grâce au swipe,
-        les flèches peuvent être
-        plus discrètes.
-    */
-
-    .bouton-carousel-recette {
-        width: 38px;
-        height: 38px;
-
-        font-size: 27px;
-
-        background-color:
-            rgba(
-                255,
-                255,
-                255,
-                0.86
-            );
-    }
-
-
-    .bouton-carousel-precedent {
-        left: 9px;
-    }
-
-
-    .bouton-carousel-suivant {
-        right: 9px;
-    }
-
-
-    .indicateurs-carousel-recette {
-        gap: 7px;
-
-        padding:
-            11px
-            15px;
-    }
-
-
-    .indicateur-carousel-recette {
-        width: 8px;
-        height: 8px;
-    }
-
-
-    .indicateur-carousel-recette.actif {
-        width: 21px;
-    }
-}
-
-/* =================================
-   BOUTON AJOUTER AU PLANNING
-================================= */
-
-.bouton-ajouter-planning-recette {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 48px;
-
-    padding: 12px 20px;
-
-    border: 2px solid var(--vert);
-    border-radius: 10px;
-
-    background-color: var(--blanc);
-    color: var(--vert);
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.bouton-ajouter-planning-recette:hover {
-    background-color: #eef0e8;
-    transform: translateY(-1px);
-}
-
-.bouton-ajouter-planning-recette.ajoute {
-    background-color: var(--vert);
-    color: var(--blanc);
-}
-
-
-/* =================================
-   FOND POPUP PLANNING
-================================= */
-
-.fond-popup-planning-recette {
-    position: fixed;
-    inset: 0;
-
-    z-index: 3000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background-color:
-        rgba(30, 35, 28, 0.55);
-
-    backdrop-filter: blur(4px);
-}
-
-.fond-popup-planning-recette[hidden] {
-    display: none !important;
-}
-
-body.popup-ouverte {
-    overflow: hidden;
-}
-
-
-/* =================================
-   POPUP
-================================= */
-
-.popup-planning-recette {
-    position: relative;
-
-    width: 100%;
-    max-width: 520px;
-
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-
-    padding: 34px;
-
-    border-radius: 22px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 22px 70px
-        rgba(30, 35, 28, 0.24);
-}
-
-
-/* =================================
-   CROIX
-================================= */
-
-.fermer-popup-planning-recette {
-    position: absolute;
-
-    top: 18px;
-    right: 18px;
-
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background-color: var(--creme);
-    color: var(--texte);
-
-    font-size: 28px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-
-/* =================================
-   ENTÊTE
-================================= */
-
-.entete-popup-planning-recette {
-    padding-right: 50px;
-    margin-bottom: 28px;
-}
-
-.entete-popup-planning-recette h2,
-.popup-confirmation-planning h2 {
-    margin: 0 0 8px;
-
-    color: var(--texte);
-
-    font-size: 30px;
-}
-
-.nom-recette-popup-planning {
-    margin: 0;
-
-    color: var(--texte-secondaire);
-
-    font-size: 17px;
-}
-
-
-/* =================================
-   CHAMPS
-================================= */
-
-.champ-popup-planning {
-    margin-bottom: 24px;
-}
-
-.champ-popup-planning label,
-.label-popup-planning {
-    display: block;
-
-    margin-bottom: 10px;
-
-    color: var(--texte);
-
-    font-size: 15px;
-    font-weight: bold;
-}
-
-#date-ajout-planning {
-    width: 100%;
-    height: 52px;
-
-    padding: 0 14px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 16px;
-}
-
-
-/* =================================
-   MIDI / SOIR
-================================= */
-
-.choix-moment-planning {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    gap: 10px;
-}
-
-.bouton-moment-planning {
-    min-height: 50px;
-
-    border: 1px solid #d8d1c5;
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.bouton-moment-planning.actif {
-    border-color: var(--vert);
-
-    background-color: #eef0e8;
-    color: var(--vert);
-}
-
-
-/* =================================
-   PERSONNES
-================================= */
-
-.controle-personnes-planning {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 18px;
-}
-
-.controle-personnes-planning button {
-    width: 42px;
-    height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: 1px solid var(--vert);
-    border-radius: 50%;
-
-    background-color: var(--blanc);
-    color: var(--vert);
-
-    font-size: 24px;
-
-    cursor: pointer;
-}
-
-#nombre-personnes-planning {
-    min-width: 30px;
-
-    text-align: center;
-
-    font-size: 23px;
-}
-
-
-/* =================================
-   MESSAGE
-================================= */
-
-.message-popup-planning {
-    margin-bottom: 18px;
-
-    padding: 12px 14px;
-
-    border-radius: 10px;
-
-    font-size: 14px;
-    line-height: 1.45;
-}
-
-.message-popup-planning[hidden] {
-    display: none !important;
-}
-
-.message-popup-planning.erreur {
-    background-color: #fbefea;
-    color: #a54f3c;
-}
-
-.message-popup-planning.succes {
-    background-color: #eef0e8;
-    color: var(--vert);
-}
-
-
-/* =================================
-   ACTIONS
-================================= */
-
-.actions-popup-planning {
-    display: flex;
-
-    justify-content: flex-end;
-
-    gap: 10px;
-
-    margin-top: 28px;
-}
-
-.bouton-annuler-planning,
-.bouton-confirmer-planning {
-    min-height: 48px;
-
-    padding: 12px 18px;
-
-    border-radius: 10px;
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-}
-
-.bouton-annuler-planning {
-    border: 1px solid #d8d1c5;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-}
-
-.bouton-confirmer-planning {
-    border: 1px solid var(--vert);
-
-    background-color: var(--vert);
-    color: var(--blanc);
-}
-
-.bouton-confirmer-planning:hover {
-    background-color: var(--vert-fonce);
-}
-
-
-/* =================================
-   CONFIRMATION REPAS EXISTANT
-================================= */
-
-.popup-confirmation-planning {
-    max-width: 470px;
-
-    text-align: center;
-}
-
-.popup-confirmation-planning p {
-    margin: 18px 0 0;
-
-    color: var(--texte-secondaire);
-
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-
-/* =================================
-   MOBILE
-================================= */
-
-@media (max-width: 600px) {
-
-    .fond-popup-planning-recette {
-        padding: 14px;
-    }
-
-    .popup-planning-recette {
-        padding: 28px 20px 22px;
-
-        border-radius: 18px;
-    }
-
-    .entete-popup-planning-recette h2,
-    .popup-confirmation-planning h2 {
-        font-size: 25px;
-    }
-
-    .choix-moment-planning {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .actions-popup-planning {
-        flex-direction: column-reverse;
-    }
-
-    .bouton-annuler-planning,
-    .bouton-confirmer-planning {
-        width: 100%;
-    }
-
-    .bouton-ajouter-planning-recette {
-        width: 100%;
-    }
-}
-
-
-/* =================================
-   RÉORGANISATION DES PHOTOS
-   DRAG & DROP / MOBILE
-================================= */
-
-.apercu-photo-recette {
-    cursor: grab;
-    user-select: none;
-    -webkit-user-select: none;
-
-    transition:
-        transform 0.18s ease,
-        opacity 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
-
-    touch-action: pan-y;
-}
-
-.apercu-photo-recette:active {
-    cursor: grabbing;
-}
-
-
-/* =================================
-   PHOTO PRINCIPALE
-================================= */
-
-.apercu-photo-recette.photo-principale {
-    border:
-        2px solid
-        var(--vert);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(
-            102,
-            112,
-            90,
-            0.10
-        );
-}
-
-.badge-photo-principale {
-    position: absolute;
-
-    left: 8px;
-    bottom: 8px;
-
-    z-index: 4;
-
-    max-width:
-        calc(100% - 16px);
-
-    padding:
-        6px
-        9px;
-
-    border-radius:
-        999px;
-
-    background-color:
-        rgba(
-            81,
-            90,
-            72,
-            0.94
-        );
-
-    color:
-        #ffffff;
-
-    font-size: 11px;
-    font-weight: 800;
-
-    line-height: 1.1;
-
-    white-space: nowrap;
-
-    pointer-events: none;
-}
-
-
-/* =================================
-   POIGNÉE DRAG & DROP
-================================= */
-
-.poignee-photo-recette {
-    position: absolute;
-
-    top: 9px;
-    left: 9px;
-
-    z-index: 5;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 30px;
-    height: 30px;
-
-    border-radius: 9px;
-
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.92
-        );
-
-    color:
-        var(--vert);
-
-    box-shadow:
-        0 2px 8px
-        rgba(
-            52,
-            59,
-            47,
-            0.14
-        );
-
-    font-size: 18px;
-    font-weight: 900;
-
-    letter-spacing: -4px;
-    line-height: 1;
-
-    cursor: grab;
-
-    pointer-events: none;
-}
-
-
-/* =================================
-   BOUTONS ORDRE GAUCHE / DROITE
-================================= */
-
-.actions-ordre-photo {
-    position: absolute;
-
-    left: 50%;
-    bottom: 8px;
-
-    z-index: 5;
-
-    display: flex;
-    align-items: center;
-
-    gap: 6px;
-
-    transform:
-        translateX(-50%);
-}
-
-.photo-principale
-.actions-ordre-photo {
-    bottom: 43px;
-}
-
-.deplacer-photo-recette {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 34px;
-    height: 34px;
-
-    padding: 0;
-
-    border:
-        1px solid
-        rgba(
-            102,
-            112,
-            90,
-            0.30
-        );
-
-    border-radius: 10px;
-
-    background-color:
-        rgba(
-            255,
-            255,
-            255,
-            0.94
-        );
-
-    color:
-        var(--vert);
-
-    box-shadow:
-        0 2px 8px
-        rgba(
-            52,
-            59,
-            47,
-            0.12
-        );
-
-    font: inherit;
-    font-size: 17px;
-    font-weight: 800;
-
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.18s ease,
-        color 0.18s ease,
-        border-color 0.18s ease,
-        transform 0.18s ease,
-        opacity 0.18s ease;
-}
-
-.deplacer-photo-recette:hover:not(:disabled) {
-    border-color:
-        var(--vert);
-
-    background-color:
-        var(--vert);
-
-    color:
-        #ffffff;
-
-    transform:
-        translateY(-1px);
-}
-
-.deplacer-photo-recette:disabled {
-    opacity: 0.28;
-    cursor: default;
-}
-
-
-/* =================================
-   ÉTATS DRAG & DROP
-================================= */
-
-.apercu-photo-recette.photo-en-deplacement,
-.apercu-photo-recette.photo-en-deplacement-tactile {
-    opacity: 0.55;
-
-    transform:
-        scale(0.97);
-
-    cursor: grabbing;
-}
-
-.apercu-photo-recette.photo-cible-deplacement {
-    border-color:
-        var(--vert);
-
-    box-shadow:
-        0 0 0 4px
-        rgba(
-            102,
-            112,
-            90,
-            0.16
-        );
-
-    transform:
-        scale(1.025);
-}
-
-
-/* =================================
-   FOCUS CLAVIER
-================================= */
-
-.deplacer-photo-recette:focus-visible {
-    outline:
-        3px solid
-        rgba(
-            102,
-            112,
-            90,
-            0.22
-        );
-
-    outline-offset: 2px;
-}
-
-
-/* =================================
-   MOBILE - RÉORGANISATION PHOTOS
-================================= */
-
-@media (max-width: 760px) {
-
-    .apercu-photo-recette {
-        cursor: default;
-    }
-
-    .poignee-photo-recette {
-        top: 7px;
-        left: 7px;
-
-        width: 28px;
-        height: 28px;
-
-        border-radius: 8px;
-
-        font-size: 16px;
-    }
-
-    .badge-photo-principale {
-        left: 7px;
-        bottom: 7px;
-
-        padding:
-            5px
-            8px;
-
-        font-size: 10px;
-    }
-
-    .actions-ordre-photo {
-        bottom: 7px;
-        gap: 5px;
-    }
-
-    .photo-principale
-    .actions-ordre-photo {
-        bottom: 39px;
-    }
-
-    .deplacer-photo-recette {
-        width: 32px;
-        height: 32px;
-
-        border-radius: 9px;
-
-        font-size: 16px;
-    }
-}
-
-
-/* =================================
-   PETIT MOBILE
-================================= */
-
-@media (max-width: 420px) {
-
-    .poignee-photo-recette {
-        width: 26px;
-        height: 26px;
-
-        font-size: 15px;
-    }
-
-    .deplacer-photo-recette {
-        width: 30px;
-        height: 30px;
-
-        font-size: 15px;
-    }
-
-    .badge-photo-principale {
-        font-size: 9px;
-    }
-}
-
-/* =================================
-   BOUTON MODE CUISINE
-================================= */
-
-.bouton-mode-cuisine {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 48px;
-
-    padding: 12px 20px;
-
-    border: 2px solid var(--terracotta);
-    border-radius: 10px;
-
-    background-color: var(--terracotta);
-    color: var(--blanc);
-
-    font: inherit;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-.bouton-mode-cuisine:hover {
-    background-color: #9d593b;
-    border-color: #9d593b;
-    transform: translateY(-1px);
-}
-
-
-/* =================================
-   MODE CUISINE - CONTENEUR GLOBAL
-================================= */
-
-.mode-cuisine {
-    position: fixed;
-    inset: 0;
-
-    z-index: 5000;
-
-    overflow-y: auto;
-
-    background-color: var(--creme);
-}
-
-.mode-cuisine[hidden] {
-    display: none !important;
-}
-
-body.mode-cuisine-ouvert {
-    overflow: hidden;
-}
-
-.mode-cuisine-conteneur {
-    min-height: 100vh;
-
-    padding:
-        28px
-        32px
-        40px;
-}
-
-
-/* =================================
-   ENTÊTE MODE CUISINE
-================================= */
-
-.mode-cuisine-entete {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 24px;
-
-    max-width: 1400px;
-
-    margin:
-        0
-        auto
-        24px;
-
-    padding: 0;
-
-    background: transparent;
-    color: var(--texte);
-}
-
-.mode-cuisine-entete-texte {
-    min-width: 0;
-}
-
-.mode-cuisine-sur-titre {
-    display: inline-block;
-
-    margin-bottom: 6px;
-
-    color: var(--terracotta);
-
-    font-size: 12px;
-    font-weight: 800;
-
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-.mode-cuisine-entete h2 {
-    margin: 0;
-
-    color: var(--texte);
-
-    font-size: 34px;
-    line-height: 1.15;
-}
-
-.mode-cuisine-fermer {
-    width: 46px;
-    height: 46px;
-
-    flex: 0 0 46px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-
-    box-shadow:
-        0 5px 18px
-        rgba(
-            52,
-            59,
-            47,
-            0.12
-        );
-
-    font-size: 30px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-
-/* =================================
-   GRILLE MODE CUISINE
-================================= */
-
-.mode-cuisine-grille {
-    display: grid;
-
-    grid-template-columns:
-        minmax(
-            280px,
-            380px
-        )
-        minmax(
-            0,
-            1fr
-        );
-
-    gap: 28px;
-
-    max-width: 1400px;
-
-    margin: auto;
-}
-
-
-/* =================================
-   INGRÉDIENTS MODE CUISINE
-================================= */
-
-.mode-cuisine-ingredients {
-    position: sticky;
-    top: 24px;
-
-    align-self: start;
-
-    overflow: hidden;
-
-    border:
-        1px solid
-        #ded7ca;
-
-    border-radius: 20px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 8px 26px
-        rgba(
-            52,
-            59,
-            47,
-            0.08
-        );
-}
-
-.mode-cuisine-titre-section {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 14px;
-
-    padding:
-        20px
-        22px;
-
-    border-bottom:
-        1px solid
-        var(--beige);
-}
-
-.mode-cuisine-titre-section h3 {
-    margin: 0;
-
-    font-size: 22px;
-}
-
-.bouton-replier-cuisine {
-    padding:
-        8px
-        11px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius: 999px;
-
-    background-color: var(--creme);
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 12px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.contenu-ingredients-cuisine {
-    padding:
-        18px
-        22px
-        22px;
-}
-
-.mode-cuisine-ingredients.replie
-.contenu-ingredients-cuisine {
-    display: none;
-}
-
-
-/* =================================
-   PORTIONS MODE CUISINE
-================================= */
-
-.portions-mode-cuisine {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 12px;
-
-    margin-bottom: 20px;
-
-    padding:
-        12px
-        14px;
-
-    border-radius: 12px;
-
-    background-color: var(--creme);
-
-    font-weight: 700;
-}
-
-.controle-portions-cuisine {
-    display: inline-flex;
-    align-items: center;
-
-    gap: 10px;
-}
-
-.controle-portions-cuisine button {
-    width: 34px;
-    height: 34px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border:
-        1px solid
-        var(--vert);
-
-    border-radius: 50%;
-
-    background-color: var(--blanc);
-    color: var(--vert);
-
-    font-size: 21px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-#nombre-portions-cuisine {
-    min-width: 28px;
-
-    text-align: center;
-
-    font-size: 18px;
-}
-
-
-/* =================================
-   LISTE INGRÉDIENTS CUISINE
-================================= */
-
-.liste-ingredients-cuisine {
-    margin: 0;
-    padding: 0;
-
-    list-style: none;
-}
-
-.liste-ingredients-cuisine li {
-    display: flex;
-    align-items: flex-start;
-
-    gap: 10px;
-
-    margin-bottom: 12px;
-}
-
-.liste-ingredients-cuisine li:last-child {
-    margin-bottom: 0;
-}
-
-.case-ingredient-cuisine {
-    width: 19px;
-    height: 19px;
-
-    flex:
-        0 0
-        19px;
-
-    margin-top: 2px;
-
-    accent-color: var(--vert);
-
-    cursor: pointer;
-}
-
-.liste-ingredients-cuisine label {
-    line-height: 1.5;
-
-    cursor: pointer;
-}
-
-.ingredient-cuisine-coche label {
-    color: var(--texte-secondaire);
-
-    text-decoration: line-through;
-
-    opacity: 0.6;
-}
-
-.aucun-ingredient-cuisine {
-    margin: 0;
-
-    color: var(--texte-secondaire);
-}
-
-
-/* =================================
-   ÉTAPE MODE CUISINE
-================================= */
-
-.mode-cuisine-etape {
-    width: auto;
-    max-width: none;
-
-    margin: 0;
-
-    padding:
-        34px
-        36px;
-
-    min-height: 520px;
-
-    display: flex;
-    flex-direction: column;
-
-    border-radius: 22px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 10px 34px
-        rgba(
-            52,
-            59,
-            47,
-            0.10
-        );
-}
-
-
-/* =================================
-   PROGRESSION
-================================= */
-
-.progression-cuisine {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 16px;
-
-    margin-bottom: 10px;
-
-    color: var(--texte-secondaire);
-
-    font-size: 14px;
-    font-weight: 700;
-}
-
-#numero-etape-cuisine {
-    color: var(--vert);
-}
-
-.barre-progression-cuisine {
-    width: 100%;
-    height: 8px;
-
-    overflow: hidden;
-
-    margin-bottom: 34px;
-
-    border-radius: 999px;
-
-    background-color: var(--beige);
-}
-
-.barre-progression-cuisine-remplie {
-    width: 0%;
-    height: 100%;
-
-    border-radius: inherit;
-
-    background-color: var(--vert);
-
-    transition:
-        width 0.25s ease;
-}
-
-
-/* =================================
-   TEXTE ÉTAPE
-================================= */
-
-.contenu-etape-cuisine {
-    flex: 1;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    min-height: 270px;
-
-    padding:
-        20px
-        8%;
-}
-
-.texte-etape-cuisine {
-    margin: 0;
-
-    max-width: 820px;
-
-    color: var(--texte);
-
-    font-size: clamp(
-        28px,
-        3vw,
-        46px
-    );
-
-    font-weight: 700;
-
-    line-height: 1.35;
-
-    text-align: center;
-}
-
-
-/* =================================
-   ACTION MINUTEUR ÉTAPE
-================================= */
-
-.actions-etape-cuisine {
-    display: flex;
-    justify-content: center;
-
-    margin-top: 16px;
-    margin-bottom: 26px;
-}
-
-.bouton-minuteur-etape {
-    min-height: 46px;
-
-    padding:
-        11px
-        18px;
-
-    border:
-        2px solid
-        var(--terracotta);
-
-    border-radius: 12px;
-
-    background-color: #fff8f4;
-    color: var(--terracotta);
-
-    font: inherit;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.bouton-minuteur-etape:hover:not(:disabled) {
-    background-color: #f8ece7;
-}
-
-.bouton-minuteur-etape:disabled {
-    opacity: 0.45;
-    cursor: default;
-}
-
-
-/* =================================
-   NAVIGATION ÉTAPES
-================================= */
-
-.navigation-etapes-cuisine {
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap: 12px;
-
-    margin-top: auto;
-}
-
-.bouton-navigation-cuisine {
-    min-height: 54px;
-
-    padding:
-        13px
-        20px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius: 12px;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 16px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.bouton-navigation-cuisine:hover:not(:disabled) {
-    background-color: var(--creme);
-}
-
-.bouton-navigation-cuisine-principal {
-    border-color: var(--vert);
-
-    background-color: var(--vert);
-    color: var(--blanc);
-}
-
-.bouton-navigation-cuisine-principal:hover:not(:disabled) {
-    background-color: var(--vert-fonce);
-}
-
-.bouton-navigation-cuisine:disabled {
-    opacity: 0.35;
-    cursor: default;
-}
-
-
-/* =================================
-   ZONE MINUTEURS
-================================= */
-
-.mode-cuisine-minuteurs {
-    max-width: 1400px;
-
-    margin:
-        0
-        auto
-        24px;
-
-    padding:
-        18px
-        20px;
-
-    border:
-        1px solid
-        #ded7ca;
-
-    border-radius: 18px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 6px 22px
-        rgba(
-            52,
-            59,
-            47,
-            0.07
-        );
-}
-
-.mode-cuisine-minuteurs[hidden] {
-    display: none !important;
-}
-
-.mode-cuisine-minuteurs-entete {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 14px;
-
-    margin-bottom: 14px;
-}
-
-.mode-cuisine-minuteurs-entete h3 {
-    margin: 0;
-
-    font-size: 20px;
-}
-
-.bouton-nouveau-minuteur {
-    padding:
-        9px
-        13px;
-
-    border:
-        1px solid
-        var(--terracotta);
-
-    border-radius: 10px;
-
-    background-color: #fff8f4;
-    color: var(--terracotta);
-
-    font: inherit;
-    font-size: 13px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.liste-minuteurs-cuisine {
-    display: grid;
-
-    grid-template-columns:
-        repeat(
-            auto-fit,
-            minmax(
-                240px,
-                1fr
-            )
-        );
-
-    gap: 12px;
-}
-
-
-/* =================================
-   CARTE MINUTEUR
-================================= */
-
-.minuteur-cuisine {
-    padding:
-        15px
-        16px;
-
-    border:
-        1px solid
-        #ded7ca;
-
-    border-radius: 14px;
-
-    background-color: var(--creme);
-}
-
-.minuteur-cuisine.minuteur-pause {
-    opacity: 0.75;
-}
-
-.minuteur-cuisine.minuteur-termine {
-    border-color:
-        rgba(
-            183,
-            104,
-            66,
-            0.45
-        );
-
-    background-color: #fff1e9;
-}
-
-.minuteur-cuisine-infos {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    gap: 12px;
-}
-
-.minuteur-cuisine-nom {
-    min-width: 0;
-
-    overflow-wrap: anywhere;
-}
-
-.minuteur-cuisine-etat {
-    flex: 0 0 auto;
-
-    color: var(--texte-secondaire);
-
-    font-size: 12px;
-    font-weight: 700;
-}
-
-.minuteur-cuisine-temps {
-    margin:
-        14px
-        0;
-
-    color: var(--vert-fonce);
-
-    font-size: 34px;
-    font-weight: 900;
-
-    letter-spacing: 0.5px;
-}
-
-.minuteur-termine
-.minuteur-cuisine-temps {
-    color: var(--terracotta);
-}
-
-.actions-minuteur-cuisine {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-}
-
-.pause-minuteur-cuisine,
-.relancer-minuteur-cuisine,
-.supprimer-minuteur-cuisine {
-    min-height: 38px;
-
-    padding:
-        8px
-        11px;
-
-    border-radius: 9px;
-
-    font: inherit;
-    font-size: 12px;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.pause-minuteur-cuisine,
-.relancer-minuteur-cuisine {
-    border:
-        1px solid
-        var(--vert);
-
-    background-color: var(--blanc);
-    color: var(--vert);
-}
-
-.supprimer-minuteur-cuisine {
-    border:
-        1px solid
-        rgba(
-            183,
-            104,
-            66,
-            0.35
-        );
-
-    background-color: var(--blanc);
-    color: var(--terracotta);
-}
-
-
-/* =================================
-   POPUP MINUTEUR
-================================= */
-
-.fond-popup-minuteur-cuisine {
-    position: fixed;
-    inset: 0;
-
-    z-index: 6000;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background-color:
-        rgba(
-            30,
-            35,
-            28,
-            0.58
-        );
-
-    backdrop-filter: blur(4px);
-}
-
-.fond-popup-minuteur-cuisine[hidden] {
-    display: none !important;
-}
-
-.popup-minuteur-cuisine {
-    position: relative;
-
-    width: 100%;
-    max-width: 520px;
-
-    max-height:
-        calc(
-            100vh -
-            40px
-        );
-
-    overflow-y: auto;
-
-    padding:
-        32px;
-
-    border-radius: 22px;
-
-    background-color: var(--blanc);
-
-    box-shadow:
-        0 22px 70px
-        rgba(
-            30,
-            35,
-            28,
-            0.25
-        );
-}
-
-.popup-minuteur-cuisine h2 {
-    margin:
-        0
-        50px
-        26px
-        0;
-
-    font-size: 28px;
-}
-
-.fermer-popup-minuteur {
-    position: absolute;
-
-    top: 16px;
-    right: 16px;
-
-    width: 42px;
-    height: 42px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    background-color: var(--creme);
-    color: var(--texte);
-
-    font-size: 28px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-
-/* =================================
-   CHAMPS MINUTEUR
-================================= */
-
-.champ-minuteur-cuisine {
-    margin-bottom: 20px;
-}
-
-.champ-minuteur-cuisine label,
-.label-minuteur-cuisine {
-    display: block;
-
-    margin-bottom: 8px;
-
-    color: var(--texte);
-
-    font-size: 14px;
-    font-weight: 800;
-}
-
-.champ-minuteur-cuisine input {
-    width: 100%;
-    min-height: 48px;
-
-    padding:
-        10px
-        13px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius: 10px;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 16px;
-
-    outline: none;
-}
-
-.champ-minuteur-cuisine input:focus {
-    border-color: var(--vert);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(
-            102,
-            112,
-            90,
-            0.10
-        );
-}
-
-.duree-minuteur-cuisine {
-    display: grid;
-
-    grid-template-columns:
-        1fr
-        1fr;
-
-    gap: 12px;
-}
-
-
-/* =================================
-   DURÉES RAPIDES
-================================= */
-
-.durees-rapides-cuisine {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin:
-        4px
-        0
-        22px;
-}
-
-.durees-rapides-cuisine button {
-    padding:
-        8px
-        11px;
-
-    border:
-        1px solid
-        #d8d1c5;
-
-    border-radius: 999px;
-
-    background-color: var(--creme);
-    color: var(--texte);
-
-    font: inherit;
-    font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-}
-
-.durees-rapides-cuisine button:hover {
-    border-color: var(--vert);
-
-    background-color: #eef0e8;
-}
-
-
-/* =================================
-   MESSAGE MINUTEUR
-================================= */
-
-.message-minuteur-cuisine {
-    margin-bottom: 16px;
-
-    padding:
-        11px
-        13px;
-
-    border-radius: 10px;
-
-    background-color: #fbefea;
-    color: #a54f3c;
-
-    font-size: 13px;
-    line-height: 1.45;
-}
-
-.message-minuteur-cuisine[hidden] {
-    display: none !important;
-}
-
-
-/* =================================
-   ACTIONS POPUP MINUTEUR
-================================= */
-
-.actions-popup-minuteur {
-    display: flex;
-    justify-content: flex-end;
-
-    gap: 10px;
-
-    margin-top: 22px;
-}
-
-.bouton-annuler-minuteur,
-.bouton-lancer-minuteur {
-    min-height: 46px;
-
-    padding:
-        11px
-        16px;
-
-    border-radius: 10px;
-
-    font: inherit;
-    font-weight: 800;
-
-    cursor: pointer;
-}
-
-.bouton-annuler-minuteur {
-    border:
-        1px solid
-        #d8d1c5;
-
-    background-color: var(--blanc);
-    color: var(--texte);
-}
-
-.bouton-lancer-minuteur {
-    border:
-        1px solid
-        var(--terracotta);
-
-    background-color: var(--terracotta);
-    color: var(--blanc);
-}
-
-
-/* =================================
-   TABLETTE
-================================= */
-
-@media (max-width: 980px) {
-
-    .mode-cuisine-conteneur {
-        padding:
-            22px
-            20px
-            32px;
-    }
-
-    .mode-cuisine-grille {
-        grid-template-columns:
-            1fr;
-    }
-
-    .mode-cuisine-ingredients {
-        position: static;
-    }
-
-    .contenu-etape-cuisine {
-        min-height: 220px;
-    }
-
-    .texte-etape-cuisine {
-        font-size:
-            clamp(
-                26px,
-                5vw,
-                40px
-            );
-    }
-}
-
-
-/* =================================
-   MOBILE
-================================= */
-
-@media (max-width: 600px) {
-
-    .bouton-mode-cuisine {
-        width: 100%;
-    }
-
-    .mode-cuisine-conteneur {
-        padding:
-            16px
-            14px
-            24px;
-    }
-
-    .mode-cuisine-entete {
-        align-items: center;
-
-        margin-bottom: 16px;
-    }
-
-    .mode-cuisine-entete h2 {
-        font-size: 26px;
-    }
-
-    .mode-cuisine-sur-titre {
-        font-size: 11px;
-    }
-
-    .mode-cuisine-fermer {
-        width: 42px;
-        height: 42px;
-
-        flex-basis: 42px;
-
-        font-size: 27px;
-    }
-
-    .mode-cuisine-minuteurs {
-        margin-bottom: 16px;
-
-        padding:
-            14px;
-    }
-
-    .mode-cuisine-minuteurs-entete {
-        align-items: stretch;
-        flex-direction: column;
-    }
-
-    .bouton-nouveau-minuteur {
-        width: 100%;
-    }
-
-    .liste-minuteurs-cuisine {
-        grid-template-columns:
-            1fr;
-    }
-
-    .mode-cuisine-titre-section {
-        padding:
-            16px;
-    }
-
-    .contenu-ingredients-cuisine {
-        padding:
-            15px
-            16px
-            18px;
-    }
-
-    .portions-mode-cuisine {
-        padding:
-            10px
-            12px;
-    }
-
-    .mode-cuisine-etape {
-        min-height:
-            calc(
-                100vh -
-                190px
-            );
-
-        padding:
-            24px
-            18px;
-
-        border-radius: 18px;
-    }
-
-    .barre-progression-cuisine {
-        margin-bottom: 22px;
-    }
-
-    .contenu-etape-cuisine {
-        min-height: 230px;
-
-        padding:
-            14px
-            2%;
-    }
-
-    .texte-etape-cuisine {
-        font-size:
-            clamp(
-                25px,
-                8vw,
-                34px
-            );
-
-        line-height: 1.35;
+        font-size: 11px !important;
     }
 
-    .actions-etape-cuisine {
-        margin:
-            14px
-            0
-            20px;
-    }
-
-    .bouton-minuteur-etape {
-        width: 100%;
-    }
-
-    .navigation-etapes-cuisine {
-        grid-template-columns:
-            1fr
-            1fr;
-    }
-
-    .bouton-navigation-cuisine {
-        min-height: 50px;
-
-        padding:
-            11px
-            12px;
-
-        font-size: 14px;
-    }
-
-    .popup-minuteur-cuisine {
-        padding:
-            28px
-            18px
-            20px;
-
-        border-radius: 18px;
-    }
-
-    .popup-minuteur-cuisine h2 {
-        font-size: 24px;
-    }
-
-    .duree-minuteur-cuisine {
-        grid-template-columns:
-            1fr
-            1fr;
-    }
-
-    .actions-popup-minuteur {
-        flex-direction:
-            column-reverse;
-    }
-
-    .bouton-annuler-minuteur,
-    .bouton-lancer-minuteur {
-        width: 100%;
-    }
 }
-
-
-/* =================================
-   PETIT MOBILE
-================================= */
-
-@media (max-width: 390px) {
-
-    .mode-cuisine-conteneur {
-        padding:
-            12px
-            10px
-            20px;
-    }
-
-    .mode-cuisine-entete h2 {
-        font-size: 22px;
-    }
-
-    .mode-cuisine-etape {
-        padding:
-            20px
-            14px;
-    }
-
-    .navigation-etapes-cuisine {
-        grid-template-columns:
-            1fr;
-    }
 
-    .duree-minuteur-cuisine {
-        grid-template-columns:
-            1fr;
-    }
-}
