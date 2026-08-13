@@ -2407,7 +2407,9 @@ const texte =
                     ingredient
                 ) {
 
-const texte =
+brancherBoutonsRecettesLieesFiche();
+
+                   const texte =
     formaterIngredientAffichage(
         ingredient,
         personnesModeCuisine
@@ -2457,6 +2459,62 @@ if (
 
         </li>
     `;
+}
+
+                   function brancherBoutonsRecettesLieesFiche() {
+
+    if (
+        !listeIngredients
+    ) {
+
+        return;
+    }
+
+
+    const boutons =
+        listeIngredients
+            .querySelectorAll(
+                ".bouton-recette-liee"
+            );
+
+
+    boutons.forEach(
+        function (
+            bouton
+        ) {
+
+            bouton.addEventListener(
+                "click",
+                function () {
+
+                    const recetteId =
+                        bouton.dataset
+                            .recetteLieeId;
+
+
+                    if (
+                        !recetteId
+                    ) {
+
+                        return;
+                    }
+
+
+                    const url =
+                        `recette.html?id=${encodeURIComponent(
+                            recetteId
+                        )}`;
+
+
+                    window.open(
+                        url,
+                        "_blank",
+                        "noopener,noreferrer"
+                    );
+                }
+            );
+        }
+    );
 }
 
 
