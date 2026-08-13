@@ -1407,7 +1407,16 @@ function obtenirElementsPlanningCourses() {
         element.recette_id,
 
     nom:
-        element.nom
+        element.nom,
+
+    mode_approvisionnement:
+        element.mode_approvisionnement ||
+        "faire",
+
+    ordre:
+        Number(
+            element.ordre
+        ) || 1
 
 });
 
