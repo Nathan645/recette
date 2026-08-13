@@ -262,13 +262,13 @@
     display: grid;
 
     grid-template-columns:
-        repeat(7, minmax(0, 1fr));
+        repeat(7, minmax(175px, 1fr));
 
-    gap: 12px;
+    gap: 14px;
 
     width: 100%;
 
-    overflow: visible;
+    overflow-x: auto;
 
     padding:
         4px
@@ -2183,4 +2183,25 @@
         font-size: 13px;
     }
 
+}
+
+/* ==========================================
+   PLANNING PLEINE LARGEUR
+========================================== */
+
+.page-planning {
+    width: 100vw !important;
+    max-width: none !important;
+
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+}
+
+.nom-repas-principal,
+.element-secondaire-repas {
+    overflow-wrap: normal !important;
+    word-break: normal !important;
 }
