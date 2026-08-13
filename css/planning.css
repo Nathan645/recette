@@ -2205,3 +2205,31 @@
     overflow-wrap: normal !important;
     word-break: normal !important;
 }
+
+/* ==========================================
+   PLATS SECONDAIRES DU REPAS
+========================================== */
+
+.elements-secondaires-repas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    gap: 3px;
+
+    margin-top: 3px;
+}
+
+.element-secondaire-repas {
+    display: block;
+    width: 100%;
+
+    color: var(--texte);
+
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+
+    overflow-wrap: normal;
+    word-break: normal;
+}
