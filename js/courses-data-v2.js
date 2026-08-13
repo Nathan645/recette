@@ -1714,6 +1714,129 @@ function ajouterIngredientCourses(
         quantiteBase;
 }
 
+/* ==========================================
+   TROUVER LE LIEN VERS UNE RECETTE ACHETÉE
+========================================== */
+
+function trouverLienRecetteAcheteeCourses(
+    elementAchete,
+    tousLesElements
+) {
+
+    if (
+        !elementAchete?.recette_id
+    ) {
+
+        return null;
+    }
+
+
+    /*
+        On cherche uniquement dans le même repas.
+    */
+
+    const elementsDuMemeRepas =
+        tousLesElements.filter(
+            function (
+                element
+            ) {
+
+                return (
+                    String(
+                        element.repas_id
+                    ) ===
+                    String(
+                        elementAchete.repas_id
+                    ) &&
+                    String(
+                        element.recette_id ||
+                        ""
+                    ) !==
+                    String(
+                        elementAchete.recette_id
+                    )
+                );
+            }
+        );
+
+
+    for (
+        const elementParent
+        of elementsDuMemeRepas
+    ) {
+
+        if (
+            !elementParent.recette_id
+        ) {
+
+            continue;
+        }
+
+
+        const recetteParent =
+            trouverRecetteCourses(
+                elementParent.recette_id
+            );
+
+
+        if (
+            !recetteParent
+        ) {
+
+            continue;
+        }
+
+
+        const ingredients =
+            Array.isArray(
+                recetteParent.ingredients
+            )
+                ? recetteParent.ingredients
+                : [];
+
+
+        const ingredientLien =
+            ingredients.find(
+                function (
+                    ingredient
+                ) {
+
+                    return (
+                        ingredient &&
+                        typeof ingredient ===
+                            "object" &&
+                        ingredient.recette_liee_id &&
+                        String(
+                            ingredient.recette_liee_id
+                        ) ===
+                        String(
+                            elementAchete.recette_id
+                        )
+                    );
+                }
+            );
+
+
+        if (
+            ingredientLien
+        ) {
+
+            return {
+                ingredient:
+                    ingredientLien,
+
+                recetteParent:
+                    recetteParent,
+
+                elementParent:
+                    elementParent
+            };
+        }
+    }
+
+
+    return null;
+}
 
 /* ==========================================
    CALCULER LES INGRÉDIENTS
@@ -1755,6 +1878,122 @@ function calculerArticlesPlanningCourses() {
                 return;
             }
 
+           /* =========================
+   RECETTE À ACHETER
+========================= */
+
+if (
+    element.mode_approvisionnement ===
+    "acheter"
+) {
+
+    const lien =
+        trouverLienRecetteAcheteeCourses(
+            element,
+            elements
+        );
+
+
+    /*
+        Cas normal :
+        on retrouve la quantité prévue
+        dans la recette mère.
+    */
+
+    if (
+        lien
+    ) {
+
+        const ingredientLien =
+            lien.ingredient;
+
+
+        const personnesRecetteParent =
+            Number(
+                lien.recetteParent.personnes
+            ) || 1;
+
+
+        const personnesRepas =
+            Number(
+                element.personnes
+            ) ||
+            personnesRecetteParent;
+
+
+        const coefficientParent =
+            personnesRepas /
+            personnesRecetteParent;
+
+
+        let quantiteAchetee =
+            ingredientLien.quantite;
+
+
+        if (
+            ingredientLien.proportionnel !==
+                false &&
+            quantiteAchetee !== null &&
+            quantiteAchetee !== undefined &&
+            quantiteAchetee !== "" &&
+            Number.isFinite(
+                Number(
+                    quantiteAchetee
+                )
+            )
+        ) {
+
+            quantiteAchetee =
+                Number(
+                    quantiteAchetee
+                ) *
+                coefficientParent;
+        }
+
+
+        ajouterIngredientCourses(
+            collection,
+            {
+                ...ingredientLien,
+
+                /*
+                    On utilise le nom réel
+                    de la recette achetée.
+                */
+
+                nom:
+                    recette.nom
+            },
+            quantiteAchetee
+        );
+
+
+        return;
+    }
+
+
+    /*
+        Sécurité :
+        si aucun parent n'est retrouvé,
+        on ajoute quand même la préparation
+        sans quantité plutôt que ses ingrédients.
+    */
+
+    ajouterIngredientCourses(
+        collection,
+        {
+            nom:
+                recette.nom,
+
+            unite:
+                ""
+        },
+        null
+    );
+
+
+    return;
+}
 
             const personnesRecette =
                 Number(
