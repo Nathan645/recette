@@ -3295,3 +3295,424 @@ input[type="radio"]:focus-visible {
     }
 }
 
+/* =========================================================
+   V3 — AJUSTEMENTS FINAUX DEMANDÉS
+   ========================================================= */
+
+/* 1) Lignes ingrédients : restent dans la carte, marges symétriques */
+.entete-ingredients,
+.ligne-ingredient {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    grid-template-columns:
+        minmax(95px, .72fr)
+        minmax(78px, .55fr)
+        minmax(150px, .95fr)
+        minmax(220px, 2fr)
+        minmax(150px, 1.05fr)
+        46px !important;
+    gap: 12px !important;
+}
+
+.ligne-ingredient > * {
+    min-width: 0 !important;
+}
+
+.ligne-ingredient .option-proportionnelle {
+    min-width: 0 !important;
+    width: 100% !important;
+}
+
+.ligne-ingredient .supprimer-ingredient {
+    width: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    justify-self: end !important;
+}
+
+/* 2) Aperçus photos : miniatures propres, jamais géantes */
+.apercu-photos-recette {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)) !important;
+    gap: 14px !important;
+    margin-top: 18px !important;
+    width: 100% !important;
+}
+
+.apercu-photos-recette[hidden] {
+    display: none !important;
+}
+
+.apercu-photo-recette {
+    position: relative !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    aspect-ratio: 4 / 3 !important;
+    overflow: hidden !important;
+    border: 1px solid #ded7ca !important;
+    border-radius: 14px !important;
+    background: var(--creme) !important;
+    box-shadow: 0 5px 16px rgba(52,59,47,.08) !important;
+}
+
+.apercu-photo-recette img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    object-fit: cover !important;
+}
+
+.numero-photo-recette {
+    position: absolute !important;
+    left: 9px !important;
+    bottom: 9px !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 8px !important;
+    border-radius: 999px !important;
+    background: rgba(255,255,255,.92) !important;
+    color: var(--texte) !important;
+    font-size: 12px !important;
+    font-weight: 800 !important;
+}
+
+.supprimer-photo-recette {
+    position: absolute !important;
+    top: 9px !important;
+    right: 9px !important;
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,.94) !important;
+    color: #a54f3c !important;
+    font-size: 20px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 3px 10px rgba(0,0,0,.12) !important;
+}
+
+.actions-ordre-photo-recette,
+.actions-photo-recette {
+    position: absolute !important;
+    right: 9px !important;
+    bottom: 9px !important;
+    display: flex !important;
+    gap: 6px !important;
+}
+
+.deplacer-photo-recette {
+    width: 30px !important;
+    height: 30px !important;
+    padding: 0 !important;
+    border: 1px solid #d8d1c5 !important;
+    border-radius: 8px !important;
+    background: rgba(255,255,255,.94) !important;
+    color: var(--texte) !important;
+}
+
+/* 3) Entête fiche recette : beaucoup plus visuel */
+#fiche-recette-contenu .contenu {
+    padding: 48px !important;
+}
+
+#fiche-recette-contenu .badges-principaux {
+    margin-bottom: 16px !important;
+}
+
+#fiche-recette-contenu .categorie {
+    min-height: 36px !important;
+    padding: 8px 14px !important;
+    background: #efe7d8 !important;
+    color: var(--vert) !important;
+    border: 1px solid rgba(102,112,90,.12) !important;
+}
+
+#fiche-recette-contenu .badges-recette {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin: 18px 0 4px !important;
+}
+
+#fiche-recette-contenu .badges-recette span,
+#fiche-recette-contenu .badge-recette {
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 32px !important;
+    padding: 6px 11px !important;
+    border-radius: 999px !important;
+    background: #f2eee5 !important;
+    color: var(--vert) !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
+}
+
+#fiche-recette-contenu .informations-recette {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    margin: 34px 0 38px !important;
+}
+
+#fiche-recette-contenu .information {
+    min-height: 128px !important;
+    padding: 22px 16px !important;
+    border: 1px solid #ebe5da !important;
+    background: linear-gradient(145deg, #fbf8f1, #f4eee3) !important;
+    box-shadow: 0 5px 16px rgba(52,59,47,.05) !important;
+}
+
+#fiche-recette-contenu .information strong {
+    font-size: 15px !important;
+    text-transform: uppercase !important;
+    letter-spacing: .35px !important;
+    color: var(--vert) !important;
+}
+
+#fiche-recette-contenu .information > span {
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    color: var(--texte) !important;
+}
+
+/* Portions vraiment visibles / manipulables */
+#fiche-recette-contenu .information-portions .controle-portions {
+    margin: 5px 0 2px !important;
+}
+
+#fiche-recette-contenu .information-portions .texte-personnes {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+}
+
+/* 4) Minuteurs : cachés tant qu'il n'y en a aucun */
+.mode-cuisine-minuteurs[hidden],
+#zone-minuteurs-cuisine[hidden] {
+    display: none !important;
+}
+
+/* La zone minuteurs n'occupe de place que lorsqu'elle est affichée */
+.mode-cuisine-minuteurs:not([hidden]) {
+    display: block !important;
+    margin: 0 0 22px !important;
+    padding: 18px !important;
+    border: 1px solid #e8e2d7 !important;
+    border-radius: 18px !important;
+    background: var(--blanc) !important;
+    box-shadow: 0 8px 24px var(--ombre) !important;
+}
+
+.mode-cuisine-minuteurs-entete {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin-bottom: 12px !important;
+}
+
+.mode-cuisine-minuteurs-entete h3 {
+    margin: 0 !important;
+    font-size: 20px !important;
+}
+
+.bouton-nouveau-minuteur {
+    min-height: 40px !important;
+    padding: 9px 13px !important;
+    border: 1px solid var(--vert) !important;
+    border-radius: 10px !important;
+    background: var(--blanc) !important;
+    color: var(--vert) !important;
+    font-weight: 800 !important;
+}
+
+.liste-minuteurs-cuisine {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+    gap: 10px !important;
+}
+
+.minuteur-cuisine {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 13px 14px !important;
+    border: 1px solid #e6dfd3 !important;
+    border-radius: 13px !important;
+    background: #faf7f0 !important;
+}
+
+.minuteur-cuisine-info {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3px !important;
+}
+
+.minuteur-cuisine-nom {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: var(--texte-secondaire) !important;
+}
+
+.minuteur-cuisine-temps {
+    font-size: 24px !important;
+    line-height: 1 !important;
+    color: var(--texte) !important;
+}
+
+.actions-minuteur-cuisine {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+}
+
+.actions-minuteur-cuisine button {
+    min-height: 34px !important;
+    padding: 7px 10px !important;
+    border: 1px solid var(--vert) !important;
+    border-radius: 9px !important;
+    background: var(--blanc) !important;
+    color: var(--vert) !important;
+    font-weight: 700 !important;
+}
+
+.bouton-supprimer-minuteur {
+    width: 34px !important;
+    padding: 0 !important;
+    border-color: #c58c79 !important;
+    color: #a54f3c !important;
+}
+
+/* Popup minuteur dans le même langage visuel */
+.popup-minuteur-cuisine {
+    width: min(100%, 520px) !important;
+    padding: 34px !important;
+    border-radius: 22px !important;
+    background: var(--blanc) !important;
+    box-shadow: 0 24px 70px rgba(30,35,28,.3) !important;
+}
+
+.popup-minuteur-cuisine h2 {
+    margin: 0 40px 24px 0 !important;
+    font-size: 30px !important;
+}
+
+.champ-minuteur-cuisine {
+    margin-bottom: 18px !important;
+}
+
+.champ-minuteur-cuisine label,
+.label-minuteur-cuisine {
+    display: block !important;
+    margin-bottom: 7px !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    color: var(--texte-secondaire) !important;
+}
+
+.champ-minuteur-cuisine input {
+    width: 100% !important;
+    min-height: 46px !important;
+    padding: 10px 12px !important;
+    border: 1px solid #d8d1c5 !important;
+    border-radius: 10px !important;
+    background: var(--blanc) !important;
+    color: var(--texte) !important;
+    font: inherit !important;
+}
+
+.duree-minuteur-cuisine {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+}
+
+.durees-rapides-cuisine {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+    margin: 4px 0 18px !important;
+}
+
+.durees-rapides-cuisine button {
+    min-height: 40px !important;
+    border: 1px solid #d8d1c5 !important;
+    border-radius: 10px !important;
+    background: #faf8f3 !important;
+    color: var(--texte) !important;
+    font-weight: 700 !important;
+}
+
+.durees-rapides-cuisine button:hover {
+    border-color: var(--vert) !important;
+    background: #eef0e8 !important;
+}
+
+.actions-popup-minuteur {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 10px !important;
+    margin-top: 22px !important;
+}
+
+.bouton-annuler-minuteur,
+.bouton-lancer-minuteur {
+    min-height: 46px !important;
+    padding: 11px 16px !important;
+    border-radius: 10px !important;
+    font-weight: 800 !important;
+}
+
+.bouton-annuler-minuteur {
+    border: 1px solid #d8d1c5 !important;
+    background: var(--blanc) !important;
+    color: var(--texte) !important;
+}
+
+.bouton-lancer-minuteur {
+    border: 1px solid var(--vert) !important;
+    background: var(--vert) !important;
+    color: var(--blanc) !important;
+}
+
+@media (max-width: 760px) {
+    .entete-ingredients,
+    .ligne-ingredient {
+        grid-template-columns:
+            minmax(85px, .8fr)
+            minmax(75px, .65fr)
+            minmax(135px, 1fr)
+            minmax(180px, 1.7fr)
+            minmax(135px, 1fr)
+            42px !important;
+        gap: 8px !important;
+    }
+
+    #fiche-recette-contenu .informations-recette {
+        grid-template-columns: 1fr !important;
+    }
+
+    .apercu-photos-recette {
+        grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .durees-rapides-cuisine {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+
+    .actions-popup-minuteur {
+        flex-direction: column-reverse !important;
+    }
+
+    .actions-popup-minuteur button {
+        width: 100% !important;
+    }
+}
+
