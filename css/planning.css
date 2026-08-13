@@ -2233,3 +2233,17 @@
     overflow-wrap: normal;
     word-break: normal;
 }
+
+.nom-repas-principal,
+.element-secondaire-repas {
+    font-family: inherit !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 1.35 !important;
+    color: var(--texte) !important;
+}
+
+.element-secondaire-repas {
+    display: block;
+    width: 100%;
+}
