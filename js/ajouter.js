@@ -101,23 +101,16 @@ let foyerId =
 
 
 /* =================================
-   RECETTES DISPONIBLES POUR LIAISON
+   RECETTES DISPONIBLES
 ================================= */
 
 /*
-    Liste des recettes que l'utilisateur
-    peut sélectionner comme recette liée
-    pour un ingrédient.
+    Elles servent dans les lignes
+    de type "Recette".
 
-    Structure :
+    Exemple :
 
-    {
-        id: "...",
-        nom: "...",
-        categorie: "...",
-        visibilite: "...",
-        foyer_id: "..."
-    }
+    100 ml | Recette | Béchamel
 */
 
 let recettesDisponiblesPourLiaison =
@@ -224,10 +217,8 @@ function ajouterPhotoDansOrdre(
 
     if (
         !type ||
-        id ===
-            null ||
-        id ===
-            undefined
+        id === null ||
+        id === undefined
     ) {
 
         return;
@@ -238,8 +229,7 @@ function ajouterPhotoDansOrdre(
         trouverIndexPhotoOrdre(
             type,
             id
-        ) !==
-        -1;
+        ) !== -1;
 
 
     if (
@@ -252,11 +242,13 @@ function ajouterPhotoDansOrdre(
 
     ordrePhotos.push(
         {
+
             type:
                 type,
 
             id:
                 id
+
         }
     );
 }
@@ -551,10 +543,8 @@ function deplacerPhoto(
 
 
     if (
-        indexDepart <
-            0 ||
-        indexArrivee <
-            0 ||
+        indexDepart < 0 ||
+        indexArrivee < 0 ||
         indexDepart >=
             ordrePhotos.length ||
         indexArrivee >=
@@ -607,8 +597,7 @@ function deplacerPhotoDirection(
 
 
     if (
-        index ===
-        -1
+        index === -1
     ) {
 
         return;
@@ -623,8 +612,7 @@ function deplacerPhotoDirection(
 
 
     if (
-        nouvelIndex <
-            0 ||
+        nouvelIndex < 0 ||
         nouvelIndex >=
             ordrePhotos.length
     ) {
@@ -743,22 +731,8 @@ async function recupererFoyerUtilisateur() {
 
 
 /* =================================
-   CHARGER LES RECETTES LIABLES
+   CHARGER LES RECETTES DISPONIBLES
 ================================= */
-
-/*
-    On récupère les recettes visibles
-    par l'utilisateur.
-
-    Les règles RLS de Supabase
-    continuent de décider ce que
-    l'utilisateur a réellement le droit
-    de lire.
-
-    La recette actuellement modifiée
-    est exclue pour éviter qu'une recette
-    se lie elle-même.
-*/
 
 async function chargerRecettesDisponiblesPourLiaison() {
 
@@ -802,6 +776,11 @@ async function chargerRecettesDisponiblesPourLiaison() {
             : [];
 
 
+    /*
+        On empêche une recette
+        de s'utiliser elle-même.
+    */
+
     recettesDisponiblesPourLiaison =
         recettes.filter(
             function (
@@ -830,7 +809,7 @@ async function chargerRecettesDisponiblesPourLiaison() {
 
 
 /* =================================
-   ÉCHAPPER TEXTE POUR HTML
+   ÉCHAPPER TEXTE HTML
 ================================= */
 
 function echapperHtmlAjout(
@@ -865,16 +844,53 @@ function echapperHtmlAjout(
 
 
 /* =================================
-   OPTIONS RECETTES LIÉES
+   TROUVER UNE RECETTE
 ================================= */
 
-function creerOptionsRecettesLiees(
-    recetteLieeId = ""
+function trouverRecetteDisponible(
+    recetteId
+) {
+
+    if (
+        !recetteId
+    ) {
+
+        return null;
+    }
+
+
+    return (
+        recettesDisponiblesPourLiaison.find(
+            function (
+                recette
+            ) {
+
+                return (
+                    String(
+                        recette.id
+                    ) ===
+                    String(
+                        recetteId
+                    )
+                );
+            }
+        ) ||
+        null
+    );
+}
+
+
+/* =================================
+   OPTIONS DES RECETTES
+================================= */
+
+function creerOptionsRecettes(
+    recetteSelectionneeId = ""
 ) {
 
     const valeurSelectionnee =
         String(
-            recetteLieeId ||
+            recetteSelectionneeId ||
             ""
         );
 
@@ -882,7 +898,7 @@ function creerOptionsRecettesLiees(
     let html = `
 
         <option value="">
-            Aucune recette liée
+            Choisir une recette
         </option>
 
     `;
@@ -910,7 +926,7 @@ function creerOptionsRecettesLiees(
                 "";
 
 
-            const libelleCategorie =
+            const suffixeCategorie =
                 categorie
                     ? ` — ${categorie}`
                     : "";
@@ -931,7 +947,7 @@ function creerOptionsRecettesLiees(
                     ${echapperHtmlAjout(
                         recette.nom
                     )}${echapperHtmlAjout(
-                        libelleCategorie
+                        suffixeCategorie
                     )}
                 </option>
 
@@ -945,7 +961,147 @@ function creerOptionsRecettesLiees(
 
 
 /* =================================
-   INGRÉDIENTS
+   TYPE D'UNE LIGNE
+================================= */
+
+function obtenirTypeIngredientDepuisValeurs(
+    valeurs = {}
+) {
+
+    /*
+        Compatibilité avec les recettes
+        déjà enregistrées :
+
+        recette_liee_id présent
+        = ligne de type recette.
+    */
+
+    if (
+        valeurs.recette_liee_id
+    ) {
+
+        return "recette";
+    }
+
+
+    return "ingredient";
+}
+
+
+/* =================================
+   METTRE À JOUR LE TYPE
+   D'UNE LIGNE
+================================= */
+
+function mettreAJourTypeLigneIngredient(
+    ligne
+) {
+
+    if (
+        !ligne
+    ) {
+
+        return;
+    }
+
+
+    const selectType =
+        ligne.querySelector(
+            ".ingredient-type"
+        );
+
+
+    const champNom =
+        ligne.querySelector(
+            ".ingredient-nom"
+        );
+
+
+    const selectRecette =
+        ligne.querySelector(
+            ".ingredient-recette"
+        );
+
+
+    if (
+        !selectType ||
+        !champNom ||
+        !selectRecette
+    ) {
+
+        return;
+    }
+
+
+    const type =
+        selectType.value ===
+        "recette"
+            ? "recette"
+            : "ingredient";
+
+
+    if (
+        type ===
+        "recette"
+    ) {
+
+        champNom.hidden =
+            true;
+
+
+        champNom.disabled =
+            true;
+
+
+        selectRecette.hidden =
+            false;
+
+
+        selectRecette.disabled =
+            false;
+
+
+        ligne.classList.add(
+            "ligne-type-recette"
+        );
+
+
+        ligne.classList.remove(
+            "ligne-type-ingredient"
+        );
+
+    } else {
+
+        champNom.hidden =
+            false;
+
+
+        champNom.disabled =
+            false;
+
+
+        selectRecette.hidden =
+            true;
+
+
+        selectRecette.disabled =
+            true;
+
+
+        ligne.classList.add(
+            "ligne-type-ingredient"
+        );
+
+
+        ligne.classList.remove(
+            "ligne-type-recette"
+        );
+    }
+}
+
+
+/* =================================
+   CRÉER UNE LIGNE
 ================================= */
 
 function creerLigneIngredient(
@@ -962,13 +1118,19 @@ function creerLigneIngredient(
         "ligne-ingredient";
 
 
+    const typeInitial =
+        obtenirTypeIngredientDepuisValeurs(
+            valeurs
+        );
+
+
     ligne.innerHTML = `
 
         <input
             type="text"
             inputmode="decimal"
             class="ingredient-quantite"
-            aria-label="Quantité de l’ingrédient"
+            aria-label="Quantité"
             placeholder="Ex. 400"
             value="${echapperHtmlAjout(
                 valeurs.quantite ??
@@ -976,10 +1138,11 @@ function creerLigneIngredient(
             )}"
         >
 
+
         <input
             type="text"
             class="ingredient-unite"
-            aria-label="Unité de l’ingrédient"
+            aria-label="Unité"
             placeholder="g, ml…"
             value="${echapperHtmlAjout(
                 valeurs.unite ??
@@ -987,37 +1150,59 @@ function creerLigneIngredient(
             )}"
         >
 
-        <input
-            type="text"
-            class="ingredient-nom"
-            aria-label="Nom de l’ingrédient"
-            placeholder="Ex. farine"
-            required
-            value="${echapperHtmlAjout(
-                valeurs.nom ??
-                ""
-            )}"
+
+        <select
+            class="ingredient-type"
+            aria-label="Type de composant"
         >
 
+            <option
+                value="ingredient"
+                ${
+                    typeInitial ===
+                    "ingredient"
+                        ? "selected"
+                        : ""
+                }
+            >
+                Ingrédient
+            </option>
 
-        <div class="ingredient-recette-liee-zone">
+            <option
+                value="recette"
+                ${
+                    typeInitial ===
+                    "recette"
+                        ? "selected"
+                        : ""
+                }
+            >
+                Recette
+            </option>
 
-            <label class="ingredient-recette-liee-label">
+        </select>
 
-                Recette liée
-                <span>
-                    facultatif
-                </span>
 
-            </label>
+        <div class="ingredient-valeur-zone">
+
+            <input
+                type="text"
+                class="ingredient-nom"
+                aria-label="Nom de l’ingrédient"
+                placeholder="Ex. farine"
+                value="${echapperHtmlAjout(
+                    valeurs.nom ??
+                    ""
+                )}"
+            >
 
 
             <select
-                class="ingredient-recette-liee"
-                aria-label="Recette liée à cet ingrédient"
+                class="ingredient-recette"
+                aria-label="Choisir une recette"
             >
 
-                ${creerOptionsRecettesLiees(
+                ${creerOptionsRecettes(
                     valeurs.recette_liee_id ||
                     ""
                 )}
@@ -1048,14 +1233,65 @@ function creerLigneIngredient(
         <button
             type="button"
             class="supprimer-ingredient"
-            aria-label="Supprimer cet ingrédient"
-            title="Supprimer cet ingrédient"
+            aria-label="Supprimer cette ligne"
+            title="Supprimer cette ligne"
         >
             ×
         </button>
 
     `;
 
+
+    /* =========================
+       TYPE
+    ========================= */
+
+    const selectType =
+        ligne.querySelector(
+            ".ingredient-type"
+        );
+
+
+    selectType.addEventListener(
+        "change",
+        function () {
+
+            mettreAJourTypeLigneIngredient(
+                ligne
+            );
+        }
+    );
+
+
+    /* =========================
+       RECETTE SÉLECTIONNÉE
+    ========================= */
+
+    const selectRecette =
+        ligne.querySelector(
+            ".ingredient-recette"
+        );
+
+
+    selectRecette.addEventListener(
+        "change",
+        function () {
+
+            /*
+                Le nom réel sera récupéré
+                au moment de l'enregistrement.
+
+                On ne remplit pas le champ
+                texte caché pour éviter
+                toute ambiguïté.
+            */
+        }
+    );
+
+
+    /* =========================
+       SUPPRESSION
+    ========================= */
 
     const boutonSupprimer =
         ligne.querySelector(
@@ -1105,25 +1341,31 @@ function creerLigneIngredient(
 
                 ligne
                     .querySelector(
+                        ".ingredient-type"
+                    )
+                    .value =
+                        "ingredient";
+
+
+                ligne
+                    .querySelector(
+                        ".ingredient-recette"
+                    )
+                    .value =
+                        "";
+
+
+                ligne
+                    .querySelector(
                         ".ingredient-proportionnel"
                     )
                     .checked =
                         true;
 
 
-                const selectRecetteLiee =
-                    ligne.querySelector(
-                        ".ingredient-recette-liee"
-                    );
-
-
-                if (
-                    selectRecetteLiee
-                ) {
-
-                    selectRecetteLiee.value =
-                        "";
-                }
+                mettreAJourTypeLigneIngredient(
+                    ligne
+                );
 
 
                 return;
@@ -1139,12 +1381,20 @@ function creerLigneIngredient(
         .appendChild(
             ligne
         );
+
+
+    /* =========================
+       AFFICHAGE INITIAL
+    ========================= */
+
+    mettreAJourTypeLigneIngredient(
+        ligne
+    );
 }
 
 
 /* =================================
-   RAFRAÎCHIR LES SELECTS
-   DE RECETTES LIÉES
+   RAFRAÎCHIR LES LISTES RECETTES
 ================================= */
 
 function rafraichirSelectsRecettesLiees() {
@@ -1152,7 +1402,7 @@ function rafraichirSelectsRecettesLiees() {
     const selects =
         conteneurIngredients
             .querySelectorAll(
-                ".ingredient-recette-liee"
+                ".ingredient-recette"
             );
 
 
@@ -1166,7 +1416,7 @@ function rafraichirSelectsRecettesLiees() {
 
 
             select.innerHTML =
-                creerOptionsRecettesLiees(
+                creerOptionsRecettes(
                     valeurActuelle
                 );
         }
@@ -1306,8 +1556,7 @@ function convertirQuantite(
         !Number.isFinite(
             nombre
         ) ||
-        nombre <
-            0
+        nombre < 0
     ) {
 
         throw new Error(
@@ -1321,7 +1570,7 @@ function convertirQuantite(
 
 
 /* =================================
-   RÉCUPÉRER LES INGRÉDIENTS
+   RÉCUPÉRER LES COMPOSANTS
 ================================= */
 
 function recupererIngredients() {
@@ -1359,13 +1608,27 @@ function recupererIngredients() {
                     .trim();
 
 
-            const nom =
+            const type =
                 ligne
                     .querySelector(
-                        ".ingredient-nom"
+                        ".ingredient-type"
                     )
-                    .value
-                    .trim();
+                    .value ===
+                    "recette"
+                        ? "recette"
+                        : "ingredient";
+
+
+            const champNom =
+                ligne.querySelector(
+                    ".ingredient-nom"
+                );
+
+
+            const selectRecette =
+                ligne.querySelector(
+                    ".ingredient-recette"
+                );
 
 
             const proportionnel =
@@ -1376,50 +1639,96 @@ function recupererIngredients() {
                     .checked;
 
 
-            const selectRecetteLiee =
-                ligne.querySelector(
-                    ".ingredient-recette-liee"
-                );
-
-
-            const recetteLieeId =
-                selectRecetteLiee
-                    ? selectRecetteLiee
-                        .value
-                        .trim()
-                    : "";
-
-
-            const ligneVide =
-                quantiteTexte.trim() ===
-                    "" &&
-                unite ===
-                    "" &&
-                nom ===
-                    "";
-
+            /* =========================
+               INGRÉDIENT CLASSIQUE
+            ========================= */
 
             if (
-                ligneVide
+                type ===
+                "ingredient"
             ) {
+
+                const nom =
+                    champNom.value
+                        .trim();
+
+
+                const ligneVide =
+                    quantiteTexte.trim() ===
+                        "" &&
+                    unite ===
+                        "" &&
+                    nom ===
+                        "";
+
+
+                if (
+                    ligneVide
+                ) {
+
+                    return;
+                }
+
+
+                if (
+                    nom ===
+                    ""
+                ) {
+
+                    throw new Error(
+                        "Chaque ingrédient doit avoir un nom."
+                    );
+                }
+
+
+                ingredients.push(
+                    {
+
+                        quantite:
+                            convertirQuantite(
+                                quantiteTexte
+                            ),
+
+                        unite:
+                            unite,
+
+                        nom:
+                            nom,
+
+                        proportionnel:
+                            proportionnel,
+
+                        recette_liee_id:
+                            null
+
+                    }
+                );
+
 
                 return;
             }
 
 
+            /* =========================
+               RECETTE
+            ========================= */
+
+            const recetteLieeId =
+                selectRecette.value
+                    .trim();
+
+
             if (
-                nom ===
-                ""
+                !recetteLieeId
             ) {
 
                 throw new Error(
-                    "Chaque ingrédient doit avoir un nom."
+                    "Choisis une recette pour chaque ligne de type « Recette »."
                 );
             }
 
 
             if (
-                recetteLieeId &&
                 identifiantRecette &&
                 String(
                     recetteLieeId
@@ -1430,7 +1739,23 @@ function recupererIngredients() {
             ) {
 
                 throw new Error(
-                    `L’ingrédient « ${nom} » ne peut pas être lié à cette même recette.`
+                    "Une recette ne peut pas s’utiliser elle-même."
+                );
+            }
+
+
+            const recetteLiee =
+                trouverRecetteDisponible(
+                    recetteLieeId
+                );
+
+
+            if (
+                !recetteLiee
+            ) {
+
+                throw new Error(
+                    "La recette sélectionnée est introuvable."
                 );
             }
 
@@ -1446,15 +1771,24 @@ function recupererIngredients() {
                     unite:
                         unite,
 
+                    /*
+                        On sauvegarde également
+                        le nom.
+
+                        Comme ça l'affichage
+                        reste possible même si
+                        la recette liée change
+                        plus tard de visibilité.
+                    */
+
                     nom:
-                        nom,
+                        recetteLiee.nom,
 
                     proportionnel:
                         proportionnel,
 
                     recette_liee_id:
-                        recetteLieeId ||
-                        null
+                        recetteLiee.id
 
                 }
             );
@@ -1468,7 +1802,7 @@ function recupererIngredients() {
     ) {
 
         throw new Error(
-            "Ajoute au moins un ingrédient."
+            "Ajoute au moins un ingrédient ou une recette."
         );
     }
 
@@ -1821,11 +2155,6 @@ function verifierFichierPhoto(
     }
 
 
-    /*
-        On accepte jusqu'à 25 Mo
-        avant compression.
-    */
-
     const tailleMaximum =
         25 *
         1024 *
@@ -1890,6 +2219,7 @@ function ajouterFichiersPhotos(
             "La recette contient déjà 5 photos.",
             "erreur"
         );
+
 
         return;
     }
@@ -2855,8 +3185,7 @@ if (
 
 
             if (
-                indexDepart ===
-                    -1 ||
+                indexDepart === -1 ||
                 !Number.isInteger(
                     indexArrivee
                 ) ||
@@ -2949,6 +3278,7 @@ if (
     );
 }
 
+
 /* =================================
    CORRESPONDANCE DES NOUVELLES PHOTOS
    APRÈS INSERTION SUPABASE
@@ -2956,7 +3286,6 @@ if (
 
 const idsNouvellesPhotosEnregistrees =
     new Map();
-
 
 /* =================================
    CHARGER UNE IMAGE
@@ -3883,6 +4212,7 @@ async function supprimerPhotoStorage(
     }
 }
 
+
 /* =================================
    SUPPRIMER UNE PHOTO DE LA BASE
 ================================= */
@@ -3957,8 +4287,8 @@ async function supprimerPhotosRetirees() {
         [];
 }
 
-
-/* =================================
+5
+5/* =================================
    CONVERTIR L'ORDRE LOCAL
    EN IDS SUPABASE
 ================================= */
@@ -4591,7 +4921,7 @@ function remplirFormulaire(
 
 
     /* =========================
-       INGRÉDIENTS + RECETTES LIÉES
+       INGRÉDIENTS / RECETTES
     ========================= */
 
     if (
@@ -4608,16 +4938,29 @@ function remplirFormulaire(
             ) {
 
                 /*
+                    Ancien ingrédient :
+
+                    {
+                        nom: "Farine",
+                        recette_liee_id: null
+                    }
+
+                    => type "Ingrédient"
+
+
+                    Recette utilisée
+                    comme composant :
+
+                    {
+                        nom: "Béchamel",
+                        recette_liee_id: "..."
+                    }
+
+                    => type "Recette"
+
                     creerLigneIngredient()
-                    reçoit l'objet complet.
-
-                    Si l'ingrédient contient :
-
-                    recette_liee_id: "..."
-
-                    le select sera
-                    automatiquement positionné
-                    sur la bonne recette.
+                    détecte automatiquement
+                    le bon type.
                 */
 
                 creerLigneIngredient(
@@ -4645,12 +4988,9 @@ async function chargerRecetteAModifier() {
     ) {
 
         /*
-            Nouvelle recette.
-
-            Les recettes disponibles
-            pour liaison ont déjà été
-            chargées lors de
-            l'initialisation générale.
+            Nouvelle recette :
+            on démarre avec trois
+            lignes de type ingrédient.
         */
 
         creerLigneIngredient();
@@ -4776,14 +5116,14 @@ async function chargerRecetteAModifier() {
 
 
         /*
-            Important :
-            les recettes disponibles
-            pour liaison doivent déjà
-            être chargées AVANT ceci.
+            Les recettes disponibles
+            doivent déjà être chargées
+            avant remplirFormulaire().
 
-            Ainsi les selects peuvent
-            directement afficher
-            la recette liée enregistrée.
+            Ainsi une ligne ayant
+            recette_liee_id affiche
+            directement le bon choix
+            dans sa liste déroulante.
         */
 
         remplirFormulaire(
@@ -4931,7 +5271,7 @@ async function modifierRecette(
 
 
 /* =================================
-   AJOUTER UNE LIGNE INGRÉDIENT
+   AJOUTER UNE LIGNE
 ================================= */
 
 if (
@@ -4973,29 +5313,96 @@ function verifierPhotosAvantEnregistrement() {
 
 
 /* =================================
-   VERROUILLER LES RECETTES LIÉES
+   VERROUILLER LES COMPOSANTS
 ================================= */
 
-function verrouillerRecettesLiees(
+function verrouillerComposantsRecette(
     verrouille
 ) {
 
-    const selects =
+    if (
+        !conteneurIngredients
+    ) {
+
+        return;
+    }
+
+
+    const elements =
         conteneurIngredients
             .querySelectorAll(
-                ".ingredient-recette-liee"
+                `
+                .ingredient-quantite,
+                .ingredient-unite,
+                .ingredient-type,
+                .ingredient-nom,
+                .ingredient-recette,
+                .ingredient-proportionnel,
+                .supprimer-ingredient
+                `
             );
 
 
-    selects.forEach(
+    elements.forEach(
         function (
-            select
+            element
         ) {
 
-            select.disabled =
+            /*
+                Quand on déverrouille,
+                ingredient-nom et
+                ingredient-recette doivent
+                retrouver leur état selon
+                le type de ligne.
+
+                On ne les réactive donc
+                pas brutalement ici.
+            */
+
+            if (
+                !verrouille &&
+                (
+                    element.classList.contains(
+                        "ingredient-nom"
+                    ) ||
+                    element.classList.contains(
+                        "ingredient-recette"
+                    )
+                )
+            ) {
+
+                return;
+            }
+
+
+            element.disabled =
                 verrouille;
         }
     );
+
+
+    if (
+        !verrouille
+    ) {
+
+        const lignes =
+            conteneurIngredients
+                .querySelectorAll(
+                    ".ligne-ingredient"
+                );
+
+
+        lignes.forEach(
+            function (
+                ligne
+            ) {
+
+                mettreAJourTypeLigneIngredient(
+                    ligne
+                );
+            }
+        );
+    }
 }
 
 
@@ -5106,7 +5513,7 @@ function mettreFormulaireEnEnregistrement(
     );
 
 
-    verrouillerRecettesLiees(
+    verrouillerComposantsRecette(
         actif
     );
 
@@ -5169,12 +5576,19 @@ async function enregistrerRecetteComplete() {
 
 
     /*
-        construireRecette() récupère
-        maintenant aussi :
+        construireRecette() construit
+        maintenant une liste pouvant
+        contenir :
 
-        recette_liee_id
+        - des ingrédients classiques ;
+        - des recettes utilisées comme
+          composants.
 
-        pour chaque ingrédient.
+        recette_liee_id === null
+        => ingrédient
+
+        recette_liee_id !== null
+        => recette
     */
 
     const recette =
@@ -5482,19 +5896,16 @@ async function initialiserPageAjout() {
 
 
         /* =========================
-           3. RECETTES LIÉES
+           3. RECETTES DISPONIBLES
         ========================= */
 
         /*
-            Important :
+            La liste doit être chargée
+            AVANT la création des lignes.
 
-            on charge cette liste AVANT
-            de créer les lignes ingrédients.
-
-            Comme ça, les <select>
-            sont remplis immédiatement
-            aussi bien en création
-            qu'en modification.
+            Sinon une ligne de type
+            "Recette" aurait un select
+            vide.
         */
 
         messageFormulaire.textContent =
@@ -5505,17 +5916,45 @@ async function initialiserPageAjout() {
 
 
         /* =========================
-           4. RECETTE
+           4. CRÉATION / MODIFICATION
         ========================= */
 
         await chargerRecetteAModifier();
 
 
         /* =========================
-           5. SÉCURITÉ SELECTS
+           5. RAFRAÎCHIR LES SELECTS
         ========================= */
 
         rafraichirSelectsRecettesLiees();
+
+
+        /*
+            On remet également chaque
+            ligne dans son bon état
+            visuel.
+
+            - Ingrédient = champ texte
+            - Recette = liste déroulante
+        */
+
+        const lignes =
+            conteneurIngredients
+                .querySelectorAll(
+                    ".ligne-ingredient"
+                );
+
+
+        lignes.forEach(
+            function (
+                ligne
+            ) {
+
+                mettreAJourTypeLigneIngredient(
+                    ligne
+                );
+            }
+        );
 
 
         boutonEnregistrer.disabled =
@@ -5542,8 +5981,15 @@ async function initialiserPageAjout() {
                 foyerId:
                     foyerId,
 
-                recettesDisponiblesPourLiaison:
+                recettesDisponibles:
                     recettesDisponiblesPourLiaison.length,
+
+                composants:
+                    conteneurIngredients
+                        .querySelectorAll(
+                            ".ligne-ingredient"
+                        )
+                        .length,
 
                 photosExistantes:
                     photosExistantes.length,
@@ -5581,4 +6027,3 @@ async function initialiserPageAjout() {
 ================================= */
 
 initialiserPageAjout();
-
