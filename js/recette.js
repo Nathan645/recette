@@ -4066,6 +4066,90 @@ async function demanderAjoutPlanning() {
             "Vérification…";
     }
 
+   /* =========================
+   RECETTES LIÉES ?
+========================= */
+
+const recettesLiees =
+    obtenirRecettesLieesPlanning();
+
+
+if (
+    recettesLiees.length >
+        0 &&
+    !ajoutPlanningEnAttente?.choixEffectue
+) {
+
+    /*
+        On mémorise les informations
+        choisies dans la première popup.
+
+        Elles serviront après le choix
+        Faire maison / Acheter.
+    */
+
+    ajoutPlanningEnAttente =
+        {
+            date:
+                date,
+
+            moment:
+                momentSelectionnePlanning,
+
+            personnes:
+                personnesSelectionneesPlanning,
+
+            choixEffectue:
+                false
+        };
+
+
+    try {
+
+        const popupOuverte =
+            await ouvrirPopupRecettesLieesDepuisFiche();
+
+
+        if (
+            popupOuverte
+        ) {
+
+            return;
+        }
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur ouverture choix recettes liées :",
+            erreur
+        );
+
+
+        ajoutPlanningEnAttente =
+            null;
+
+
+        afficherMessagePlanning(
+            erreur?.message ||
+            "Impossible d’afficher les préparations liées."
+        );
+
+
+        if (
+            popupAjoutPlanning
+        ) {
+
+            popupAjoutPlanning.hidden =
+                false;
+        }
+
+
+        return;
+    }
+}
 
     try {
 
