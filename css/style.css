@@ -1922,3 +1922,63 @@ input[type="radio"]:focus-visible {
 
 }
 
+/* =========================================================
+   AJUSTEMENT FINAL — FORMULAIRE INGRÉDIENTS / RECETTES
+   Quantité | Unité | Type | Ingrédient | Proportionnel
+   ========================================================= */
+
+.entete-ingredients,
+.ligne-ingredient {
+    grid-template-columns:
+        minmax(110px, 0.85fr)
+        minmax(95px, 0.7fr)
+        minmax(150px, 1fr)
+        minmax(250px, 2.25fr)
+        minmax(145px, 1fr) !important;
+    gap: 12px !important;
+    align-items: center !important;
+}
+
+.ligne-ingredient input,
+.ligne-ingredient select {
+    width: 100% !important;
+    min-width: 0 !important;
+}
+
+.ligne-ingredient .option-proportionnelle {
+    width: 100% !important;
+    min-width: 145px !important;
+    height: 48px !important;
+    min-height: 48px !important;
+    padding: 7px 10px !important;
+    font-size: 12px !important;
+    line-height: 1.1 !important;
+    overflow: visible !important;
+}
+
+@media (max-width: 900px) {
+    .entete-ingredients {
+        display: none !important;
+    }
+
+    .ligne-ingredient {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 10px !important;
+    }
+
+    .ligne-ingredient .option-proportionnelle {
+        min-width: 0 !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .ligne-ingredient {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ligne-ingredient .option-proportionnelle {
+        width: 100% !important;
+        min-width: 0 !important;
+        font-size: 13px !important;
+    }
+}
