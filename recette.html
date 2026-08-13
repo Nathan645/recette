@@ -16,7 +16,7 @@
 
     <link
         rel="stylesheet"
-        href="css/style.css?v=9"
+        href="css/style.css?v=10"
     >
 
 </head>
@@ -223,9 +223,9 @@
                         id="moment-planning-midi"
                         data-moment="midi"
                     >
-                        ☀️
-                        Midi
+                        ☀️ Midi
                     </button>
+
 
                     <button
                         type="button"
@@ -233,8 +233,7 @@
                         id="moment-planning-soir"
                         data-moment="soir"
                     >
-                        🌙
-                        Soir
+                        🌙 Soir
                     </button>
 
                 </div>
@@ -244,7 +243,7 @@
 
 
             <!-- =========================
-                 NOMBRE DE PERSONNES
+                 PERSONNES
             ========================== -->
 
             <div class="champ-popup-planning">
@@ -263,11 +262,13 @@
                         −
                     </button>
 
+
                     <strong
                         id="nombre-personnes-planning"
                     >
                         2
                     </strong>
+
 
                     <button
                         type="button"
@@ -310,6 +311,7 @@
                     Annuler
                 </button>
 
+
                 <button
                     type="button"
                     class="bouton-confirmer-planning"
@@ -343,20 +345,14 @@
             aria-labelledby="titre-confirmation-planning"
         >
 
-
             <h2 id="titre-confirmation-planning">
                 Un repas est déjà prévu
             </h2>
 
 
             <p id="texte-confirmation-planning">
-
-                Il y a déjà un repas prévu
-                sur ce créneau.
-
-                Êtes-vous sûr de vouloir
-                ajouter cette recette ?
-
+                Il y a déjà un repas prévu sur ce créneau.
+                Êtes-vous sûr de vouloir ajouter cette recette ?
             </p>
 
 
@@ -369,6 +365,7 @@
                 >
                     Annuler
                 </button>
+
 
                 <button
                     type="button"
@@ -447,6 +444,7 @@
                         Minuteurs
                     </h3>
 
+
                     <button
                         type="button"
                         class="bouton-nouveau-minuteur"
@@ -490,6 +488,7 @@
                             Ingrédients
                         </h3>
 
+
                         <button
                             type="button"
                             class="bouton-replier-cuisine"
@@ -510,11 +509,14 @@
 
                 </aside>
 
-                                <!-- =========================
-                     ÉTAPES
+
+
+                <!-- =========================
+                     ÉTAPE EN COURS
                 ========================== -->
 
-                <section class="mode-cuisine-etapes">
+                <main class="mode-cuisine-etape">
+
 
                     <!-- =========================
                          PROGRESSION
@@ -522,51 +524,31 @@
 
                     <div class="progression-cuisine">
 
-                        <div class="progression-cuisine-texte">
+                        <span id="numero-etape-cuisine">
+                            Étape 1
+                        </span>
 
-                            <span id="progression-cuisine-texte">
-                                Étape 1 sur 1
-                            </span>
-
-                            <span id="progression-cuisine-pourcentage">
-                                100 %
-                            </span>
-
-                        </div>
-
-
-                        <div class="progression-cuisine-barre">
-
-                            <div
-                                class="progression-cuisine-remplissage"
-                                id="progression-cuisine-remplissage"
-                            >
-                            </div>
-
-                        </div>
+                        <span id="total-etapes-cuisine">
+                        </span>
 
                     </div>
 
 
+                    <div class="barre-progression-cuisine">
 
-                    <!-- =========================
-                         CARTE ÉTAPE
-                    ========================== -->
-
-                    <article class="carte-etape-cuisine">
-
-                        <div class="carte-etape-cuisine-numero">
-
-                            <span>
-                                Étape
-                            </span>
-
-                            <strong id="numero-etape-cuisine">
-                                1
-                            </strong>
-
+                        <div
+                            class="barre-progression-cuisine-remplie"
+                            id="barre-progression-cuisine"
+                        >
                         </div>
 
+                    </div>
+
+                                        <!-- =========================
+                         TEXTE DE L'ÉTAPE
+                    ========================== -->
+
+                    <div class="contenu-etape-cuisine">
 
                         <p
                             class="texte-etape-cuisine"
@@ -574,41 +556,25 @@
                         >
                         </p>
 
+                    </div>
 
-                        <!-- =========================
-                             MINUTEUR DÉTECTÉ
-                        ========================== -->
 
-                        <div
-                            class="suggestion-minuteur-etape"
-                            id="suggestion-minuteur-etape"
-                            hidden
+
+                    <!-- =========================
+                         MINUTEUR POUR CETTE ÉTAPE
+                    ========================== -->
+
+                    <div class="actions-etape-cuisine">
+
+                        <button
+                            type="button"
+                            class="bouton-minuteur-etape"
+                            id="minuteur-etape-cuisine"
                         >
+                            Lancer un minuteur
+                        </button>
 
-                            <div>
-
-                                <span class="suggestion-minuteur-label">
-                                    Minuteur détecté
-                                </span>
-
-                                <strong id="suggestion-minuteur-duree">
-                                    10 min
-                                </strong>
-
-                            </div>
-
-
-                            <button
-                                type="button"
-                                class="bouton-lancer-minuteur-etape"
-                                id="lancer-minuteur-etape"
-                            >
-                                Lancer
-                            </button>
-
-                        </div>
-
-                    </article>
+                    </div>
 
 
 
@@ -620,50 +586,28 @@
 
                         <button
                             type="button"
-                            class="bouton-etape-precedente"
-                            id="etape-precedente-cuisine"
+                            class="bouton-navigation-cuisine"
+                            id="etape-cuisine-precedente"
                         >
-                            ← Étape précédente
+                            Précédent
                         </button>
 
 
                         <button
                             type="button"
-                            class="bouton-etape-suivante"
-                            id="etape-suivante-cuisine"
+                            class="bouton-navigation-cuisine bouton-navigation-cuisine-principal"
+                            id="etape-cuisine-suivante"
                         >
-                            Étape suivante →
+                            Suivant
                         </button>
 
                     </div>
 
 
-
-                    <!-- =========================
-                         TERMINER
-                    ========================== -->
-
-                    <div
-                        class="zone-terminer-cuisine"
-                        id="zone-terminer-cuisine"
-                        hidden
-                    >
-
-                        <button
-                            type="button"
-                            class="bouton-terminer-cuisine"
-                            id="terminer-mode-cuisine"
-                        >
-                            Terminer la recette
-                        </button>
-
-                    </div>
-
-                </section>
+                </main>
 
 
             </div>
-
 
         </div>
 
@@ -706,6 +650,7 @@
             <h2 id="titre-popup-minuteur">
                 Nouveau minuteur
             </h2>
+
 
 
             <!-- =========================
@@ -900,7 +845,7 @@
 
     <script src="js/supabase.js"></script>
 
-    <script src="js/recette.js?v=10"></script>
+    <script src="js/recette.js?v=11"></script>
 
 
 </body>
