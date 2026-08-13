@@ -3786,3 +3786,10 @@ input[type="radio"]:focus-visible {
         );
 }
 
+#replier-ingredients-cuisine {
+    display: none !important;
+}
+
+.mode-cuisine-titre-section {
+    justify-content: flex-start !important;
+}
