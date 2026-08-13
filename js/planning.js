@@ -1193,6 +1193,283 @@ function ouvrirPopupRecettesLieesPlanning(
 }
 
 /* =================================
+   FERMER POPUP RECETTES LIÉES
+================================= */
+
+function fermerPopupRecettesLieesPlanning(
+    rouvrirRepas = true
+) {
+
+    if (
+        popupRecettesLieesPlanning
+    ) {
+
+        popupRecettesLieesPlanning.hidden =
+            true;
+    }
+
+
+    if (
+        rouvrirRepas &&
+        popupRepas
+    ) {
+
+        popupRepas.hidden =
+            false;
+    }
+
+
+    if (
+        !rouvrirRepas
+    ) {
+
+        document.body.style.overflow =
+            "";
+    }
+}
+
+
+/* =================================
+   CONFIRMER FAIRE / ACHETER
+================================= */
+
+function confirmerRecettesLieesPlanning() {
+
+    if (
+        !recetteEnAttenteRecettesLiees
+    ) {
+
+        fermerPopupRecettesLieesPlanning(
+            true
+        );
+
+        return;
+    }
+
+
+    const recettePrincipale =
+        recetteEnAttenteRecettesLiees;
+
+
+    const ingredientsLies =
+        obtenirIngredientsRecettesLiees(
+            recettePrincipale
+        );
+
+
+    /* =========================
+       AJOUT RECETTE PRINCIPALE
+    ========================= */
+
+    const principaleDejaPresente =
+        elementsRepasEnCours.some(
+            function (
+                element
+            ) {
+
+                return (
+                    element.recette_id &&
+                    String(
+                        element.recette_id
+                    ) ===
+                    String(
+                        recettePrincipale.id
+                    )
+                );
+            }
+        );
+
+
+    if (
+        !principaleDejaPresente
+    ) {
+
+        elementsRepasEnCours.push(
+            {
+                id:
+                    null,
+
+                type:
+                    "recette",
+
+                recette_id:
+                    recettePrincipale.id,
+
+                nom:
+                    recettePrincipale.nom,
+
+                mode_approvisionnement:
+                    "faire"
+            }
+        );
+    }
+
+
+    /* =========================
+       AJOUT RECETTES FILLES
+    ========================= */
+
+    ingredientsLies.forEach(
+        function (
+            ingredient
+        ) {
+
+            const recetteLieeId =
+                String(
+                    ingredient.recette_liee_id
+                );
+
+
+            const mode =
+                choixRecettesLieesPlanning[
+                    recetteLieeId
+                ] ||
+                "faire";
+
+
+            const recetteLiee =
+                recettes.find(
+                    function (
+                        recette
+                    ) {
+
+                        return (
+                            String(
+                                recette.id
+                            ) ===
+                            recetteLieeId
+                        );
+                    }
+                );
+
+
+            if (
+                !recetteLiee
+            ) {
+
+                return;
+            }
+
+
+            const existeDeja =
+                elementsRepasEnCours.some(
+                    function (
+                        element
+                    ) {
+
+                        return (
+                            element.recette_id &&
+                            String(
+                                element.recette_id
+                            ) ===
+                            recetteLieeId
+                        );
+                    }
+                );
+
+
+            if (
+                existeDeja
+            ) {
+
+                /*
+                    Si la recette fille existe
+                    déjà dans le repas, on met
+                    simplement son choix à jour.
+                */
+
+                const elementExistant =
+                    elementsRepasEnCours.find(
+                        function (
+                            element
+                        ) {
+
+                            return (
+                                element.recette_id &&
+                                String(
+                                    element.recette_id
+                                ) ===
+                                recetteLieeId
+                            );
+                        }
+                    );
+
+
+                if (
+                    elementExistant
+                ) {
+
+                    elementExistant
+                        .mode_approvisionnement =
+                            mode;
+                }
+
+
+                return;
+            }
+
+
+            elementsRepasEnCours.push(
+                {
+                    id:
+                        null,
+
+                    type:
+                        "recette",
+
+                    recette_id:
+                        recetteLiee.id,
+
+                    nom:
+                        recetteLiee.nom,
+
+                    mode_approvisionnement:
+                        mode
+                }
+            );
+        }
+    );
+
+
+    /* =========================
+       RAFRAÎCHIR POPUP REPAS
+    ========================= */
+
+    afficherElementsRepasEnCours();
+
+
+    afficherMessagePlanning(
+        ""
+    );
+
+
+    champRechercheRecette.value =
+        "";
+
+
+    afficherResultatsRecettes(
+        ""
+    );
+
+
+    /* =========================
+       NETTOYAGE
+    ========================= */
+
+    recetteEnAttenteRecettesLiees =
+        null;
+
+
+    choixRecettesLieesPlanning =
+        {};
+
+
+    fermerPopupRecettesLieesPlanning(
+        true
+    );
+}
+
+/* =================================
    AJOUTER UNE RECETTE
 ================================= */
 
@@ -1815,6 +2092,45 @@ champNomRepasLibre.addEventListener(
     }
 );
 
+/* =================================
+   POPUP RECETTES LIÉES
+================================= */
+
+if (
+    boutonAnnulerRecettesLieesPlanning
+) {
+
+    boutonAnnulerRecettesLieesPlanning
+        .addEventListener(
+            "click",
+            function () {
+
+                recetteEnAttenteRecettesLiees =
+                    null;
+
+
+                choixRecettesLieesPlanning =
+                    {};
+
+
+                fermerPopupRecettesLieesPlanning(
+                    true
+                );
+            }
+        );
+}
+
+
+if (
+    boutonConfirmerRecettesLieesPlanning
+) {
+
+    boutonConfirmerRecettesLieesPlanning
+        .addEventListener(
+            "click",
+            confirmerRecettesLieesPlanning
+        );
+}
 
 /* =================================
    VALIDATION REPAS
