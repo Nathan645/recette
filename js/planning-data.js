@@ -1341,7 +1341,11 @@ async function remplacerElementsRepas(
                             ""
                         )
                             .trim(),
-
+                   
+                    mode_approvisionnement:
+    element.mode_approvisionnement ||
+    "faire",
+                   
                     ordre:
                         index + 1
 
@@ -1387,13 +1391,14 @@ async function remplacerElementsRepas(
                 lignes
             )
             .select(`
-                id,
-                repas_planning_id,
-                recette_id,
-                nom,
-                ordre,
-                created_at
-            `);
+    id,
+    repas_planning_id,
+    recette_id,
+    nom,
+    mode_approvisionnement,
+    ordre,
+    created_at
+`);
 
 
     if (error) {
