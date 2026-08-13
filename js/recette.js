@@ -2407,80 +2407,76 @@ const texte =
                     ingredient
                 ) {
 
-                    const texte =
-                        formaterIngredientAffichage(
-                            ingredient,
-                            personnesModeCuisine
-                        );
+const texte =
+    formaterIngredientAffichage(
+        ingredient,
+        personnesModeCuisine
+    );
 
 
-                    const recetteLieeId =
-                        ingredient.recette_liee_id
-                            ? String(
-                                ingredient.recette_liee_id
-                            )
-                            : null;
+const recetteLieeId =
+    ingredient.recette_liee_id
+        ? String(
+            ingredient.recette_liee_id
+        )
+        : null;
 
 
-                    /*
-                        Si l'ingrédient correspond
-                        à une autre recette,
-                        toute la ligne devient cliquable.
-                    */
+/* =========================
+   RECETTE LIÉE
+========================= */
 
-                    if (
-                        recetteLieeId &&
-                        recetteLieeId !==
-                            String(
-                                identifiantRecette
-                            )
-                    ) {
+if (
+    recetteLieeId &&
+    recetteLieeId !==
+        String(
+            identifiantRecette
+        )
+) {
 
-                        return `
-                            <li
-                                class="ingredient-item ingredient-recette-liee"
-                            >
-                                <a
-                                    href="recette.html?id=${encodeURIComponent(
-                                        recetteLieeId
-                                    )}"
-                                    target="_blank"
-                                    rel="noopener"
-                                    class="lien-recette-liee-fiche"
-                                    title="Ouvrir cette recette dans un nouvel onglet"
-                                >
-                                    <span>
-                                        ${
-                                            echapperHtml(
-                                                texte
-                                            )
-                                        }
-                                    </span>
+    return `
+        <li class="ingredient-item ingredient-recette-liee">
 
-                                    <span class="indicateur-recette-liee">
-                                        Recette ↗
-                                    </span>
-                                </a>
-                            </li>
-                        `;
-                    }
+            <span>
+                ${
+                    echapperHtml(
+                        texte
+                    )
+                }
+            </span>
+
+            <button
+                type="button"
+                class="bouton-recette-liee"
+                data-recette-liee-id="${echapperHtml(
+                    recetteLieeId
+                )}"
+            >
+                Voir la recette ↗
+            </button>
+
+        </li>
+    `;
+}
 
 
-                    /*
-                        Ingrédient classique
-                    */
+/* =========================
+   INGRÉDIENT CLASSIQUE
+========================= */
 
-                    return `
-                        <li class="ingredient-item">
-                            <span>
-                                ${
-                                    echapperHtml(
-                                        texte
-                                    )
-                                }
-                            </span>
-                        </li>
-                    `;
+return `
+    <li class="ingredient-item">
+
+        <span>
+            ${
+                echapperHtml(
+                    texte
+                )
+            }
+        </span>
+
+    </li>
+`;
                 }
             )
             .join(
@@ -4513,17 +4509,15 @@ if (
 
     lienRecette =
         `
-            <a
-                href="recette.html?id=${encodeURIComponent(
+            <button
+                type="button"
+                class="bouton-recette-liee"
+                data-recette-liee-id="${echapperHtml(
                     recetteLieeId
                 )}"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="lien-recette-liee-cuisine"
-                title="Ouvrir cette recette dans un nouvel onglet"
             >
-                Recette liée ↗
-            </a>
+                Voir la recette ↗
+            </button>
         `;
 }
 
@@ -4607,6 +4601,51 @@ if (
             );
         }
     );
+
+   const boutonsRecettesLiees =
+    contenuIngredientsCuisine
+        .querySelectorAll(
+            ".bouton-recette-liee"
+        );
+
+
+boutonsRecettesLiees.forEach(
+    function (
+        bouton
+    ) {
+
+        bouton.addEventListener(
+            "click",
+            function () {
+
+                const recetteId =
+                    bouton.dataset
+                        .recetteLieeId;
+
+
+                if (
+                    !recetteId
+                ) {
+
+                    return;
+                }
+
+
+                const url =
+                    `recette.html?id=${encodeURIComponent(
+                        recetteId
+                    )}`;
+
+
+                window.open(
+                    url,
+                    "_blank",
+                    "noopener,noreferrer"
+                );
+            }
+        );
+    }
+);
 }
 
 
