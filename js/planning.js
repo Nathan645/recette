@@ -1203,6 +1203,7 @@ function ajouterRecetteDansPopup(
     if (
         !recette
     ) {
+
         return;
     }
 
@@ -1222,7 +1223,6 @@ function ajouterRecetteDansPopup(
                         recette.id
                     )
                 );
-
             }
         );
 
@@ -1241,6 +1241,38 @@ function ajouterRecetteDansPopup(
     }
 
 
+    /* =========================
+       RECETTES LIÉES ?
+    ========================= */
+
+    const popupOuverte =
+        ouvrirPopupRecettesLieesPlanning(
+            recette
+        );
+
+
+    if (
+        popupOuverte
+    ) {
+
+        /*
+            On attend maintenant le choix
+            Faire / Acheter.
+
+            La recette ne sera réellement
+            ajoutée qu'après confirmation
+            de cette popup.
+        */
+
+        return;
+    }
+
+
+    /* =========================
+       AUCUNE RECETTE LIÉE
+       AJOUT CLASSIQUE
+    ========================= */
+
     elementsRepasEnCours.push(
         {
 
@@ -1254,7 +1286,10 @@ function ajouterRecetteDansPopup(
                 recette.id,
 
             nom:
-                recette.nom
+                recette.nom,
+
+            mode_approvisionnement:
+                "faire"
 
         }
     );
@@ -1275,9 +1310,7 @@ function ajouterRecetteDansPopup(
     afficherResultatsRecettes(
         ""
     );
-
 }
-
 
 /* =================================
    AJOUTER UN PLAT LIBRE
