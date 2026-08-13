@@ -244,6 +244,13 @@ const messageCopieSemaine =
 let elementsRepasEnCours =
     [];
 
+let choixRecettesLieesPlanning =
+    {};
+
+
+let recetteEnAttenteRecettesLiees =
+    null;
+
 
 /* =================================
    MESSAGES
@@ -848,6 +855,342 @@ function afficherResultatsRecettes(
 
 }
 
+/* =================================
+   RECETTES LIÉES
+   FAIRE OU ACHETER
+================================= */
+
+function obtenirIngredientsRecettesLiees(
+    recette
+) {
+
+    const ingredients =
+        Array.isArray(
+            recette?.ingredients
+        )
+            ? recette.ingredients
+            : [];
+
+
+    return ingredients.filter(
+        function (
+            ingredient
+        ) {
+
+            return (
+                ingredient &&
+                typeof ingredient ===
+                    "object" &&
+                ingredient.recette_liee_id
+            );
+        }
+    );
+}
+
+
+function ouvrirPopupRecettesLieesPlanning(
+    recette
+) {
+
+    if (
+        !popupRecettesLieesPlanning ||
+        !listeRecettesLieesPlanning
+    ) {
+
+        return false;
+    }
+
+
+    const recettesLiees =
+        obtenirIngredientsRecettesLiees(
+            recette
+        );
+
+
+    if (
+        recettesLiees.length ===
+        0
+    ) {
+
+        return false;
+    }
+
+
+    recetteEnAttenteRecettesLiees =
+        recette;
+
+
+    choixRecettesLieesPlanning =
+        {};
+
+
+    listeRecettesLieesPlanning.innerHTML =
+        recettesLiees
+            .map(
+                function (
+                    ingredient
+                ) {
+
+                    const recetteLieeId =
+                        String(
+                            ingredient
+                                .recette_liee_id
+                        );
+
+
+                    const recetteLiee =
+                        recettes.find(
+                            function (
+                                element
+                            ) {
+
+                                return (
+                                    String(
+                                        element.id
+                                    ) ===
+                                    recetteLieeId
+                                );
+                            }
+                        );
+
+
+                    const nom =
+                        recetteLiee?.nom ||
+                        ingredient.nom ||
+                        ingredient.ingredient ||
+                        "Recette liée";
+
+
+                    choixRecettesLieesPlanning[
+                        recetteLieeId
+                    ] =
+                        "faire";
+
+
+                    const quantite =
+                        ingredient.quantite ??
+                        "";
+
+
+                    const unite =
+                        ingredient.unite ||
+                        "";
+
+
+                    const quantiteTexte =
+                        [
+                            quantite,
+                            unite
+                        ]
+                            .filter(
+                                function (
+                                    valeur
+                                ) {
+
+                                    return (
+                                        valeur !==
+                                            "" &&
+                                        valeur !==
+                                            null &&
+                                        valeur !==
+                                            undefined
+                                    );
+                                }
+                            )
+                            .join(
+                                " "
+                            );
+
+
+                    return `
+                        <section
+                            class="carte-recette-liee-planning"
+                            data-recette-id="${echapperHTML(
+                                recetteLieeId
+                            )}"
+                        >
+
+                            <div class="entete-recette-liee-planning">
+
+                                <strong>
+                                    ${echapperHTML(
+                                        nom
+                                    )}
+                                </strong>
+
+                                ${
+                                    quantiteTexte
+                                        ? `
+                                            <span>
+                                                ${echapperHTML(
+                                                    quantiteTexte
+                                                )}
+                                            </span>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+
+                            <div class="choix-approvisionnement-recette">
+
+                                <button
+                                    type="button"
+                                    class="option-approvisionnement actif"
+                                    data-recette-id="${echapperHTML(
+                                        recetteLieeId
+                                    )}"
+                                    data-mode="faire"
+                                >
+                                    <span class="icone-option">
+                                        👩‍🍳
+                                    </span>
+
+                                    <span>
+                                        <strong>
+                                            Faire maison
+                                        </strong>
+
+                                        <small>
+                                            Ajouter ses ingrédients aux courses.
+                                        </small>
+                                    </span>
+                                </button>
+
+
+                                <button
+                                    type="button"
+                                    class="option-approvisionnement"
+                                    data-recette-id="${echapperHTML(
+                                        recetteLieeId
+                                    )}"
+                                    data-mode="acheter"
+                                >
+                                    <span class="icone-option">
+                                        🛒
+                                    </span>
+
+                                    <span>
+                                        <strong>
+                                            Acheter
+                                        </strong>
+
+                                        <small>
+                                            Ajouter directement cette préparation aux courses.
+                                        </small>
+                                    </span>
+                                </button>
+
+                            </div>
+
+                        </section>
+                    `;
+                }
+            )
+            .join(
+                ""
+            );
+
+
+    listeRecettesLieesPlanning
+        .querySelectorAll(
+            ".option-approvisionnement"
+        )
+        .forEach(
+            function (
+                bouton
+            ) {
+
+                bouton.addEventListener(
+                    "click",
+                    function () {
+
+                        const recetteId =
+                            bouton.dataset
+                                .recetteId;
+
+
+                        const mode =
+                            bouton.dataset
+                                .mode;
+
+
+                        if (
+                            !recetteId ||
+                            !mode
+                        ) {
+
+                            return;
+                        }
+
+
+                        choixRecettesLieesPlanning[
+                            recetteId
+                        ] =
+                            mode;
+
+
+                        const carte =
+                            bouton.closest(
+                                ".carte-recette-liee-planning"
+                            );
+
+
+                        if (
+                            !carte
+                        ) {
+
+                            return;
+                        }
+
+
+                        carte
+                            .querySelectorAll(
+                                ".option-approvisionnement"
+                            )
+                            .forEach(
+                                function (
+                                    option
+                                ) {
+
+                                    option.classList.toggle(
+                                        "actif",
+                                        option ===
+                                            bouton
+                                    );
+                                }
+                            );
+                    }
+                );
+            }
+        );
+
+
+    /*
+        On masque la popup principale
+        pendant le choix.
+    */
+
+    if (
+        popupRepas
+    ) {
+
+        popupRepas.hidden =
+            true;
+    }
+
+
+    popupRecettesLieesPlanning.hidden =
+        false;
+
+
+    document.body.style.overflow =
+        "hidden";
+
+
+    return true;
+}
 
 /* =================================
    AJOUTER UNE RECETTE
