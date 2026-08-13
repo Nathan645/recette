@@ -2247,3 +2247,293 @@
     display: block;
     width: 100%;
 }
+
+/* ==========================================
+   POPUP RECETTE LIÉE
+   FAIRE / ACHETER
+========================================== */
+
+.fond-popup-planning-recette {
+    position: fixed;
+    inset: 0;
+
+    z-index: 6000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(30, 35, 28, 0.58);
+    backdrop-filter: blur(5px);
+
+    overflow-y: auto;
+}
+
+
+.fond-popup-planning-recette[hidden] {
+    display: none !important;
+}
+
+
+.popup-planning-recette {
+    position: relative;
+
+    width: min(100%, 620px);
+
+    max-height: calc(100vh - 48px);
+    overflow-y: auto;
+
+    padding: 34px;
+
+    border-radius: 22px;
+
+    background: var(--blanc);
+
+    box-shadow:
+        0 24px 80px
+        rgba(30, 35, 28, 0.25);
+}
+
+
+/* =========================
+   ENTÊTE
+========================= */
+
+.entete-popup-recettes-liees {
+    margin-bottom: 28px;
+}
+
+
+.sur-titre-popup-recettes-liees {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--vert);
+
+    font-size: 13px;
+    font-weight: 800;
+
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+
+.entete-popup-recettes-liees h2 {
+    margin:
+        0
+        0
+        10px;
+
+    color: var(--texte);
+
+    font-size: 28px;
+}
+
+
+.entete-popup-recettes-liees p {
+    margin: 0;
+
+    color: var(--texte-secondaire);
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   RECETTE LIÉE
+========================= */
+
+.liste-recettes-liees-planning {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.carte-recette-liee-planning {
+    padding: 18px;
+
+    border: 1px solid #ded8cd;
+    border-radius: 16px;
+
+    background: #faf8f3;
+}
+
+
+.entete-recette-liee-planning {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 14px;
+}
+
+
+.entete-recette-liee-planning strong {
+    color: var(--texte);
+
+    font-size: 18px;
+}
+
+
+.entete-recette-liee-planning span {
+    color: var(--texte-secondaire);
+
+    font-size: 14px;
+}
+
+
+/* =========================
+   FAIRE / ACHETER
+========================= */
+
+.choix-approvisionnement-recette {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+
+.option-approvisionnement {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 13px;
+
+    background: var(--blanc);
+    color: var(--texte);
+
+    text-align: left;
+
+    font: inherit;
+
+    cursor: pointer;
+
+    transition:
+        border-color .2s ease,
+        background-color .2s ease,
+        transform .2s ease;
+}
+
+
+.option-approvisionnement:hover {
+    transform: translateY(-1px);
+
+    border-color: var(--vert);
+}
+
+
+.option-approvisionnement.actif {
+    border-color: var(--vert);
+
+    background: #eef0e8;
+}
+
+
+.icone-option {
+    flex: 0 0 auto;
+
+    font-size: 25px;
+}
+
+
+.option-approvisionnement > span:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+
+.option-approvisionnement strong {
+    font-size: 15px;
+}
+
+
+.option-approvisionnement small {
+    color: var(--texte-secondaire);
+
+    font-size: 12px;
+    line-height: 1.35;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions-popup-planning {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    margin-top: 26px;
+}
+
+
+.bouton-annuler-planning,
+.bouton-confirmer-planning {
+    min-height: 46px;
+
+    padding: 11px 18px;
+
+    border-radius: 10px;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.bouton-annuler-planning {
+    border: 1px solid #d8d1c5;
+
+    background: var(--blanc);
+    color: var(--texte);
+}
+
+
+.bouton-confirmer-planning {
+    border: 1px solid var(--vert);
+
+    background: var(--vert);
+    color: var(--blanc);
+}
+
+
+@media (max-width: 600px) {
+
+    .choix-approvisionnement-recette {
+        grid-template-columns: 1fr;
+    }
+
+
+    .actions-popup-planning {
+        flex-direction: column-reverse;
+    }
+
+
+    .bouton-annuler-planning,
+    .bouton-confirmer-planning {
+        width: 100%;
+    }
+
+}
