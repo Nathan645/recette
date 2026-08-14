@@ -3912,3 +3912,307 @@ input[type="radio"]:focus-visible {
     justify-content:
         flex-start !important;
 }
+
+/* =========================================================
+   HARMONISATION POPUPS RECETTE / PLANNING
+   ========================================================= */
+
+
+/* =========================
+   POPUP : AJOUTER AU PLANNING
+   ========================= */
+
+.fond-popup-planning-recette {
+    background: rgba(35, 43, 32, 0.66) !important;
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+}
+
+
+.popup-planning-recette {
+    width: min(690px, calc(100% - 40px)) !important;
+
+    padding: 38px 40px !important;
+
+    border: 1px solid rgba(214, 207, 194, 0.8) !important;
+    border-radius: 26px !important;
+
+    background: #fffefa !important;
+
+    box-shadow:
+        0 28px 90px
+        rgba(30, 35, 27, 0.26) !important;
+}
+
+
+/* Titre */
+
+.popup-planning-recette h2 {
+    margin: 0 55px 8px 0 !important;
+
+    color: var(--texte) !important;
+
+    font-size: 32px !important;
+    line-height: 1.12 !important;
+
+    letter-spacing: -0.025em !important;
+}
+
+
+/* Nom de la recette */
+
+.popup-planning-recette > p {
+    margin:
+        0
+        0
+        26px !important;
+
+    color: var(--texte-secondaire) !important;
+
+    font-size: 16px !important;
+    line-height: 1.45 !important;
+}
+
+
+/* =========================
+   CHAMPS
+   ========================= */
+
+.popup-planning-recette label,
+.popup-planning-recette .titre-champ {
+    margin:
+        18px
+        0
+        8px !important;
+
+    color: var(--texte) !important;
+
+    font-size: 15px !important;
+    font-weight: 750 !important;
+}
+
+
+.popup-planning-recette input[type="date"],
+.popup-planning-recette select {
+    width: 100% !important;
+
+    min-height: 50px !important;
+
+    padding:
+        0
+        15px !important;
+
+    border:
+        1.5px solid
+        #d8d0c3 !important;
+
+    border-radius: 14px !important;
+
+    background: var(--blanc) !important;
+
+    color: var(--texte) !important;
+
+    font: inherit !important;
+}
+
+
+/* =========================
+   MIDI / SOIR
+   ========================= */
+
+.choix-moment-planning,
+.moments-planning {
+    display: flex !important;
+
+    flex-wrap: wrap !important;
+
+    gap: 10px !important;
+}
+
+
+.choix-moment-planning button,
+.moments-planning button {
+    min-height: 46px !important;
+
+    padding:
+        10px
+        18px !important;
+
+    border:
+        1.5px solid
+        #d8d0c3 !important;
+
+    border-radius: 999px !important;
+
+    background: var(--blanc) !important;
+
+    color: var(--texte) !important;
+
+    font: inherit !important;
+    font-weight: 650 !important;
+
+    cursor: pointer !important;
+}
+
+
+.choix-moment-planning button.actif,
+.moments-planning button.actif {
+    border-color:
+        var(--vert) !important;
+
+    background:
+        #eef1e8 !important;
+
+    color:
+        var(--vert) !important;
+
+    font-weight:
+        750 !important;
+}
+
+
+/* =========================
+   NOMBRE DE PERSONNES
+   ========================= */
+
+.controle-personnes-planning {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 12px !important;
+}
+
+
+.controle-personnes-planning button {
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 44px !important;
+    height: 44px !important;
+
+    padding: 0 !important;
+
+    border:
+        1.5px solid
+        var(--vert) !important;
+
+    border-radius: 50% !important;
+
+    background:
+        var(--blanc) !important;
+
+    color:
+        var(--vert) !important;
+
+    font-size: 22px !important;
+
+    cursor: pointer !important;
+}
+
+
+/* =========================
+   BOUTONS BAS DE POPUP
+   ========================= */
+
+.actions-popup-planning,
+.actions-planning {
+    display: grid !important;
+
+    grid-template-columns:
+        1fr
+        1fr !important;
+
+    gap: 14px !important;
+
+    margin-top: 30px !important;
+}
+
+
+.actions-popup-planning button,
+.actions-planning button {
+    width: 100% !important;
+
+    min-height: 52px !important;
+
+    padding:
+        13px
+        20px !important;
+
+    border-radius: 11px !important;
+
+    font: inherit !important;
+    font-weight: 750 !important;
+
+    cursor: pointer !important;
+}
+
+
+/* Annuler / Retour */
+
+.actions-popup-planning button:first-child,
+.actions-planning button:first-child {
+    border:
+        2px solid
+        #d8d0c3 !important;
+
+    background:
+        var(--blanc) !important;
+
+    color:
+        var(--texte) !important;
+}
+
+
+/* Continuer / Ajouter */
+
+.actions-popup-planning button:last-child,
+.actions-planning button:last-child {
+    border:
+        2px solid
+        var(--vert) !important;
+
+    background:
+        var(--vert) !important;
+
+    color:
+        var(--blanc) !important;
+}
+
+
+.actions-popup-planning button:last-child:hover,
+.actions-planning button:last-child:hover {
+    background:
+        var(--vert-fonce) !important;
+
+    border-color:
+        var(--vert-fonce) !important;
+}
+
+
+/* =========================
+   CROIX
+   ========================= */
+
+.fermer-popup-planning,
+#fermer-popup-planning {
+    width: 46px !important;
+    height: 46px !important;
+
+    top: 22px !important;
+    right: 22px !important;
+
+    border: none !important;
+
+    border-radius: 50% !important;
+
+    background:
+        #f6f0e5 !important;
+
+    color:
+        var(--texte) !important;
+
+    font-size: 27px !important;
+}
