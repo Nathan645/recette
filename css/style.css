@@ -4216,3 +4216,369 @@ input[type="radio"]:focus-visible {
 
     font-size: 27px !important;
 }
+
+/* =========================================================
+   POPUP PRÉPARATIONS LIÉES
+   IDENTIQUE AU PLANNING
+   ========================================================= */
+
+.entete-popup-recettes-liees {
+    margin-bottom: 28px !important;
+}
+
+
+.sur-titre-popup-recettes-liees {
+    display: block !important;
+
+    margin-bottom: 7px !important;
+
+    color: var(--vert) !important;
+
+    font-size: 12px !important;
+    font-weight: 800 !important;
+
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+}
+
+
+.entete-popup-recettes-liees h2 {
+    margin:
+        0
+        0
+        10px !important;
+
+    color: var(--texte) !important;
+
+    font-size: 32px !important;
+    line-height: 1.12 !important;
+
+    letter-spacing: -0.025em !important;
+}
+
+
+.entete-popup-recettes-liees p {
+    margin: 0 !important;
+
+    color: var(--texte-secondaire) !important;
+
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+}
+
+
+/* =========================
+   LISTE RECETTES LIÉES
+   ========================= */
+
+.liste-recettes-liees-planning {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    gap: 16px !important;
+}
+
+
+/* =========================
+   CARTE RECETTE LIÉE
+   ========================= */
+
+.carte-recette-liee-planning {
+    padding: 18px !important;
+
+    border:
+        1px solid
+        #ded8cd !important;
+
+    border-radius: 16px !important;
+
+    background:
+        #f9f7f1 !important;
+}
+
+
+.entete-recette-liee-planning {
+    display: flex !important;
+
+    align-items: baseline !important;
+    justify-content: space-between !important;
+
+    gap: 14px !important;
+
+    margin-bottom: 14px !important;
+}
+
+
+.entete-recette-liee-planning strong {
+    color: var(--texte) !important;
+
+    font-size: 18px !important;
+    font-weight: 750 !important;
+}
+
+
+.entete-recette-liee-planning span {
+    flex: 0 0 auto !important;
+
+    color: var(--texte-secondaire) !important;
+
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+
+
+/* =========================
+   FAIRE / ACHETER
+   ========================= */
+
+.choix-approvisionnement-recette {
+    display: grid !important;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr)) !important;
+
+    gap: 10px !important;
+}
+
+
+.option-approvisionnement {
+    display: flex !important;
+
+    align-items: center !important;
+
+    gap: 12px !important;
+
+    width: 100% !important;
+    min-height: 82px !important;
+
+    padding: 14px !important;
+
+    border:
+        1.5px solid
+        #d8d1c5 !important;
+
+    border-radius: 13px !important;
+
+    background:
+        var(--blanc) !important;
+
+    color:
+        var(--texte) !important;
+
+    text-align: left !important;
+
+    font: inherit !important;
+
+    cursor: pointer !important;
+
+    box-shadow: none !important;
+
+    transition:
+        transform .15s ease,
+        border-color .15s ease,
+        background-color .15s ease !important;
+}
+
+
+.option-approvisionnement:hover {
+    transform:
+        translateY(-1px) !important;
+
+    border-color:
+        var(--vert) !important;
+}
+
+
+.option-approvisionnement.actif {
+    border-color:
+        var(--vert) !important;
+
+    background:
+        #eef1e8 !important;
+}
+
+
+/* Icône */
+
+.icone-option {
+    flex:
+        0
+        0
+        auto !important;
+
+    display: flex !important;
+
+    align-items: center !important;
+    justify-content: center !important;
+
+    width: 42px !important;
+    height: 42px !important;
+
+    border-radius: 11px !important;
+
+    background:
+        #f1eee6 !important;
+
+    font-size: 22px !important;
+}
+
+
+/* Texte du bouton */
+
+.option-approvisionnement > span:last-child {
+    display: flex !important;
+
+    flex-direction: column !important;
+
+    align-items: flex-start !important;
+
+    gap: 3px !important;
+
+    min-width: 0 !important;
+}
+
+
+.option-approvisionnement strong {
+    display: block !important;
+
+    margin: 0 !important;
+
+    color: var(--texte) !important;
+
+    font-size: 15px !important;
+    font-weight: 750 !important;
+
+    line-height: 1.25 !important;
+}
+
+
+.option-approvisionnement small {
+    display: block !important;
+
+    margin: 0 !important;
+
+    color:
+        var(--texte-secondaire) !important;
+
+    font-size: 12px !important;
+    font-weight: 500 !important;
+
+    line-height: 1.35 !important;
+}
+
+
+/* =========================
+   RETOUR / CONTINUER
+   ========================= */
+
+.popup-recettes-liees-planning
+.actions-popup-planning {
+    display: grid !important;
+
+    grid-template-columns:
+        1fr
+        1fr !important;
+
+    gap: 14px !important;
+
+    margin-top: 26px !important;
+}
+
+
+.popup-recettes-liees-planning
+.bouton-annuler-planning,
+.popup-recettes-liees-planning
+.bouton-confirmer-planning {
+    width: 100% !important;
+
+    min-height: 52px !important;
+
+    padding:
+        13px
+        20px !important;
+
+    border-radius: 11px !important;
+
+    font: inherit !important;
+    font-weight: 750 !important;
+
+    cursor: pointer !important;
+}
+
+
+.popup-recettes-liees-planning
+.bouton-annuler-planning {
+    border:
+        2px solid
+        #d8d0c3 !important;
+
+    background:
+        var(--blanc) !important;
+
+    color:
+        var(--texte) !important;
+}
+
+
+.popup-recettes-liees-planning
+.bouton-annuler-planning:hover {
+    border-color:
+        var(--vert) !important;
+
+    color:
+        var(--vert) !important;
+}
+
+
+.popup-recettes-liees-planning
+.bouton-confirmer-planning {
+    border:
+        2px solid
+        var(--vert) !important;
+
+    background:
+        var(--vert) !important;
+
+    color:
+        var(--blanc) !important;
+}
+
+
+.popup-recettes-liees-planning
+.bouton-confirmer-planning:hover {
+    border-color:
+        var(--vert-fonce) !important;
+
+    background:
+        var(--vert-fonce) !important;
+}
+
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 600px) {
+
+    .choix-approvisionnement-recette {
+        grid-template-columns:
+            1fr !important;
+    }
+
+
+    .popup-recettes-liees-planning
+    .actions-popup-planning {
+        grid-template-columns:
+            1fr !important;
+    }
+
+
+    .popup-recettes-liees-planning {
+        width:
+            min(
+                100%,
+                calc(100vw - 28px)
+            ) !important;
+    }
+}
