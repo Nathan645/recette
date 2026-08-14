@@ -40,10 +40,28 @@ function ouvrirPopup(
         );
 
 
-    const momentTexte =
-        moment === "midi"
-            ? "Midi"
-            : "Soir";
+    const titresMoments = {
+
+    "petit-dejeuner":
+        "Petit-déjeuner",
+
+    "midi":
+        "Midi",
+
+    "gouter":
+        "Goûter",
+
+    "soir":
+        "Soir"
+
+};
+
+
+const momentTexte =
+    titresMoments[
+        moment
+    ] ||
+    moment;
 
 
     if (
