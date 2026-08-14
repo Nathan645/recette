@@ -276,10 +276,28 @@ function creerCreneauRepas(
         );
 
 
-    const titreMoment =
-        moment === "midi"
-            ? "Midi"
-            : "Soir";
+    const titresMoments = {
+
+    "petit-dejeuner":
+        "Petit-déjeuner",
+
+    "midi":
+        "Midi",
+
+    "gouter":
+        "Goûter",
+
+    "soir":
+        "Soir"
+
+};
+
+
+const titreMoment =
+    titresMoments[
+        moment
+    ] ||
+    moment;
 
 
     let contenu =
@@ -662,15 +680,27 @@ function afficherSemaine() {
 
 
                 ${creerCreneauRepas(
-                    date,
-                    "midi"
-                )}
+    date,
+    "petit-dejeuner"
+)}
 
 
-                ${creerCreneauRepas(
-                    date,
-                    "soir"
-                )}
+${creerCreneauRepas(
+    date,
+    "midi"
+)}
+
+
+${creerCreneauRepas(
+    date,
+    "gouter"
+)}
+
+
+${creerCreneauRepas(
+    date,
+    "soir"
+)}
 
             </article>
 
