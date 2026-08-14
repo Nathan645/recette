@@ -3443,12 +3443,13 @@ async function rechercherRepasExistantPlanning(
                 "repas_planning_elements"
             )
             .select(
-                `
-                    id,
-                    repas_planning_id,
-                    recette_id,
-                    nom,
-                    ordre
+    `
+        id,
+        repas_planning_id,
+        recette_id,
+        nom,
+        mode_approvisionnement,
+        ordre
                 `
             )
             .eq(
@@ -3508,11 +3509,14 @@ async function rechercherRepasExistantPlanning(
                     null,
 
                 nom:
-                    repas.nom ||
-                    "Repas",
+    repas.nom ||
+    "Repas",
 
-                ordre:
-                    1
+mode_approvisionnement:
+    "faire",
+
+ordre:
+    1
             }
         );
     }
@@ -4561,21 +4565,38 @@ const elementsPlanning =
                         recetteId,
 
                     nom:
-                        recette?.nom ||
-                        (
-                            String(
-                                recetteId
-                            ) ===
-                            String(
-                                recetteChargee.id
-                            )
-                                ? recetteChargee.nom
-                                : "Recette liée"
-                        ),
+    recette?.nom ||
+    (
+        String(
+            recetteId
+        ) ===
+        String(
+            recetteChargee.id
+        )
+            ? recetteChargee.nom
+            : "Recette liée"
+    ),
 
-                    ordre:
-                        index +
-                        1
+mode_approvisionnement:
+    String(
+        recetteId
+    ) ===
+    String(
+        recetteChargee.id
+    )
+        ? "faire"
+        : (
+            choixRecettesLieesPlanning[
+                String(
+                    recetteId
+                )
+            ] ||
+            "faire"
+        ),
+
+ordre:
+    index +
+    1
                 };
             }
         );
@@ -4874,21 +4895,38 @@ const elementsAInserer =
                     recetteId,
 
                 nom:
-                    recette?.nom ||
-                    (
-                        String(
-                            recetteId
-                        ) ===
-                        String(
-                            recetteChargee.id
-                        )
-                            ? recetteChargee.nom
-                            : "Recette liée"
-                    ),
+    recette?.nom ||
+    (
+        String(
+            recetteId
+        ) ===
+        String(
+            recetteChargee.id
+        )
+            ? recetteChargee.nom
+            : "Recette liée"
+    ),
 
-                ordre:
-                    ordreSuivant +
-                    index
+mode_approvisionnement:
+    String(
+        recetteId
+    ) ===
+    String(
+        recetteChargee.id
+    )
+        ? "faire"
+        : (
+            choixRecettesLieesPlanning[
+                String(
+                    recetteId
+                )
+            ] ||
+            "faire"
+        ),
+
+ordre:
+    ordreSuivant +
+    index
             };
         }
     );
