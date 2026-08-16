@@ -697,8 +697,8 @@ function obtenirNomFiltre(
         "pour-recevoir":
             "Pour recevoir",
 
-        "a-preparer-avance":
-            "À préparer à l'avance",
+        "batch-cooking":
+            "Batch Cooking",
 
         "quotidien":
             "Quotidien",
