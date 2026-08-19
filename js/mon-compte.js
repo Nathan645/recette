@@ -132,6 +132,23 @@ const listeMembresFoyer =
         "liste-membres-foyer"
     );
 
+const boutonQuitterFoyer =
+    document.getElementById(
+        "bouton-quitter-foyer"
+    );
+
+
+const boutonSupprimerFoyer =
+    document.getElementById(
+        "bouton-supprimer-foyer"
+    );
+
+
+const messageActionFoyer =
+    document.getElementById(
+        "message-action-foyer"
+    );
+
 
 /* =================================
    DÉCONNEXION
@@ -569,6 +586,45 @@ function afficherFoyer() {
         personnesParDefaut > 0
             ? personnesParDefaut
             : 2;
+}
+
+/* =================================
+   ACTIONS DU FOYER
+================================= */
+
+function afficherActionsFoyer() {
+
+    const estProprietaire =
+        foyerUtilisateur?.created_by ===
+        utilisateurConnecte?.id;
+
+
+    /*
+        Le propriétaire peut
+        supprimer le foyer.
+    */
+
+    if (
+        boutonSupprimerFoyer
+    ) {
+
+        boutonSupprimerFoyer.hidden =
+            !estProprietaire;
+    }
+
+
+    /*
+        Un membre simple peut
+        quitter le foyer.
+    */
+
+    if (
+        boutonQuitterFoyer
+    ) {
+
+        boutonQuitterFoyer.hidden =
+            estProprietaire;
+    }
 }
 
 
@@ -1252,9 +1308,11 @@ async function initialiserMonCompte() {
 
         afficherProfil();
 
-        afficherFoyer();
+afficherFoyer();
 
-        afficherMembres();
+afficherMembres();
+
+afficherActionsFoyer();
 
 
         /* 7. Fin du chargement */
