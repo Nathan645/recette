@@ -149,6 +149,225 @@ const messageActionFoyer =
         "message-action-foyer"
     );
 
+/* =================================
+   QUITTER LE FOYER
+================================= */
+
+if (
+    boutonQuitterFoyer
+) {
+
+    boutonQuitterFoyer.addEventListener(
+        "click",
+        async function () {
+
+            const confirmation =
+                window.confirm(
+                    "Voulez-vous vraiment quitter ce foyer ?\n\nVous n’aurez plus accès à son planning, ses courses et ses données partagées."
+                );
+
+
+            if (
+                !confirmation
+            ) {
+
+                return;
+            }
+
+
+            boutonQuitterFoyer.disabled =
+                true;
+
+
+            boutonQuitterFoyer.textContent =
+                "Départ en cours…";
+
+
+            if (
+                messageActionFoyer
+            ) {
+
+                messageActionFoyer.textContent =
+                    "";
+            }
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await window.supabaseClient
+                        .rpc(
+                            "quitter_foyer"
+                        );
+
+
+                if (
+                    error
+                ) {
+
+                    throw error;
+                }
+
+
+                /*
+                    L'utilisateur n'appartient
+                    maintenant plus à aucun foyer.
+                */
+
+                window.location.replace(
+                    "foyer.html"
+                );
+
+
+            } catch (
+                erreur
+            ) {
+
+                console.error(
+                    "Erreur pendant la sortie du foyer :",
+                    erreur
+                );
+
+
+                if (
+                    messageActionFoyer
+                ) {
+
+                    messageActionFoyer.textContent =
+                        erreur.message ||
+                        "Impossible de quitter le foyer.";
+                }
+
+
+                boutonQuitterFoyer.disabled =
+                    false;
+
+
+                boutonQuitterFoyer.textContent =
+                    "Quitter le foyer";
+            }
+        }
+    );
+}
+/* =================================
+   SUPPRIMER LE FOYER
+================================= */
+
+if (
+    boutonSupprimerFoyer
+) {
+
+    boutonSupprimerFoyer.addEventListener(
+        "click",
+        async function () {
+
+            const confirmation =
+                window.confirm(
+                    "Voulez-vous vraiment supprimer ce foyer ?\n\nCette action supprimera définitivement le planning, les courses et les données partagées du foyer.\n\nLes recettes personnelles seront conservées."
+                );
+
+
+            if (
+                !confirmation
+            ) {
+
+                return;
+            }
+
+
+            const confirmationFinale =
+                window.confirm(
+                    "Dernière confirmation : cette action est irréversible.\n\nSupprimer définitivement le foyer ?"
+                );
+
+
+            if (
+                !confirmationFinale
+            ) {
+
+                return;
+            }
+
+
+            boutonSupprimerFoyer.disabled =
+                true;
+
+
+            boutonSupprimerFoyer.textContent =
+                "Suppression…";
+
+
+            if (
+                messageActionFoyer
+            ) {
+
+                messageActionFoyer.textContent =
+                    "";
+            }
+
+
+            try {
+
+                const {
+                    error
+                } =
+                    await window.supabaseClient
+                        .rpc(
+                            "supprimer_foyer"
+                        );
+
+
+                if (
+                    error
+                ) {
+
+                    throw error;
+                }
+
+
+                /*
+                    Le foyer n'existe plus.
+                    Le compte utilisateur,
+                    lui, existe toujours.
+                */
+
+                window.location.replace(
+                    "foyer.html"
+                );
+
+
+            } catch (
+                erreur
+            ) {
+
+                console.error(
+                    "Erreur pendant la suppression du foyer :",
+                    erreur
+                );
+
+
+                if (
+                    messageActionFoyer
+                ) {
+
+                    messageActionFoyer.textContent =
+                        erreur.message ||
+                        "Impossible de supprimer le foyer.";
+                }
+
+
+                boutonSupprimerFoyer.disabled =
+                    false;
+
+
+                boutonSupprimerFoyer.textContent =
+                    "Supprimer le foyer";
+            }
+        }
+    );
+}
 
 /* =================================
    DÉCONNEXION
