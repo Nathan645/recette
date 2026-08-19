@@ -1342,6 +1342,102 @@
 
 }
 
+.entete-membres-foyer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 18px;
+}
+
+
+.entete-membres-foyer h4 {
+    margin: 0;
+}
+
+
+.bouton-action-foyer {
+    flex: 0 0 auto;
+
+    min-height: 42px;
+
+    padding:
+        9px
+        16px;
+
+    border-radius: 10px;
+
+    background: transparent;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color .2s ease,
+        color .2s ease,
+        border-color .2s ease;
+}
+
+
+.bouton-quitter-foyer {
+    border:
+        1.5px solid
+        var(--vert);
+
+    color:
+        var(--vert);
+}
+
+
+.bouton-quitter-foyer:hover {
+    background:
+        #eef1e8;
+}
+
+
+.bouton-supprimer-foyer {
+    border:
+        1.5px solid
+        #ad4c38;
+
+    color:
+        #ad4c38;
+}
+
+
+.bouton-supprimer-foyer:hover {
+    background:
+        #fff3ef;
+}
+
+
+.message-action-foyer {
+    min-height: 20px;
+
+    margin:
+        12px
+        0
+        0;
+
+    font-size: 14px;
+}
+
+
+@media (max-width: 650px) {
+
+    .entete-membres-foyer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+
 
 /* =================================
    FIN
