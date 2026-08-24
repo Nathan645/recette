@@ -1438,6 +1438,75 @@ const champEtapes =
         "etapes"
     );
 
+let selectionEtapesSauvegardee =
+    null;
+
+
+/* =================================
+   MÉMORISER LA SÉLECTION
+================================= */
+
+function sauvegarderSelectionEtapes() {
+
+    const selection =
+        window.getSelection();
+
+
+    if (
+        !selection ||
+        selection.rangeCount === 0
+    ) {
+
+        return;
+    }
+
+
+    const range =
+        selection.getRangeAt(
+            0
+        );
+
+
+    if (
+        editeurEtapes &&
+        editeurEtapes.contains(
+            range.commonAncestorContainer
+        )
+    ) {
+
+        selectionEtapesSauvegardee =
+            range.cloneRange();
+    }
+}
+
+
+/* =================================
+   RESTAURER LA SÉLECTION
+================================= */
+
+function restaurerSelectionEtapes() {
+
+    if (
+        !selectionEtapesSauvegardee
+    ) {
+
+        return;
+    }
+
+
+    const selection =
+        window.getSelection();
+
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        selectionEtapesSauvegardee
+    );
+}
+
+
+
 
 /* =================================
    EXÉCUTER UNE COMMANDE
@@ -1529,6 +1598,15 @@ if (
 ) {
 
     selectTailleTexte.addEventListener(
+        "mousedown",
+        function () {
+
+            sauvegarderSelectionEtapes();
+        }
+    );
+
+
+    selectTailleTexte.addEventListener(
         "change",
         function () {
 
@@ -1544,16 +1622,30 @@ if (
             }
 
 
-            executerCommandeEditeur(
+            /*
+                Le select a pris le focus.
+                On remet donc la sélection
+                dans l'éditeur.
+            */
+
+            editeurEtapes.focus();
+
+            restaurerSelectionEtapes();
+
+
+            document.execCommand(
                 "fontSize",
+                false,
                 taille
             );
 
+
+            synchroniserEditeurEtapes();
+
+            sauvegarderSelectionEtapes();
         }
     );
 }
-
-
 /* =================================
    SYNCHRONISER L'ÉDITEUR
 ================================= */
@@ -1581,6 +1673,18 @@ if (
     editeurEtapes.addEventListener(
         "input",
         synchroniserEditeurEtapes
+    );
+
+
+    editeurEtapes.addEventListener(
+        "keyup",
+        sauvegarderSelectionEtapes
+    );
+
+
+    editeurEtapes.addEventListener(
+        "mouseup",
+        sauvegarderSelectionEtapes
     );
 }
 
