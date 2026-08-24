@@ -1546,12 +1546,37 @@ if (
                                 : echapperHtml(
                                     commentaire.contenu
                                 );
+                       const boutonsRepondre =
+    listeCommentaires.querySelectorAll(
+        ".bouton-repondre-commentaire"
+    );
+
+
+boutonsRepondre.forEach(
+    function (
+        bouton
+    ) {
+
+        bouton.addEventListener(
+            "click",
+            function () {
+
+                ouvrirFormulaireReponse(
+                    bouton.dataset.commentaireId
+                );
+
+            }
+        );
+    }
+);
 
                        const profil =
     profilsParId[
         commentaire.user_id
     ];
 
+                       
+   
 
 const prenom =
     profil?.prenom ||
@@ -1638,6 +1663,130 @@ const auteur =
     }
 }
 
+/* =================================
+   OUVRIR LE FORMULAIRE DE RÉPONSE
+================================= */
+
+function ouvrirFormulaireReponse(
+    commentaireId
+) {
+
+    const zoneReponses =
+        document.querySelector(
+            `[data-reponses-parent="${commentaireId}"]`
+        );
+
+
+    if (
+        !zoneReponses
+    ) {
+        return;
+    }
+
+
+    /*
+        Si un formulaire est déjà ouvert
+        pour ce commentaire, on le ferme.
+    */
+
+    const formulaireExistant =
+        zoneReponses.querySelector(
+            ".formulaire-reponse-commentaire"
+        );
+
+
+    if (
+        formulaireExistant
+    ) {
+
+        formulaireExistant.remove();
+
+        return;
+    }
+
+
+    /*
+        Création du formulaire
+    */
+
+    const formulaire =
+        document.createElement(
+            "form"
+        );
+
+
+    formulaire.className =
+        "formulaire-reponse-commentaire";
+
+
+    formulaire.setAttribute(
+        "action",
+        "javascript:void(0);"
+    );
+
+
+    formulaire.dataset.parentId =
+        commentaireId;
+
+
+    formulaire.innerHTML =
+        `
+            <textarea
+                class="champ-reponse-commentaire"
+                placeholder="Écrire une réponse…"
+                maxlength="1000"
+                required
+            ></textarea>
+
+            <div class="actions-reponse-commentaire">
+
+                <button
+                    type="button"
+                    class="bouton-annuler-reponse"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="submit"
+                    class="bouton-publier-reponse"
+                >
+                    Répondre
+                </button>
+
+            </div>
+        `;
+
+
+    zoneReponses.prepend(
+        formulaire
+    );
+
+
+    const champ =
+        formulaire.querySelector(
+            ".champ-reponse-commentaire"
+        );
+
+
+    champ?.focus();
+
+
+    const boutonAnnuler =
+        formulaire.querySelector(
+            ".bouton-annuler-reponse"
+        );
+
+
+    boutonAnnuler?.addEventListener(
+        "click",
+        function () {
+
+            formulaire.remove();
+
+        }
+    );
+}
 /* =================================
    CHARGER LE FOYER
 ================================= */
