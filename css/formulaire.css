@@ -1424,6 +1424,286 @@ input[type="checkbox"] {
     padding: 0;
 }
 
+/* =================================
+   ÉDITEUR DE TEXTE — ÉTAPES
+================================= */
+
+
+/* BARRE D'OUTILS */
+
+.barre-outils-editeur {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    padding:
+        8px
+        10px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-bottom: none;
+
+    border-radius:
+        10px
+        10px
+        0
+        0;
+
+    background-color:
+        #f8f6f0;
+}
+
+
+/* BOUTONS */
+
+.outil-editeur {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 38px;
+    height: 36px;
+
+    padding:
+        0
+        10px;
+
+    border:
+        1px solid
+        transparent;
+
+    border-radius: 8px;
+
+    background-color:
+        transparent;
+
+    color:
+        var(--texte);
+
+    font: inherit;
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.outil-editeur:hover {
+    border-color:
+        #d8d1c5;
+
+    background-color:
+        #ffffff;
+}
+
+
+.outil-editeur:active {
+    background-color:
+        #eef0e8;
+}
+
+
+/* SÉPARATEURS */
+
+.separateur-outils {
+    width: 1px;
+    height: 24px;
+
+    margin:
+        0
+        3px;
+
+    background-color:
+        #d8d1c5;
+}
+
+
+/* TAILLE DU TEXTE */
+
+.taille-texte-editeur {
+    width: auto !important;
+    height: 36px !important;
+    min-height: 36px !important;
+
+    padding:
+        0
+        34px
+        0
+        10px !important;
+
+    border:
+        1px solid
+        #d8d1c5 !important;
+
+    border-radius: 8px !important;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font: inherit;
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+
+/* ZONE D'ÉDITION */
+
+.editeur-texte {
+    width: 100%;
+    min-height: 190px;
+
+    box-sizing: border-box;
+
+    padding:
+        16px
+        18px;
+
+    border:
+        1px solid
+        #d8d1c5;
+
+    border-radius:
+        0
+        0
+        10px
+        10px;
+
+    background-color:
+        #ffffff;
+
+    color:
+        var(--texte);
+
+    font: inherit;
+    font-size: 16px;
+
+    line-height: 1.6;
+
+    outline: none;
+
+    overflow-y: auto;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.editeur-texte:focus {
+    border-color:
+        var(--vert);
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            102,
+            112,
+            90,
+            0.10
+        );
+}
+
+
+/* PLACEHOLDER */
+
+.editeur-texte:empty::before {
+    content:
+        attr(data-placeholder);
+
+    color:
+        #aaa;
+
+    pointer-events: none;
+}
+
+
+/* PARAGRAPHES */
+
+.editeur-texte p {
+    margin:
+        0
+        0
+        10px;
+}
+
+
+.editeur-texte p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* LISTES */
+
+.editeur-texte ul,
+.editeur-texte ol {
+    margin:
+        8px
+        0;
+
+    padding-left: 28px;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 520px) {
+
+    .barre-outils-editeur {
+        gap: 4px;
+
+        padding:
+            7px;
+    }
+
+
+    .outil-editeur {
+        min-width: 34px;
+        height: 34px;
+
+        padding:
+            0
+            8px;
+
+        font-size: 13px;
+    }
+
+
+    .taille-texte-editeur {
+        height: 34px !important;
+        min-height: 34px !important;
+
+        font-size: 12px;
+    }
+
+
+    .separateur-outils {
+        height: 21px;
+    }
+
+
+    .editeur-texte {
+        min-height: 170px;
+
+        padding:
+            14px;
+
+        font-size: 15px;
+    }
+}
 
 /* =================================
    FIN
