@@ -1546,30 +1546,7 @@ if (
                                 : echapperHtml(
                                     commentaire.contenu
                                 );
-                       const boutonsRepondre =
-    listeCommentaires.querySelectorAll(
-        ".bouton-repondre-commentaire"
-    );
-
-
-boutonsRepondre.forEach(
-    function (
-        bouton
-    ) {
-
-        bouton.addEventListener(
-            "click",
-            function () {
-
-                ouvrirFormulaireReponse(
-                    bouton.dataset.commentaireId
-                );
-
-            }
-        );
-    }
-);
-
+                     
                        const profil =
     profilsParId[
         commentaire.user_id
@@ -1642,7 +1619,29 @@ const auteur =
                 .join(
                     ""
                 );
+const boutonsRepondre =
+    listeCommentaires.querySelectorAll(
+        ".bouton-repondre-commentaire"
+    );
 
+
+boutonsRepondre.forEach(
+    function (
+        bouton
+    ) {
+
+        bouton.addEventListener(
+            "click",
+            function () {
+
+                ouvrirFormulaireReponse(
+                    bouton.dataset.commentaireId
+                );
+
+            }
+        );
+    }
+);
 
     } catch (
         erreur
