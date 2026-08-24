@@ -906,6 +906,7 @@ afficherRecette(
 
 await chargerLikesRecette();
 
+await chargerCommentairesRecette();
 
 /* =========================
    MINUTEURS SAUVEGARDÉS
@@ -1291,6 +1292,8 @@ async function publierCommentaireRecette(
         champCommentaire.value =
             "";
 
+       await chargerCommentairesRecette();
+
 
         if (
             messageCommentaire
@@ -1332,6 +1335,189 @@ async function publierCommentaireRecette(
             boutonPublier.textContent =
                 "Publier";
         }
+    }
+}
+
+/* =================================
+   CHARGER LES COMMENTAIRES
+================================= */
+
+async function chargerCommentairesRecette() {
+
+    if (
+        !recetteChargee?.id
+    ) {
+        return;
+    }
+
+
+    const listeCommentaires =
+        document.getElementById(
+            "liste-commentaires-recette"
+        );
+
+
+    const compteurCommentaires =
+        document.getElementById(
+            "compteur-commentaires-recette"
+        );
+
+
+    if (
+        !listeCommentaires
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .select(
+                    "id, user_id, parent_id, contenu, supprime, created_at"
+                )
+                .eq(
+                    "recette_id",
+                    recetteChargee.id
+                )
+                .is(
+                    "parent_id",
+                    null
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            false
+                    }
+                );
+
+
+        if (
+            error
+        ) {
+            throw error;
+        }
+
+
+        const commentaires =
+            Array.isArray(
+                data
+            )
+                ? data
+                : [];
+
+
+        if (
+            compteurCommentaires
+        ) {
+            compteurCommentaires.textContent =
+                commentaires.length;
+        }
+
+
+        if (
+            commentaires.length ===
+            0
+        ) {
+
+            listeCommentaires.innerHTML =
+                `
+                    <p>
+                        Aucun commentaire pour le moment.
+                    </p>
+                `;
+
+            return;
+        }
+
+
+        listeCommentaires.innerHTML =
+            commentaires
+                .map(
+                    function (
+                        commentaire
+                    ) {
+
+                        const date =
+                            new Date(
+                                commentaire.created_at
+                            )
+                                .toLocaleDateString(
+                                    "fr-FR",
+                                    {
+                                        day:
+                                            "numeric",
+                                        month:
+                                            "long",
+                                        year:
+                                            "numeric"
+                                    }
+                                );
+
+
+                        const texte =
+                            commentaire.supprime
+                                ? "Commentaire supprimé"
+                                : echapperHtml(
+                                    commentaire.contenu
+                                );
+
+
+                        return `
+                            <article
+                                class="commentaire-recette"
+                                data-commentaire-id="${commentaire.id}"
+                            >
+
+                                <div class="entete-commentaire-recette">
+
+                                    <span class="auteur-commentaire-recette">
+                                        Utilisateur
+                                    </span>
+
+                                    <span class="date-commentaire-recette">
+                                        ${date}
+                                    </span>
+
+                                </div>
+
+                                <p class="texte-commentaire-recette">
+                                    ${texte}
+                                </p>
+
+                            </article>
+                        `;
+                    }
+                )
+                .join(
+                    ""
+                );
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur chargement commentaires recette :",
+            erreur
+        );
+
+
+        listeCommentaires.innerHTML =
+            `
+                <p>
+                    Impossible de charger les commentaires.
+                </p>
+            `;
     }
 }
 
