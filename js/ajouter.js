@@ -1423,6 +1423,277 @@ function rafraichirSelectsRecettesLiees() {
     );
 }
 
+/* =================================
+   ÉDITEUR DE TEXTE — ÉTAPES
+================================= */
+
+const editeurEtapes =
+    document.getElementById(
+        "editeur-etapes"
+    );
+
+
+const champEtapes =
+    document.getElementById(
+        "etapes"
+    );
+
+
+/* =================================
+   EXÉCUTER UNE COMMANDE
+================================= */
+
+function executerCommandeEditeur(
+    commande,
+    valeur = null
+) {
+
+    if (
+        !editeurEtapes
+    ) {
+
+        return;
+    }
+
+
+    editeurEtapes.focus();
+
+
+    document.execCommand(
+        commande,
+        false,
+        valeur
+    );
+}
+
+
+/* =================================
+   BOUTONS DE LA BARRE D'OUTILS
+================================= */
+
+document
+    .querySelectorAll(
+        ".outil-editeur[data-command]"
+    )
+    .forEach(
+        function (
+            bouton
+        ) {
+
+            /*
+                On évite que le clic
+                fasse perdre la sélection
+                de texte.
+            */
+
+            bouton.addEventListener(
+                "mousedown",
+                function (
+                    evenement
+                ) {
+
+                    evenement.preventDefault();
+                }
+            );
+
+
+            bouton.addEventListener(
+                "click",
+                function () {
+
+                    const commande =
+                        bouton.dataset.command;
+
+
+                    executerCommandeEditeur(
+                        commande
+                    );
+                }
+            );
+        }
+    );
+
+
+/* =================================
+   TAILLE DU TEXTE
+================================= */
+
+const selectTailleTexte =
+    document.getElementById(
+        "taille-texte-editeur"
+    );
+
+
+if (
+    selectTailleTexte
+) {
+
+    selectTailleTexte.addEventListener(
+        "change",
+        function () {
+
+            const taille =
+                selectTailleTexte.value;
+
+
+            if (
+                !taille
+            ) {
+
+                return;
+            }
+
+
+            executerCommandeEditeur(
+                "fontSize",
+                taille
+            );
+
+
+            selectTailleTexte.value =
+                "";
+        }
+    );
+}
+
+
+/* =================================
+   SYNCHRONISER L'ÉDITEUR
+================================= */
+
+function synchroniserEditeurEtapes() {
+
+    if (
+        !editeurEtapes ||
+        !champEtapes
+    ) {
+
+        return;
+    }
+
+
+    champEtapes.value =
+        editeurEtapes.innerHTML.trim();
+}
+
+
+if (
+    editeurEtapes
+) {
+
+    editeurEtapes.addEventListener(
+        "input",
+        synchroniserEditeurEtapes
+    );
+}
+
+
+/* =================================
+   RÉCUPÉRER LES ÉTAPES
+================================= */
+
+function recupererEtapesEditeur() {
+
+    if (
+        !editeurEtapes
+    ) {
+
+        return [];
+    }
+
+
+    const texte =
+        editeurEtapes
+            .innerText
+            .trim();
+
+
+    if (
+        !texte
+    ) {
+
+        return [];
+    }
+
+
+    /*
+        On conserve le HTML.
+
+        Chaque ligne principale devient
+        une étape indépendante.
+    */
+
+    const conteneur =
+        document.createElement(
+            "div"
+        );
+
+
+    conteneur.innerHTML =
+        editeurEtapes.innerHTML;
+
+
+    const enfants =
+        Array.from(
+            conteneur.children
+        );
+
+
+    /*
+        Si le navigateur a créé
+        plusieurs blocs, chacun devient
+        une étape.
+    */
+
+    if (
+        enfants.length >
+        0
+    ) {
+
+        return enfants
+            .map(
+                function (
+                    element
+                ) {
+
+                    return element.outerHTML;
+                }
+            )
+            .filter(
+                function (
+                    element
+                ) {
+
+                    const temporaire =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    temporaire.innerHTML =
+                        element;
+
+
+                    return (
+                        temporaire
+                            .innerText
+                            .trim() !==
+                        ""
+                    );
+                }
+            );
+    }
+
+
+    /*
+        Sécurité :
+        contenu sans bloc HTML.
+    */
+
+    return [
+        editeurEtapes.innerHTML.trim()
+    ];
+}
 
 /* =================================
    OUTILS
@@ -1852,14 +2123,8 @@ function recupererVisibilite() {
 
 function construireRecette() {
 
-    const etapes =
-        transformerEnListe(
-            document
-                .getElementById(
-                    "etapes"
-                )
-                .value
-        );
+    cconst etapes =
+    recupererEtapesEditeur();
 
 
     if (
@@ -4868,19 +5133,84 @@ function remplirFormulaire(
             "";
 
 
-    document
-        .getElementById(
-            "etapes"
-        )
-        .value =
-            Array.isArray(
-                recette.etapes
-            )
-                ? recette.etapes
-                    .join(
-                        "\n"
+    const etapesExistantes =
+    Array.isArray(
+        recette.etapes
+    )
+        ? recette.etapes
+        : [];
+
+
+if (
+    editeurEtapes
+) {
+
+    const contientHtml =
+        etapesExistantes.some(
+            function (
+                etape
+            ) {
+
+                return /<[a-z][\s\S]*>/i.test(
+                    String(
+                        etape
                     )
-                : "";
+                );
+            }
+        );
+
+
+    if (
+        contientHtml
+    ) {
+
+        /*
+            Nouvelle recette :
+            les étapes contiennent déjà
+            leur mise en forme HTML.
+        */
+
+        editeurEtapes.innerHTML =
+            etapesExistantes.join(
+                ""
+            );
+
+    } else {
+
+        /*
+            Ancienne recette :
+            conversion de chaque ligne
+            texte en paragraphe HTML.
+        */
+
+        editeurEtapes.innerHTML =
+            etapesExistantes
+                .map(
+                    function (
+                        etape
+                    ) {
+
+                        const p =
+                            document.createElement(
+                                "p"
+                            );
+
+
+                        p.textContent =
+                            String(
+                                etape
+                            );
+
+
+                        return p.outerHTML;
+                    }
+                )
+                .join("");
+    }
+
+
+    synchroniserEditeurEtapes();
+}
 
 
     document
