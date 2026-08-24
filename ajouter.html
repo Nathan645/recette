@@ -760,23 +760,132 @@
 
             <div class="champ">
 
-                <label for="etapes">
-                    Étapes
-                </label>
+    <label for="editeur-etapes">
+        Étapes
+    </label>
 
-                <textarea
-                    id="etapes"
-                    required
-                    placeholder="Écris une étape par ligne&#10;Préchauffer le four.&#10;Mélanger les ingrédients.&#10;Enfourner 30 minutes."
-                ></textarea>
 
-                <small>
-                    Une étape par ligne.
-                    Évite les quantités fixes dans les étapes
-                    lorsqu’elles doivent évoluer avec les portions.
-                </small>
+    <!-- BARRE D'OUTILS -->
 
-            </div>
+    <div
+        class="barre-outils-editeur"
+        id="barre-outils-etapes"
+    >
+
+        <button
+            type="button"
+            class="outil-editeur"
+            data-commande="bold"
+            title="Gras"
+        >
+            <strong>B</strong>
+        </button>
+
+
+        <button
+            type="button"
+            class="outil-editeur"
+            data-commande="italic"
+            title="Italique"
+        >
+            <em>I</em>
+        </button>
+
+
+        <button
+            type="button"
+            class="outil-editeur"
+            data-commande="underline"
+            title="Souligné"
+        >
+            <u>U</u>
+        </button>
+
+
+        <span class="separateur-outils"></span>
+
+
+        <select
+            id="taille-texte-etapes"
+            class="taille-texte-editeur"
+            aria-label="Taille du texte"
+        >
+
+            <option value="small">
+                Petit
+            </option>
+
+            <option
+                value="normal"
+                selected
+            >
+                Normal
+            </option>
+
+            <option value="large">
+                Grand
+            </option>
+
+        </select>
+
+
+        <span class="separateur-outils"></span>
+
+
+        <button
+            type="button"
+            class="outil-editeur"
+            data-commande="insertUnorderedList"
+            title="Liste à puces"
+        >
+            • Liste
+        </button>
+
+
+        <button
+            type="button"
+            class="outil-editeur"
+            data-commande="insertOrderedList"
+            title="Liste numérotée"
+        >
+            1. Liste
+        </button>
+
+    </div>
+
+
+    <!-- ÉDITEUR -->
+
+    <div
+        id="editeur-etapes"
+        class="editeur-texte"
+        contenteditable="true"
+        role="textbox"
+        aria-multiline="true"
+        data-placeholder="Écris les différentes étapes de la recette…"
+    ></div>
+
+
+    <!--
+        On conserve l'ancien champ #etapes caché.
+
+        ajouter.js pourra donc continuer à fonctionner
+        pendant qu'on adapte progressivement le système.
+    -->
+
+    <textarea
+        id="etapes"
+        required
+        hidden
+    ></textarea>
+
+
+    <small>
+        Détaille les différentes étapes de préparation.
+        Tu peux mettre en forme les informations importantes.
+    </small>
+
+</div>
 
 
 
