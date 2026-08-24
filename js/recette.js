@@ -1387,11 +1387,7 @@ async function chargerCommentairesRecette() {
     parent_id,
     contenu,
     supprime,
-    created_at,
-    profiles:user_id (
-        prenom,
-        nom
-    )
+    created_at
     `
 )
                 .eq(
@@ -1425,6 +1421,76 @@ async function chargerCommentairesRecette() {
                 ? data
                 : [];
 
+       const idsUtilisateurs =
+    [
+        ...new Set(
+            commentaires
+                .map(
+                    function (
+                        commentaire
+                    ) {
+                        return commentaire.user_id;
+                    }
+                )
+                .filter(
+                    Boolean
+                )
+        )
+    ];
+
+
+let profilsParId =
+    {};
+
+
+if (
+    idsUtilisateurs.length >
+    0
+) {
+
+    const {
+        data:
+            profils,
+        error:
+            erreurProfils
+    } =
+        await window.supabaseClient
+            .from(
+                "profiles"
+            )
+            .select(
+                "id, prenom, nom"
+            )
+            .in(
+                "id",
+                idsUtilisateurs
+            );
+
+
+    if (
+        erreurProfils
+    ) {
+        throw erreurProfils;
+    }
+
+
+    profilsParId =
+        Object.fromEntries(
+            (
+                profils || []
+            )
+                .map(
+                    function (
+                        profil
+                    ) {
+                        return [
+                            profil.id,
+                            profil
+                        ];
+                    }
+                )
+        );
+}
 
         if (
             compteurCommentaires
@@ -1481,12 +1547,18 @@ async function chargerCommentairesRecette() {
                                     commentaire.contenu
                                 );
 
-                       const prenom =
-    commentaire.profiles?.prenom ||
+                       const profil =
+    profilsParId[
+        commentaire.user_id
+    ];
+
+
+const prenom =
+    profil?.prenom ||
     "";
 
 const nom =
-    commentaire.profiles?.nom ||
+    profil?.nom ||
     "";
 
 const auteur =
