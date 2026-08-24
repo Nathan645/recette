@@ -2846,9 +2846,10 @@ const texte =
 
 
     <form
-        class="formulaire-commentaire-recette"
-        id="formulaire-commentaire-recette"
-    >
+    class="formulaire-commentaire-recette"
+    id="formulaire-commentaire-recette"
+    action="javascript:void(0);"
+>
 
         <textarea
             id="champ-commentaire-recette"
