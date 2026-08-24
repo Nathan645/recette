@@ -4965,3 +4965,81 @@ input[type="radio"]:focus-visible {
         );
     }
 }
+
+/* =================================
+   FORMULAIRE DE RÉPONSE
+================================= */
+
+.formulaire-reponse-commentaire {
+    margin-top: 14px;
+}
+
+
+.champ-reponse-commentaire {
+    width: 100%;
+    min-height: 80px;
+
+    box-sizing: border-box;
+
+    padding: 12px 14px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    font: inherit;
+    line-height: 1.5;
+
+    resize: vertical;
+    outline: none;
+}
+
+
+.champ-reponse-commentaire:focus {
+    border-color: #69755d;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(105, 117, 93, 0.12);
+}
+
+
+.actions-reponse-commentaire {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-top: 8px;
+}
+
+
+.bouton-annuler-reponse {
+    border: none;
+    background: transparent;
+
+    color: #69755d;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.bouton-publier-reponse {
+    border: none;
+    border-radius: 9px;
+
+    padding: 8px 14px;
+
+    background: #69755d;
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+}
