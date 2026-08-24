@@ -1373,38 +1373,34 @@ async function chargerCommentairesRecette() {
     try {
 
         const {
-            data,
-            error
-        } =
-            await window.supabaseClient
-                .from(
-                    "recette_commentaires"
-                )
-                .select(
-    `
-    id,
-    user_id,
-    parent_id,
-    contenu,
-    supprime,
-    created_at
-    `
-)
-                .eq(
-                    "recette_id",
-                    recetteChargee.id
-                )
-                .is(
-                    "parent_id",
-                    null
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending:
-                            false
-                    }
-                );
+    data,
+    error
+} =
+    await window.supabaseClient
+        .from(
+            "recette_commentaires"
+        )
+        .select(
+            `
+            id,
+            user_id,
+            parent_id,
+            contenu,
+            supprime,
+            created_at
+            `
+        )
+        .eq(
+            "recette_id",
+            recetteChargee.id
+        )
+        .order(
+            "created_at",
+            {
+                ascending:
+                    true
+            }
+        );
 
 
         if (
@@ -1415,11 +1411,25 @@ async function chargerCommentairesRecette() {
 
 
         const commentaires =
-            Array.isArray(
-                data
-            )
-                ? data
-                : [];
+    Array.isArray(
+        data
+    )
+        ? data
+        : [];
+
+
+const commentairesPrincipaux =
+    commentaires.filter(
+        function (
+            commentaire
+        ) {
+
+            return (
+                commentaire.parent_id ===
+                null
+            );
+        }
+    );
 
        const idsUtilisateurs =
     [
@@ -1501,9 +1511,9 @@ if (
 
 
         if (
-            commentaires.length ===
-            0
-        ) {
+    commentairesPrincipaux.length ===
+    0
+) {
 
             listeCommentaires.innerHTML =
                 `
@@ -1517,8 +1527,8 @@ if (
 
 
         listeCommentaires.innerHTML =
-            commentaires
-                .map(
+    commentairesPrincipaux
+        .map(
                     function (
                         commentaire
                     ) {
