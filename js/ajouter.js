@@ -1589,22 +1589,130 @@ document
 
 const selectTailleTexte =
     document.getElementById(
-        "taille-texte-editeur"
+        "taille-texte-etapes"
     );
+
+
+function appliquerTailleTexte(
+    taille
+) {
+
+    if (
+        !selectionEtapesSauvegardee ||
+        !editeurEtapes
+    ) {
+
+        return;
+    }
+
+
+    const range =
+        selectionEtapesSauvegardee
+            .cloneRange();
+
+
+    /*
+        Rien n'est sélectionné.
+    */
+
+    if (
+        range.collapsed
+    ) {
+
+        return;
+    }
+
+
+    /*
+        On vérifie que la sélection
+        appartient bien à l'éditeur.
+    */
+
+    if (
+        !editeurEtapes.contains(
+            range.commonAncestorContainer
+        )
+    ) {
+
+        return;
+    }
+
+
+    /*
+        On récupère le contenu
+        actuellement sélectionné.
+    */
+
+    const contenu =
+        range.extractContents();
+
+
+    /*
+        On l'entoure d'un span
+        avec la taille choisie.
+    */
+
+    const span =
+        document.createElement(
+            "span"
+        );
+
+
+    span.style.fontSize =
+        taille;
+
+
+    span.appendChild(
+        contenu
+    );
+
+
+    range.insertNode(
+        span
+    );
+
+
+    /*
+        On remet la sélection
+        autour du texte modifié.
+    */
+
+    const nouvelleSelection =
+        document.createRange();
+
+
+    nouvelleSelection.selectNodeContents(
+        span
+    );
+
+
+    const selection =
+        window.getSelection();
+
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        nouvelleSelection
+    );
+
+
+    /*
+        On mémorise cette nouvelle
+        sélection.
+    */
+
+    selectionEtapesSauvegardee =
+        nouvelleSelection.cloneRange();
+
+
+    synchroniserEditeurEtapes();
+}
 
 
 if (
     selectTailleTexte
 ) {
-
-    selectTailleTexte.addEventListener(
-        "mousedown",
-        function () {
-
-            sauvegarderSelectionEtapes();
-        }
-    );
-
 
     selectTailleTexte.addEventListener(
         "change",
@@ -1614,35 +1722,12 @@ if (
                 selectTailleTexte.value;
 
 
-            if (
-                !taille
-            ) {
-
-                return;
-            }
-
-
-            /*
-                Le select a pris le focus.
-                On remet donc la sélection
-                dans l'éditeur.
-            */
-
-            editeurEtapes.focus();
-
-            restaurerSelectionEtapes();
-
-
-            document.execCommand(
-                "fontSize",
-                false,
+            appliquerTailleTexte(
                 taille
             );
 
 
-            synchroniserEditeurEtapes();
-
-            sauvegarderSelectionEtapes();
+            editeurEtapes.focus();
         }
     );
 }
