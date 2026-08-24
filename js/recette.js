@@ -1381,8 +1381,19 @@ async function chargerCommentairesRecette() {
                     "recette_commentaires"
                 )
                 .select(
-                    "id, user_id, parent_id, contenu, supprime, created_at"
-                )
+    `
+    id,
+    user_id,
+    parent_id,
+    contenu,
+    supprime,
+    created_at,
+    profiles:user_id (
+        prenom,
+        nom
+    )
+    `
+)
                 .eq(
                     "recette_id",
                     recetteChargee.id
@@ -1470,6 +1481,18 @@ async function chargerCommentairesRecette() {
                                     commentaire.contenu
                                 );
 
+                       const prenom =
+    commentaire.profiles?.prenom ||
+    "";
+
+const nom =
+    commentaire.profiles?.nom ||
+    "";
+
+const auteur =
+    `${prenom} ${nom}`.trim() ||
+    "Utilisateur";
+
 
                         return `
                             <article
@@ -1480,8 +1503,8 @@ async function chargerCommentairesRecette() {
                                 <div class="entete-commentaire-recette">
 
                                     <span class="auteur-commentaire-recette">
-                                        Utilisateur
-                                    </span>
+    ${echapperHtml(auteur)}
+</span>
 
                                     <span class="date-commentaire-recette">
                                         ${date}
