@@ -1567,29 +1567,51 @@ const auteur =
 
 
                         return `
-                            <article
-                                class="commentaire-recette"
-                                data-commentaire-id="${commentaire.id}"
-                            >
+    <article
+        class="commentaire-recette"
+        data-commentaire-id="${commentaire.id}"
+    >
 
-                                <div class="entete-commentaire-recette">
+        <div class="entete-commentaire-recette">
 
-                                    <span class="auteur-commentaire-recette">
-    ${echapperHtml(auteur)}
-</span>
+            <span class="auteur-commentaire-recette">
+                ${echapperHtml(auteur)}
+            </span>
 
-                                    <span class="date-commentaire-recette">
-                                        ${date}
-                                    </span>
+            <span class="date-commentaire-recette">
+                ${date}
+            </span>
 
-                                </div>
+        </div>
 
-                                <p class="texte-commentaire-recette">
-                                    ${texte}
-                                </p>
+        <p class="texte-commentaire-recette">
+            ${texte}
+        </p>
 
-                            </article>
-                        `;
+
+        ${
+            commentaire.supprime
+                ? ""
+                : `
+                    <button
+                        type="button"
+                        class="bouton-repondre-commentaire"
+                        data-commentaire-id="${commentaire.id}"
+                    >
+                        Répondre
+                    </button>
+                `
+        }
+
+
+        <div
+            class="zone-reponses-commentaire"
+            data-reponses-parent="${commentaire.id}"
+        >
+        </div>
+
+    </article>
+`;
                     }
                 )
                 .join(
