@@ -1473,7 +1473,7 @@ function executerCommandeEditeur(
 
 document
     .querySelectorAll(
-        ".outil-editeur[data-command]"
+        ".outil-editeur[data-commande]"
     )
     .forEach(
         function (
@@ -1502,7 +1502,7 @@ document
                 function () {
 
                     const commande =
-                        bouton.dataset.command;
+                        bouton.dataset.commande;
 
 
                     executerCommandeEditeur(
@@ -1549,9 +1549,6 @@ if (
                 taille
             );
 
-
-            selectTailleTexte.value =
-                "";
         }
     );
 }
