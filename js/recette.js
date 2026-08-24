@@ -2662,6 +2662,73 @@ const texte =
 
                     </section>
 
+                    <!-- =========================
+     COMMENTAIRES
+========================== -->
+
+<section class="section-commentaires-recette">
+
+    <div class="entete-commentaires-recette">
+
+        <h2>
+            Commentaires
+        </h2>
+
+        <span
+            class="compteur-commentaires-recette"
+            id="compteur-commentaires-recette"
+        >
+            0
+        </span>
+
+    </div>
+
+
+    <form
+        class="formulaire-commentaire-recette"
+        id="formulaire-commentaire-recette"
+    >
+
+        <textarea
+            id="champ-commentaire-recette"
+            placeholder="Écrire un commentaire…"
+            maxlength="1000"
+            required
+        ></textarea>
+
+
+        <div class="actions-commentaire-recette">
+
+            <span
+                class="message-commentaire-recette"
+                id="message-commentaire-recette"
+            >
+            </span>
+
+
+            <button
+                type="submit"
+                class="bouton-publier-commentaire"
+            >
+                Publier
+            </button>
+
+        </div>
+
+    </form>
+
+
+    <div
+        class="liste-commentaires-recette"
+        id="liste-commentaires-recette"
+    >
+
+        <!-- Les commentaires seront injectés ici -->
+
+    </div>
+
+</section>
+
 
                 </div>
 
