@@ -1175,6 +1175,167 @@ async function basculerLikeRecette() {
 }
 
 /* =================================
+   PUBLIER UN COMMENTAIRE
+================================= */
+
+async function publierCommentaireRecette(
+    evenement
+) {
+
+    evenement.preventDefault();
+
+
+    if (
+        !recetteChargee?.id ||
+        !utilisateurConnecte?.id
+    ) {
+
+        return;
+    }
+
+
+    const champCommentaire =
+        document.getElementById(
+            "champ-commentaire-recette"
+        );
+
+
+    const messageCommentaire =
+        document.getElementById(
+            "message-commentaire-recette"
+        );
+
+
+    const boutonPublier =
+        evenement.currentTarget
+            .querySelector(
+                ".bouton-publier-commentaire"
+            );
+
+
+    const contenu =
+        champCommentaire
+            ?.value
+            .trim();
+
+
+    if (
+        !contenu
+    ) {
+
+        if (
+            messageCommentaire
+        ) {
+
+            messageCommentaire.textContent =
+                "Écris un commentaire avant de publier.";
+        }
+
+        return;
+    }
+
+
+    if (
+        boutonPublier
+    ) {
+
+        boutonPublier.disabled =
+            true;
+
+        boutonPublier.textContent =
+            "Publication…";
+    }
+
+
+    if (
+        messageCommentaire
+    ) {
+
+        messageCommentaire.textContent =
+            "";
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .insert({
+                    recette_id:
+                        recetteChargee.id,
+
+                    user_id:
+                        utilisateurConnecte.id,
+
+                    parent_id:
+                        null,
+
+                    contenu:
+                        contenu
+                });
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        champCommentaire.value =
+            "";
+
+
+        if (
+            messageCommentaire
+        ) {
+
+            messageCommentaire.textContent =
+                "Commentaire publié.";
+        }
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur publication commentaire :",
+            erreur
+        );
+
+
+        if (
+            messageCommentaire
+        ) {
+
+            messageCommentaire.textContent =
+                "Impossible de publier le commentaire.";
+        }
+
+
+    } finally {
+
+        if (
+            boutonPublier
+        ) {
+
+            boutonPublier.disabled =
+                false;
+
+            boutonPublier.textContent =
+                "Publier";
+        }
+    }
+}
+
+/* =================================
    CHARGER LE FOYER
 ================================= */
 
@@ -3007,6 +3168,22 @@ if (
     boutonLike.addEventListener(
         "click",
         basculerLikeRecette
+    );
+}
+
+   const formulaireCommentaire =
+    document.getElementById(
+        "formulaire-commentaire-recette"
+    );
+
+
+if (
+    formulaireCommentaire
+) {
+
+    formulaireCommentaire.addEventListener(
+        "submit",
+        publierCommentaireRecette
     );
 }
 }
