@@ -900,172 +900,44 @@ async function chargerRecette() {
         /* =========================
            AFFICHAGE
         ========================= */
+afficherRecette(
+    recetteChargee
+);
 
-        afficherRecette(
-            recetteChargee
-        );
-       await chargerLikesRecette();
-
-       /* =================================
-   AJOUTER / RETIRER UN LIKE
-================================= */
-
-async function basculerLikeRecette() {
-
-    if (
-        !recetteChargee?.id ||
-        !utilisateurConnecte?.id
-    ) {
-
-        return;
-    }
+await chargerLikesRecette();
 
 
-    const boutonLike =
-        document.getElementById(
-            "bouton-like-recette"
-        );
+/* =========================
+   MINUTEURS SAUVEGARDÉS
+========================= */
+
+chargerMinuteursCuisine();
 
 
-    if (
-        boutonLike
-    ) {
+} catch (
+    erreur
+) {
 
-        boutonLike.disabled =
-            true;
-    }
-
-
-    try {
-
-        /*
-            L'utilisateur a déjà aimé :
-            on retire son like.
-        */
-
-        if (
-            utilisateurALikeRecette
-        ) {
-
-            const {
-                error
-            } =
-                await window.supabaseClient
-                    .from(
-                        "recette_likes"
-                    )
-                    .delete()
-                    .eq(
-                        "recette_id",
-                        recetteChargee.id
-                    )
-                    .eq(
-                        "user_id",
-                        utilisateurConnecte.id
-                    );
-
-
-            if (
-                error
-            ) {
-
-                throw error;
-            }
-
-        } else {
-
-            /*
-                L'utilisateur n'a pas encore aimé :
-                on ajoute son like.
-            */
-
-            const {
-                error
-            } =
-                await window.supabaseClient
-                    .from(
-                        "recette_likes"
-                    )
-                    .insert({
-                        recette_id:
-                            recetteChargee.id,
-
-                        user_id:
-                            utilisateurConnecte.id
-                    });
-
-
-            if (
-                error
-            ) {
-
-                throw error;
-            }
-        }
-
-
-        /*
-            On recharge immédiatement
-            l'état réel depuis Supabase.
-        */
-
-        await chargerLikesRecette();
-
-
-    } catch (
+    console.error(
+        "Erreur chargement recette :",
         erreur
-    ) {
-
-        console.error(
-            "Erreur modification like recette :",
-            erreur
-        );
+    );
 
 
-    } finally {
-
-        if (
-            boutonLike
-        ) {
-
-            boutonLike.disabled =
-                false;
-        }
+    contenuRecette.innerHTML =
+        `
+            <div class="message erreur">
+                ${
+                    echapperHtml(
+                        erreur.message ||
+                        "Impossible de charger la recette."
+                    )
+                }
+            </div>
+        `;
     }
 }
-      
 
-
-        /* =========================
-           MINUTEURS SAUVEGARDÉS
-        ========================= */
-
-        chargerMinuteursCuisine();
-
-
-    } catch (
-        erreur
-    ) {
-
-        console.error(
-            "Erreur chargement recette :",
-            erreur
-        );
-
-
-        contenuRecette.innerHTML =
-            `
-                <div class="message erreur">
-                    ${
-                        echapperHtml(
-                            erreur.message ||
-                            "Impossible de charger la recette."
-                        )
-                    }
-                </div>
-            `;
-    }
-}
 
 /* =================================
    CHARGER LES LIKES
@@ -1185,6 +1057,120 @@ async function chargerLikesRecette() {
             "Erreur chargement likes recette :",
             erreur
         );
+    }
+}
+
+
+/* =================================
+   AJOUTER / RETIRER UN LIKE
+================================= */
+
+async function basculerLikeRecette() {
+
+    if (
+        !recetteChargee?.id ||
+        !utilisateurConnecte?.id
+    ) {
+
+        return;
+    }
+
+
+    const boutonLike =
+        document.getElementById(
+            "bouton-like-recette"
+        );
+
+
+    if (
+        boutonLike
+    ) {
+
+        boutonLike.disabled =
+            true;
+    }
+
+
+    try {
+
+        if (
+            utilisateurALikeRecette
+        ) {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from(
+                        "recette_likes"
+                    )
+                    .delete()
+                    .eq(
+                        "recette_id",
+                        recetteChargee.id
+                    )
+                    .eq(
+                        "user_id",
+                        utilisateurConnecte.id
+                    );
+
+
+            if (
+                error
+            ) {
+
+                throw error;
+            }
+
+        } else {
+
+            const {
+                error
+            } =
+                await window.supabaseClient
+                    .from(
+                        "recette_likes"
+                    )
+                    .insert({
+                        recette_id:
+                            recetteChargee.id,
+
+                        user_id:
+                            utilisateurConnecte.id
+                    });
+
+
+            if (
+                error
+            ) {
+
+                throw error;
+            }
+        }
+
+
+        await chargerLikesRecette();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur modification like recette :",
+            erreur
+        );
+
+
+    } finally {
+
+        if (
+            boutonLike
+        ) {
+
+            boutonLike.disabled =
+                false;
+        }
     }
 }
 
