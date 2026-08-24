@@ -4582,3 +4582,112 @@ input[type="radio"]:focus-visible {
             ) !important;
     }
 }
+
+/* =================================
+   INTERACTIONS RECETTE
+================================= */
+
+.section-interactions-recette {
+    margin-top: 48px;
+    padding-top: 28px;
+    border-top: 1px solid #ded7c8;
+}
+
+.zone-like-recette {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =================================
+   BOUTON J'AIME
+================================= */
+
+.bouton-like-recette {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 48px;
+    padding: 10px 18px;
+
+    border: 2px solid #69755d;
+    border-radius: 14px;
+
+    background: white;
+    color: #394032;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.15s ease;
+}
+
+.bouton-like-recette:hover {
+    background: #f4f2eb;
+    transform: translateY(-1px);
+}
+
+.bouton-like-recette:active {
+    transform: translateY(0);
+}
+
+
+/* =================================
+   RECETTE AIMÉE
+================================= */
+
+.bouton-like-recette.actif {
+    background: #69755d;
+    border-color: #69755d;
+    color: white;
+}
+
+
+/* =================================
+   COMPTEUR
+================================= */
+
+.compteur-like-recette {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 34px;
+    height: 34px;
+    padding: 0 9px;
+
+    border-radius: 999px;
+
+    background: #f4f2eb;
+    color: #394032;
+
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .section-interactions-recette {
+        margin-top: 36px;
+        padding-top: 22px;
+    }
+
+    .bouton-like-recette {
+        min-height: 44px;
+        padding: 9px 15px;
+    }
+}
