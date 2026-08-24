@@ -4691,3 +4691,277 @@ input[type="radio"]:focus-visible {
         padding: 9px 15px;
     }
 }
+
+/* =================================
+   COMMENTAIRES
+================================= */
+
+.section-commentaires-recette {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid #ded7c8;
+}
+
+
+.entete-commentaires-recette {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+
+.entete-commentaires-recette h2 {
+    margin: 0;
+}
+
+
+.compteur-commentaires-recette {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 28px;
+    height: 28px;
+
+    padding: 0 8px;
+
+    border-radius: 999px;
+
+    background: #f4f2eb;
+
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+
+/* =================================
+   FORMULAIRE COMMENTAIRE
+================================= */
+
+.formulaire-commentaire-recette {
+    margin-bottom: 28px;
+}
+
+
+.formulaire-commentaire-recette textarea {
+    width: 100%;
+    min-height: 110px;
+
+    box-sizing: border-box;
+
+    padding: 14px 16px;
+
+    border: 1px solid #d8d1c5;
+    border-radius: 12px;
+
+    background: #ffffff;
+
+    font: inherit;
+    line-height: 1.5;
+
+    resize: vertical;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.formulaire-commentaire-recette textarea:focus {
+    border-color: #69755d;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(105, 117, 93, 0.12);
+}
+
+
+.actions-commentaire-recette {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+
+    margin-top: 10px;
+}
+
+
+.message-commentaire-recette {
+    min-height: 20px;
+
+    font-size: 0.9rem;
+}
+
+
+.bouton-publier-commentaire {
+    border: none;
+    border-radius: 10px;
+
+    padding: 10px 18px;
+
+    background: #69755d;
+    color: #ffffff;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.15s ease;
+}
+
+
+.bouton-publier-commentaire:hover {
+    opacity: 0.9;
+}
+
+
+.bouton-publier-commentaire:active {
+    transform: scale(0.98);
+}
+
+
+/* =================================
+   LISTE DES COMMENTAIRES
+================================= */
+
+.liste-commentaires-recette {
+    display: flex;
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+.commentaire-recette {
+    padding: 16px 18px;
+
+    border: 1px solid #e2ddd3;
+    border-radius: 12px;
+
+    background: #ffffff;
+}
+
+
+.entete-commentaire-recette {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 8px;
+}
+
+
+.auteur-commentaire-recette {
+    font-weight: 700;
+}
+
+
+.date-commentaire-recette {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+
+.texte-commentaire-recette {
+    margin: 0;
+
+    line-height: 1.55;
+}
+
+
+/* =================================
+   RÉPONSES
+================================= */
+
+.reponses-commentaire-recette {
+    margin-top: 12px;
+}
+
+
+.commentaire-reponse {
+    margin-top: 12px;
+    margin-left: min(
+        calc(var(--niveau-commentaire, 1) * 24px),
+        72px
+    );
+}
+
+
+/* =================================
+   ACTIONS COMMENTAIRE
+================================= */
+
+.actions-commentaire {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-top: 10px;
+}
+
+
+.bouton-repondre-commentaire,
+.bouton-supprimer-commentaire {
+    border: none;
+
+    padding: 0;
+
+    background: transparent;
+
+    color: #69755d;
+
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.bouton-repondre-commentaire:hover,
+.bouton-supprimer-commentaire:hover {
+    text-decoration: underline;
+}
+
+
+/* =================================
+   MOBILE
+================================= */
+
+@media (max-width: 700px) {
+
+    .section-commentaires-recette {
+        margin-top: 32px;
+        padding-top: 22px;
+    }
+
+
+    .actions-commentaire-recette {
+        align-items: flex-end;
+        flex-direction: column;
+    }
+
+
+    .bouton-publier-commentaire {
+        width: 100%;
+    }
+
+
+    .commentaire-reponse {
+        margin-left: min(
+            calc(var(--niveau-commentaire, 1) * 16px),
+            48px
+        );
+    }
+}
