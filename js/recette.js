@@ -1785,6 +1785,11 @@ function ouvrirFormulaireReponse(
 
         }
     );
+
+   formulaire.addEventListener(
+    "submit",
+    publierReponseCommentaire
+);
 }
 /* =================================
    CHARGER LE FOYER
@@ -1916,6 +1921,149 @@ async function chargerFoyerPlanning() {
 
         personnesParDefautPlanning =
             1;
+    }
+}
+
+/* =================================
+   PUBLIER UNE RÉPONSE
+================================= */
+
+async function publierReponseCommentaire(
+    evenement
+) {
+
+    evenement.preventDefault();
+
+
+    if (
+        !recetteChargee?.id ||
+        !utilisateurConnecte?.id
+    ) {
+        return;
+    }
+
+
+    const formulaire =
+        evenement.currentTarget;
+
+
+    const parentId =
+        formulaire.dataset.parentId;
+
+
+    const champ =
+        formulaire.querySelector(
+            ".champ-reponse-commentaire"
+        );
+
+
+    const boutonPublier =
+        formulaire.querySelector(
+            ".bouton-publier-reponse"
+        );
+
+
+    const contenu =
+        champ
+            ?.value
+            .trim();
+
+
+    if (
+        !parentId ||
+        !contenu
+    ) {
+        return;
+    }
+
+
+    if (
+        boutonPublier
+    ) {
+
+        boutonPublier.disabled =
+            true;
+
+        boutonPublier.textContent =
+            "Publication…";
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .insert({
+
+                    recette_id:
+                        recetteChargee.id,
+
+                    user_id:
+                        utilisateurConnecte.id,
+
+                    parent_id:
+                        parentId,
+
+                    contenu:
+                        contenu
+
+                });
+
+
+        if (
+            error
+        ) {
+            throw error;
+        }
+
+
+        console.log(
+            "Réponse publiée avec succès."
+        );
+
+
+        formulaire.remove();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur publication réponse :",
+            erreur
+        );
+
+
+        if (
+            boutonPublier
+        ) {
+
+            boutonPublier.textContent =
+                "Erreur";
+        }
+
+
+        return;
+
+    } finally {
+
+        if (
+            boutonPublier &&
+            boutonPublier.isConnected
+        ) {
+
+            boutonPublier.disabled =
+                false;
+
+            boutonPublier.textContent =
+                "Répondre";
+        }
     }
 }
 
