@@ -2391,11 +2391,43 @@ const texte =
 
                         </section>
 
-                    </div>
+                                        </div>
+
+
+                    <!-- =========================
+                         INTERACTIONS
+                    ========================== -->
+
+                    <section class="section-interactions-recette">
+
+                        <div class="zone-like-recette">
+
+                            <button
+                                type="button"
+                                class="bouton-like-recette"
+                                id="bouton-like-recette"
+                                aria-pressed="false"
+                            >
+                                👍 J’aime
+                            </button>
+
+
+                            <span
+                                class="compteur-like-recette"
+                                id="compteur-like-recette"
+                            >
+                                0
+                            </span>
+
+                        </div>
+
+                    </section>
+
 
                 </div>
 
             </article>
+      
         `;
 
 
