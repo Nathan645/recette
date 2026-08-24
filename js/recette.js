@@ -497,6 +497,9 @@ let intervalMinuteursCuisine =
 let indexEtapeMinuteurEnCreation =
     null;
 
+let utilisateurALikeRecette =
+    false;
+
 
 /* =================================
    STOCKAGE LOCAL MODE CUISINE
@@ -901,6 +904,7 @@ async function chargerRecette() {
         afficherRecette(
             recetteChargee
         );
+       await chargerLikesRecette();
 
 
         /* =========================
@@ -934,6 +938,126 @@ async function chargerRecette() {
     }
 }
 
+/* =================================
+   CHARGER LES LIKES
+================================= */
+
+async function chargerLikesRecette() {
+
+    if (
+        !recetteChargee?.id ||
+        !utilisateurConnecte?.id
+    ) {
+
+        return;
+    }
+
+
+    const boutonLike =
+        document.getElementById(
+            "bouton-like-recette"
+        );
+
+
+    const compteurLike =
+        document.getElementById(
+            "compteur-like-recette"
+        );
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_likes"
+                )
+                .select(
+                    "user_id"
+                )
+                .eq(
+                    "recette_id",
+                    recetteChargee.id
+                );
+
+
+        if (
+            error
+        ) {
+
+            throw error;
+        }
+
+
+        const likes =
+            Array.isArray(
+                data
+            )
+                ? data
+                : [];
+
+
+        utilisateurALikeRecette =
+            likes.some(
+                function (
+                    like
+                ) {
+
+                    return (
+                        like.user_id ===
+                        utilisateurConnecte.id
+                    );
+                }
+            );
+
+
+        if (
+            compteurLike
+        ) {
+
+            compteurLike.textContent =
+                likes.length;
+        }
+
+
+        if (
+            boutonLike
+        ) {
+
+            boutonLike.classList.toggle(
+                "actif",
+                utilisateurALikeRecette
+            );
+
+
+            boutonLike.setAttribute(
+                "aria-pressed",
+                utilisateurALikeRecette
+                    ? "true"
+                    : "false"
+            );
+
+
+            boutonLike.textContent =
+                utilisateurALikeRecette
+                    ? "👍 Aimé"
+                    : "👍 J’aime";
+        }
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur chargement likes recette :",
+            erreur
+        );
+    }
+}
 
 /* =================================
    CHARGER LE FOYER
