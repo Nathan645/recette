@@ -1773,6 +1773,42 @@ if (
     );
 }
 
+document.addEventListener(
+    "selectionchange",
+    function () {
+
+        const selection =
+            window.getSelection();
+
+
+        if (
+            !selection ||
+            selection.rangeCount === 0 ||
+            !editeurEtapes
+        ) {
+
+            return;
+        }
+
+
+        const range =
+            selection.getRangeAt(
+                0
+            );
+
+
+        if (
+            editeurEtapes.contains(
+                range.commonAncestorContainer
+            )
+        ) {
+
+            selectionEtapesSauvegardee =
+                range.cloneRange();
+        }
+    }
+);
+
 
 /* =================================
    RÉCUPÉRER LES ÉTAPES
