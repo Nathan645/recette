@@ -2374,16 +2374,12 @@ const texte =
                                             ) {
 
                                                 return `
-                                                    <li class="etape-item">
-                                                        <span>
-                                                            ${
-                                                                echapperHtml(
-                                                                    etape
-                                                                )
-                                                            }
-                                                        </span>
-                                                    </li>
-                                                `;
+    <li class="etape-item">
+        <div class="contenu-etape">
+            ${etape}
+        </div>
+    </li>
+`;
                                             }
                                         )
                                         .join(
@@ -5875,8 +5871,8 @@ function afficherEtapeCuisine() {
         texteEtapeCuisine
     ) {
 
-        texteEtapeCuisine.textContent =
-            etape;
+        texteEtapeCuisine.innerHTML =
+    etape;
     }
 
 
