@@ -2120,7 +2120,7 @@ function recupererVisibilite() {
 
 function construireRecette() {
 
-    cconst etapes =
+    const etapes =
     recupererEtapesEditeur();
 
 
