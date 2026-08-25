@@ -1669,7 +1669,12 @@ async function chargerCommentairesRecette() {
                         ""
                     );
 
-
+            console.log("TEST SUPPRESSION", {
+    utilisateurConnecte: utilisateurConnecte?.id,
+    auteurCommentaire: commentaire.user_id,
+    identiques: utilisateurConnecte?.id === commentaire.user_id
+});
+           
             /* =========================
                HTML DU COMMENTAIRE
             ========================= */
@@ -1706,19 +1711,42 @@ async function chargerCommentairesRecette() {
                     </p>
 
 
-                    ${
-                        commentaire.supprime
-                            ? ""
-                            : `
-                                <button
-                                    type="button"
-                                    class="bouton-repondre-commentaire"
-                                    data-commentaire-id="${commentaire.id}"
-                                >
-                                    Répondre
-                                </button>
-                            `
-                    }
+                    <div class="actions-commentaire">
+
+    ${
+        commentaire.supprime
+            ? ""
+            : `
+                <button
+                    type="button"
+                    class="bouton-repondre-commentaire"
+                    data-commentaire-id="${commentaire.id}"
+                >
+                    Répondre
+                </button>
+            `
+    }
+
+
+    ${
+        (
+            !commentaire.supprime &&
+            utilisateurConnecte?.id ===
+            commentaire.user_id
+        )
+            ? `
+                <button
+                    type="button"
+                    class="bouton-supprimer-commentaire"
+                    data-supprimer-commentaire-id="${commentaire.id}"
+                >
+                    Supprimer
+                </button>
+            `
+            : ""
+    }
+
+</div>
 
 
                     <div
@@ -1767,6 +1795,30 @@ async function chargerCommentairesRecette() {
                     ".bouton-repondre-commentaire"
                 );
 
+       const boutonsSupprimer =
+    listeCommentaires.querySelectorAll(
+        ".bouton-supprimer-commentaire"
+    );
+
+
+boutonsSupprimer.forEach(
+    function (
+        bouton
+    ) {
+
+        bouton.addEventListener(
+            "click",
+            function () {
+
+                supprimerCommentaireRecette(
+                    bouton.dataset
+                        .supprimerCommentaireId
+                );
+
+            }
+        );
+    }
+);
 
         boutonsRepondre.forEach(
             function (
@@ -2217,6 +2269,83 @@ await chargerCommentairesRecette();
     }
 }
 
+/* =================================
+   SUPPRIMER SON COMMENTAIRE
+   OU SA RÉPONSE
+================================= */
+
+async function supprimerCommentaireRecette(
+    commentaireId
+) {
+
+    if (
+        !commentaireId ||
+        !utilisateurConnecte?.id
+    ) {
+        return;
+    }
+
+
+    const confirmation =
+        window.confirm(
+            "Supprimer ce commentaire ?"
+        );
+
+
+    if (
+        !confirmation
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .update({
+                    supprime:
+                        true
+                })
+                .eq(
+                    "id",
+                    commentaireId
+                )
+                .eq(
+                    "user_id",
+                    utilisateurConnecte.id
+                );
+
+
+        if (
+            error
+        ) {
+            throw error;
+        }
+
+
+        await chargerCommentairesRecette();
+
+
+    } catch (
+        erreur
+    ) {
+
+        console.error(
+            "Erreur suppression commentaire :",
+            erreur
+        );
+
+        alert(
+            "Impossible de supprimer le commentaire."
+        );
+    }
+}
 
 /* =================================
    CHARGER LES PHOTOS
