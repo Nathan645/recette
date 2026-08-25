@@ -4911,15 +4911,49 @@ input[type="radio"]:focus-visible {
 }
 
 
-.bouton-repondre-commentaire,
+/* Bouton Répondre */
+
+.bouton-repondre-commentaire {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 14px;
+
+    border: 2px solid var(--vert);
+    border-radius: 10px;
+
+    background-color: var(--blanc);
+    color: var(--vert);
+
+    font: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.bouton-repondre-commentaire:hover {
+    background-color: var(--vert);
+    color: var(--blanc);
+}
+
+
+/* Bouton supprimer commentaire */
+
 .bouton-supprimer-commentaire {
     border: none;
-
     padding: 0;
 
     background: transparent;
-
-    color: #69755d;
+    color: #a54f3c;
 
     font: inherit;
     font-size: 0.9rem;
@@ -4928,12 +4962,9 @@ input[type="radio"]:focus-visible {
     cursor: pointer;
 }
 
-
-.bouton-repondre-commentaire:hover,
 .bouton-supprimer-commentaire:hover {
     text-decoration: underline;
 }
-
 
 /* =================================
    MOBILE
