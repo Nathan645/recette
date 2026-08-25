@@ -4949,21 +4949,36 @@ input[type="radio"]:focus-visible {
 /* Bouton supprimer commentaire */
 
 .bouton-supprimer-commentaire {
-    border: none;
-    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 16px;
 
     background: transparent;
-    color: #a54f3c;
+    border: 2px solid #a94f3d;
+    border-radius: 10px;
+
+    color: #a94f3d;
 
     font: inherit;
-    font-size: 0.9rem;
     font-weight: 700;
 
     cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .bouton-supprimer-commentaire:hover {
-    text-decoration: underline;
+    background: #a94f3d;
+    color: white;
+}
+
+.bouton-supprimer-commentaire:active {
+    transform: scale(0.97);
 }
 
 /* =================================
