@@ -50,6 +50,12 @@ let utilisateurConnecte =
 let favoris =
     [];
 
+let nombresLikesParRecette =
+    {};
+
+let nombresCommentairesParRecette =
+    {};
+
 let categorieSelectionnee =
     "toutes";
 
@@ -147,6 +153,106 @@ async function chargerFavoris() {
             : [];
 }
 
+/* =================================
+   LIKES ET COMMENTAIRES DES RECETTES
+================================= */
+
+async function chargerInteractionsRecettes() {
+
+    const [
+        resultatLikes,
+        resultatCommentaires
+    ] =
+        await Promise.all([
+
+            window.supabaseClient
+                .from(
+                    "recette_likes"
+                )
+                .select(
+                    "recette_id"
+                ),
+
+            window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .select(
+                    "recette_id"
+                )
+
+        ]);
+
+
+    if (
+        resultatLikes.error
+    ) {
+        throw resultatLikes.error;
+    }
+
+
+    if (
+        resultatCommentaires.error
+    ) {
+        throw resultatCommentaires.error;
+    }
+
+
+    nombresLikesParRecette =
+        {};
+
+
+    nombresCommentairesParRecette =
+        {};
+
+
+    (
+        resultatLikes.data ||
+        []
+    )
+        .forEach(
+            function (
+                like
+            ) {
+
+                const id =
+                    String(
+                        like.recette_id
+                    );
+
+
+                nombresLikesParRecette[id] =
+                    (
+                        nombresLikesParRecette[id] ||
+                        0
+                    ) + 1;
+            }
+        );
+
+
+    (
+        resultatCommentaires.data ||
+        []
+    )
+        .forEach(
+            function (
+                commentaire
+            ) {
+
+                const id =
+                    String(
+                        commentaire.recette_id
+                    );
+
+
+                nombresCommentairesParRecette[id] =
+                    (
+                        nombresCommentairesParRecette[id] ||
+                        0
+                    ) + 1;
+            }
+        );
+}
 
 function recetteEstFavorite(
     id
@@ -292,6 +398,7 @@ async function chargerRecettes() {
 
         await chargerFavoris();
 
+        await chargerInteractionsRecettes();
 
         const {
             data,
