@@ -5074,3 +5074,32 @@ input[type="radio"]:focus-visible {
 
     cursor: pointer;
 }
+
+/* =================================
+   ACTIVITÉ SOCIALE SUR LES CARTES
+================================= */
+
+.informations {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.infos-sociales-carte {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-left: auto;
+
+    color: var(--texte-secondaire);
+    font-size: 14px;
+}
+
+.info-sociale-carte {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    white-space: nowrap;
+}
