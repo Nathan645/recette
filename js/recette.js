@@ -1515,6 +1515,148 @@ if (
     0
 ) {
 
+           function genererHtmlCommentaire(
+    commentaire,
+    niveau = 0
+) {
+
+    const date =
+        new Date(
+            commentaire.created_at
+        )
+            .toLocaleDateString(
+                "fr-FR",
+                {
+                    day:
+                        "numeric",
+                    month:
+                        "long",
+                    year:
+                        "numeric"
+                }
+            );
+
+
+    const texte =
+        commentaire.supprime
+            ? "Commentaire supprimé"
+            : echapperHtml(
+                commentaire.contenu
+            );
+
+
+    const profil =
+        profilsParId[
+            commentaire.user_id
+        ];
+
+
+    const prenom =
+        profil?.prenom ||
+        "";
+
+
+    const nom =
+        profil?.nom ||
+        "";
+
+
+    const auteur =
+        `${prenom} ${nom}`.trim() ||
+        "Utilisateur";
+
+
+    const reponses =
+        commentaires.filter(
+            function (
+                element
+            ) {
+
+                return (
+                    element.parent_id ===
+                    commentaire.id
+                );
+            }
+        );
+
+
+    const reponsesHtml =
+        reponses
+            .map(
+                function (
+                    reponse
+                ) {
+
+                    return genererHtmlCommentaire(
+                        reponse,
+                        niveau + 1
+                    );
+                }
+            )
+            .join(
+                ""
+            );
+
+
+    return `
+        <article
+            class="
+                commentaire-recette
+                ${
+                    niveau > 0
+                        ? "commentaire-reponse"
+                        : ""
+                }
+            "
+            data-commentaire-id="${commentaire.id}"
+            style="--niveau-commentaire:${niveau};"
+        >
+
+            <div class="entete-commentaire-recette">
+
+                <span class="auteur-commentaire-recette">
+                    ${echapperHtml(auteur)}
+                </span>
+
+                <span class="date-commentaire-recette">
+                    ${date}
+                </span>
+
+            </div>
+
+
+            <p class="texte-commentaire-recette">
+                ${texte}
+            </p>
+
+
+            ${
+                commentaire.supprime
+                    ? ""
+                    : `
+                        <button
+                            type="button"
+                            class="bouton-repondre-commentaire"
+                            data-commentaire-id="${commentaire.id}"
+                        >
+                            Répondre
+                        </button>
+                    `
+            }
+
+
+            <div
+                class="zone-reponses-commentaire"
+                data-reponses-parent="${commentaire.id}"
+            >
+
+                ${reponsesHtml}
+
+            </div>
+
+        </article>
+    `;
+}
             listeCommentaires.innerHTML =
                 `
                     <p>
@@ -1526,28 +1668,7 @@ if (
         }
 
 
-        listeCommentaires.innerHTML =
-    commentairesPrincipaux
-        .map(
-                    function (
-                        commentaire
-                    ) {
-
-                        const date =
-                            new Date(
-                                commentaire.created_at
-                            )
-                                .toLocaleDateString(
-                                    "fr-FR",
-                                    {
-                                        day:
-                                            "numeric",
-                                        month:
-                                            "long",
-                                        year:
-                                            "numeric"
-                                    }
-                                );
+       
 
 
                         const texte =
@@ -1562,73 +1683,23 @@ if (
         commentaire.user_id
     ];
 
-                       
-   
+                     listeCommentaires.innerHTML =
+    commentairesPrincipaux
+        .map(
+            function (
+                commentaire
+            ) {
 
-const prenom =
-    profil?.prenom ||
-    "";
-
-const nom =
-    profil?.nom ||
-    "";
-
-const auteur =
-    `${prenom} ${nom}`.trim() ||
-    "Utilisateur";
-
-
-                        return `
-    <article
-        class="commentaire-recette"
-        data-commentaire-id="${commentaire.id}"
-    >
-
-        <div class="entete-commentaire-recette">
-
-            <span class="auteur-commentaire-recette">
-                ${echapperHtml(auteur)}
-            </span>
-
-            <span class="date-commentaire-recette">
-                ${date}
-            </span>
-
-        </div>
-
-        <p class="texte-commentaire-recette">
-            ${texte}
-        </p>
-
-
-        ${
-            commentaire.supprime
-                ? ""
-                : `
-                    <button
-                        type="button"
-                        class="bouton-repondre-commentaire"
-                        data-commentaire-id="${commentaire.id}"
-                    >
-                        Répondre
-                    </button>
-                `
-        }
-
-
-        <div
-            class="zone-reponses-commentaire"
-            data-reponses-parent="${commentaire.id}"
-        >
-        </div>
-
-    </article>
-`;
-                    }
-                )
-                .join(
-                    ""
+                return genererHtmlCommentaire(
+                    commentaire,
+                    0
                 );
+            }
+        )
+        .join(
+            ""
+        );
+       
 const boutonsRepondre =
     listeCommentaires.querySelectorAll(
         ".bouton-repondre-commentaire"
