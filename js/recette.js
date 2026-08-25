@@ -2265,8 +2265,8 @@ await chargerCommentairesRecette();
 }
 
 /* =================================
-   SUPPRIMER UN COMMENTAIRE
-   ET TOUTES SES RÉPONSES
+   SUPPRIMER SON COMMENTAIRE
+   OU SA RÉPONSE
 ================================= */
 
 async function supprimerCommentaireRecette(
@@ -2284,7 +2284,7 @@ async function supprimerCommentaireRecette(
 
     const confirmation =
         window.confirm(
-            "Supprimer ce commentaire et toutes ses réponses ?"
+            "Supprimer ce commentaire ?"
         );
 
 
@@ -2298,125 +2298,162 @@ async function supprimerCommentaireRecette(
     try {
 
         /* =========================
-           1. CHARGER TOUTE LA
-              DISCUSSION
+           1. VÉRIFIER QUE LE
+           COMMENTAIRE EST À MOI
         ========================= */
 
         const {
             data:
-                commentaires,
+                commentaire,
             error:
-                erreurChargement
+                erreurCommentaire
         } =
             await window.supabaseClient
                 .from(
                     "recette_commentaires"
                 )
                 .select(
-                    "id, parent_id"
+                    "id, user_id"
                 )
                 .eq(
-                    "recette_id",
-                    recetteChargee.id
-                );
+                    "id",
+                    commentaireId
+                )
+                .eq(
+                    "user_id",
+                    utilisateurConnecte.id
+                )
+                .single();
 
 
         if (
-            erreurChargement
+            erreurCommentaire
         ) {
-            throw erreurChargement;
+            throw erreurCommentaire;
+        }
+
+
+        if (
+            !commentaire
+        ) {
+            return;
         }
 
 
         /* =========================
-           2. TROUVER TOUS LES
-              DESCENDANTS
-        ========================= */
-
-        const idsASupprimer =
-            new Set([
-                commentaireId
-            ]);
-
-
-        let nouveauTrouve =
-            true;
-
-
-        while (
-            nouveauTrouve
-        ) {
-
-            nouveauTrouve =
-                false;
-
-
-            (
-                commentaires ||
-                []
-            )
-                .forEach(
-                    function (
-                        commentaire
-                    ) {
-
-                        if (
-                            commentaire.parent_id &&
-                            idsASupprimer.has(
-                                commentaire.parent_id
-                            ) &&
-                            !idsASupprimer.has(
-                                commentaire.id
-                            )
-                        ) {
-
-                            idsASupprimer.add(
-                                commentaire.id
-                            );
-
-
-                            nouveauTrouve =
-                                true;
-                        }
-                    }
-                );
-        }
-
-
-        const listeIds =
-            Array.from(
-                idsASupprimer
-            );
-
-
-        /* =========================
-           3. MARQUER LE PARENT
-              + TOUS SES ENFANTS
-              COMME SUPPRIMÉS
+           2. VOIR S'IL EXISTE
+           DES RÉPONSES
         ========================= */
 
         const {
+            data:
+                reponses,
             error:
-                erreurSuppression
+                erreurReponses
         } =
             await window.supabaseClient
                 .from(
                     "recette_commentaires"
                 )
-                .update({
-                    supprime:
-                        true
-                })
-                .in(
-                    "id",
-                    listeIds
+                .select(
+                    "id"
+                )
+                .eq(
+                    "parent_id",
+                    commentaireId
+                )
+                .limit(
+                    1
                 );
 
 
         if (
-            erreurSuppression
+            erreurReponses
         ) {
-            throw erreurSuppression;
+            throw erreurReponses;
+        }
+
+
+        const aDesReponses =
+            Array.isArray(
+                reponses
+            ) &&
+            reponses.length >
+            0;
+
+
+        /* =========================
+           3A. PAS DE RÉPONSE
+           → SUPPRESSION RÉELLE
+        ========================= */
+
+        if (
+            !aDesReponses
+        ) {
+
+            const {
+                error:
+                    erreurSuppression
+            } =
+                await window.supabaseClient
+                    .from(
+                        "recette_commentaires"
+                    )
+                    .delete()
+                    .eq(
+                        "id",
+                        commentaireId
+                    )
+                    .eq(
+                        "user_id",
+                        utilisateurConnecte.id
+                    );
+
+
+            if (
+                erreurSuppression
+            ) {
+                throw erreurSuppression;
+            }
+
+
+        /* =========================
+           3B. DES RÉPONSES EXISTENT
+           → SUPPRESSION LOGIQUE
+        ========================= */
+
+        } else {
+
+            const {
+                error:
+                    erreurSuppression
+            } =
+                await window.supabaseClient
+                    .from(
+                        "recette_commentaires"
+                    )
+                    .update({
+                        supprime:
+                            true,
+
+                        contenu:
+                            null
+                    })
+                    .eq(
+                        "id",
+                        commentaireId
+                    )
+                    .eq(
+                        "user_id",
+                        utilisateurConnecte.id
+                    );
+
+
+            if (
+                erreurSuppression
+            ) {
+                throw erreurSuppression;
+            }
         }
 
 
@@ -2432,7 +2469,7 @@ async function supprimerCommentaireRecette(
     ) {
 
         console.error(
-            "Erreur suppression commentaire et réponses :",
+            "Erreur suppression commentaire :",
             erreur
         );
 
