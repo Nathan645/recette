@@ -1594,11 +1594,9 @@ async function chargerCommentairesRecette() {
             ========================= */
 
             const texte =
-                commentaire.supprime
-                    ? "Commentaire supprimé"
-                    : echapperHtml(
-                        commentaire.contenu
-                    );
+    echapperHtml(
+        commentaire.contenu
+    );
 
 
             /* =========================
