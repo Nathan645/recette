@@ -2410,19 +2410,7 @@ async function supprimerCommentaireRecette(
     await chargerCommentairesRecette();
 
 
-} catch (
-    erreur
-) {
-
-    console.error(
-        "Erreur suppression commentaire :",
-        erreur
-    );
-
-    alert(
-        "Impossible de supprimer le commentaire."
-    );
-}
+} 
      catch (
         erreur
     ) {
