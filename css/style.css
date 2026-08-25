@@ -5076,30 +5076,27 @@ input[type="radio"]:focus-visible {
 }
 
 /* =================================
-   ACTIVITÉ SOCIALE SUR LES CARTES
+   LIKES ET COMMENTAIRES SUR LES CARTES
 ================================= */
 
-.informations {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-}
-
-.infos-sociales-carte {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-
-    margin-left: auto;
-
-    color: var(--texte-secondaire);
-    font-size: 14px;
-}
-
-.info-sociale-carte {
+.informations .interactions-carte {
     display: inline-flex;
     align-items: center;
     gap: 4px;
 
+    padding: 5px 9px;
+    border-radius: 999px;
+
+    background-color: #f4f2eb;
+    color: var(--texte-secondaire);
+
+    font-size: 13px;
+    font-weight: 700;
+
     white-space: nowrap;
+}
+
+/* Pousse les likes + commentaires à droite */
+.informations span:nth-last-child(2) {
+    margin-left: auto;
 }
