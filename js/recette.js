@@ -2167,11 +2167,17 @@ async function publierReponseCommentaire(
 
 
         console.log(
-            "Réponse publiée avec succès."
-        );
+    "Réponse publiée avec succès."
+);
 
 
-        formulaire.remove();
+/*
+    Recharger toute la discussion
+    pour afficher immédiatement
+    la nouvelle réponse.
+*/
+
+await chargerCommentairesRecette();
 
 
     } catch (
