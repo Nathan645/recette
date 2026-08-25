@@ -1372,35 +1372,40 @@ async function chargerCommentairesRecette() {
 
     try {
 
+        /* =========================
+           CHARGER TOUS LES COMMENTAIRES
+           ET TOUTES LES RÉPONSES
+        ========================= */
+
         const {
-    data,
-    error
-} =
-    await window.supabaseClient
-        .from(
-            "recette_commentaires"
-        )
-        .select(
-            `
-            id,
-            user_id,
-            parent_id,
-            contenu,
-            supprime,
-            created_at
-            `
-        )
-        .eq(
-            "recette_id",
-            recetteChargee.id
-        )
-        .order(
-            "created_at",
-            {
-                ascending:
-                    true
-            }
-        );
+            data,
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .select(
+                    `
+                    id,
+                    user_id,
+                    parent_id,
+                    contenu,
+                    supprime,
+                    created_at
+                    `
+                )
+                .eq(
+                    "recette_id",
+                    recetteChargee.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending:
+                            true
+                    }
+                );
 
 
         if (
@@ -1411,252 +1416,35 @@ async function chargerCommentairesRecette() {
 
 
         const commentaires =
-    Array.isArray(
-        data
-    )
-        ? data
-        : [];
-
-
-const commentairesPrincipaux =
-    commentaires.filter(
-        function (
-            commentaire
-        ) {
-
-            return (
-                commentaire.parent_id ===
-                null
-            );
-        }
-    );
-
-       const idsUtilisateurs =
-    [
-        ...new Set(
-            commentaires
-                .map(
-                    function (
-                        commentaire
-                    ) {
-                        return commentaire.user_id;
-                    }
-                )
-                .filter(
-                    Boolean
-                )
-        )
-    ];
-
-
-let profilsParId =
-    {};
-
-
-if (
-    idsUtilisateurs.length >
-    0
-) {
-
-    const {
-        data:
-            profils,
-        error:
-            erreurProfils
-    } =
-        await window.supabaseClient
-            .from(
-                "profiles"
+            Array.isArray(
+                data
             )
-            .select(
-                "id, prenom, nom"
-            )
-            .in(
-                "id",
-                idsUtilisateurs
-            );
+                ? data
+                : [];
 
 
-    if (
-        erreurProfils
-    ) {
-        throw erreurProfils;
-    }
-
-
-    profilsParId =
-        Object.fromEntries(
-            (
-                profils || []
-            )
-                .map(
-                    function (
-                        profil
-                    ) {
-                        return [
-                            profil.id,
-                            profil
-                        ];
-                    }
-                )
-        );
-}
+        /* =========================
+           COMPTEUR
+        ========================= */
 
         if (
             compteurCommentaires
         ) {
+
             compteurCommentaires.textContent =
                 commentaires.length;
         }
 
 
+        /* =========================
+           AUCUN COMMENTAIRE
+        ========================= */
+
         if (
-    commentairesPrincipaux.length ===
-    0
-) {
+            commentaires.length ===
+            0
+        ) {
 
-           function genererHtmlCommentaire(
-    commentaire,
-    niveau = 0
-) {
-
-    const date =
-        new Date(
-            commentaire.created_at
-        )
-            .toLocaleDateString(
-                "fr-FR",
-                {
-                    day:
-                        "numeric",
-                    month:
-                        "long",
-                    year:
-                        "numeric"
-                }
-            );
-
-
-    const texte =
-        commentaire.supprime
-            ? "Commentaire supprimé"
-            : echapperHtml(
-                commentaire.contenu
-            );
-
-
-    const profil =
-        profilsParId[
-            commentaire.user_id
-        ];
-
-
-    const prenom =
-        profil?.prenom ||
-        "";
-
-
-    const nom =
-        profil?.nom ||
-        "";
-
-
-    const auteur =
-        `${prenom} ${nom}`.trim() ||
-        "Utilisateur";
-
-
-    const reponses =
-        commentaires.filter(
-            function (
-                element
-            ) {
-
-                return (
-                    element.parent_id ===
-                    commentaire.id
-                );
-            }
-        );
-
-
-    const reponsesHtml =
-        reponses
-            .map(
-                function (
-                    reponse
-                ) {
-
-                    return genererHtmlCommentaire(
-                        reponse,
-                        niveau + 1
-                    );
-                }
-            )
-            .join(
-                ""
-            );
-
-
-    return `
-        <article
-            class="
-                commentaire-recette
-                ${
-                    niveau > 0
-                        ? "commentaire-reponse"
-                        : ""
-                }
-            "
-            data-commentaire-id="${commentaire.id}"
-            style="--niveau-commentaire:${niveau};"
-        >
-
-            <div class="entete-commentaire-recette">
-
-                <span class="auteur-commentaire-recette">
-                    ${echapperHtml(auteur)}
-                </span>
-
-                <span class="date-commentaire-recette">
-                    ${date}
-                </span>
-
-            </div>
-
-
-            <p class="texte-commentaire-recette">
-                ${texte}
-            </p>
-
-
-            ${
-                commentaire.supprime
-                    ? ""
-                    : `
-                        <button
-                            type="button"
-                            class="bouton-repondre-commentaire"
-                            data-commentaire-id="${commentaire.id}"
-                        >
-                            Répondre
-                        </button>
-                    `
-            }
-
-
-            <div
-                class="zone-reponses-commentaire"
-                data-reponses-parent="${commentaire.id}"
-            >
-
-                ${reponsesHtml}
-
-            </div>
-
-        </article>
-    `;
-}
             listeCommentaires.innerHTML =
                 `
                     <p>
@@ -1668,61 +1456,336 @@ if (
         }
 
 
-       
+        /* =========================
+           COMMENTAIRES PRINCIPAUX
+        ========================= */
+
+        const commentairesPrincipaux =
+            commentaires.filter(
+                function (
+                    commentaire
+                ) {
+
+                    return (
+                        commentaire.parent_id ===
+                        null
+                    );
+                }
+            );
 
 
-                        const texte =
-                            commentaire.supprime
-                                ? "Commentaire supprimé"
-                                : echapperHtml(
-                                    commentaire.contenu
+        /* =========================
+           RÉCUPÉRER LES UTILISATEURS
+        ========================= */
+
+        const idsUtilisateurs =
+            [
+                ...new Set(
+                    commentaires
+                        .map(
+                            function (
+                                commentaire
+                            ) {
+
+                                return (
+                                    commentaire.user_id
                                 );
-                     
-                       const profil =
-    profilsParId[
-        commentaire.user_id
-    ];
+                            }
+                        )
+                        .filter(
+                            Boolean
+                        )
+                )
+            ];
 
-                     listeCommentaires.innerHTML =
-    commentairesPrincipaux
-        .map(
+
+        let profilsParId =
+            {};
+
+
+        if (
+            idsUtilisateurs.length >
+            0
+        ) {
+
+            const {
+                data:
+                    profils,
+
+                error:
+                    erreurProfils
+            } =
+                await window.supabaseClient
+                    .from(
+                        "profiles"
+                    )
+                    .select(
+                        "id, prenom, nom"
+                    )
+                    .in(
+                        "id",
+                        idsUtilisateurs
+                    );
+
+
+            if (
+                erreurProfils
+            ) {
+                throw erreurProfils;
+            }
+
+
+            profilsParId =
+                Object.fromEntries(
+                    (
+                        profils ||
+                        []
+                    )
+                        .map(
+                            function (
+                                profil
+                            ) {
+
+                                return [
+                                    profil.id,
+                                    profil
+                                ];
+                            }
+                        )
+                );
+        }
+
+
+        /* =================================
+           GÉNÉRER UN COMMENTAIRE
+           ET SES RÉPONSES
+        ================================= */
+
+        function genererHtmlCommentaire(
+            commentaire,
+            niveau = 0
+        ) {
+
+            /* =========================
+               DATE
+            ========================= */
+
+            const date =
+                new Date(
+                    commentaire.created_at
+                )
+                    .toLocaleDateString(
+                        "fr-FR",
+                        {
+                            day:
+                                "numeric",
+
+                            month:
+                                "long",
+
+                            year:
+                                "numeric"
+                        }
+                    );
+
+
+            /* =========================
+               TEXTE
+            ========================= */
+
+            const texte =
+                commentaire.supprime
+                    ? "Commentaire supprimé"
+                    : echapperHtml(
+                        commentaire.contenu
+                    );
+
+
+            /* =========================
+               AUTEUR
+            ========================= */
+
+            const profil =
+                profilsParId[
+                    commentaire.user_id
+                ];
+
+
+            const prenom =
+                profil?.prenom ||
+                "";
+
+
+            const nom =
+                profil?.nom ||
+                "";
+
+
+            const auteur =
+                `${prenom} ${nom}`.trim() ||
+                "Utilisateur";
+
+
+            /* =========================
+               TROUVER LES RÉPONSES
+               DIRECTES
+            ========================= */
+
+            const reponses =
+                commentaires.filter(
+                    function (
+                        element
+                    ) {
+
+                        return (
+                            element.parent_id ===
+                            commentaire.id
+                        );
+                    }
+                );
+
+
+            /* =========================
+               GÉNÉRER LES RÉPONSES
+               RÉCURSIVEMENT
+            ========================= */
+
+            const reponsesHtml =
+                reponses
+                    .map(
+                        function (
+                            reponse
+                        ) {
+
+                            return (
+                                genererHtmlCommentaire(
+                                    reponse,
+                                    niveau + 1
+                                )
+                            );
+                        }
+                    )
+                    .join(
+                        ""
+                    );
+
+
+            /* =========================
+               HTML DU COMMENTAIRE
+            ========================= */
+
+            return `
+                <article
+                    class="
+                        commentaire-recette
+                        ${
+                            niveau > 0
+                                ? "commentaire-reponse"
+                                : ""
+                        }
+                    "
+                    data-commentaire-id="${commentaire.id}"
+                    style="--niveau-commentaire:${niveau};"
+                >
+
+                    <div class="entete-commentaire-recette">
+
+                        <span class="auteur-commentaire-recette">
+                            ${echapperHtml(auteur)}
+                        </span>
+
+                        <span class="date-commentaire-recette">
+                            ${date}
+                        </span>
+
+                    </div>
+
+
+                    <p class="texte-commentaire-recette">
+                        ${texte}
+                    </p>
+
+
+                    ${
+                        commentaire.supprime
+                            ? ""
+                            : `
+                                <button
+                                    type="button"
+                                    class="bouton-repondre-commentaire"
+                                    data-commentaire-id="${commentaire.id}"
+                                >
+                                    Répondre
+                                </button>
+                            `
+                    }
+
+
+                    <div
+                        class="zone-reponses-commentaire"
+                        data-reponses-parent="${commentaire.id}"
+                    >
+                        ${reponsesHtml}
+                    </div>
+
+                </article>
+            `;
+        }
+
+
+        /* =========================
+           AFFICHER L'ARBRE
+        ========================= */
+
+        listeCommentaires.innerHTML =
+            commentairesPrincipaux
+                .map(
+                    function (
+                        commentaire
+                    ) {
+
+                        return (
+                            genererHtmlCommentaire(
+                                commentaire,
+                                0
+                            )
+                        );
+                    }
+                )
+                .join(
+                    ""
+                );
+
+
+        /* =========================
+           BOUTONS RÉPONDRE
+        ========================= */
+
+        const boutonsRepondre =
+            listeCommentaires
+                .querySelectorAll(
+                    ".bouton-repondre-commentaire"
+                );
+
+
+        boutonsRepondre.forEach(
             function (
-                commentaire
+                bouton
             ) {
 
-                return genererHtmlCommentaire(
-                    commentaire,
-                    0
+                bouton.addEventListener(
+                    "click",
+                    function () {
+
+                        ouvrirFormulaireReponse(
+                            bouton.dataset.commentaireId
+                        );
+
+                    }
                 );
             }
-        )
-        .join(
-            ""
         );
-       
-const boutonsRepondre =
-    listeCommentaires.querySelectorAll(
-        ".bouton-repondre-commentaire"
-    );
 
-
-boutonsRepondre.forEach(
-    function (
-        bouton
-    ) {
-
-        bouton.addEventListener(
-            "click",
-            function () {
-
-                ouvrirFormulaireReponse(
-                    bouton.dataset.commentaireId
-                );
-
-            }
-        );
-    }
-);
 
     } catch (
         erreur
