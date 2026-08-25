@@ -505,6 +505,17 @@ function creerCarteRecette(
             recette.id
         );
 
+    const nombreLikes =
+    nombresLikesParRecette[
+        String(recette.id)
+    ] || 0;
+
+
+const nombreCommentaires =
+    nombresCommentairesParRecette[
+        String(recette.id)
+    ] || 0;
+
 
     return `
 
@@ -561,17 +572,25 @@ function creerCarteRecette(
                 </p>
 
 
-                <div class="informations">
+               <div class="informations">
 
-                    <span>
-                        ⏱️ ${tempsTotal} min
-                    </span>
+    <span>
+        ⏱️ ${tempsTotal} min
+    </span>
 
-                    <span>
-                        ● ${recette.difficulte}
-                    </span>
+    <span>
+        ● ${recette.difficulte}
+    </span>
 
-                </div>
+    <span class="interactions-carte">
+        👍 ${nombreLikes}
+    </span>
+
+    <span class="interactions-carte">
+        💬 ${nombreCommentaires}
+    </span>
+
+</div>
 
             </div>
 
