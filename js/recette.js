@@ -2282,9 +2282,10 @@ async function supprimerCommentaireRecette(
 
 
     const confirmation =
-        window.confirm(
-            "Supprimer ce commentaire ?"
-        );
+    await demanderConfirmationSuppression(
+        "Supprimer ce commentaire ?",
+        "Cette action supprimera votre commentaire."
+    );
 
 
     if (
@@ -2293,8 +2294,89 @@ async function supprimerCommentaireRecette(
         return;
     }
 
+   try {
 
-    try {
+    /* =========================
+       VÉRIFIER S'IL A DES RÉPONSES
+    ========================= */
+
+    const {
+        count,
+        error:
+            erreurVerification
+    } =
+        await window.supabaseClient
+            .from(
+                "recette_commentaires"
+            )
+            .select(
+                "id",
+                {
+                    count:
+                        "exact",
+                    head:
+                        true
+                }
+            )
+            .eq(
+                "parent_id",
+                commentaireId
+            );
+
+
+    if (
+        erreurVerification
+    ) {
+        throw erreurVerification;
+    }
+
+
+    const aDesReponses =
+        Number(
+            count
+        ) > 0;
+
+
+    /* =========================
+       PAS DE RÉPONSE :
+       SUPPRESSION RÉELLE
+    ========================= */
+
+    if (
+        !aDesReponses
+    ) {
+
+        const {
+            error
+        } =
+            await window.supabaseClient
+                .from(
+                    "recette_commentaires"
+                )
+                .delete()
+                .eq(
+                    "id",
+                    commentaireId
+                )
+                .eq(
+                    "user_id",
+                    utilisateurConnecte.id
+                );
+
+
+        if (
+            error
+        ) {
+            throw error;
+        }
+
+
+    } else {
+
+        /* =========================
+           IL A DES RÉPONSES :
+           GARDER LA STRUCTURE
+        ========================= */
 
         const {
             error
@@ -2322,12 +2404,26 @@ async function supprimerCommentaireRecette(
         ) {
             throw error;
         }
+    }
 
 
-        await chargerCommentairesRecette();
+    await chargerCommentairesRecette();
 
 
-    } catch (
+} catch (
+    erreur
+) {
+
+    console.error(
+        "Erreur suppression commentaire :",
+        erreur
+    );
+
+    alert(
+        "Impossible de supprimer le commentaire."
+    );
+}
+     catch (
         erreur
     ) {
 
@@ -9877,7 +9973,10 @@ if (
    POPUP CONFIRMATION SUPPRESSION
 ================================= */
 
-function demanderConfirmationSuppression() {
+function demanderConfirmationSuppression(
+    titre = "Supprimer cette recette ?",
+    texte = "Cette action est définitive. La recette et ses photos seront supprimées."
+) {
 
     return new Promise(
         function (
@@ -9907,13 +10006,12 @@ function demanderConfirmationSuppression() {
                         </div>
 
                         <h2>
-                            Supprimer cette recette ?
-                        </h2>
+    ${echapperHtml(titre)}
+</h2>
 
-                        <p>
-                            Cette action est définitive.
-                            La recette et ses photos seront supprimées.
-                        </p>
+<p>
+    ${echapperHtml(texte)}
+</p>
 
                         <div class="actions-popup">
 
