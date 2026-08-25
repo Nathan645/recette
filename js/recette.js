@@ -1669,11 +1669,6 @@ async function chargerCommentairesRecette() {
                         ""
                     );
 
-            console.log("TEST SUPPRESSION", {
-    utilisateurConnecte: utilisateurConnecte?.id,
-    auteurCommentaire: commentaire.user_id,
-    identiques: utilisateurConnecte?.id === commentaire.user_id
-});
            
             /* =========================
                HTML DU COMMENTAIRE
