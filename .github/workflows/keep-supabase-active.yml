@@ -1,0 +1,31 @@
+name: Garder Supabase actif
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Effectuer une lecture légère dans Supabase
+        env:
+          SUPABASE_URL: "https://kwizsykajvrftxhntoiv.supabase.co"
+          SUPABASE_PUBLISHABLE_KEY: "sb_publishable_38f75llTob__m-EUGio0sA_M9Us0aJv"
+        run: |
+          curl --fail --silent --show-error \
+            --retry 3 \
+            --retry-delay 5 \
+            --get \
+            --header "apikey: ${SUPABASE_PUBLISHABLE_KEY}" \
+            --header "Authorization: Bearer ${SUPABASE_PUBLISHABLE_KEY}" \
+            --data-urlencode "select=id" \
+            --data-urlencode "limit=1" \
+            "${SUPABASE_URL}/rest/v1/recettes" \
+            > /dev/null
